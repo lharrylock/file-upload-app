@@ -50,7 +50,7 @@ module.exports = ({ analyze, env } = {}) => ({
             {
                 test: /\.css/,
                 include: [
-                    path.resolve(__dirname, '../', 'src')
+                    path.resolve(__dirname, '../', 'src/renderer')
                 ],
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
