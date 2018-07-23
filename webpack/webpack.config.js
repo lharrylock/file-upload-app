@@ -4,7 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const tsImportPluginFactory = require('ts-import-plugin');
 
 module.exports = ({ analyze, env } = {}) => ({
-    entry: './src/index.tsx',
+    entry: './src/renderer/index.tsx',
     output: {
         path: path.resolve(__dirname, '../', 'dist'),
         filename: '[name].[chunkhash].js'
