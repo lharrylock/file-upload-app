@@ -1,0 +1,24 @@
+{
+  "name": "template-electron-react",
+  "version": "1.0.0",
+  "description": "template electron and react app",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@stash.corp.alleninstitute.org:7999/aicssw/template-electron-react.git"
+  },
+  "keywords": [
+    "template",
+    "electron",
+    "react",
+    "aics"
+  ],
+  "author": "Lisa Harrylock",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^2.0.5"
+  }
+}
