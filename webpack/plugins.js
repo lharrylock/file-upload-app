@@ -13,20 +13,27 @@ const BASE_PLUGINS = [
         tslint: path.resolve(__dirname, '../', 'tslint.json'),
         workers: ForkTsCheckerWebpackPlugin.TWO_CPUS_FREE,
     }),
-    new CleanWebpackPlugin(['dist'], {
-        root: path.resolve(__dirname, '../'),
-        watch: true,
-    }),
-    new ExtractTextPlugin('style.css'),
-    new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, 'index.template.html')
-    })
 ];
 
 const BUNDLE_ANALYZER = [new BundleAnalyzerPlugin({ analyzerMode: 'static' })];
+const PLUGINS_BY_PROCESS = {
+    'main': [
 
-module.exports = (env, analyzer) => [
+    ],
+    'renderer': [
+        new CleanWebpackPlugin(['dist'], {
+            root: path.resolve(__dirname, '../'),
+            watch: true,
+        }),
+        new ExtractTextPlugin('style.css'),
+        new HtmlWebpackPlugin({
+            template: path.resolve(__dirname, 'index.template.html')
+        })
+    ]
+};
+module.exports = (env, analyzer, process) => [
     ...BASE_PLUGINS,
     ...(analyzer ? BUNDLE_ANALYZER : []),
+    ...(PLUGINS_BY_PROCESS[process] || [])
     // ...(PLUGINS_BY_ENV[env] || [])
 ];

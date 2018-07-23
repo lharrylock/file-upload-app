@@ -76,11 +76,18 @@ task buildRenderer(type: NodeTask) {
     args = ["--config", "./webpack/webpack.renderer.js"]
 }
 
-task runElectron(type: NodeTask) {
+task buildMain(type: NodeTask) {
     dependsOn buildRenderer
 
+    script = file("${npmBin}/webpack")
+    args = ["--config", "./webpack/webpack.main.js"]
+}
+
+task runElectron(type: NodeTask) {
+    dependsOn buildMain
+
     script = file("${npmBin}/electron")
-    args = ["src/main/index.js"]
+    args = ["dist/main.js"]
 }
 
 task test(type: NodeTask) {

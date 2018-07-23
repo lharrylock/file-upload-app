@@ -17,7 +17,7 @@ module.exports = ({ analyze, env } = {}) => ({
             {
                 test: /\.tsx?/,
                 include: [
-                    path.resolve(__dirname, '../', 'src')
+                    path.resolve(__dirname, '../', 'src', 'renderer')
                 ],
                 exclude: /node_modules/,
                 use: {
@@ -50,7 +50,7 @@ module.exports = ({ analyze, env } = {}) => ({
             {
                 test: /\.css/,
                 include: [
-                    path.resolve(__dirname, '../', 'src/renderer')
+                    path.resolve(__dirname, '../', 'src', 'renderer')
                 ],
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
@@ -93,7 +93,7 @@ module.exports = ({ analyze, env } = {}) => ({
             },
         ]
     },
-    plugins: getPluginsByEnv(env, analyze),
+    plugins: getPluginsByEnv(env, analyze, 'renderer'),
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
     },
