@@ -1,5 +1,6 @@
 const path = require('path');
 const getPluginsByEnv = require('./plugins');
+const tsImportPluginFactory = require('ts-import-plugin');
 
 module.exports = ({ analyze, env } = {}) => ({
     entry: './src/index.tsx',
@@ -25,18 +26,18 @@ module.exports = ({ analyze, env } = {}) => ({
                         compilerOptions: {
                             noEmit: false,
                         },
-                        // getCustomTransformers: () => ({
-                        //     before: [
-                        //         tsImportPluginFactory([
-                        //             {
-                        //                 libraryName: 'lodash',
-                        //                 libraryDirectory: null,
-                        //                 camel2DashComponentName: false,
-                        //                 style: false,
-                        //             }
-                        //         ]),
-                        //     ]
-                        // }),
+                        getCustomTransformers: () => ({
+                            before: [
+                                tsImportPluginFactory([
+                                    {
+                                        libraryName: 'lodash',
+                                        libraryDirectory: null,
+                                        camel2DashComponentName: false,
+                                        style: false,
+                                    }
+                                ]),
+                            ]
+                        }),
                         // give responsibility of type checking to fork-ts-checker-webpack-plugin
                         // in order to speed up build times
                         transpileOnly: true,
