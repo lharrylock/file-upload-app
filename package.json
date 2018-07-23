@@ -49,6 +49,9 @@
     "@types/classnames": "^2.2.6",
     "@types/lodash": "^4.14.112",
     "classnames": "^2.2.6",
-    "lodash": "^4.17.10"
+    "core-js": "^2.5.7",
+    "lodash": "^4.17.10",
+    "redux-logic": "^0.15.0",
+    "reselect": "^3.0.1"
   }
 }
