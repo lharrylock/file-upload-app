@@ -1,9 +1,11 @@
 import * as React from "react";
 import { render } from "react-dom";
 
+const styles = require("./style.css");
+
 class App extends React.Component {
     public render() {
-        return <div>Hello World</div>;
+        return <div className={styles.container}>Hello World</div>;
     }
 }
 

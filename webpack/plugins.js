@@ -17,7 +17,7 @@ const BASE_PLUGINS = [
         root: path.resolve(__dirname, '../'),
         watch: true,
     }),
-    // new ExtractTextPlugin('style.[contenthash].css'),
+    new ExtractTextPlugin('style.css'),
     // new optimization.splitChunks({
     //     name: 'vendor',
     //     minChunks(module) {
