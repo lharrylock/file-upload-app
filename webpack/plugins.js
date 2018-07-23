@@ -18,20 +18,10 @@ const BASE_PLUGINS = [
         watch: true,
     }),
     new ExtractTextPlugin('style.css'),
-    // new optimization.splitChunks({
-    //     name: 'vendor',
-    //     minChunks(module) {
-    //         return module.context && module.context.indexOf('node_modules') !== -1;
-    //     }
-    // }),
-    // new optimization.splitChunks({
-    //     name: 'runtime'
-    // }),
     new HtmlWebpackPlugin({
         template: path.resolve(__dirname, 'index.template.html')
     })
 ];
-
 
 const BUNDLE_ANALYZER = [new BundleAnalyzerPlugin({ analyzerMode: 'static' })];
 
