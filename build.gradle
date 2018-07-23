@@ -73,7 +73,7 @@ task buildRenderer(type: NodeTask) {
 //    dependsOn npmInstall
 
     script = file("${npmBin}/webpack")
-    args = ["--config", "./webpack/webpack.config.js"]
+    args = ["--config", "./webpack/webpack.renderer.js"]
 }
 
 task runElectron(type: NodeTask) {
