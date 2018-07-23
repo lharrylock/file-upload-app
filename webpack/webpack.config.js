@@ -97,5 +97,17 @@ module.exports = ({ analyze, env } = {}) => ({
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
     },
+    optimization: {
+      splitChunks: {
+          cacheGroups: {
+              vendor: {
+                  chunks: "initial",
+                  test: path.resolve(__dirname, "node_modules"),
+                  name: "vendor",
+                  enforce: true
+              }
+          }
+      }
+    },
     mode: 'development'
 });
