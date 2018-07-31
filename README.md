@@ -4,7 +4,14 @@ Template for creating desktop application using electron and react.
 
 ## Setup
 
-git clone
+create a new repository in bit bucket
+```commandline
+git clone <ssh:....>
+git remote add template ssh://git@stash.corp.alleninstitute.org:7999/aicssw/template-electron-react.gitgit fetch template
+git merge template/master
+```
+
+
 ./gradlew runElectron
 
 If on Linux: apt-get install libgconf-2-4
@@ -22,5 +29,3 @@ Some additional items planned:
 * more main process examples
 * setup and test packaging app into executable
 * more webpack chunks splitting?
-
-asdf
