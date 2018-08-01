@@ -109,5 +109,6 @@ module.exports = ({ analyze, env } = {}) => ({
           }
       }
     },
-    mode: 'development'
+    mode: 'development',
+    target: "electron-renderer"
 });

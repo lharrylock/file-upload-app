@@ -10,8 +10,18 @@ import { APP_ID } from "./constants";
 import App from "./containers/App";
 import { createReduxStore } from "./state";
 
+const appContainer = document.getElementById(APP_ID);
 render(
     <Provider store={createReduxStore()}>
         <App />
     </Provider>,
-    document.getElementById(APP_ID));
+    appContainer);
+
+// Prevent default behavior from div containing app and let app handle file drop
+if (appContainer) {
+    const returnFalse = () => false;
+    appContainer.ondragover = returnFalse;
+    appContainer.ondragleave = returnFalse;
+    appContainer.ondragend = returnFalse;
+    appContainer.ondrop = returnFalse;
+}
