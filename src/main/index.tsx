@@ -1,5 +1,4 @@
 import { app, BrowserWindow } from "electron";
-import * as path from "path";
 import * as url from "url";
 
 // Keep a global reference of the window object, if you don"t, the window will
@@ -12,9 +11,8 @@ function createWindow() {
 
     // and load the index.html of the app.
     win.loadURL(url.format({
-        pathname: path.join(__dirname, "index.html"),
-        protocol: "file:",
-        slashes: true,
+        host: "localhost:1212/dist",
+        protocol: "http",
     }));
 
     // Open the DevTools.

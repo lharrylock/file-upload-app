@@ -1,17 +1,23 @@
 import { ipcRenderer } from "electron";
-
+import {
+    readdirSync,
+    statSync,
+} from "fs";
+import { isEmpty } from "lodash";
 import * as React from "react";
 
 const styles = require("./style.css");
 
 interface AppState {
-    file?: string;
+    files?: File[];
 }
 
 export default class App extends React.Component<{}, AppState> {
     constructor(props: {}) {
         super(props);
-        this.state = {};
+        this.state = {
+            files: [],
+        };
         this.onDrop = this.onDrop.bind(this);
     }
 
@@ -22,25 +28,35 @@ export default class App extends React.Component<{}, AppState> {
     public onDrop(e: React.DragEvent<HTMLDivElement>): boolean {
         e.preventDefault();
 
-        this.setState({file: "File: Something"});
+        const files: File[] = [];
         for (let i = 0; i < e.dataTransfer.files.length; i++) {
             const file = e.dataTransfer.files.item(i);
 
             if (file) {
-                // tslint:disable-next-line
-                console.log("File(s) you dragged here: ", file.path);
-                ipcRenderer.send("filereceived", file.path);
+
+                if (statSync(file.path).isDirectory()) {
+                    // tslint:disable-next-line
+                    readdirSync(file.path).forEach((f) => console.log(f));
+                } else {
+                    files.push(file);
+                }
+
+                // ipcRenderer.send("filereceived", file.path);
+
             } else {
                 // display error?
             }
+        }
 
+        if (!isEmpty(files)) {
+            this.setState({files});
         }
 
         return false;
     }
 
     public render() {
-        const { file } = this.state;
+        const { files } = this.state;
         return (
             <div
                 className={styles.container}
@@ -49,7 +65,8 @@ export default class App extends React.Component<{}, AppState> {
                 onDragEnd={this.onDrag}
                 onDrop={this.onDrop}
             >
-                {file || "Drag Something Here"}
+                test
+                {files && files.length > 0 ? files.map((f) => <div key={f.path}>{f.path}</div>) : "Drag Something Here"}
             </div>
         );
     }

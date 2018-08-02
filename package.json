@@ -59,6 +59,7 @@
     "classnames": "^2.2.6",
     "core-js": "^2.5.7",
     "lodash": "^4.17.10",
+    "react-hot-loader": "^4.3.4",
     "redux-logic": "^0.15.0",
     "reselect": "^3.0.1"
   }
