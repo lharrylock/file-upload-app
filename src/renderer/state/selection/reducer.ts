@@ -24,14 +24,17 @@ export const initialState = { // todo this should be empty
         {
             files: null,
             name: "image1.ome.tiff",
+            path: "/",
         },
         {
             files: null,
             name: "image2.ome.tiff",
+            path: "/",
         },
         {
             files: null,
             name: "cells.csv",
+            path: "/",
         },
     ],
 };

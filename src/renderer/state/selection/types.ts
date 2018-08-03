@@ -2,6 +2,7 @@ import { MetadataStateBranch } from "../metadata/types";
 
 export interface File {
     name: string;
+    path: string;
     files: File[] | null;
 }
 

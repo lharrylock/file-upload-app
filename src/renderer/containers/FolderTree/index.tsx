@@ -4,9 +4,11 @@ import {
     statSync
 } from "fs";
 import { isEmpty } from "lodash";
+import * as path from "path";
 import * as React from "react";
 import { connect } from "react-redux";
-import FolderTreeNode from "../../components/FolderTreeNode/index";
+
+import FolderTreeNode from "../../components/FolderTreeNode";
 
 import {
     //  selections,
@@ -31,7 +33,6 @@ class FolderTree extends React.Component<Props, FolderTreeState> {
             files: [],
         };
         this.onDrop = this.onDrop.bind(this);
-        this.getFilesFromDirectory = this.getFilesFromDirectory.bind(this);
     }
 
     public render() {
@@ -46,7 +47,9 @@ class FolderTree extends React.Component<Props, FolderTreeState> {
                 onDrop={this.onDrop}
             >
                 {files && files.length > 0 ?
-                    files.map((file: File) => (<FolderTreeNode file={file}/>))
+                    files.map((file: File) =>
+                        (<FolderTreeNode key={path.resolve(file.path, file.name)} file={file}/>)
+                    )
                     : "drag content here"}
             </div>
         );
@@ -54,16 +57,6 @@ class FolderTree extends React.Component<Props, FolderTreeState> {
 
     private onDrag(): boolean {
         return false;
-    }
-
-    private getFilesFromDirectory(path: string): File[] {
-        const files: string[] = readdirSync(path);
-        // tslint:disable-next-line
-        console.log(files)
-        return files.map((f: string) => ({
-            files: statSync(f).isDirectory() ? this.getFilesFromDirectory(f) : null,
-            name: f,
-        }));
     }
 
     private onDrop(e: React.DragEvent<HTMLDivElement>): boolean {
@@ -75,18 +68,11 @@ class FolderTree extends React.Component<Props, FolderTreeState> {
             const file = e.dataTransfer.files.item(i);
 
             if (file) {
-
-                if (statSync(file.path).isDirectory()) {
-                    files.push({
-                        files: this.getFilesFromDirectory(file.path),
-                        name: file.name,
-                    });
-                } else {
-                    files.push({
-                        files: null,
-                        name: file.name,
-                    });
-                }
+                files.push({
+                    files: statSync(file.path).isDirectory() ? [] : null,
+                    name: file.name,
+                    path: file.path,
+                });
 
             } else {
                 // display error?
@@ -104,7 +90,6 @@ class FolderTree extends React.Component<Props, FolderTreeState> {
 function mapStateToProps(state: State, props: Props): Props {
     return {
         className: props.className,
-        // filteredOutMesoStructures: selections.selectors.getFilteredOutMesoStructures(state),
     };
 }
 
