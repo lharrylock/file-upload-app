@@ -1,17 +1,22 @@
 import { MetadataStateBranch } from "../metadata/types";
 
+export interface File {
+    name: string;
+    files: File[] | null;
+}
+
 export interface DeselectFileAction {
-    payload: string | string[];
+    payload: File | File[];
     type: string;
 }
 
 export interface SelectionStateBranch {
     [key: string]: any;
-    files: string[];
+    files: File[];
 }
 
 export interface SelectFileAction {
-    payload: string | string[];
+    payload: File | File[];
     type: string;
 }
 

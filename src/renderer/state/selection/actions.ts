@@ -8,17 +8,18 @@ import {
     SelectFileAction,
     SelectMetadataAction,
 } from "./types";
+import { File } from "./types";
 
-export function selectFile(fileId: string | string[]): SelectFileAction {
+export function selectFile(file: File | File[]): SelectFileAction {
     return {
-        payload: fileId,
+        payload: file,
         type: SELECT_FILE,
     };
 }
 
-export function deselectFile(fileId: string | string[]): DeselectFileAction {
+export function deselectFile(file: File | File[]): DeselectFileAction {
     return {
-        payload: fileId,
+        payload: file,
         type: DESELECT_FILE,
     };
 }

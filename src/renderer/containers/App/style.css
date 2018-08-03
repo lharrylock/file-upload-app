@@ -1,4 +1,12 @@
 .container {
-    background-color: aquamarine;
     height: 100%;
+    display: flex;
+
+    & .folder-tree {
+        flex: 1;
+    }
+
+    & .files-to-upload {
+        flex: 1;
+    }
 }

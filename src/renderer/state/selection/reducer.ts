@@ -19,8 +19,21 @@ import {
     SelectMetadataAction,
 } from "./types";
 
-export const initialState = {
-    files: [],
+export const initialState = { // todo this should be empty
+    files: [
+        {
+            files: null,
+            name: "image1.ome.tiff",
+        },
+        {
+            files: null,
+            name: "image2.ome.tiff",
+        },
+        {
+            files: null,
+            name: "cells.csv",
+        },
+    ],
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {
