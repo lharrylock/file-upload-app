@@ -1,10 +1,5 @@
+import { Icon } from "antd";
 import * as classNames from "classnames";
-import {
-    statSync
-} from "fs";
-import {
-    isEmpty
-} from "lodash";
 import * as React from "react";
 
 import {
@@ -18,10 +13,19 @@ export interface Props {
     onDrop?: (file: FileList) => LoadFilesFromDragAndDropAction;
 }
 
-class DragAndDropSquare extends React.Component<Props, {}> {
+export interface DragAndDropSquareState {
+    isHovered: boolean;
+}
+
+class DragAndDropSquare extends React.Component<Props, DragAndDropSquareState> {
     constructor(props: Props) {
         super(props);
+        this.state = {
+            isHovered: false,
+        };
         this.onDrop = this.onDrop.bind(this);
+        this.onDrag = this.onDrag.bind(this);
+        this.onDragLeave = this.onDragLeave.bind(this);
     }
 
     public render(): React.ReactNode {
@@ -31,18 +35,25 @@ class DragAndDropSquare extends React.Component<Props, {}> {
 
         return (
             <div
-                className={classNames(styles.container, className)}
-                onDragOver={this.onDrag}
-                onDragLeave={this.onDrag}
-                onDragEnd={this.onDrag}
+                className={classNames(styles.container, {[styles.highlight]: this.state.isHovered}, className)}
+                onDragEnter={this.onDrag}
+                onDragLeave={this.onDragLeave}
+                onDragEnd={this.onDragLeave}
                 onDrop={this.onDrop}
             >
-                Drag and Drop Files here
+                <Icon type="upload" className={styles.uploadIcon} />
+                <div>Drag and Drop</div>
             </div>
         );
     }
 
     private onDrag(): boolean {
+        this.setState({isHovered: true});
+        return false;
+    }
+
+    private onDragLeave(): boolean {
+        this.setState({isHovered: false});
         return false;
     }
 
@@ -51,8 +62,6 @@ class DragAndDropSquare extends React.Component<Props, {}> {
 
         // todo this is ugly
         if (this.props.onDrop) {
-            // tslint:disable-next-line
-            console.log('received files');
             this.props.onDrop(e.dataTransfer.files);
         }
 

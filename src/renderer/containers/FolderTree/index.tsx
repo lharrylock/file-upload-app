@@ -8,10 +8,12 @@ import {
     selection,
     State } from "../../state";
 import {
+    ClearStagedFilesAction,
     LoadFilesFromDragAndDropAction,
     SelectFileAction,
     UploadFile
 } from "../../state/selection/types";
+import Button from "antd/es/button/button";
 
 const styles = require("./style.css");
 
@@ -19,6 +21,7 @@ interface Props {
     className?: string;
     files?: UploadFile[];
     onCheck?: (files: string[]) => SelectFileAction;
+    onClear?: () => ClearStagedFilesAction;
     onDrop?: (file: FileList) => LoadFilesFromDragAndDropAction;
 }
 
@@ -47,6 +50,7 @@ class FolderTree extends React.Component<Props, {}> {
 
     constructor(props: Props) {
         super(props);
+        this.clearAll = this.clearAll.bind(this);
         this.onExpand = this.onExpand.bind(this);
         this.onSelect = this.onSelect.bind(this);
     }
@@ -63,6 +67,13 @@ class FolderTree extends React.Component<Props, {}> {
         console.log('expand');
     }
 
+    public clearAll(): void {
+        // todo ugly
+        if (this.props.onClear) {
+            this.props.onClear();
+        }
+    }
+
     public render() {
         const {
             className,
@@ -70,26 +81,34 @@ class FolderTree extends React.Component<Props, {}> {
             onDrop,
         } = this.props;
 
+        let body;
         if (!files || files.length === 0) {
-            return (
+            body = (
                 <DragAndDropSquare
-                    className={classNames(className, styles.container)}
                     onDrop={onDrop}
                 />
+            );
+        } else {
+            body = (
+                <div>
+                    <Button onClick={this.clearAll}>Clear all</Button>
+                    <Tree.DirectoryTree
+                        checkable={true}
+                        multiple={true}
+                        defaultExpandAll={true}
+                        onCheck={this.onSelect}
+                        onExpand={this.onExpand}
+                    >
+                        {files.map((file: UploadFile) => FolderTree.renderChildDirectories(file.files))}
+                    </Tree.DirectoryTree>
+                </div>
             );
         }
 
         return (
-            <Tree.DirectoryTree
-                className={classNames(className, styles.container)}
-                checkable={true}
-                multiple={true}
-                defaultExpandAll={true}
-                onCheck={this.onSelect}
-                onExpand={this.onExpand}
-            >
-                {files.map((file: UploadFile) => FolderTree.renderChildDirectories(file.files))}
-            </Tree.DirectoryTree>
+            <div className={classNames(className, styles.container)}>
+                {body}
+            </div>
         );
     }
 }
@@ -103,6 +122,7 @@ function mapStateToProps(state: State, props: Props) {
 
 const dispatchToPropsMap = {
     onCheck: selection.actions.selectFile,
+    onClear: selection.actions.clearStagedFiles,
     onDrop: selection.actions.loadFilesFromDragAndDrop,
 };
 

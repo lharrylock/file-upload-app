@@ -38,6 +38,10 @@ export interface LoadFilesFromDragAndDropAction {
     type: string;
 }
 
+export interface ClearStagedFilesAction {
+    type: string;
+}
+
 export interface SelectionStateBranch {
     [key: string]: any;
     files: string[];

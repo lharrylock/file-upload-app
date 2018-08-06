@@ -7,11 +7,12 @@ import { TypeToDescriptionMap } from "../types";
 import { makeReducer } from "../util";
 
 import {
-    ADD_STAGE_FILES,
+    ADD_STAGE_FILES, CLEAR_STAGED_FILES,
     SELECT_FILE,
     SELECT_METADATA,
 } from "./constants";
 import {
+    ClearStagedFilesAction,
     SelectFileAction,
     SelectionStateBranch,
     SelectMetadataAction,
@@ -23,11 +24,18 @@ export const initialState = {
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {
+    [CLEAR_STAGED_FILES]: {
+        accepts: (action: AnyAction): action is SelectFileAction => action.type === CLEAR_STAGED_FILES,
+        perform: (state: SelectionStateBranch, action: ClearStagedFilesAction) => {
+            return {
+                ...state,
+                stagedFiles: [],
+            };
+        },
+    },
     [SELECT_FILE]: {
         accepts: (action: AnyAction): action is SelectFileAction => action.type === SELECT_FILE,
         perform: (state: SelectionStateBranch, action: SelectFileAction) => {
-            // tslint:disable-next-line
-            console.log('files selected:', action.payload);
             return {
                 ...state,
                 files: [...castArray(action.payload)],

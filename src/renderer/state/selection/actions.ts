@@ -1,18 +1,24 @@
 import {
-    ADD_STAGE_FILES,
+    ADD_STAGE_FILES, CLEAR_STAGED_FILES,
     DESELECT_FILE,
     LOAD_FILES,
     SELECT_FILE,
     SELECT_METADATA,
 } from "./constants";
 import {
-    AddStageFilesAction,
+    AddStageFilesAction, ClearStagedFilesAction,
     DeselectFileAction,
     LoadFilesFromDragAndDropAction,
     SelectFileAction,
     SelectMetadataAction,
 } from "./types";
 import { UploadFile } from "./types";
+
+export function clearStagedFiles(): ClearStagedFilesAction {
+    return {
+        type: CLEAR_STAGED_FILES,
+    };
+}
 
 export function loadFilesFromDragAndDrop(files: FileList): LoadFilesFromDragAndDropAction {
     return {

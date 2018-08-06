@@ -30,6 +30,7 @@ class FilesToUpload extends React.Component<Props, {}> {
             <div
                 className={classNames(styles.container, className)}
             >
+                <div>Files to Upload</div>
                 {files.map((f) => (
                     <FileToUploadRow name={f} key={f}/>
                 ))}
