@@ -10,18 +10,18 @@ import {
 import * as path from "path";
 import * as React from "react";
 
-import { File } from "../../state/selection/types";
+import { UploadFile } from "../../state/selection/types";
 
 const styles = require("./style.css");
 
 export interface Props {
     className?: string;
-    file: File;
+    file: UploadFile;
 }
 
 export interface FolderTreeNodeState {
     showChildren: boolean;
-    children: File[];
+    children: UploadFile[];
 }
 
 class FolderTreeNode extends React.Component<Props, FolderTreeNodeState> {
@@ -52,7 +52,7 @@ class FolderTreeNode extends React.Component<Props, FolderTreeNodeState> {
                     {file.name} {file.files && "directory"}
                 </div>
 
-                {showChildren && children.map((childFile: File) =>
+                {showChildren && children.map((childFile: UploadFile) =>
                     <FolderTreeNode key={childFile.name} file={childFile}/>) }
             </div>
         );
@@ -65,7 +65,7 @@ class FolderTreeNode extends React.Component<Props, FolderTreeNodeState> {
             const files: string[] = readdirSync(filePath);
             // tslint:disable-next-line
             console.log(files)
-            const children: File[] = files.map((fileName: string) => ({
+            const children: UploadFile[] = files.map((fileName: string) => ({
                 files: statSync(path.resolve(filePath, fileName)).isDirectory() ? [] : null,
                 name: fileName,
                 path: filePath,
@@ -77,7 +77,7 @@ class FolderTreeNode extends React.Component<Props, FolderTreeNodeState> {
         }
     }
 
-    private getOnNodeClick(file: File): ((e: React.MouseEvent<HTMLDivElement>) => void) | undefined {
+    private getOnNodeClick(file: UploadFile): ((e: React.MouseEvent<HTMLDivElement>) => void) | undefined {
         if (file.files) {
             return (e: React.MouseEvent<HTMLDivElement>) =>
                 this.getFilesFromDirectory(file.path);

@@ -1,23 +1,40 @@
 import {
+    ADD_STAGE_FILES,
     DESELECT_FILE,
+    LOAD_FILES,
     SELECT_FILE,
     SELECT_METADATA,
 } from "./constants";
 import {
-    DeselectFileAction,
+    AddStageFilesAction,
+    DeselectFileAction, LoadFilesFromDragAndDropAction,
     SelectFileAction,
     SelectMetadataAction,
 } from "./types";
-import { File } from "./types";
+import { UploadFile } from "./types";
 
-export function selectFile(file: File | File[]): SelectFileAction {
+export function loadFilesFromDragAndDrop(files: FileList): LoadFilesFromDragAndDropAction {
+    return {
+        payload: files,
+        type: LOAD_FILES,
+    };
+}
+
+export function stageFiles(files: UploadFile[]): AddStageFilesAction {
+    return {
+        payload: files,
+        type: ADD_STAGE_FILES,
+    };
+}
+
+export function selectFile(file: UploadFile | UploadFile[]): SelectFileAction {
     return {
         payload: file,
         type: SELECT_FILE,
     };
 }
 
-export function deselectFile(file: File | File[]): DeselectFileAction {
+export function deselectFile(file: UploadFile | UploadFile[]): DeselectFileAction {
     return {
         payload: file,
         type: DESELECT_FILE,

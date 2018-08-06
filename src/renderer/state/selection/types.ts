@@ -1,28 +1,39 @@
 import { MetadataStateBranch } from "../metadata/types";
 
-export interface File {
+export interface UploadFile {
     name: string;
     path: string;
-    files: File[] | null;
+    files: UploadFile[] | null;
 }
 
 export interface DeselectFileAction {
-    payload: File | File[];
+    payload: UploadFile | UploadFile[];
+    type: string;
+}
+
+export interface LoadFilesFromDragAndDropAction {
+    payload: FileList;
     type: string;
 }
 
 export interface SelectionStateBranch {
     [key: string]: any;
-    files: File[];
+    files: UploadFile[];
+    stagedFiles: UploadFile[];
 }
 
 export interface SelectFileAction {
-    payload: File | File[];
+    payload: UploadFile | UploadFile[];
     type: string;
 }
 
 export interface SelectMetadataAction {
     key: keyof MetadataStateBranch;
     payload: string | number;
+    type: string;
+}
+
+export interface AddStageFilesAction {
+    payload: UploadFile[];
     type: string;
 }

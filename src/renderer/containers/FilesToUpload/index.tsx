@@ -8,13 +8,13 @@ import {
     selection,
     State,
 } from "../../state";
-import { File } from "../../state/selection/types";
+import { UploadFile } from "../../state/selection/types";
 
 const styles = require("./style.css");
 
 interface Props {
     className?: string;
-    files: File[];
+    files: UploadFile[];
 }
 
 class FilesToUpload extends React.Component<Props, {}> {

@@ -8,6 +8,7 @@ import { TypeToDescriptionMap } from "../types";
 import { makeReducer } from "../util";
 
 import {
+    ADD_STAGE_FILES,
     DESELECT_FILE,
     SELECT_FILE,
     SELECT_METADATA,
@@ -37,6 +38,7 @@ export const initialState = { // todo this should be empty
             path: "/",
         },
     ],
+    stagedFiles: [],
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {
@@ -49,10 +51,14 @@ const actionToConfigMap: TypeToDescriptionMap = {
     },
     [SELECT_FILE]: {
         accepts: (action: AnyAction): action is SelectFileAction => action.type === SELECT_FILE,
-        perform: (state: SelectionStateBranch, action: SelectFileAction) => ({
-            ...state,
-            files: [...state.files, ...castArray(action.payload)],
-        }),
+        perform: (state: SelectionStateBranch, action: SelectFileAction) => {
+            // tslint:disable-next-line
+            console.log(action.payload);
+            return {
+                ...state,
+                files: [...state.files, ...castArray(action.payload)],
+            };
+        },
     },
     [SELECT_METADATA]: {
         accepts: (action: AnyAction): action is SelectMetadataAction => action.type === SELECT_METADATA,
@@ -60,6 +66,17 @@ const actionToConfigMap: TypeToDescriptionMap = {
             ...state,
             [action.key]: action.payload,
         }),
+    },
+    [ADD_STAGE_FILES]: {
+        accepts: (action: AnyAction): action is SelectFileAction => action.type === ADD_STAGE_FILES,
+        perform: (state: SelectionStateBranch, action: SelectFileAction) => {
+            // tslint:disable-next-line
+            console.log(action.payload);
+            return {
+                ...state,
+                stagedFiles: [...state.stagedFiles, ...castArray(action.payload)],
+            };
+        },
     },
 };
 
