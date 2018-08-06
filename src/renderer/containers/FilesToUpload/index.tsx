@@ -8,13 +8,12 @@ import {
     selection,
     State,
 } from "../../state";
-import { UploadFile } from "../../state/selection/types";
 
 const styles = require("./style.css");
 
 interface Props {
     className?: string;
-    files: UploadFile[];
+    files: string[];
 }
 
 class FilesToUpload extends React.Component<Props, {}> {
@@ -32,7 +31,7 @@ class FilesToUpload extends React.Component<Props, {}> {
                 className={classNames(styles.container, className)}
             >
                 {files.map((f) => (
-                    <FileToUploadRow name={f.name} key={f.name}/>
+                    <FileToUploadRow name={f} key={f}/>
                 ))}
             </div>
         );

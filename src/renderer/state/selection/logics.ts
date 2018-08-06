@@ -9,7 +9,9 @@ import { createLogic } from "redux-logic";
 import { ReduxLogicDeps } from "../types";
 
 import { stageFiles } from "./actions";
-import { LOAD_FILES } from "./constants";
+import {
+    LOAD_FILES,
+} from "./constants";
 import { UploadFile } from "./types";
 
 const getFilesInDirectory = (filePath: string): UploadFile[] => {
@@ -23,8 +25,6 @@ const getFilesInDirectory = (filePath: string): UploadFile[] => {
 const loadFilesLogic = createLogic({
     transform: ({ action }: ReduxLogicDeps, next: (action: AnyAction) => void) => {
         const files: UploadFile[] = [];
-        // tslint:disable-next-line
-        console.log('in logic')
         for (let i = 0; i < action.payload.length; i++) {
             const file = action.payload.item(i);
 
@@ -34,7 +34,7 @@ const loadFilesLogic = createLogic({
                 files.push(new UploadFile(file.name, file.path, children));
 
             } else {
-                // display error?
+                // todo display error?
             }
         }
 
@@ -42,6 +42,7 @@ const loadFilesLogic = createLogic({
     },
     type: LOAD_FILES,
 });
+
 export default [
     loadFilesLogic,
 ];

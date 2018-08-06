@@ -1,6 +1,5 @@
 import {
     castArray,
-    without,
 } from "lodash";
 import { AnyAction } from "redux";
 
@@ -9,12 +8,10 @@ import { makeReducer } from "../util";
 
 import {
     ADD_STAGE_FILES,
-    DESELECT_FILE,
     SELECT_FILE,
     SELECT_METADATA,
 } from "./constants";
 import {
-    DeselectFileAction,
     SelectFileAction,
     SelectionStateBranch,
     SelectMetadataAction,
@@ -26,21 +23,14 @@ export const initialState = {
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {
-    [DESELECT_FILE]: {
-        accepts: (action: AnyAction): action is DeselectFileAction => action.type === DESELECT_FILE,
-        perform: (state: SelectionStateBranch, action: DeselectFileAction) => ({
-            ...state,
-            files: without(state.files, ...castArray(action.payload)),
-        }),
-    },
     [SELECT_FILE]: {
         accepts: (action: AnyAction): action is SelectFileAction => action.type === SELECT_FILE,
         perform: (state: SelectionStateBranch, action: SelectFileAction) => {
             // tslint:disable-next-line
-            console.log(action.payload);
+            console.log('files selected:', action.payload);
             return {
                 ...state,
-                files: [...state.files, ...castArray(action.payload)],
+                files: [...castArray(action.payload)],
             };
         },
     },

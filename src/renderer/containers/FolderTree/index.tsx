@@ -9,6 +9,7 @@ import {
     State } from "../../state";
 import {
     LoadFilesFromDragAndDropAction,
+    SelectFileAction,
     UploadFile
 } from "../../state/selection/types";
 
@@ -17,6 +18,7 @@ const styles = require("./style.css");
 interface Props {
     className?: string;
     files?: UploadFile[];
+    onCheck?: (files: string[]) => SelectFileAction;
     onDrop?: (file: FileList) => LoadFilesFromDragAndDropAction;
 }
 
@@ -47,9 +49,11 @@ class FolderTree extends React.Component<Props, {}> {
         this.onSelect = this.onSelect.bind(this);
     }
 
-    public onSelect() {
-        // tslint:disable-next-line
-        console.log('select');
+    public onSelect(files: string[]) {
+        // todo ugly
+        if (this.props.onCheck) {
+            this.props.onCheck(files);
+        }
     }
 
     public onExpand(): void {
@@ -76,9 +80,10 @@ class FolderTree extends React.Component<Props, {}> {
         return (
             <Tree.DirectoryTree
                 className={classNames(className, styles.container)}
+                checkable={true}
                 multiple={true}
                 defaultExpandAll={true}
-                onSelect={this.onSelect}
+                onCheck={this.onSelect}
                 onExpand={this.onExpand}
             >
                 {files.map((file: UploadFile) => FolderTree.renderChildDirectories(file.files))}
@@ -95,6 +100,7 @@ function mapStateToProps(state: State, props: Props) {
 }
 
 const dispatchToPropsMap = {
+    onCheck: selection.actions.selectFile,
     onDrop: selection.actions.loadFilesFromDragAndDrop,
 };
 

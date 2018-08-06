@@ -7,7 +7,8 @@ import {
 } from "./constants";
 import {
     AddStageFilesAction,
-    DeselectFileAction, LoadFilesFromDragAndDropAction,
+    DeselectFileAction,
+    LoadFilesFromDragAndDropAction,
     SelectFileAction,
     SelectMetadataAction,
 } from "./types";
@@ -27,7 +28,7 @@ export function stageFiles(files: UploadFile[]): AddStageFilesAction {
     };
 }
 
-export function selectFile(file: UploadFile | UploadFile[]): SelectFileAction {
+export function selectFile(file: string | string[]): SelectFileAction {
     return {
         payload: file,
         type: SELECT_FILE,

@@ -40,12 +40,12 @@ export interface LoadFilesFromDragAndDropAction {
 
 export interface SelectionStateBranch {
     [key: string]: any;
-    files: UploadFile[];
+    files: string[];
     stagedFiles: UploadFile[];
 }
 
 export interface SelectFileAction {
-    payload: UploadFile | UploadFile[];
+    payload: string | string[];
     type: string;
 }
 
