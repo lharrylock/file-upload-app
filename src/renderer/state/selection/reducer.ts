@@ -20,24 +20,8 @@ import {
     SelectMetadataAction,
 } from "./types";
 
-export const initialState = { // todo this should be empty
-    files: [
-        {
-            files: null,
-            name: "image1.ome.tiff",
-            path: "/",
-        },
-        {
-            files: null,
-            name: "image2.ome.tiff",
-            path: "/",
-        },
-        {
-            files: null,
-            name: "cells.csv",
-            path: "/",
-        },
-    ],
+export const initialState = {
+    files: [],
     stagedFiles: [],
 };
 

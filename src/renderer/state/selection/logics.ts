@@ -13,12 +13,11 @@ import { LOAD_FILES } from "./constants";
 import { UploadFile } from "./types";
 
 const getFilesInDirectory = (filePath: string): UploadFile[] => {
-    return readdirSync(filePath).map((name: string) => ({
-        files: statSync(path.resolve(filePath, name)).isDirectory() ?
-            getFilesInDirectory(path.resolve(filePath, name)) : null,
-        name,
-        path: filePath,
-    }));
+    return readdirSync(filePath).map((name: string) => {
+        const children = statSync(path.resolve(filePath, name)).isDirectory() ?
+            getFilesInDirectory(path.resolve(filePath, name)) : null;
+        return new UploadFile(name, filePath, children);
+    });
 };
 
 const loadFilesLogic = createLogic({
@@ -30,12 +29,9 @@ const loadFilesLogic = createLogic({
             const file = action.payload.item(i);
 
             if (file) {
-                files.push({
-                    files: statSync(file.path).isDirectory() ?
-                        getFilesInDirectory(file.path) : null,
-                    name: file.name,
-                    path: file.path,
-                });
+                const children = statSync(file.path).isDirectory() ?
+                getFilesInDirectory(file.path) : null;
+                files.push(new UploadFile(file.name, file.path, children));
 
             } else {
                 // display error?

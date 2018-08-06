@@ -1,6 +1,28 @@
+import { resolve } from "path";
+
 import { MetadataStateBranch } from "../metadata/types";
 
-export interface UploadFile {
+export class UploadFile implements AICSFile {
+    public name: string;
+    public path: string;
+    public files: UploadFile[] | null;
+
+    constructor(name: string, path: string, files: UploadFile[] | null) {
+        this.name = name;
+        this.path = path;
+        this.files = files;
+    }
+
+    get isDirectory(): boolean {
+        return !!this.files;
+    }
+
+    get fullPath(): string {
+        return resolve(this.path, this.name);
+    }
+}
+
+export interface AICSFile {
     name: string;
     path: string;
     files: UploadFile[] | null;

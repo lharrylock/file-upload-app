@@ -1,10 +1,9 @@
+import { Tree } from "antd";
 import * as classNames from "classnames";
-import * as path from "path";
 import * as React from "react";
 import { connect } from "react-redux";
 
 import DragAndDropSquare from "../../components/DragAndDropSquare";
-import FolderTreeNode from "../../components/FolderTreeNode";
 import {
     selection,
     State } from "../../state";
@@ -22,8 +21,40 @@ interface Props {
 }
 
 class FolderTree extends React.Component<Props, {}> {
+    public static renderChildDirectories(files: UploadFile[] | null): any {
+        if (!files) {
+            return null;
+        }
+
+        return (
+            files.map((file: UploadFile) => {
+                if (!file.isDirectory || !file.files) {
+                    return <Tree.TreeNode title={file.name} key={file.fullPath} isLeaf={true}/>;
+                }
+
+                return (
+                    <Tree.TreeNode title={file.name} key={file.fullPath} isLeaf={false}>
+                        {FolderTree.renderChildDirectories(file.files)}
+                    </Tree.TreeNode>
+                );
+            })
+        );
+    }
+
     constructor(props: Props) {
         super(props);
+        this.onExpand = this.onExpand.bind(this);
+        this.onSelect = this.onSelect.bind(this);
+    }
+
+    public onSelect() {
+        // tslint:disable-next-line
+        console.log('select');
+    }
+
+    public onExpand(): void {
+        // tslint:disable-next-line
+        console.log('expand');
     }
 
     public render() {
@@ -32,16 +63,26 @@ class FolderTree extends React.Component<Props, {}> {
             files,
             onDrop,
         } = this.props;
+
+        if (!files || files.length === 0) {
+            return (
+                <DragAndDropSquare
+                    className={classNames(className, styles.container)}
+                    onDrop={onDrop}
+                />
+            );
+        }
+
         return (
-            <div
+            <Tree.DirectoryTree
                 className={classNames(className, styles.container)}
+                multiple={true}
+                defaultExpandAll={true}
+                onSelect={this.onSelect}
+                onExpand={this.onExpand}
             >
-                {files && files.length > 0 ?
-                    files.map((file: UploadFile) =>
-                        (<FolderTreeNode key={path.resolve(file.path, file.name)} file={file}/>)
-                    )
-                    : <DragAndDropSquare onDrop={onDrop}/>}
-            </div>
+                {files.map((file: UploadFile) => FolderTree.renderChildDirectories(file.files))}
+            </Tree.DirectoryTree>
         );
     }
 }
