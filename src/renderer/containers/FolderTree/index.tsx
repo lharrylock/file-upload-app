@@ -22,6 +22,8 @@ interface Props {
     onDrop?: (file: FileList) => LoadFilesFromDragAndDropAction;
 }
 
+const FOLDER_TAG = "(folder)";
+
 class FolderTree extends React.Component<Props, {}> {
     public static renderChildDirectories(files: UploadFile[] | null): any {
         if (!files) {
@@ -35,7 +37,7 @@ class FolderTree extends React.Component<Props, {}> {
                 }
 
                 return (
-                    <Tree.TreeNode title={file.name} key={file.fullPath} isLeaf={false}>
+                    <Tree.TreeNode title={file.name} key={file.fullPath + FOLDER_TAG} isLeaf={false}>
                         {FolderTree.renderChildDirectories(file.files)}
                     </Tree.TreeNode>
                 );
@@ -52,7 +54,7 @@ class FolderTree extends React.Component<Props, {}> {
     public onSelect(files: string[]) {
         // todo ugly
         if (this.props.onCheck) {
-            this.props.onCheck(files);
+            this.props.onCheck(files.filter((file: string) => !file.includes(FOLDER_TAG)));
         }
     }
 
