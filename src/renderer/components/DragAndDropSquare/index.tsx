@@ -1,5 +1,9 @@
-import { Icon } from "antd";
+import {
+    Button,
+    Icon,
+} from "antd";
 import * as classNames from "classnames";
+import { remote } from "electron";
 import * as React from "react";
 
 import {
@@ -26,6 +30,7 @@ class DragAndDropSquare extends React.Component<Props, DragAndDropSquareState> {
         this.onDrop = this.onDrop.bind(this);
         this.onDrag = this.onDrag.bind(this);
         this.onDragLeave = this.onDragLeave.bind(this);
+        this.onBrowse = this.onBrowse.bind(this);
     }
 
     public render(): React.ReactNode {
@@ -43,8 +48,24 @@ class DragAndDropSquare extends React.Component<Props, DragAndDropSquareState> {
             >
                 <Icon type="upload" className={styles.uploadIcon} />
                 <div>Drag and Drop</div>
+                <div>- or -</div>
+                <Button type="primary" onClick={this.onBrowse}>Browse</Button>
             </div>
         );
+    }
+
+    private onBrowse(): void {
+        const properties: Array<"openFile" | "openDirectory" | "multiSelections" | "showHiddenFiles" |
+            "createDirectory" | "promptToCreate" | "noResolveAliases" | "treatPackageAsDirectory"> =
+            ["openFile", "openDirectory", "multiSelections"];
+        const options = {
+            properties,
+            title: "Upload files",
+        };
+        remote.dialog.showOpenDialog(options, (filenames: any) => {
+            // tslint:disable-next-line
+            console.log(filenames);
+        });
     }
 
     private onDrag(): boolean {

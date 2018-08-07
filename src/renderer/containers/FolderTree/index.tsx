@@ -1,4 +1,7 @@
-import { Tree } from "antd";
+import {
+    Button,
+    Tree
+} from "antd";
 import * as classNames from "classnames";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -13,7 +16,6 @@ import {
     SelectFileAction,
     UploadFile
 } from "../../state/selection/types";
-import Button from "antd/es/button/button";
 
 const styles = require("./style.css");
 

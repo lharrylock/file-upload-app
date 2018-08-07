@@ -54,7 +54,6 @@
     "webpack-dev-server": "^3.1.5"
   },
   "dependencies": {
-    "@types/antd": "^1.0.0",
     "@types/classnames": "^2.2.6",
     "@types/lodash": "^4.14.112",
     "antd": "^3.8.0",

@@ -8,7 +8,8 @@
     "noEmit": true,
     "preserveConstEnums": true,
     "strict": true,
-    "target": "ES5"
+    "target": "ES5",
+    "skipLibCheck": true
   },
   "include": [
     "typings/**/*",

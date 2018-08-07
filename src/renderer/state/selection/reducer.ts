@@ -29,6 +29,7 @@ const actionToConfigMap: TypeToDescriptionMap = {
         perform: (state: SelectionStateBranch, action: ClearStagedFilesAction) => {
             return {
                 ...state,
+                files: [],
                 stagedFiles: [],
             };
         },
