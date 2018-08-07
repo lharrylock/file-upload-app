@@ -4,6 +4,7 @@ import {
 } from "antd";
 import * as classNames from "classnames";
 import { remote } from "electron";
+import { isEmpty } from "lodash";
 import * as React from "react";
 
 import {
@@ -69,7 +70,7 @@ class DragAndDropSquare extends React.Component<Props, DragAndDropSquareState> {
             // tslint:disable-next-line
             console.log(filenames);
             // todo ugly
-            if (this.props.onOpen) {
+            if (this.props.onOpen && !isEmpty(filenames)) {
                 this.props.onOpen(filenames);
             }
         });

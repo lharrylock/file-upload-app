@@ -119,14 +119,14 @@ console.log(files);
     }
 }
 
-function mapStateToProps(state: State, props: Props) {
+function mapStateToProps(state: State, props: Props): Partial<Props> {
     return {
         className: props.className,
         files: state.selection.stagedFiles,
     };
 }
 
-const dispatchToPropsMap = {
+const dispatchToPropsMap: Partial<Props> = {
     onCheck: selection.actions.selectFile,
     onClear: selection.actions.clearStagedFiles,
     onDrop: selection.actions.loadFilesFromDragAndDrop,
