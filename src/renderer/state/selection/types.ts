@@ -38,6 +38,11 @@ export interface LoadFilesFromDragAndDropAction {
     type: string;
 }
 
+export interface LoadFilesFromOpenDialogAction {
+    payload: string[];
+    type: string;
+}
+
 export interface ClearStagedFilesAction {
     type: string;
 }

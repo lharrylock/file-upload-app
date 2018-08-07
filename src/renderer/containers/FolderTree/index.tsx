@@ -12,7 +12,7 @@ import {
     State } from "../../state";
 import {
     ClearStagedFilesAction,
-    LoadFilesFromDragAndDropAction,
+    LoadFilesFromDragAndDropAction, LoadFilesFromOpenDialogAction,
     SelectFileAction,
     UploadFile
 } from "../../state/selection/types";
@@ -24,7 +24,8 @@ interface Props {
     files?: UploadFile[];
     onCheck?: (files: string[]) => SelectFileAction;
     onClear?: () => ClearStagedFilesAction;
-    onDrop?: (file: FileList) => LoadFilesFromDragAndDropAction;
+    onDrop?: (files: FileList) => LoadFilesFromDragAndDropAction; // todo these two are so similar
+    onOpen?: (files: string[]) => LoadFilesFromOpenDialogAction;
 }
 
 const FOLDER_TAG = "(folder)";
@@ -34,7 +35,8 @@ class FolderTree extends React.Component<Props, {}> {
         if (!files) {
             return null;
         }
-
+        // tslint:disable-next-line
+console.log(files);
         return (
             files.map((file: UploadFile) => {
                 if (!file.isDirectory || !file.files) {
@@ -81,6 +83,7 @@ class FolderTree extends React.Component<Props, {}> {
             className,
             files,
             onDrop,
+            onOpen,
         } = this.props;
 
         let body;
@@ -88,6 +91,7 @@ class FolderTree extends React.Component<Props, {}> {
             body = (
                 <DragAndDropSquare
                     onDrop={onDrop}
+                    onOpen={onOpen}
                 />
             );
         } else {
@@ -126,6 +130,7 @@ const dispatchToPropsMap = {
     onCheck: selection.actions.selectFile,
     onClear: selection.actions.clearStagedFiles,
     onDrop: selection.actions.loadFilesFromDragAndDrop,
+    onOpen: selection.actions.openFilesFromDialog,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(FolderTree);

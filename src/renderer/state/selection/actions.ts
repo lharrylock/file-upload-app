@@ -1,14 +1,14 @@
 import {
     ADD_STAGE_FILES, CLEAR_STAGED_FILES,
     DESELECT_FILE,
-    LOAD_FILES,
+    LOAD_FILES, OPEN_FILES,
     SELECT_FILE,
     SELECT_METADATA,
 } from "./constants";
 import {
     AddStageFilesAction, ClearStagedFilesAction,
     DeselectFileAction,
-    LoadFilesFromDragAndDropAction,
+    LoadFilesFromDragAndDropAction, LoadFilesFromOpenDialogAction,
     SelectFileAction,
     SelectMetadataAction,
 } from "./types";
@@ -24,6 +24,13 @@ export function loadFilesFromDragAndDrop(files: FileList): LoadFilesFromDragAndD
     return {
         payload: files,
         type: LOAD_FILES,
+    };
+}
+
+export function openFilesFromDialog(files: string[]): LoadFilesFromOpenDialogAction {
+    return {
+        payload: files,
+        type: OPEN_FILES,
     };
 }
 

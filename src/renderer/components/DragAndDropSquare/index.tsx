@@ -8,13 +8,15 @@ import * as React from "react";
 
 import {
     LoadFilesFromDragAndDropAction,
+    LoadFilesFromOpenDialogAction,
 } from "../../state/selection/types";
 
 const styles = require("./style.css");
 
 export interface Props {
     className?: string;
-    onDrop?: (file: FileList) => LoadFilesFromDragAndDropAction;
+    onDrop?: (files: FileList) => LoadFilesFromDragAndDropAction;
+    onOpen?: (files: string[]) => LoadFilesFromOpenDialogAction;
 }
 
 export interface DragAndDropSquareState {
@@ -55,6 +57,7 @@ class DragAndDropSquare extends React.Component<Props, DragAndDropSquareState> {
     }
 
     private onBrowse(): void {
+        // todo create a type for this
         const properties: Array<"openFile" | "openDirectory" | "multiSelections" | "showHiddenFiles" |
             "createDirectory" | "promptToCreate" | "noResolveAliases" | "treatPackageAsDirectory"> =
             ["openFile", "openDirectory", "multiSelections"];
@@ -65,6 +68,10 @@ class DragAndDropSquare extends React.Component<Props, DragAndDropSquareState> {
         remote.dialog.showOpenDialog(options, (filenames: any) => {
             // tslint:disable-next-line
             console.log(filenames);
+            // todo ugly
+            if (this.props.onOpen) {
+                this.props.onOpen(filenames);
+            }
         });
     }
 
