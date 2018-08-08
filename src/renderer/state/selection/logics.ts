@@ -29,19 +29,19 @@ const getFilesInDirectory = (filePath: string): UploadFile[] => {
 const loadFilesLogic = createLogic({
     transform: ({ action }: ReduxLogicDeps, next: (action: AnyAction) => void) => {
         const files: UploadFile[] = [];
+
         for (let i = 0; i < action.payload.length; i++) {
             const file = action.payload.item(i);
 
             if (file) {
                 const children = statSync(file.path).isDirectory() ?
                 getFilesInDirectory(file.path) : null;
-                files.push(new UploadFile(file.name, file.path, children));
+                files.push(new UploadFile(file.name, dirname(file.path), children));
 
             } else {
                 // todo display error?
             }
         }
-
         next(stageFiles(files));
     },
     type: LOAD_FILES,

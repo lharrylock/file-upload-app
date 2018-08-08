@@ -53,8 +53,6 @@ const actionToConfigMap: TypeToDescriptionMap = {
     [ADD_STAGE_FILES]: {
         accepts: (action: AnyAction): action is SelectFileAction => action.type === ADD_STAGE_FILES,
         perform: (state: SelectionStateBranch, action: SelectFileAction) => {
-            // tslint:disable-next-line
-            console.log(action.payload);
             return {
                 ...state,
                 stagedFiles: [...state.stagedFiles, ...castArray(action.payload)],

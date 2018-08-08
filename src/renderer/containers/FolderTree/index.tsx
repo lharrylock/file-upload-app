@@ -31,24 +31,15 @@ interface Props {
 const FOLDER_TAG = "(folder)";
 
 class FolderTree extends React.Component<Props, {}> {
-    public static renderChildDirectories(files: UploadFile[] | null): any {
-        if (!files) {
-            return null;
+    public static renderChildDirectories(file: UploadFile): React.ReactNode {
+        if (!file.isDirectory || !file.files) {
+            return <Tree.TreeNode title={file.name} key={file.fullPath} isLeaf={true}/>;
         }
-        // tslint:disable-next-line
-console.log(files);
-        return (
-            files.map((file: UploadFile) => {
-                if (!file.isDirectory || !file.files) {
-                    return <Tree.TreeNode title={file.name} key={file.fullPath} isLeaf={true}/>;
-                }
 
-                return (
-                    <Tree.TreeNode title={file.name} key={file.fullPath + FOLDER_TAG} isLeaf={false}>
-                        {FolderTree.renderChildDirectories(file.files)}
-                    </Tree.TreeNode>
-                );
-            })
+        return (
+            <Tree.TreeNode title={file.name} key={file.fullPath + FOLDER_TAG} isLeaf={false}>
+                {file.files.map((child: UploadFile) => FolderTree.renderChildDirectories(child))}
+            </Tree.TreeNode>
         );
     }
 
@@ -105,7 +96,7 @@ console.log(files);
                         onCheck={this.onSelect}
                         onExpand={this.onExpand}
                     >
-                        {files.map((file: UploadFile) => FolderTree.renderChildDirectories(file.files))}
+                        {files.map((file: UploadFile) => FolderTree.renderChildDirectories(file))}
                     </Tree.DirectoryTree>
                 </div>
             );
