@@ -33,3 +33,9 @@ export interface State {
 export interface TypeToDescriptionMap {
     [propName: string ]: ActionDescription;
 }
+
+export enum AppStatus {
+    NeedsStagedFiles = 1,
+    ViewingAllMetadata,
+    CreatingMetadata,
+}

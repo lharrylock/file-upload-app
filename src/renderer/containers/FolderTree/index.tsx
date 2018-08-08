@@ -6,13 +6,11 @@ import * as classNames from "classnames";
 import * as React from "react";
 import { connect } from "react-redux";
 
-import DragAndDropSquare from "../../components/DragAndDropSquare";
 import {
     selection,
     State } from "../../state";
 import {
     ClearStagedFilesAction,
-    LoadFilesFromDragAndDropAction, LoadFilesFromOpenDialogAction,
     SelectFileAction,
     UploadFile
 } from "../../state/selection/types";
@@ -24,8 +22,6 @@ interface Props {
     files?: UploadFile[];
     onCheck?: (files: string[]) => SelectFileAction;
     onClear?: () => ClearStagedFilesAction;
-    onDrop?: (files: FileList) => LoadFilesFromDragAndDropAction; // todo these two are so similar
-    onOpen?: (files: string[]) => LoadFilesFromOpenDialogAction;
 }
 
 const FOLDER_TAG = "(folder)";
@@ -73,39 +69,25 @@ class FolderTree extends React.Component<Props, {}> {
         const {
             className,
             files,
-            onDrop,
-            onOpen,
         } = this.props;
 
-        let body;
-        if (!files || files.length === 0) {
-            body = (
-                <DragAndDropSquare
-                    onDrop={onDrop}
-                    onOpen={onOpen}
-                />
-            );
-        } else {
-            body = (
-                <div>
-                    <Button onClick={this.clearAll} icon="delete" shape="circle"/>
-                    <Button icon="upload" shape="circle"/>
-                    <Tree.DirectoryTree
-                        checkable={true}
-                        multiple={true}
-                        defaultExpandAll={true}
-                        onCheck={this.onSelect}
-                        onExpand={this.onExpand}
-                    >
-                        {files.map((file: UploadFile) => FolderTree.renderChildDirectories(file))}
-                    </Tree.DirectoryTree>
-                </div>
-            );
+        if (!files) {
+            return null;
         }
 
         return (
             <div className={classNames(className, styles.container)}>
-                {body}
+                <Button onClick={this.clearAll} icon="delete" shape="circle"/>
+                <Button icon="upload" shape="circle"/>
+                <Tree.DirectoryTree
+                    checkable={true}
+                    multiple={true}
+                    defaultExpandAll={true}
+                    onCheck={this.onSelect}
+                    onExpand={this.onExpand}
+                >
+                    {files.map((file: UploadFile) => FolderTree.renderChildDirectories(file))}
+                </Tree.DirectoryTree>
             </div>
         );
     }
@@ -121,8 +103,6 @@ function mapStateToProps(state: State, props: Props): Partial<Props> {
 const dispatchToPropsMap: Partial<Props> = {
     onCheck: selection.actions.selectFile,
     onClear: selection.actions.clearStagedFiles,
-    onDrop: selection.actions.loadFilesFromDragAndDrop,
-    onOpen: selection.actions.openFilesFromDialog,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(FolderTree);

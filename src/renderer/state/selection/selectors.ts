@@ -1,7 +1,7 @@
 import { isEmpty } from "lodash";
 import { createSelector } from "reselect";
 
-import { State } from "../types";
+import { AppStatus, State } from "../types";
 
 import { UploadFile } from "./types";
 
@@ -11,6 +11,11 @@ export const getSelectedFiles = (state: State): string[] => state.selection.file
 export const getStagedFiles = (state: State) => state.selection.stagedFiles;
 
 // COMPLEX SELECTORS
-export const hasStagedFiles = createSelector([getStagedFiles], (files: UploadFile[]): boolean => {
-    return !isEmpty(files);
+export const getAppStatus = createSelector([
+    getStagedFiles,
+], (stagedFiles: UploadFile[]): AppStatus => {
+    if (isEmpty(stagedFiles)) {
+        return AppStatus.NeedsStagedFiles;
+    }
+    return AppStatus.ViewingAllMetadata;
 });
