@@ -88,7 +88,8 @@ class FolderTree extends React.Component<Props, {}> {
         } else {
             body = (
                 <div>
-                    <Button onClick={this.clearAll}>Clear all</Button>
+                    <Button onClick={this.clearAll} icon="delete" shape="circle"/>
+                    <Button icon="upload" shape="circle"/>
                     <Tree.DirectoryTree
                         checkable={true}
                         multiple={true}

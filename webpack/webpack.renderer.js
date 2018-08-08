@@ -56,9 +56,6 @@ module.exports = ({ analyze, env } = {}) => ({
                         compilerOptions: {
                             noEmit: false,
                         },
-                        // plugins: [
-                        //     'react-hot-loader'
-                        // ],
                         getCustomTransformers: () => ({
                             before: [
                                 tsImportPluginFactory([

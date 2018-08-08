@@ -1,6 +1,7 @@
 .container {
     height: 100%;
     display: flex;
+    font-size: 16px;
 
     & .folder-tree {
         flex: 1;

@@ -21,6 +21,7 @@ export interface Props {
 }
 
 export interface DragAndDropSquareState {
+    count: number;
     isHovered: boolean;
 }
 
@@ -28,6 +29,7 @@ class DragAndDropSquare extends React.Component<Props, DragAndDropSquareState> {
     constructor(props: Props) {
         super(props);
         this.state = {
+            count: 0,
             isHovered: false,
         };
         this.onDrop = this.onDrop.bind(this);
@@ -49,10 +51,12 @@ class DragAndDropSquare extends React.Component<Props, DragAndDropSquareState> {
                 onDragEnd={this.onDragLeave}
                 onDrop={this.onDrop}
             >
-                <Icon type="upload" className={styles.uploadIcon} />
-                <div>Drag and Drop</div>
-                <div>- or -</div>
-                <Button type="primary" onClick={this.onBrowse}>Browse</Button>
+                <div className={styles.content}>
+                    <Icon type="upload" className={styles.uploadIcon} />
+                    <div>Drag and Drop</div>
+                    <div>- or -</div>
+                    <Button type="primary" onClick={this.onBrowse} className={styles.button}>Browse</Button>
+                </div>
             </div>
         );
     }
@@ -76,19 +80,25 @@ class DragAndDropSquare extends React.Component<Props, DragAndDropSquareState> {
         });
     }
 
-    private onDrag(): boolean {
-        this.setState({isHovered: true});
-        return false;
+    private onDrag(e: React.DragEvent<HTMLDivElement>): void {
+        e.preventDefault();
+        this.setState({isHovered: true, count: this.state.count + 1});
     }
 
-    private onDragLeave(): boolean {
-        this.setState({isHovered: false});
-        return false;
+    private onDragLeave(e: React.DragEvent<HTMLDivElement>): void {
+        e.preventDefault();
+
+        const count = this.state.count - 1;
+        if (count === 0) {
+            this.setState({isHovered: false, count: 0});
+        } else {
+            this.setState({count});
+        }
     }
 
     private onDrop(e: React.DragEvent<HTMLDivElement>): boolean {
         e.preventDefault();
-
+        this.setState({isHovered: false});
         // todo this is ugly
         if (this.props.onDrop) {
             this.props.onDrop(e.dataTransfer.files);
