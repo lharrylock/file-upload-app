@@ -9,7 +9,8 @@
         "interface-name": [true, "never-prefix"],
         "jsx-no-multiline-js": [false],
         "jsx-wrap-multiline": true,
-        "no-var-requires": false, // needed for CSS Modules; const styles = require('./style.css')
+      "no-console": false,
+      "no-var-requires": false, // needed for CSS Modules; const styles = require('./style.css')
         "ordered-imports": [
           true,
           {

@@ -57,8 +57,6 @@ const openFilesLogic = createLogic({
             const path = dirname(file);
             files.push(new UploadFile(name, path, children));
         }
-// tslint:disable-next-line
-        console.log(files)
         next(stageFiles(files));
     },
     type: OPEN_FILES,

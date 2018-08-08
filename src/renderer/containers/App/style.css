@@ -9,4 +9,8 @@
     & .files-to-upload {
         flex: 1;
     }
+
+    & .metadata-entry {
+        flex: 1;
+    }
 }
