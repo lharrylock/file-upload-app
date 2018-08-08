@@ -8,6 +8,7 @@ import { LoadFilesFromDragAndDropAction, LoadFilesFromOpenDialogAction } from ".
 import { AppStatus, State } from "../../state/types";
 
 import FolderTree from "../FolderTree";
+import MetadataDocuments from "../MetadataDocuments";
 import MetadataEntry from "../MetadataEntry";
 
 const styles = require("./style.css");
@@ -42,7 +43,7 @@ class App extends React.Component<AppProps, {}> {
                 return (
                     <React.Fragment>
                         <FolderTree className={styles.folderTree}/>
-                        <div className={styles.metadataEntry}>All Metadata</div>
+                        <MetadataDocuments className={styles.metadataEntry}/>
                     </React.Fragment>
                 );
             default:
