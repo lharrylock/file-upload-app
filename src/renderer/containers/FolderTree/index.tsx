@@ -1,4 +1,5 @@
 import { Button, Tree } from "antd";
+import Icon from "antd/es/icon";
 import * as classNames from "classnames";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -73,17 +74,23 @@ class FolderTree extends React.Component<Props, {}> {
 
         return (
             <div className={classNames(className, styles.container)}>
-                <Button onClick={this.clearAll} icon="delete" shape="circle"/>
-                <Button icon="upload" shape="circle"/>
-                <Tree.DirectoryTree
-                    checkable={isCheckable}
-                    multiple={true}
-                    defaultExpandAll={true}
-                    onCheck={this.onSelect}
-                    onExpand={this.onExpand}
-                >
-                    {files.map((file: UploadFile) => FolderTree.renderChildDirectories(file))}
-                </Tree.DirectoryTree>
+                <div className={styles.logoContainer}>
+                    <Icon type="cloud-upload" className={styles.logo}/>
+                    <span className={styles.brandName}>AICS File Uploader</span>
+                </div>
+                <div className={styles.fileTree}>
+                    <Button onClick={this.clearAll} icon="delete" shape="circle"/>
+                    <Button icon="upload" shape="circle"/>
+                    <Tree.DirectoryTree
+                        checkable={isCheckable}
+                        multiple={true}
+                        defaultExpandAll={true}
+                        onCheck={this.onSelect}
+                        onExpand={this.onExpand}
+                    >
+                        {files.map((file: UploadFile) => FolderTree.renderChildDirectories(file))}
+                    </Tree.DirectoryTree>
+                </div>
             </div>
         );
     }

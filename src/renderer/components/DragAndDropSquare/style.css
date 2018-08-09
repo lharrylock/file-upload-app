@@ -1,6 +1,4 @@
-:root {
-    --brand-primary: #419CF5;
-}
+@import "../../styles/colors.css";
 
 .container {
     width: 100%;
