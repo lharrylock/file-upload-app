@@ -38,4 +38,5 @@ export enum AppStatus {
     NeedsStagedFiles = 1,
     ViewingAllMetadata,
     CreatingMetadata,
+    AttachingMetadata,
 }

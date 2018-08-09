@@ -1,24 +1,17 @@
-import {
-    Button,
-    Tree
-} from "antd";
+import { Button, Tree } from "antd";
 import * as classNames from "classnames";
 import * as React from "react";
 import { connect } from "react-redux";
 
-import {
-    selection,
-    State } from "../../state";
-import {
-    ClearStagedFilesAction,
-    SelectFileAction,
-    UploadFile
-} from "../../state/selection/types";
+import { selection, State } from "../../state";
+import { ClearStagedFilesAction, SelectFileAction, UploadFile } from "../../state/selection/types";
+import { AppStatus } from "../../state/types";
 
 const styles = require("./style.css");
 
 interface Props {
     className?: string;
+    status?: AppStatus;
     files?: UploadFile[];
     onCheck?: (files: string[]) => SelectFileAction;
     onClear?: () => ClearStagedFilesAction;
@@ -69,18 +62,21 @@ class FolderTree extends React.Component<Props, {}> {
         const {
             className,
             files,
+            status,
         } = this.props;
 
         if (!files) {
             return null;
         }
 
+        const isCheckable = status === AppStatus.AttachingMetadata;
+
         return (
             <div className={classNames(className, styles.container)}>
                 <Button onClick={this.clearAll} icon="delete" shape="circle"/>
                 <Button icon="upload" shape="circle"/>
                 <Tree.DirectoryTree
-                    checkable={true}
+                    checkable={isCheckable}
                     multiple={true}
                     defaultExpandAll={true}
                     onCheck={this.onSelect}
@@ -97,6 +93,7 @@ function mapStateToProps(state: State, props: Props): Partial<Props> {
     return {
         className: props.className,
         files: state.selection.stagedFiles,
+        status: selection.selectors.getAppStatus(state),
     };
 }
 
