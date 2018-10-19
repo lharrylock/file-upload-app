@@ -1,7 +1,13 @@
-import { app, BrowserWindow } from "electron";
+import {
+    app,
+    BrowserWindow,
+    ipcMain,
+    Menu,
+    MenuItemConstructorOptions,
+} from "electron";
 import * as url from "url";
 
-// Keep a global reference of the window object, if you don't, the window will
+// Keep a global reference of the window object, if you don"t, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow | null;
 
@@ -51,3 +57,25 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+// Menu
+const template: MenuItemConstructorOptions[] = [
+    {
+        label: "File",
+        submenu: [
+            {
+                label: "Clear all staged files",
+                click(menuItem, window, event) {
+                    console.log("clear called");
+                    event.sender.send("CLEAR_STAGED_FILES", null);
+                },
+            },
+            {
+                role: "quit",
+            },
+        ],
+    },
+];
+
+const menu = Menu.buildFromTemplate(template);
+Menu.setApplicationMenu(menu);
