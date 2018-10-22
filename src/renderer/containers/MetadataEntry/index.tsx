@@ -2,11 +2,10 @@ import { LabKeyOptionSelector } from "aics-react-labkey";
 import "aics-react-labkey-internal/dist/styles.css";
 import { Button } from "antd";
 import * as classNames from "classnames";
+import { ipcRenderer } from "electron";
 import { debounce } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
-
-import CreatePlateModal from "../../components/CreatePlateModal/index";
 
 import {
     State,
@@ -28,9 +27,7 @@ interface Props {
 
 interface MetadataEntryState {
     barcode?: string;
-    confirmCreatePlateModalLoading: boolean;
     error?: string;
-    showCreatePlateModal: boolean;
 }
 
 interface BarcodeOption {
@@ -52,14 +49,9 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
 
     constructor(props: {}) {
         super(props);
-        this.state = {
-            confirmCreatePlateModalLoading: false,
-            showCreatePlateModal: false,
-        };
+        this.state = {};
         this.setBarcode = this.setBarcode.bind(this);
         this.openCreatePlateModal = this.openCreatePlateModal.bind(this);
-        this.handleCreatePlateModalOk = this.handleCreatePlateModalOk.bind(this);
-        this.handleCreatePlateModalCancel = this.handleCreatePlateModalCancel.bind(this);
         MetadataEntry.getBarcodesAsync = debounce(MetadataEntry.getBarcodesAsync, 500);
     }
 
@@ -68,28 +60,12 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
     }
 
     public openCreatePlateModal(): void {
-        this.setState({showCreatePlateModal: true});
-    }
-
-    public handleCreatePlateModalOk(): void {
-        this.setState({
-            confirmCreatePlateModalLoading: true,
-        });
-        setTimeout(() => {
-            this.setState({
-                confirmCreatePlateModalLoading: false,
-                showCreatePlateModal: false,
-            });
-        }, 2000);
-    }
-
-    public handleCreatePlateModalCancel(): void {
-        this.setState({showCreatePlateModal: false});
+        ipcRenderer.send("OPEN_CREATE_PLATE");
     }
 
     public render() {
+        const {barcode, error} = this.state;
         const {className, files} = this.props;
-        const {confirmCreatePlateModalLoading, showCreatePlateModal} = this.state;
         const noFiles = !files || files.length === 0;
         return (
             <div
@@ -117,10 +93,10 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
                         label="Plate Barcode"
                         optionIdKey="barcode"
                         optionNameKey="barcode"
-                        selected={this.state.barcode}
+                        selected={barcode}
                         onOptionSelection={this.setBarcode}
                         disabled={false}
-                        error={this.state.error}
+                        error={error}
                         clearable={true}
                         placeholder="Enter barcode"
                         helpText="Enter barcode if plate exists or click 'Create Plate'"
@@ -130,12 +106,6 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
                     <Button onClick={this.openCreatePlateModal}>
                         Create Plate
                     </Button>
-                    <CreatePlateModal
-                        visible={showCreatePlateModal}
-                        onOk={this.handleCreatePlateModalOk}
-                        confirmLoading={confirmCreatePlateModalLoading}
-                        onCancel={this.handleCreatePlateModalCancel}
-                    />
                 </div>
             </div>
         );

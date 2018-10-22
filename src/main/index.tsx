@@ -9,7 +9,7 @@ import * as url from "url";
 
 // Keep a global reference of the window object, if you don"t, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win: BrowserWindow | null;
+let win: BrowserWindow | undefined;
 
 function createWindow() {
     // Create the browser window.
@@ -29,7 +29,7 @@ function createWindow() {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
-        win = null;
+        win = undefined;
     });
 }
 
@@ -55,27 +55,55 @@ app.on("activate", () => {
     }
 });
 
+ipcMain.on("OPEN_CREATE_PLATE", (event) => {
+   console.log(event);
+   const child = new BrowserWindow({
+       modal: true,
+       parent: win,
+       show: false,
+       webPreferences: {
+           devTools: true,
+           nodeIntegration: false,
+       },
+   });
+   const modalUrl = // "https://github.com";
+   "http://stg-aics.corp.alleninstitute.org/labkey/aics_microscopy/AICS/createPlate.view?";
+   child.loadURL(modalUrl);
+   // todo: use env variable for host
+   child.once("ready-to-show", () => {
+       child.show();
+   });
+   child.webContents.on("will-navigate", (e: Event, next: string) => {
+       // e.preventDefault();
+       console.log("will navigate", next);
+       if (next.indexOf("/labkey/aics_microscopy/AICS/platesWells.view") > -1) {
+           e.preventDefault();
+           console.log("Plate created");
+       }
+   });
+});
+
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
 
 // Menu
-const template: MenuItemConstructorOptions[] = [
-    {
-        label: "File",
-        submenu: [
-            {
-                label: "Clear all staged files",
-                click(menuItem, window, event) {
-                    console.log("clear called");
-                    event.sender.send("CLEAR_STAGED_FILES", null);
-                },
-            },
-            {
-                role: "quit",
-            },
-        ],
-    },
-];
-
-const menu = Menu.buildFromTemplate(template);
-Menu.setApplicationMenu(menu);
+// const template: MenuItemConstructorOptions[] = [
+//     {
+//         label: "File",
+//         submenu: [
+//             {
+//                 label: "Clear all staged files",
+//                 click(menuItem, window, event) {
+//                     console.log("clear called");
+//                     event.sender.send("CLEAR_STAGED_FILES", null);
+//                 },
+//             },
+//             {
+//                 role: "quit",
+//             },
+//         ],
+//     },
+// ];
+//
+// const menu = Menu.buildFromTemplate(template);
+// Menu.setApplicationMenu(menu);
