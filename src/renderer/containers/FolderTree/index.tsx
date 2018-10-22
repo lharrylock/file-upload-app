@@ -42,8 +42,9 @@ class FolderTree extends React.Component<Props, {}> {
 
     public onSelect(files: string[]) {
         // todo ugly
+        const filesExcludingFolders = files.filter((file: string) => !file.includes(FOLDER_TAG));
         if (this.props.onCheck) {
-            this.props.onCheck(files.filter((file: string) => !file.includes(FOLDER_TAG)));
+            this.props.onCheck(filesExcludingFolders);
         }
     }
 
@@ -70,8 +71,6 @@ class FolderTree extends React.Component<Props, {}> {
             return null;
         }
 
-        const isCheckable = status === AppStatus.AttachingMetadata;
-
         return (
             <div className={classNames(className, styles.container)}>
                 <div className={styles.logoContainer}>
@@ -82,10 +81,10 @@ class FolderTree extends React.Component<Props, {}> {
                     <Button onClick={this.clearAll} icon="delete" shape="circle"/>
                     <Button icon="upload" shape="circle"/>
                     <Tree.DirectoryTree
-                        checkable={isCheckable}
+                        checkable={false}
                         multiple={true}
                         defaultExpandAll={true}
-                        onCheck={this.onSelect}
+                        onSelect={this.onSelect}
                         onExpand={this.onExpand}
                     >
                         {files.map((file: UploadFile) => FolderTree.renderChildDirectories(file))}
