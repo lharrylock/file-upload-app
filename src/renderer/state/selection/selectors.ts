@@ -17,5 +17,6 @@ export const getAppStatus = createSelector([
     if (isEmpty(stagedFiles)) {
         return AppStatus.NeedsStagedFiles;
     }
-    return AppStatus.ViewingAllMetadata;
+    // todo need a way to return uploading sstatus
+    return AppStatus.CreatingMetadata;
 });
