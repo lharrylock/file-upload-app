@@ -1,3 +1,4 @@
+import "aics-react-labkey/dist/styles.css";
 import "antd/dist/antd.css";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -8,7 +9,6 @@ import { LoadFilesFromDragAndDropAction, LoadFilesFromOpenDialogAction } from ".
 import { AppStatus, State } from "../../state/types";
 
 import FolderTree from "../FolderTree";
-import MetadataDocuments from "../MetadataDocuments";
 import MetadataEntry from "../MetadataEntry";
 
 const styles = require("./style.css");
@@ -39,13 +39,6 @@ class App extends React.Component<AppProps, {}> {
                         <MetadataEntry className={styles.metadataEntry}/>
                     </React.Fragment>)
                 ;
-            case AppStatus.ViewingAllMetadata:
-                return (
-                    <React.Fragment>
-                        <FolderTree className={styles.folderTree}/>
-                        <MetadataDocuments className={styles.metadataEntry}/>
-                    </React.Fragment>
-                );
             default:
                 return (
                     <DragAndDropSquare
