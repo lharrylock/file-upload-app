@@ -56,6 +56,7 @@
   "dependencies": {
     "@types/classnames": "^2.2.6",
     "@types/lodash": "^4.14.112",
+    "aics-react-labkey": "^4.1.0",
     "aics-react-labkey-internal": "^2.2.4",
     "antd": "^3.8.0",
     "classnames": "^2.2.6",
