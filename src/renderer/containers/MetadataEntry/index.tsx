@@ -1,10 +1,12 @@
 import { LabKeyOptionSelector } from "aics-react-labkey";
 import "aics-react-labkey-internal/dist/styles.css";
-import { Button, Modal } from "antd";
+import { Button } from "antd";
 import * as classNames from "classnames";
 import { debounce } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
+
+import CreatePlateModal from "../../components/CreatePlateModal/index";
 
 import {
     State,
@@ -128,15 +130,12 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
                     <Button onClick={this.openCreatePlateModal}>
                         Create Plate
                     </Button>
-                    <Modal
-                        title="Title"
+                    <CreatePlateModal
                         visible={showCreatePlateModal}
                         onOk={this.handleCreatePlateModalOk}
                         confirmLoading={confirmCreatePlateModalLoading}
                         onCancel={this.handleCreatePlateModalCancel}
-                    >
-                        <p>Labkey</p>
-                    </Modal>
+                    />
                 </div>
             </div>
         );
