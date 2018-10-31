@@ -57,28 +57,26 @@ app.on("activate", () => {
 
 ipcMain.on("OPEN_CREATE_PLATE", (event) => {
    console.log(event);
-   const child = new BrowserWindow({
+   const child: BrowserWindow = new BrowserWindow({
        modal: true,
        parent: win,
        show: false,
        webPreferences: {
-           devTools: true,
            nodeIntegration: false,
        },
    });
-   const modalUrl = // "https://github.com";
-   "http://stg-aics.corp.alleninstitute.org/labkey/aics_microscopy/AICS/createPlate.view?";
+   const host = "10.128.62.56:42287"; // "stg-aics.corp.alleninstitute.org";
+   const modalUrl = `http://${host}/labkey/aics_microscopy/AICS/plateStandalone.view`;
    child.loadURL(modalUrl);
    // todo: use env variable for host
    child.once("ready-to-show", () => {
        child.show();
    });
    child.webContents.on("will-navigate", (e: Event, next: string) => {
-       // e.preventDefault();
        console.log("will navigate", next);
-       if (next.indexOf("/labkey/aics_microscopy/AICS/platesWells.view") > -1) {
+       if (next.indexOf("plateStandalone.view") > -1) {
            e.preventDefault();
-           console.log("Plate created");
+
        }
    });
 });
