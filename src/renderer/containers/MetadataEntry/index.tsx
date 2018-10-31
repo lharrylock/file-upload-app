@@ -85,7 +85,6 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
                     </div>
                 )}
                 <div>
-                    Plate Barcode:
                     <LabKeyOptionSelector
                         required={true}
                         async={true}
