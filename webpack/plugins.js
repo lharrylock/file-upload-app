@@ -30,7 +30,7 @@ const PLUGINS_BY_PROCESS = {
         new ExtractTextPlugin('style.css'),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'index.template.html')
-        })
+        }),
     ]
 };
 module.exports = (env, analyzer, process) => [
