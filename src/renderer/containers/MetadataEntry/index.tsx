@@ -7,6 +7,8 @@ import { debounce } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
 
+import Plate from "../../components/Plate/index";
+
 import {
     State,
 } from "../../state";
@@ -105,6 +107,7 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
                     <Button onClick={this.openCreatePlateModal}>
                         Create Plate
                     </Button>
+                    <Plate/>
                 </div>
             </div>
         );
