@@ -55,8 +55,6 @@ task wrapper(type: Wrapper) {
 }
 
 task lint(type: NodeTask) {
-    dependsOn npmInstall
-
     script =  file("${npmBin}/tslint")
     FileTree tsFiles = fileTree(dir: "src", includes: ["**/*.ts", "**/*.tsx"])
     args = ["-c", "tslint.json"] + tsFiles.asList()

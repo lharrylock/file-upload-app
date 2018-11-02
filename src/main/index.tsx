@@ -1,9 +1,6 @@
 import {
     app,
     BrowserWindow,
-    ipcMain,
-    Menu,
-    MenuItemConstructorOptions,
 } from "electron";
 import * as url from "url";
 
