@@ -11,8 +11,10 @@ import {
     PlateStateBranch,
 } from "./types";
 
-export const initialState = {
-    wells: [[]],
+export const initialState: PlateStateBranch = {
+    plate: {
+        wells: [[]],
+    },
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {

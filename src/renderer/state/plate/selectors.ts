@@ -1,9 +1,8 @@
 import { isEmpty } from "lodash";
 import { createSelector } from "reselect";
 
+import { UploadFile } from "../selection/types";
 import { AppStatus, State } from "../types";
-
-import { UploadFile } from "./types";
 
 // BASIC SELECTORS
 export const getSelections = (state: State) => state.selection;
@@ -17,6 +16,6 @@ export const getAppStatus = createSelector([
     if (isEmpty(stagedFiles)) {
         return AppStatus.NeedsStagedFiles;
     }
-    // todo need a way to return uploading sstatus
+    // todo need a way to return uploading status
     return AppStatus.CreatingMetadata;
 });

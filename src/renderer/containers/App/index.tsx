@@ -14,8 +14,8 @@ import MetadataEntry from "../MetadataEntry";
 const styles = require("./style.css");
 
 interface AppProps {
-    onDrop?: (files: FileList) => LoadFilesFromDragAndDropAction; // todo these two are so similar
-    onOpen?: (files: string[]) => LoadFilesFromOpenDialogAction;
+    onDrop: (files: FileList) => LoadFilesFromDragAndDropAction; // todo these two are so similar
+    onOpen: (files: string[]) => LoadFilesFromOpenDialogAction;
     status: AppStatus;
 }
 
@@ -60,13 +60,13 @@ class App extends React.Component<AppProps, {}> {
     }
 }
 
-function mapStateToProps(state: State): Partial<AppProps> {
+function mapStateToProps(state: State) {
     return {
         status: selection.selectors.getAppStatus(state),
     };
 }
 
-const dispatchToPropsMap: Partial<AppProps> = {
+const dispatchToPropsMap = {
     onDrop: selection.actions.loadFilesFromDragAndDrop,
     onOpen: selection.actions.openFilesFromDialog,
 };

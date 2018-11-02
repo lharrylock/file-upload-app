@@ -55,18 +55,14 @@
     "webpack-shell-plugin": "^0.5.0"
   },
   "dependencies": {
-    "@labkey/api": "0.0.9",
     "@types/classnames": "^2.2.6",
     "@types/lodash": "^4.14.112",
     "aics-react-labkey": "^4.1.0",
-    "aics-react-labkey-internal": "^2.2.4",
     "antd": "^3.8.0",
     "classnames": "^2.2.6",
     "core-js": "^2.5.7",
-    "jquery": "^3.3.1",
     "lodash": "^4.17.10",
     "react-hot-loader": "^4.3.4",
-    "redux": "^4.0.1",
     "redux-logic": "^0.15.0",
     "reselect": "^3.0.1"
   }

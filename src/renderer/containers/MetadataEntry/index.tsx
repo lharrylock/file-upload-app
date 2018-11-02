@@ -1,5 +1,4 @@
 import { LabKeyOptionSelector } from "aics-react-labkey";
-import "aics-react-labkey-internal/dist/styles.css";
 import { Button } from "antd";
 import * as classNames from "classnames";
 import { ipcRenderer } from "electron";
