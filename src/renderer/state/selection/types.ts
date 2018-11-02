@@ -49,7 +49,7 @@ export interface ClearStagedFilesAction {
 
 export interface SelectionStateBranch {
     [key: string]: any;
-    files: string[];
+    files?: string[];
     stagedFiles: UploadFile[];
 }
 

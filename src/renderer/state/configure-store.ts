@@ -11,17 +11,20 @@ import { BASE_API_URL } from "../constants";
 import {
     enableBatching,
     metadata,
+    plate,
     selection,
     State,
 } from "./";
 
 const reducers = {
     metadata: metadata.reducer,
+    plate: plate.reducer,
     selection: selection.reducer,
 };
 
 const logics = [
     ...metadata.logics,
+    ...plate.logics,
     ...selection.logics,
 ];
 

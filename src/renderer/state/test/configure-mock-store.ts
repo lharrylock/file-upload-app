@@ -9,6 +9,7 @@ import { SinonStub } from "sinon";
 import {
     enableBatching,
     metadata,
+    plate,
     selection,
     State,
 } from "../";
@@ -22,11 +23,13 @@ export interface ReduxLogicDependencies {
 
 const reducers = {
     metadata: metadata.reducer,
+    plate: plate.reducer,
     selection: selection.reducer,
 };
 
 const logics = [
     ...metadata.logics,
+    ...plate.logics,
     ...selection.logics,
 ];
 

@@ -15,7 +15,7 @@ export interface CellPopulationInfo {
     passage: number;
     plateBarcode: string;
     plateId: number;
-    seedingDensity: number;
+    seedingDensity: string;
     stageId: number;
     stageName: string;
     wellId: number;
@@ -46,19 +46,22 @@ export interface SolutionLot {
 
 export interface CellPopulation {
     seedingDensity: string;
-    sourceCellPopulation: CellPopulationInfo;
-    sourcePlateWell: CellPopulation;
-    sourceVial: any; // todo
-    wellCellPopulation: CellPopulationInfo;
+    shortid: string; // todo
+    sourceCellPopulation?: CellPopulationInfo;
+    sourcePlateWell?: CellPopulationInfo; // CellPopulation;
+    sourceVial?: any; // todo
+    wellCellPopulation?: CellPopulationInfo;
 }
 
 export interface Solution {
+    shortid: string;
     solutionLot: SolutionLot;
     volume: string;
     volumeUnits: Unit;
 }
 
 export interface ViabilityResult {
+    shortid: string;
     suspensionVolume: string;
     suspensionVolumeUnits: Unit;
     viability: string;
@@ -72,14 +75,17 @@ export interface Well {
     solutions: Solution[];
     viabilityResults: ViabilityResult[];
 }
-export interface Plate {
-    wells: Well[][];
-}
+
 export interface PlateStateBranch {
-    plate: Plate;
+    wells?: Well[][];
 }
 
 export interface GetPlateFromBarcodeAction {
     payload: string;
+    type: string;
+}
+
+export interface SetWellsAction {
+    payload: Well[][];
     type: string;
 }

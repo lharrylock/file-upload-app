@@ -4,26 +4,23 @@ import { TypeToDescriptionMap } from "../types";
 import { makeReducer } from "../util";
 
 import {
-    GET_PLATE_FROM_BARCODE,
+    SET_WELLS,
 } from "./constants";
 import {
-    GetPlateFromBarcodeAction,
     PlateStateBranch,
+    SetWellsAction,
 } from "./types";
 
 export const initialState: PlateStateBranch = {
-    plate: {
-        wells: [[]],
-    },
+
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {
-    [GET_PLATE_FROM_BARCODE]: {
-        accepts: (action: AnyAction): action is GetPlateFromBarcodeAction => action.type === GET_PLATE_FROM_BARCODE,
-        perform: (state: PlateStateBranch, action: GetPlateFromBarcodeAction) => {
-            // todo remove this block. just here as example
+    [SET_WELLS]: {
+        accepts: (action: AnyAction): action is SetWellsAction => action.type === SET_WELLS,
+        perform: (state: PlateStateBranch, action: SetWellsAction) => {
             return {
-                ...state,
+                wells: action.payload,
             };
         },
     },

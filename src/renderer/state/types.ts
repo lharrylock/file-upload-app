@@ -2,6 +2,7 @@ import { AxiosInstance } from "axios";
 import { AnyAction } from "redux";
 
 import { MetadataStateBranch } from "./metadata/types";
+import { PlateStateBranch } from "./plate/types";
 import { SelectionStateBranch } from "./selection/types";
 
 export interface ActionDescription {
@@ -27,6 +28,7 @@ export type ReduxLogicNextCb = (action: AnyAction) => void;
 
 export interface State {
     metadata: MetadataStateBranch;
+    plate: PlateStateBranch;
     selection: SelectionStateBranch;
 }
 

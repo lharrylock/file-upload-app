@@ -2,17 +2,19 @@ import { AicsGrid, AicsGridCell } from "aics-react-labkey";
 import * as classNames from "classnames";
 import * as React from "react";
 
-import Well from "../Well/index";
+import { Well } from "../../state/plate/types";
+
+import WellComponent from "../Well";
 
 const styles = require("./style.css");
 
 interface PlateProps {
     className?: string;
+    wells: Well[][];
 }
 
 interface PlateState {
     selectedWells: AicsGridCell[];
-    wells: any[][];
 }
 
 class Plate extends React.Component<PlateProps, PlateState> {
@@ -20,7 +22,6 @@ class Plate extends React.Component<PlateProps, PlateState> {
         super(props);
         this.state = {
             selectedWells: [],
-            wells: [[{name: "lisa"}]],
         };
         this.handleWellClick = this.handleWellClick.bind(this);
         this.handleSelectedWellsChanged = this.handleSelectedWellsChanged.bind(this);
@@ -38,21 +39,21 @@ class Plate extends React.Component<PlateProps, PlateState> {
         console.log("cells", cells);
     }
 
-    public wellColorSelector(cellData: any): string {
-        return "orange";
+    public wellColorSelector(cellData: Well): string {
+        return cellData.modified ? "rgb(221, 216, 241)" : "rgb(226, 228, 227)";
     }
 
-    public getWellDisplayText(cellData: any): string | JSX.Element {
-        return <Well/>;
+    public getWellDisplayText(cellData: Well): string | JSX.Element {
+        return <WellComponent well={cellData}/>;
     }
 
     public render() {
         const {
             className,
+            wells,
         } = this.props;
         const {
             selectedWells,
-            wells,
         } = this.state;
 
         return (

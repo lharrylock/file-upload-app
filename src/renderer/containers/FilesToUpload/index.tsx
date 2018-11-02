@@ -13,7 +13,7 @@ const styles = require("./style.css");
 
 interface Props {
     className?: string;
-    files: string[];
+    files?: string[];
 }
 
 class FilesToUpload extends React.Component<Props, {}> {
@@ -31,7 +31,7 @@ class FilesToUpload extends React.Component<Props, {}> {
                 className={classNames(styles.container, className)}
             >
                 <div>Files to Upload</div>
-                {files.map((f) => (
+                {files && files.map((f) => (
                     <FileToUploadRow name={f} key={f}/>
                 ))}
             </div>

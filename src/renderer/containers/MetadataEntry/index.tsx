@@ -6,11 +6,14 @@ import { debounce } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
 
-import Plate from "../../components/Plate/index";
+import Plate from "../../components/Plate";
 
 import {
     State,
 } from "../../state";
+import { getPlateFromBarcode } from "../../state/plate/actions";
+import { getWells } from "../../state/plate/selectors";
+import { GetPlateFromBarcodeAction, Well } from "../../state/plate/types";
 import { getSelectedFiles } from "../../state/selection/selectors";
 
 const styles = require("./style.css");
@@ -24,6 +27,8 @@ const BARCODES = [
 interface Props {
     className?: string;
     files?: string[];
+    wells?: Well[][];
+    getPlateFromBarcode?: (barcode: string) => GetPlateFromBarcodeAction;
 }
 
 interface MetadataEntryState {
@@ -41,14 +46,12 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
             return Promise.resolve(null);
         }
 
-        return new Promise((resolve) => setTimeout(resolve, 1000, {
+        return new Promise((resolve) => setTimeout(resolve, 500, {
             options: BARCODES.map((b: string) => ({barcode: b})),
         }));
-        // It's a good idea to prime the cache this way when debouncing
-        // this.asyncCache = { '': [] };
     }
 
-    constructor(props: {}) {
+    constructor(props: Props) {
         super(props);
         this.state = {};
         this.setBarcode = this.setBarcode.bind(this);
@@ -58,6 +61,9 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
 
     public setBarcode(option: BarcodeOption): void {
         this.setState(option);
+        if (this.props.getPlateFromBarcode) {
+            this.props.getPlateFromBarcode(option.barcode);
+        }
     }
 
     public openCreatePlateModal(): void {
@@ -66,7 +72,11 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
 
     public render() {
         const {barcode, error} = this.state;
-        const {className, files} = this.props;
+        const {
+            className,
+            files,
+            wells,
+        } = this.props;
         const noFiles = !files || files.length === 0;
         return (
             <div
@@ -88,7 +98,7 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
                 <div>
                     <LabKeyOptionSelector
                         required={true}
-                        async={true}
+                        async
                         id="single-selector-async"
                         label="Plate Barcode"
                         optionIdKey="barcode"
@@ -106,20 +116,23 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
                     <Button onClick={this.openCreatePlateModal}>
                         Create Plate
                     </Button>
-                    <Plate/>
+                    {wells ? <Plate wells={wells}/> : <div>No Plate to show</div>}
                 </div>
             </div>
         );
     }
 }
 
-function mapStateToProps(state: State, props: Props): Props {
+function mapStateToProps(state: State, props: Props) {
     return {
         className: props.className,
         files: getSelectedFiles(state),
+        wells: getWells(state),
     };
 }
 
-const dispatchToPropsMap = {};
+const dispatchToPropsMap = {
+    getPlateFromBarcode,
+};
 
 export default connect(mapStateToProps, dispatchToPropsMap)(MetadataEntry);
