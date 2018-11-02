@@ -8,9 +8,6 @@ module.exports = ({ analyze, env } = {}) => ({
         path: path.resolve(__dirname, '../', 'dist'),
         filename: 'main.js'
     },
-    devServer: {
-        contentBase: path.join(__dirname, '../', 'dist')
-    },
     module: {
         rules: [
             {
@@ -67,5 +64,6 @@ module.exports = ({ analyze, env } = {}) => ({
         __dirname: false,
         __filename: false
     },
-    target: "electron-main"
+    target: "electron-main",
+    devtool: 'inline-source-map',
 });

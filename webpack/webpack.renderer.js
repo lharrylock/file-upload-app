@@ -2,15 +2,44 @@ const path = require('path');
 const getPluginsByEnv = require('./plugins');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const tsImportPluginFactory = require('ts-import-plugin');
+const spawn = require('child_process').spawn;
+
+const port = process.env.PORT || 1212;
 
 module.exports = ({ analyze, env } = {}) => ({
-    entry: './src/renderer/index.tsx',
+    entry: [
+        'react-hot-loader/patch',
+        `webpack-dev-server/client?http://localhost:${port}/`,
+        'webpack/hot/only-dev-server',
+        './src/renderer/index.tsx'
+    ],
     output: {
-        path: path.resolve(__dirname, '../', 'dist'),
-        filename: '[name].[chunkhash].js'
+        publicPath: `http://localhost:${port}/dist`,
+        filename: '[name].[hash].js'
     },
     devServer: {
-      contentBase: path.join(__dirname, '../', 'dist')
+        port,
+        publicPath: `http://localhost:${port}/dist`,
+        inline: true,
+        lazy: false,
+        hot: true,
+        watchOptions: {
+            aggregateTimeout: 300,
+            ignored: /node_modules/,
+            poll: 100
+        },
+        before() {
+            if (process.env.START_HOT) {
+                console.log('Starting Main Process...');
+                spawn('./gradlew', ['main'], {
+                    shell: true,
+                    env: process.env,
+                    stdio: 'inherit'
+                })
+                  .on('close', code => process.exit(code))
+                  .on('error', spawnError => console.error(spawnError));
+            }
+        }
     },
     module: {
         rules: [
