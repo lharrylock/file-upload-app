@@ -1,25 +1,25 @@
-const path = require('path');
-const getPluginsByEnv = require('./plugins');
-const tsImportPluginFactory = require('ts-import-plugin');
+const path = require("path");
+const getPluginsByEnv = require("./plugins");
+const tsImportPluginFactory = require("ts-import-plugin");
 
 module.exports = ({ analyze, env } = {}) => ({
-    entry: './src/main/index.tsx',
+    entry: "./src/main/index.tsx",
     output: {
-        path: path.resolve(__dirname, '../', 'dist'),
-        filename: 'main.js'
+        path: path.resolve(__dirname, "../", "dist"),
+        filename: "main.js"
     },
     module: {
         rules: [
             {
                 test: /\.tsx?/,
                 include: [
-                    path.resolve(__dirname, '../', 'src', 'main')
+                    path.resolve(__dirname, "../", "src", "main")
                 ],
                 exclude: /node_modules/,
                 use: {
-                    loader: 'ts-loader',
+                    loader: "ts-loader",
                     options: {
-                        configFile: path.resolve(__dirname, '../', 'tsconfig.json'),
+                        configFile: path.resolve(__dirname, "../", "tsconfig.json"),
                         compilerOptions: {
                             noEmit: false,
                         },
@@ -27,7 +27,7 @@ module.exports = ({ analyze, env } = {}) => ({
                             before: [
                                 tsImportPluginFactory([
                                     {
-                                        libraryName: 'lodash',
+                                        libraryName: "lodash",
                                         libraryDirectory: null,
                                         camel2DashComponentName: false,
                                         style: false,
@@ -43,9 +43,9 @@ module.exports = ({ analyze, env } = {}) => ({
             }
         ]
     },
-    plugins: getPluginsByEnv(env, analyze, 'main'),
+    plugins: getPluginsByEnv(env, analyze, "main"),
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
+        extensions: [".ts", ".tsx", ".js", ".jsx", ".json"]
     },
     optimization: {
         splitChunks: {
@@ -59,11 +59,11 @@ module.exports = ({ analyze, env } = {}) => ({
             }
         }
     },
-    mode: 'development',
+    mode: "development",
     node: {
         __dirname: false,
         __filename: false
     },
     target: "electron-main",
-    devtool: 'inline-source-map',
+    devtool: "inline-source-map",
 });

@@ -1,21 +1,21 @@
-const path = require('path');
-const getPluginsByEnv = require('./plugins');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const tsImportPluginFactory = require('ts-import-plugin');
-const spawn = require('child_process').spawn;
+const path = require("path");
+const getPluginsByEnv = require("./plugins");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const tsImportPluginFactory = require("ts-import-plugin");
+const spawn = require("child_process").spawn;
 
 const port = process.env.PORT || 1212;
 
 module.exports = ({ analyze, env } = {}) => ({
     entry: [
-        'react-hot-loader/patch',
+        "react-hot-loader/patch",
         `webpack-dev-server/client?http://localhost:${port}/`,
-        'webpack/hot/only-dev-server',
-        './src/renderer/index.tsx'
+        "webpack/hot/only-dev-server",
+        "./src/renderer/index.tsx"
     ],
     output: {
         publicPath: `http://localhost:${port}/dist`,
-        filename: '[name].[hash].js'
+        filename: "[name].[hash].js"
     },
     devServer: {
         port,
@@ -30,14 +30,14 @@ module.exports = ({ analyze, env } = {}) => ({
         },
         before() {
             if (process.env.START_HOT) {
-                console.log('Starting Main Process...');
-                spawn('./gradlew', ['main'], {
+                console.log("Starting Main Process...");
+                spawn("./gradlew", ["main"], {
                     shell: true,
                     env: process.env,
-                    stdio: 'inherit'
+                    stdio: "inherit"
                 })
-                  .on('close', code => process.exit(code))
-                  .on('error', spawnError => console.error(spawnError));
+                  .on("close", code => process.exit(code))
+                  .on("error", spawnError => console.error(spawnError));
             }
         }
     },
@@ -46,13 +46,13 @@ module.exports = ({ analyze, env } = {}) => ({
             {
                 test: /\.tsx?/,
                 include: [
-                    path.resolve(__dirname, '../', 'src', 'renderer')
+                    path.resolve(__dirname, "../", "src", "renderer")
                 ],
                 exclude: /node_modules/,
                 use: {
-                    loader: 'ts-loader',
+                    loader: "ts-loader",
                     options: {
-                        configFile: path.resolve(__dirname, '../', 'tsconfig.json'),
+                        configFile: path.resolve(__dirname, "../", "tsconfig.json"),
                         compilerOptions: {
                             noEmit: false,
                         },
@@ -60,7 +60,7 @@ module.exports = ({ analyze, env } = {}) => ({
                             before: [
                                 tsImportPluginFactory([
                                     {
-                                        libraryName: 'lodash',
+                                        libraryName: "lodash",
                                         libraryDirectory: null,
                                         camel2DashComponentName: false,
                                         style: false,
@@ -79,27 +79,27 @@ module.exports = ({ analyze, env } = {}) => ({
             {
                 test: /\.css/,
                 include: [
-                    path.resolve(__dirname, '../', 'src', 'renderer')
+                    path.resolve(__dirname, "../", "src", "renderer")
                 ],
                 use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
+                    fallback: "style-loader",
                     use: [
                         {
-                            loader: 'css-loader',
+                            loader: "css-loader",
                             options: {
                                 camelCase: true,
                                 importLoaders: 1,
-                                localIdentName: '[name]__[local]--[hash:base64:5]',
+                                localIdentName: "[name]__[local]--[hash:base64:5]",
                                 modules: true
                             }
                         },
                         {
-                            loader: 'postcss-loader',
+                            loader: "postcss-loader",
                             options: {
-                                ident: 'postcss',
+                                ident: "postcss",
                                 plugins: [
-                                    require('postcss-import'),
-                                    require('postcss-cssnext')(),
+                                    require("postcss-import"),
+                                    require("postcss-cssnext")(),
                                 ]
                             }
                         }
@@ -113,18 +113,18 @@ module.exports = ({ analyze, env } = {}) => ({
             {
                 test: /\.css/,
                 include: [
-                    path.resolve(__dirname, '../', 'node_modules')
+                    path.resolve(__dirname, "../", "node_modules")
                 ],
                 use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [{ loader: 'css-loader' }],
+                    fallback: "style-loader",
+                    use: [{ loader: "css-loader" }],
                 }),
             },
         ]
     },
-    plugins: getPluginsByEnv(env, analyze, 'renderer'),
+    plugins: getPluginsByEnv(env, analyze, "renderer"),
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
+        extensions: [".ts", ".tsx", ".js", ".jsx", ".json"]
     },
     optimization: {
       splitChunks: {
@@ -138,6 +138,6 @@ module.exports = ({ analyze, env } = {}) => ({
           }
       }
     },
-    mode: 'development',
+    mode: "development",
     target: "electron-renderer"
 });
