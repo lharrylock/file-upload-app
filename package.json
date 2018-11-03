@@ -40,6 +40,7 @@
     "postcss-loader": "^2.1.6",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-hot-loader": "^4.3.12",
     "react-redux": "^5.0.7",
     "sinon": "^6.1.4",
     "style-loader": "^0.21.0",
@@ -51,7 +52,8 @@
     "webpack": "^4.16.2",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5"
+    "webpack-dev-server": "^3.1.5",
+    "webpack-shell-plugin": "^0.5.0"
   },
   "dependencies": {
     "@types/classnames": "^2.2.6",

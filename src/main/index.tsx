@@ -1,10 +1,12 @@
-import { app, BrowserWindow } from "electron";
-import * as path from "path";
+import {
+    app,
+    BrowserWindow,
+} from "electron";
 import * as url from "url";
 
 // Keep a global reference of the window object, if you don"t, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win: BrowserWindow | null;
+let win: BrowserWindow | undefined;
 
 function createWindow() {
     // Create the browser window.
@@ -12,9 +14,8 @@ function createWindow() {
 
     // and load the index.html of the app.
     win.loadURL(url.format({
-        pathname: path.join(__dirname, "index.html"),
-        protocol: "file:",
-        slashes: true,
+        host: "localhost:1212/dist",
+        protocol: "http",
     }));
 
     // Open the DevTools.
@@ -25,7 +26,7 @@ function createWindow() {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
-        win = null;
+        win = undefined;
     });
 }
 

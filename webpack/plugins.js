@@ -6,6 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+const HotModuleReplacementPlugin = webpack.HotModuleReplacementPlugin;
 
 const BASE_PLUGINS = [
     new ForkTsCheckerWebpackPlugin({
@@ -21,6 +22,7 @@ const PLUGINS_BY_PROCESS = {
 
     ],
     'renderer': [
+        new HotModuleReplacementPlugin(),
         new CleanWebpackPlugin(['dist'], {
             root: path.resolve(__dirname, '../'),
             watch: true,

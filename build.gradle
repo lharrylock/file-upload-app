@@ -55,36 +55,31 @@ task wrapper(type: Wrapper) {
 }
 
 task lint(type: NodeTask) {
-    dependsOn npmInstall
-
     script =  file("${npmBin}/tslint")
     FileTree tsFiles = fileTree(dir: "src", includes: ["**/*.ts", "**/*.tsx"])
     args = ["-c", "tslint.json"] + tsFiles.asList()
 }
 
-task start(type: NodeTask) {
-    dependsOn npmInstall
-
-    script = file("${npmBin}/webpack-dev-server")
-    args = ["--config", "./webpack/webpack.config.js"]
-}
-
 task buildRenderer(type: NodeTask) {
-//    dependsOn npmInstall
-
     script = file("${npmBin}/webpack")
     args = ["--config", "./webpack/webpack.renderer.js"]
 }
 
 task buildMain(type: NodeTask) {
-    dependsOn buildRenderer
-
     script = file("${npmBin}/webpack")
     args = ["--config", "./webpack/webpack.main.js"]
 }
 
-task runElectron(type: NodeTask) {
+task dev(type: NodeTask) {
+    environment = [NODE_ENV: "development", START_HOT: 1]
+
+    script = file("${npmBin}/webpack-dev-server")
+    args = ["--config", "webpack/webpack.renderer.js"]
+}
+
+task main(type: NodeTask) {
     dependsOn buildMain
+    environment = [NODE_ENV: "development", START_HOT: 1]
 
     script = file("${npmBin}/electron")
     args = ["dist/main.js"]
