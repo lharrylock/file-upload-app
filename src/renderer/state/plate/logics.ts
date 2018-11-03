@@ -6,7 +6,7 @@ import { ReduxLogicDeps } from "../types";
 import { setWells } from "./actions";
 
 import { GET_PLATE_FROM_BARCODE } from "./constants";
-import { Unit, Well } from "./types";
+import { Well } from "./types";
 
 const getPlateFromBarcodeLogic = createLogic({
     transform: ({ action }: ReduxLogicDeps, next: (action: AnyAction) => void) => {
@@ -26,7 +26,7 @@ const getPlateFromBarcodeLogic = createLogic({
                             cellLineId: 1,
                             cellLineName: "AICS-12",
                             cellPopulationId: 33,
-                            clone: "clone_num",
+                            clone: "22",
                             edits: [],
                             passage: 32,
                             plateBarcode: "879230001",
@@ -41,7 +41,7 @@ const getPlateFromBarcodeLogic = createLogic({
                             cellLineId: 1,
                             cellLineName: "AICS-12",
                             cellPopulationId: 33,
-                            clone: "clone_num",
+                            clone: "22",
                             edits: [],
                             passage: 32,
                             plateBarcode: "879230001",
