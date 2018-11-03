@@ -70,6 +70,7 @@ export interface ViabilityResult {
 }
 
 export interface Well {
+    id: number;
     cellPopulations: CellPopulation[];
     modified: boolean; // todo need?
     solutions: Solution[];

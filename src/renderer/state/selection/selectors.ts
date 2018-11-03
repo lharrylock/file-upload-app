@@ -9,6 +9,7 @@ import { UploadFile } from "./types";
 export const getSelections = (state: State) => state.selection;
 export const getSelectedFiles = (state: State) => state.selection.files;
 export const getStagedFiles = (state: State) => state.selection.stagedFiles;
+export const getSelectedWells = (state: State) => state.selection.wells;
 
 // COMPLEX SELECTORS
 export const getAppStatus = createSelector([

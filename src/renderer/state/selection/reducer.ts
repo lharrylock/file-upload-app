@@ -7,15 +7,18 @@ import { TypeToDescriptionMap } from "../types";
 import { makeReducer } from "../util";
 
 import {
-    ADD_STAGE_FILES, CLEAR_STAGED_FILES,
+    ADD_STAGE_FILES,
+    CLEAR_STAGED_FILES,
     SELECT_FILE,
     SELECT_METADATA,
+    SELECT_WELLS,
 } from "./constants";
 import {
     ClearStagedFilesAction,
     SelectFileAction,
     SelectionStateBranch,
     SelectMetadataAction,
+    SelectWellsAction,
 } from "./types";
 
 export const initialState = {
@@ -40,6 +43,15 @@ const actionToConfigMap: TypeToDescriptionMap = {
             return {
                 ...state,
                 files: [...castArray(action.payload)],
+            };
+        },
+    },
+    [SELECT_WELLS]: {
+        accepts: (action: AnyAction): action is SelectWellsAction => action.type === SELECT_WELLS,
+        perform: (state: SelectionStateBranch, action: SelectWellsAction) => {
+            return {
+                ...state,
+                wells: action.payload,
             };
         },
     },

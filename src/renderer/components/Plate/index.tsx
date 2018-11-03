@@ -3,6 +3,7 @@ import * as classNames from "classnames";
 import * as React from "react";
 
 import { Well } from "../../state/plate/types";
+import { SelectWellsAction } from "../../state/selection/types";
 
 import WellComponent from "../Well";
 
@@ -10,6 +11,7 @@ const styles = require("./style.css");
 
 interface PlateProps {
     className?: string;
+    selectWells: (wells: number[]) => SelectWellsAction;
     wells: Well[][];
 }
 
@@ -29,10 +31,9 @@ class Plate extends React.Component<PlateProps, PlateState> {
         this.getWellDisplayText = this.getWellDisplayText.bind(this);
     }
 
-    public handleWellClick(event: React.MouseEvent<HTMLDivElement>, row: number, col: number, data: any): void {
-        console.log("row", row);
-        console.log("col", col);
-        console.log("data", data);
+    public handleWellClick(event: React.MouseEvent<HTMLDivElement>, row: number, col: number, data: Well): void {
+        event.preventDefault();
+        this.props.selectWells([data.id]);
     }
 
     public handleSelectedWellsChanged(selectedWells: AicsGridCell[]): void {

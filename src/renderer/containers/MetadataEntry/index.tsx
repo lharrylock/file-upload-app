@@ -2,7 +2,10 @@ import { LabKeyOptionSelector } from "aics-react-labkey";
 import { Button } from "antd";
 import * as classNames from "classnames";
 import { ipcRenderer } from "electron";
-import { debounce } from "lodash";
+import {
+    debounce,
+    isEmpty,
+} from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
 
@@ -14,7 +17,9 @@ import {
 import { getPlateFromBarcode } from "../../state/plate/actions";
 import { getWells } from "../../state/plate/selectors";
 import { GetPlateFromBarcodeAction, Well } from "../../state/plate/types";
-import { getSelectedFiles } from "../../state/selection/selectors";
+import { selectWells } from "../../state/selection/actions";
+import { getSelectedFiles, getSelectedWells } from "../../state/selection/selectors";
+import { SelectWellsAction } from "../../state/selection/types";
 
 const styles = require("./style.css");
 const BARCODES = [
@@ -29,6 +34,8 @@ interface Props {
     files?: string[];
     wells?: Well[][];
     getPlateFromBarcode?: (barcode: string) => GetPlateFromBarcodeAction;
+    selectWells: (wells: number[]) => SelectWellsAction;
+    selectedWells?: number[];
 }
 
 interface MetadataEntryState {
@@ -75,6 +82,8 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
         const {
             className,
             files,
+            selectWells: selectWellsProp,
+            selectedWells,
             wells,
         } = this.props;
         const noFiles = !files || files.length === 0;
@@ -98,7 +107,7 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
                 <div>
                     <LabKeyOptionSelector
                         required={true}
-                        async
+                        async={true}
                         id="single-selector-async"
                         label="Plate Barcode"
                         optionIdKey="barcode"
@@ -116,7 +125,8 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
                     <Button onClick={this.openCreatePlateModal}>
                         Create Plate
                     </Button>
-                    {wells ? <Plate wells={wells}/> : <div>No Plate to show</div>}
+                    {wells ? <Plate wells={wells} selectWells={selectWellsProp}/> : <div>No Plate to show</div>}
+                    {wells && <Button type="primary" disabled={!selectedWells || isEmpty(files)}>Associate</Button>}
                 </div>
             </div>
         );
@@ -127,12 +137,14 @@ function mapStateToProps(state: State, props: Props) {
     return {
         className: props.className,
         files: getSelectedFiles(state),
+        selectedWells: getSelectedWells(state),
         wells: getWells(state),
     };
 }
 
 const dispatchToPropsMap = {
     getPlateFromBarcode,
+    selectWells,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(MetadataEntry);

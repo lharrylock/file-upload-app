@@ -3,14 +3,14 @@ import {
     DESELECT_FILE,
     LOAD_FILES, OPEN_FILES,
     SELECT_FILE,
-    SELECT_METADATA,
+    SELECT_METADATA, SELECT_WELLS,
 } from "./constants";
 import {
     AddStageFilesAction, ClearStagedFilesAction,
     DeselectFileAction,
     LoadFilesFromDragAndDropAction, LoadFilesFromOpenDialogAction,
     SelectFileAction,
-    SelectMetadataAction,
+    SelectMetadataAction, SelectWellsAction,
 } from "./types";
 import { UploadFile } from "./types";
 
@@ -60,5 +60,12 @@ export function selectMetadata(key: string, payload: string | number): SelectMet
         key,
         payload,
         type: SELECT_METADATA,
+    };
+}
+
+export function selectWells(ids: number[]): SelectWellsAction {
+    return {
+        payload: ids,
+        type: SELECT_WELLS,
     };
 }

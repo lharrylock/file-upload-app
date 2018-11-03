@@ -1,3 +1,4 @@
+import { AicsGridCell } from "aics-react-labkey";
 import { resolve } from "path";
 
 import { MetadataStateBranch } from "../metadata/types";
@@ -51,6 +52,7 @@ export interface SelectionStateBranch {
     [key: string]: any;
     files?: string[];
     stagedFiles: UploadFile[];
+    wells?: number[];
 }
 
 export interface SelectFileAction {
@@ -66,5 +68,10 @@ export interface SelectMetadataAction {
 
 export interface AddStageFilesAction {
     payload: UploadFile[];
+    type: string;
+}
+
+export interface SelectWellsAction {
+    payload: number[];
     type: string;
 }
