@@ -35,8 +35,9 @@ class Plate extends React.Component<PlateProps, PlateState> {
         console.log("data", data);
     }
 
-    public handleSelectedWellsChanged(cells: AicsGridCell[]): void {
-        console.log("cells", cells);
+    public handleSelectedWellsChanged(selectedWells: AicsGridCell[]): void {
+        console.log(selectedWells);
+        this.setState({selectedWells});
     }
 
     public wellColorSelector(cellData: Well): string {
@@ -60,9 +61,9 @@ class Plate extends React.Component<PlateProps, PlateState> {
             <div className={classNames(styles.container, className)}>
                 <AicsGrid
                     selectMode="multi"
-                    cellHeight="60px"
-                    cellWidth="60px"
-                    fontSize="20px"
+                    cellHeight="80px"
+                    cellWidth="80px"
+                    fontSize="14px"
                     selectedCells={selectedWells}
                     onCellClick={this.handleWellClick}
                     onSelectedCellsChanged={this.handleSelectedWellsChanged}
