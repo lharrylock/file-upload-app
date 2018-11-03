@@ -28,10 +28,32 @@ class WellComponent extends React.Component<WellProps, WellState> {
         this.state = {
             test: "hello",
         };
+        this.getWellText = this.getWellText.bind(this);
         this.getContent = this.getContent.bind(this);
         this.getCellPopulations = this.getCellPopulations.bind(this);
         this.getSolutions = this.getSolutions.bind(this);
         this.getViabilityResults = this.getViabilityResults.bind(this);
+    }
+
+    public getWellText() {
+        const { well } = this.props;
+        let wellText: JSX.Element | null = null;
+        if (well.cellPopulations && well.cellPopulations.length > 0) {
+            // The well is only big enough to fit the text for one Cell Population,
+            // so show the info from the first one added
+            const { wellCellPopulation } = well.cellPopulations[0];
+
+            if (wellCellPopulation) {
+                wellText = (
+                    <React.Fragment>
+                        <div>{wellCellPopulation.cellLineName}</div>
+                        <div>{`C${wellCellPopulation.clone || "_N/A"}`}</div>
+                        <div>{`P${wellCellPopulation.passage || "_N/A"}`}</div>
+                    </React.Fragment>
+                );
+            }
+        }
+        return wellText;
     }
 
     public getCellPopulations(cellPopulations: CellPopulation[]) {
@@ -166,7 +188,7 @@ class WellComponent extends React.Component<WellProps, WellState> {
 
         const wellContent = (
             <div className={classNames(styles.container, className)}>
-                Hello from Well
+                {this.getWellText()}
             </div>
         );
 
