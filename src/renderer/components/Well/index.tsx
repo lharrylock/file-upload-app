@@ -46,9 +46,9 @@ class WellComponent extends React.Component<WellProps, WellState> {
             if (wellCellPopulation) {
                 wellText = (
                     <React.Fragment>
-                        <div>{wellCellPopulation.cellLineName}</div>
-                        <div>{`C${wellCellPopulation.clone || "_N/A"}`}</div>
-                        <div>{`P${wellCellPopulation.passage || "_N/A"}`}</div>
+                        <div className={styles.wellText}>{wellCellPopulation.cellLineName}</div>
+                        <div className={styles.wellText}>{`C${wellCellPopulation.clone || "_N/A"}`}</div>
+                        <div className={styles.wellText}>{`P${wellCellPopulation.passage || "_N/A"}`}</div>
                     </React.Fragment>
                 );
             }
