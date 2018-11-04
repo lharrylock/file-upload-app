@@ -22,6 +22,7 @@ const PLUGINS_BY_PROCESS = {
 
     ],
     'renderer': [
+        new HotModuleReplacementPlugin(),
         new CleanWebpackPlugin(['dist'], {
             root: path.resolve(__dirname, '../'),
             watch: true,
