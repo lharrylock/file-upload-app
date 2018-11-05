@@ -1,3 +1,3 @@
-export const APP_ID = "template-electron-react";
-export const API_VERSION = "v1";
-export const BASE_API_URL = `/template-electron-react/api/${API_VERSION}`;
+export const APP_ID = "file-upload-app";
+export const MMS_VERSION = "1.0";
+export const MMS_BASE_URL = `/metadata-management-service/${MMS_VERSION}`;
