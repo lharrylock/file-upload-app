@@ -1,7 +1,6 @@
 {
   "extends": "./tsconfig.base",
   "compilerOptions": {
-    "module": "ES6",
-    "noImplicitAny": false
+    "module": "ES6"
   }
 }
