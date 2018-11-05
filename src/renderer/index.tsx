@@ -13,7 +13,7 @@ import { createReduxStore } from "./state";
 const appContainer = document.getElementById(APP_ID);
 render(
     <Provider store={createReduxStore()}>
-        <App />
+        <App/>
     </Provider>,
     appContainer);
 

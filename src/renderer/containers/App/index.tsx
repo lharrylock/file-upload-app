@@ -1,56 +1,43 @@
-import { ipcRenderer } from "electron";
-
+import "antd/dist/antd.css";
 import * as React from "react";
+import { connect } from "react-redux";
+
+import { selection } from "../../state";
+
+import { AppPage } from "../../state/selection/types";
+
+import { State } from "../../state/types";
+
+import DragAndDropSquare from "../DragAndDropSquare/index";
 
 const styles = require("./style.css");
 
-interface AppState {
-    file?: string;
+interface AppProps {
+    page?: AppPage;
 }
 
-export default class App extends React.Component<{}, AppState> {
-    constructor(props: {}) {
+const APP_PAGE_TO_CONTAINER_MAP = new Map([
+    [AppPage.DragAndDrop, <DragAndDropSquare key="dragAndDrop"/>],
+    [AppPage.EnterBarcode, <div key="enterBarcode">TODO</div>],
+]);
+
+class App extends React.Component<AppProps, {}> {
+    constructor(props: AppProps) {
         super(props);
         this.state = {};
-        this.onDrop = this.onDrop.bind(this);
-    }
-
-    public onDrag(): boolean {
-        return false;
-    }
-
-    public onDrop(e: React.DragEvent<HTMLDivElement>): boolean {
-        e.preventDefault();
-
-        this.setState({file: "File: Something"});
-        for (let i = 0; i < e.dataTransfer.files.length; i++) {
-            const file = e.dataTransfer.files.item(i);
-
-            if (file) {
-                // tslint:disable-next-line
-                console.log("File(s) you dragged here: ", file.path);
-                ipcRenderer.send("filereceived", file.path);
-            } else {
-                // display error?
-            }
-
-        }
-
-        return false;
     }
 
     public render() {
-        const { file } = this.state;
-        return (
-            <div
-                className={styles.container}
-                onDragOver={this.onDrag}
-                onDragLeave={this.onDrag}
-                onDragEnd={this.onDrag}
-                onDrop={this.onDrop}
-            >
-                {file || "Drag Something Here"}
-            </div>
-        );
+        const { page } = this.props;
+
+        return APP_PAGE_TO_CONTAINER_MAP.get(page || AppPage.DragAndDrop);
     }
 }
+
+function mapStateToProps(state: State) {
+    return {
+        status: selection.selectors.getAppStatus(state),
+    };
+}
+
+export default connect(mapStateToProps, {})(App);

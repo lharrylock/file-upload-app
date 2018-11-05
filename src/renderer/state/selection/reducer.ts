@@ -13,6 +13,7 @@ import {
     SELECT_METADATA,
 } from "./constants";
 import {
+    AppPage,
     DeselectFileAction,
     SelectFileAction,
     SelectionStateBranch,
@@ -21,6 +22,7 @@ import {
 
 export const initialState = {
     files: [],
+    page: AppPage.DragAndDrop,
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {

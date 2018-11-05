@@ -18,7 +18,7 @@ const requestMetadata = createLogic({
 
         return httpClient
             .get(`${baseApiUrl}/metadata`)
-            .then((metadata: AxiosResponse) => metadata.data)
+            .then((metadata: AxiosResponse) => (metadata.data))
             .catch((reason) => {
                 console.log(reason); // tslint:disable-line:no-console
             });
