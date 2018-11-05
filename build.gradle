@@ -49,9 +49,9 @@ ext {
     artifactName = "${project.name}-${ext.artifactVersion}.tgz"
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion "4.5.1"
-    setDistributionType(DistributionType.ALL)
+wrapper {
+    gradleVersion "4.10.2"
+    setDistributionType(DistributionType.BIN)
 }
 
 task lint(type: NodeTask) {
