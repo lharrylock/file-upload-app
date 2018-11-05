@@ -14,6 +14,7 @@ const getPlateFromBarcodeLogic = createLogic({
             [
                 {
                     cellPopulations: [],
+                    id: 1,
                     modified: false,
                     solutions: [],
                     viabilityResults: [],
@@ -53,6 +54,7 @@ const getPlateFromBarcodeLogic = createLogic({
                             wellLabel: "A1",
                         },
                     }],
+                    id: 1,
                     modified: true,
                     solutions: [{
                         shortid: "asdfsdfs",
@@ -99,12 +101,14 @@ const getPlateFromBarcodeLogic = createLogic({
             [
                 {
                     cellPopulations: [],
+                    id: 1,
                     modified: false,
                     solutions: [],
                     viabilityResults: [],
                 },
                 {
                     cellPopulations: [],
+                    id: 1,
                     modified: false,
                     solutions: [],
                     viabilityResults: [],

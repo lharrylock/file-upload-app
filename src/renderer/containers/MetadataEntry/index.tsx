@@ -34,7 +34,7 @@ interface Props {
     files?: string[];
     wells?: Well[][];
     getPlateFromBarcode?: (barcode: string) => GetPlateFromBarcodeAction;
-    selectWells: (wells: number[]) => SelectWellsAction;
+    selectWells?: (wells: number[]) => SelectWellsAction;
     selectedWells?: number[];
 }
 
@@ -48,7 +48,7 @@ interface BarcodeOption {
 }
 
 class MetadataEntry extends React.Component<Props, MetadataEntryState> {
-    private static getBarcodesAsync(input): Promise<{options: BarcodeOption[]} | null> {
+    private static getBarcodesAsync(input: string): Promise<{options: BarcodeOption[]} | null> {
         if (!input) {
             return Promise.resolve(null);
         }
@@ -133,7 +133,7 @@ class MetadataEntry extends React.Component<Props, MetadataEntryState> {
     }
 }
 
-function mapStateToProps(state: State, props: Props) {
+function mapStateToProps(state: State, props: Props): Partial<Props> {
     return {
         className: props.className,
         files: getSelectedFiles(state),
@@ -142,7 +142,7 @@ function mapStateToProps(state: State, props: Props) {
     };
 }
 
-const dispatchToPropsMap = {
+const dispatchToPropsMap: Partial<Props> = {
     getPlateFromBarcode,
     selectWells,
 };

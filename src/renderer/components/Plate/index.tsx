@@ -11,7 +11,7 @@ const styles = require("./style.css");
 
 interface PlateProps {
     className?: string;
-    selectWells: (wells: number[]) => SelectWellsAction;
+    selectWells?: (wells: number[]) => SelectWellsAction;
     wells: Well[][];
 }
 
@@ -20,7 +20,7 @@ interface PlateState {
 }
 
 class Plate extends React.Component<PlateProps, PlateState> {
-    constructor(props) {
+    constructor(props: PlateProps) {
         super(props);
         this.state = {
             selectedWells: [],
@@ -33,11 +33,12 @@ class Plate extends React.Component<PlateProps, PlateState> {
 
     public handleWellClick(event: React.MouseEvent<HTMLDivElement>, row: number, col: number, data: Well): void {
         event.preventDefault();
-        this.props.selectWells([data.id]);
+        if (this.props.selectWells) {
+            this.props.selectWells([data.id]);
+        }
     }
 
     public handleSelectedWellsChanged(selectedWells: AicsGridCell[]): void {
-        console.log(selectedWells);
         this.setState({selectedWells});
     }
 
