@@ -6,7 +6,7 @@ import {
 } from "redux";
 import { createLogicMiddleware } from "redux-logic";
 
-import { BASE_API_URL } from "../constants";
+import { MMS_BASE_URL } from "../constants";
 
 import {
     enableBatching,
@@ -26,7 +26,7 @@ const logics = [
 ];
 
 const reduxLogicDependencies = {
-    baseApiUrl: BASE_API_URL,
+    baseMmsUrl: MMS_BASE_URL,
     httpClient: axios,
 };
 
