@@ -7,6 +7,7 @@ import {
     OpenDialogOptions,
     remote,
 } from "electron";
+import { isEmpty } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
 
@@ -78,8 +79,11 @@ class DragAndDropSquare extends React.Component<DragAndDropSquareProps, DragAndD
         };
 
         remote.dialog.showOpenDialog(options, (filenames: string[]) => {
-            this.props.onOpen(filenames);
-            this.props.selectPage(AppPage.EnterBarcode);
+            // If cancel is clicked, this callback gets called and filenames is undefined
+            if (!isEmpty(filenames)) {
+                this.props.onOpen(filenames);
+                this.props.selectPage(AppPage.EnterBarcode);
+            }
         });
     }
 
