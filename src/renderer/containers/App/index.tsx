@@ -16,7 +16,7 @@ interface AppProps {
     page?: AppPage;
 }
 
-const APP_PAGE_TO_CONTAINER_MAP = new Map([
+const APP_PAGE_TO_CONTAINER_MAP = new Map<AppPage, JSX.Element>([
     [AppPage.DragAndDrop, <DragAndDropSquare key="dragAndDrop"/>],
     [AppPage.EnterBarcode, <div key="enterBarcode">TODO</div>],
 ]);
@@ -36,7 +36,7 @@ class App extends React.Component<AppProps, {}> {
 
 function mapStateToProps(state: State) {
     return {
-        status: selection.selectors.getAppStatus(state),
+        status: selection.selectors.getAppPage(state),
     };
 }
 

@@ -3,7 +3,10 @@ import {
     Icon,
 } from "antd";
 import * as classNames from "classnames";
-import { remote } from "electron";
+import {
+    OpenDialogOptions,
+    remote,
+} from "electron";
 import { isEmpty } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -17,10 +20,11 @@ const styles = require("./style.css");
 interface DragAndDropSquareProps {
     className?: string;
     onDrop: (files: FileList) => LoadFilesFromDragAndDropAction;
-    onOpen: (files: string[]) => LoadFilesFromOpenDialogAction; // todo these are so similar
+    onOpen: (files: string[]) => LoadFilesFromOpenDialogAction;
 }
 
 interface DragAndDropSquareState {
+    // todo better name and comment explaining what it's for
     count: number;
     isHovered: boolean;
 }
@@ -62,12 +66,8 @@ class DragAndDropSquare extends React.Component<DragAndDropSquareProps, DragAndD
     }
 
     private onBrowse(): void {
-        // todo create a type for this
-        const properties: Array<"openFile" | "openDirectory" | "multiSelections" | "showHiddenFiles" |
-            "createDirectory" | "promptToCreate" | "noResolveAliases" | "treatPackageAsDirectory"> =
-            ["openFile", "openDirectory", "multiSelections"];
-        const options = {
-            properties,
+        const options: OpenDialogOptions = {
+            properties: ["openFile", "openDirectory", "multiSelections"],
             title: "Upload files",
         };
         remote.dialog.showOpenDialog(options, (filenames: any) => {
@@ -110,7 +110,7 @@ class DragAndDropSquare extends React.Component<DragAndDropSquareProps, DragAndD
 
 function mapStateToProps(state: State) {
     return {
-        status: selection.selectors.getAppStatus(state),
+
     };
 }
 
