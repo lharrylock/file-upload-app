@@ -1,4 +1,3 @@
-import "antd/dist/antd.css";
 import { ipcRenderer } from "electron";
 
 import * as React from "react";
