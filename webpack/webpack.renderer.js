@@ -60,6 +60,11 @@ module.exports = ({ analyze, env } = {}) => ({
                             before: [
                                 tsImportPluginFactory([
                                     {
+                                        libraryName: "antd",
+                                        libraryDirectory: "es",
+                                        style: "css"
+                                    },
+                                    {
                                         libraryName: "lodash",
                                         libraryDirectory: null,
                                         camel2DashComponentName: false,
