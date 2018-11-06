@@ -19,11 +19,21 @@ import {
 import { UploadFile } from "./types";
 
 const getFilesInDirectory = (filePath: string): UploadFile[] => {
-    return readdirSync(filePath).map((name: string) => {
-        const children = statSync(resolve(filePath, name)).isDirectory() ?
-            getFilesInDirectory(resolve(filePath, name)) : null;
-        return new UploadFile(name, filePath, children);
-    });
+    try {
+        return readdirSync(filePath).map((name: string) => {
+            const children = statSync(resolve(filePath, name)).isDirectory() ?
+                getFilesInDirectory(resolve(filePath, name)) : null;
+            return new UploadFile(name, filePath, children);
+        });
+    } catch (e) {
+        // tslint:disable-next-line
+        console.error(`Error thrown while reading files in directory ${filePath}: `, e);
+
+        // Exceptions may occur if node doesn't have permissions to access the directory.
+        // for now, we'll just skip adding children to these directories
+        return [];
+    }
+
 };
 
 const loadFilesLogic = createLogic({
@@ -57,7 +67,8 @@ const openFilesLogic = createLogic({
             const path = dirname(file);
             files.push(new UploadFile(name, path, children));
         }
-
+        // tslint:disable-next-line
+        console.log(files);
         next(stageFiles(files));
     },
     type: OPEN_FILES,
