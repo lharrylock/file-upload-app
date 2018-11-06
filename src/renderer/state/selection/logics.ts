@@ -57,6 +57,7 @@ const openFilesLogic = createLogic({
             const path = dirname(file);
             files.push(new UploadFile(name, path, children));
         }
+
         next(stageFiles(files));
     },
     type: OPEN_FILES,

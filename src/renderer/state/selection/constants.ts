@@ -8,3 +8,4 @@ export const SELECT_FILE = makeConstant(BRANCH_NAME, "select-file");
 export const SELECT_METADATA = makeConstant(BRANCH_NAME, "select_metadata");
 export const LOAD_FILES = makeConstant(BRANCH_NAME, "load-files");
 export const OPEN_FILES = makeConstant(BRANCH_NAME, "open-files");
+export const SELECT_PAGE = makeConstant(BRANCH_NAME, "select-page");

@@ -65,6 +65,11 @@ export interface AddStageFilesAction {
     type: string;
 }
 
+export interface SelectPageAction {
+    payload: AppPage;
+    type: string;
+}
+
 export enum AppPage {
     DragAndDrop = 1,
     EnterBarcode,

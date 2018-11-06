@@ -5,14 +5,18 @@ import {
     OPEN_FILES,
     SELECT_FILE,
     SELECT_METADATA,
+    SELECT_PAGE,
 } from "./constants";
 import {
     AddStageFilesAction,
+    AppPage,
     DeselectFileAction,
     LoadFilesFromDragAndDropAction,
     LoadFilesFromOpenDialogAction,
     SelectFileAction,
-    SelectMetadataAction, UploadFile,
+    SelectMetadataAction,
+    SelectPageAction,
+    UploadFile,
 } from "./types";
 
 export function selectFile(fileId: string | string[]): SelectFileAction {
@@ -55,5 +59,12 @@ export function stageFiles(files: UploadFile[]): AddStageFilesAction {
     return {
         payload: files,
         type: ADD_STAGE_FILES,
+    };
+}
+
+export function selectPage(page: AppPage): SelectPageAction {
+    return {
+        payload: page,
+        type: SELECT_PAGE,
     };
 }

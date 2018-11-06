@@ -11,6 +11,7 @@ import {
     DESELECT_FILE,
     SELECT_FILE,
     SELECT_METADATA,
+    SELECT_PAGE,
 } from "./constants";
 import {
     AppPage,
@@ -18,6 +19,7 @@ import {
     SelectFileAction,
     SelectionStateBranch,
     SelectMetadataAction,
+    SelectPageAction,
 } from "./types";
 
 export const initialState = {
@@ -45,6 +47,13 @@ const actionToConfigMap: TypeToDescriptionMap = {
         perform: (state: SelectionStateBranch, action: SelectMetadataAction) => ({
             ...state,
             [action.key]: action.payload,
+        }),
+    },
+    [SELECT_PAGE]: {
+        accepts: (action: AnyAction): action is SelectPageAction => action.type === SELECT_PAGE,
+        perform: (state: SelectionStateBranch, action: SelectPageAction) => ({
+            ...state,
+            page: action.payload,
         }),
     },
 };

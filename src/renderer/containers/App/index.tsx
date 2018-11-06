@@ -10,8 +10,6 @@ import { State } from "../../state/types";
 
 import DragAndDropSquare from "../DragAndDropSquare/index";
 
-const styles = require("./style.css");
-
 interface AppProps {
     page?: AppPage;
 }
@@ -36,7 +34,7 @@ class App extends React.Component<AppProps, {}> {
 
 function mapStateToProps(state: State) {
     return {
-        status: selection.selectors.getAppPage(state),
+        page: selection.selectors.getAppPage(state),
     };
 }
 
