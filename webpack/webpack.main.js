@@ -3,7 +3,7 @@ const getPluginsByEnv = require("./plugins");
 const tsImportPluginFactory = require("ts-import-plugin");
 
 module.exports = ({ analyze, env } = {}) => ({
-    entry: "./src/main/index.tsx",
+    entry: "./src/main/index.ts",
     output: {
         path: path.resolve(__dirname, "../", "dist"),
         filename: "main.js"
