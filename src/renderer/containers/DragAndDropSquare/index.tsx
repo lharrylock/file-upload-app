@@ -25,7 +25,6 @@ interface DragAndDropSquareProps {
     className?: string;
     onDrop: (files: FileList) => LoadFilesFromDragAndDropAction;
     onOpen: (files: string[]) => LoadFilesFromOpenDialogAction;
-    selectPage: (page: AppPage) => SelectPageAction;
 }
 
 interface DragAndDropSquareState {
@@ -55,7 +54,7 @@ class DragAndDropSquare extends React.Component<DragAndDropSquareProps, DragAndD
 
         return (
             <div
-                className={classNames(styles.container, {[styles.highlight]: this.isHovered()}, className)}
+                className={classNames(styles.container, {[styles.highlight]: this.isHovered}, className)}
                 onDragEnter={this.onDragEnter}
                 onDragLeave={this.onDragLeave}
                 onDragEnd={this.onDragLeave}
@@ -96,15 +95,14 @@ class DragAndDropSquare extends React.Component<DragAndDropSquareProps, DragAndD
         this.setState({dragEnterCount: this.state.dragEnterCount - 1});
     }
 
-    private isHovered(): boolean {
-        return this.state.dragEnterCount > 0;
-    }
-
     private onDrop(e: React.DragEvent<HTMLDivElement>): void {
         e.preventDefault();
         this.setState({dragEnterCount: 0});
         this.props.onDrop(e.dataTransfer.files);
-        this.props.selectPage(AppPage.EnterBarcode);
+    }
+
+    get isHovered(): boolean {
+        return this.state.dragEnterCount > 0;
     }
 }
 
@@ -113,6 +111,5 @@ const mapStateToProps = () => ({});
 const dispatchToPropsMap = {
     onDrop: selection.actions.loadFilesFromDragAndDrop,
     onOpen: selection.actions.openFilesFromDialog,
-    selectPage: selection.actions.selectPage,
 };
 export default connect(mapStateToProps, dispatchToPropsMap)(DragAndDropSquare);
