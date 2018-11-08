@@ -82,7 +82,6 @@ class DragAndDropSquare extends React.Component<DragAndDropSquareProps, DragAndD
             // If cancel is clicked, this callback gets called and filenames is undefined
             if (!isEmpty(filenames)) {
                 this.props.onOpen(filenames);
-                this.props.selectPage(AppPage.EnterBarcode);
             }
         });
     }

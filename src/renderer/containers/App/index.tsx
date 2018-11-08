@@ -1,8 +1,11 @@
-import "antd/dist/antd.css";
+import { Spin } from "antd";
 import * as React from "react";
 import { connect } from "react-redux";
 
-import { selection } from "../../state";
+import {
+    isLoading,
+    selection,
+} from "../../state";
 
 import { AppPage } from "../../state/selection/types";
 
@@ -10,8 +13,11 @@ import { State } from "../../state/types";
 
 import DragAndDropSquare from "../DragAndDropSquare/index";
 
+const styles = require("./styles.css");
+
 interface AppProps {
-    page?: AppPage;
+    loading: boolean;
+    page: AppPage;
 }
 
 const APP_PAGE_TO_CONTAINER_MAP = new Map<AppPage, JSX.Element>([
@@ -26,14 +32,30 @@ class App extends React.Component<AppProps, {}> {
     }
 
     public render() {
-        const { page } = this.props;
+        const {
+            loading,
+            page,
+        } = this.props;
 
-        return APP_PAGE_TO_CONTAINER_MAP.get(page || AppPage.DragAndDrop);
+        const showFolderTree = page !== AppPage.DragAndDrop;
+
+        return (
+            <div className={styles.container}>
+                {showFolderTree &&
+                    <div>
+                        {loading && <Spin size="large"/>}
+                        Future Folder Tree
+                    </div>
+                }
+                {APP_PAGE_TO_CONTAINER_MAP.get(page)}
+            </div>
+        );
     }
 }
 
 function mapStateToProps(state: State) {
     return {
+        loading: isLoading.selectors.getValue(state),
         page: selection.selectors.getAppPage(state),
     };
 }

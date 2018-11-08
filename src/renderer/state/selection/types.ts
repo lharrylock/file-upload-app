@@ -1,31 +1,62 @@
-import { resolve } from "path";
+import { readdir, stat, Stats } from "fs";
+import { resolve as resolvePath } from "path";
 
 import { MetadataStateBranch } from "../metadata/types";
 
 export class UploadFile implements AICSFile {
     public name: string;
     public path: string;
-    public files: UploadFile[] | null;
+    public files: UploadFile[] | undefined;
 
-    constructor(name: string, path: string, files: UploadFile[] | null) {
+    private readonly isDirectory: boolean;
+
+    constructor(name: string, path: string, isDirectory: boolean) {
         this.name = name;
         this.path = path;
-        this.files = files;
+        this.files = isDirectory ? [] : undefined;
+        this.isDirectory = isDirectory;
     }
 
-    get isDirectory(): boolean {
-        return !!this.files;
+    // run this if files is empty and this is a directory
+    public getChildren(): Promise<Array<Promise<UploadFile>>> {
+        if (this.isDirectory) {
+            return new Promise((resolve, reject) => {
+                readdir(this.fullPath, (err: NodeJS.ErrnoException, files: string[]) => {
+                    if (err) {
+                        reject(err);
+                    }
+
+                    resolve(files.map((file: string) => {
+                        return new Promise((resolve2, reject2) => {
+                            stat(file, (err2: NodeJS.ErrnoException, stats: Stats) => {
+                                if (err2) {
+                                    reject2(err2);
+                                }
+
+                                resolve2(new UploadFile(file, "", stats.isDirectory()));
+                            });
+                        });
+                    }));
+                });
+            });
+        }
+
+        throw new Error("Not a directory");
     }
 
     get fullPath(): string {
-        return resolve(this.path, this.name);
+        return resolvePath(this.path, this.name);
+    }
+
+    public getIsDirectory(): boolean {
+        return this.isDirectory;
     }
 }
 
 export interface AICSFile {
     name: string;
     path: string;
-    files: UploadFile[] | null;
+    files?: UploadFile[];
 }
 
 export interface DeselectFileAction {
@@ -37,6 +68,7 @@ export interface SelectionStateBranch {
     [key: string]: any;
     files: string[];
     page: AppPage;
+    stagedFiles: UploadFile[];
 }
 
 export interface SelectFileAction {

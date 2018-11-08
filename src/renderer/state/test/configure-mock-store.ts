@@ -8,6 +8,7 @@ import { SinonStub } from "sinon";
 
 import {
     enableBatching,
+    isLoading,
     metadata,
     selection,
     State,
@@ -21,6 +22,7 @@ export interface ReduxLogicDependencies {
 }
 
 const reducers = {
+    isLoading: isLoading.reducer,
     metadata: metadata.reducer,
     selection: selection.reducer,
 };

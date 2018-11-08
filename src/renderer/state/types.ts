@@ -24,8 +24,10 @@ export interface ReduxLogicDeps {
 }
 
 export type ReduxLogicNextCb = (action: AnyAction) => void;
+export type ReduxLogicDoneCb = () => void;
 
 export interface State {
+    isLoading: boolean;
     metadata: MetadataStateBranch;
     selection: SelectionStateBranch;
 }
