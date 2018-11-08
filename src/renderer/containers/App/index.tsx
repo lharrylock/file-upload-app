@@ -6,9 +6,7 @@ import {
     isLoading,
     selection,
 } from "../../state";
-
 import { AppPage } from "../../state/selection/types";
-
 import { State } from "../../state/types";
 
 import DragAndDropSquare from "../DragAndDropSquare/index";
@@ -20,17 +18,14 @@ interface AppProps {
     page: AppPage;
 }
 
+// This map will be used to determine which React Container to display
+// based on the selected page stored in the app store
 const APP_PAGE_TO_CONTAINER_MAP = new Map<AppPage, JSX.Element>([
     [AppPage.DragAndDrop, <DragAndDropSquare key="dragAndDrop"/>],
     [AppPage.EnterBarcode, <div key="enterBarcode">TODO</div>],
 ]);
 
 class App extends React.Component<AppProps, {}> {
-    constructor(props: AppProps) {
-        super(props);
-        this.state = {};
-    }
-
     public render() {
         const {
             loading,
@@ -43,8 +38,8 @@ class App extends React.Component<AppProps, {}> {
             <div className={styles.container}>
                 {showFolderTree &&
                     <div>
+                        <div>Future Folder Tree</div>
                         {loading && <Spin size="large"/>}
-                        Future Folder Tree
                     </div>
                 }
                 {APP_PAGE_TO_CONTAINER_MAP.get(page)}

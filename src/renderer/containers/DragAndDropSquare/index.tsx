@@ -13,10 +13,8 @@ import { connect } from "react-redux";
 
 import { selection } from "../../state";
 import {
-    AppPage,
     LoadFilesFromDragAndDropAction,
     LoadFilesFromOpenDialogAction,
-    SelectPageAction,
 } from "../../state/selection/types";
 
 const styles = require("./style.css");
@@ -64,7 +62,9 @@ class DragAndDropSquare extends React.Component<DragAndDropSquareProps, DragAndD
                     <Icon type="upload" className={styles.uploadIcon} />
                     <div>Drag and Drop</div>
                     <div>- or -</div>
-                    <Button type="primary" onClick={this.onBrowse} className={styles.button}>Browse</Button>
+                    <Button type="primary" size="large" onClick={this.onBrowse} className={styles.button}>
+                        Browse
+                    </Button>
                 </div>
             </div>
         );
