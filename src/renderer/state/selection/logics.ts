@@ -38,8 +38,6 @@ const loadFilesLogic = createLogic({
 const openFilesLogic = createLogic({
     process: ({ action, getState }: ReduxLogicDeps, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
         const originalAction = action.payload.filter((a: AnyAction) => a.type === OPEN_FILES);
-        // tslint:disable-next-line
-        console.log("in process");
 
         if (!isEmpty(originalAction)) {
             const filesToLoad: string[] = originalAction[0].payload;

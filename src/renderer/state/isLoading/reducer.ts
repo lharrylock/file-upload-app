@@ -15,19 +15,11 @@ export const initialState: boolean = false;
 const actionToConfigMap: TypeToDescriptionMap = {
     [START_LOADING]: {
         accepts: (action: AnyAction): action is StartLoadingAction => action.type === START_LOADING,
-        perform: () => {
-            // tslint:disable-next-line
-            console.log("start loading")
-            return true;
-        },
+        perform: () => true,
     },
     [STOP_LOADING]: {
         accepts: (action: AnyAction): action is StopLoadingAction => action.type === STOP_LOADING,
-        perform: () => {
-            // tslint:disable-next-line
-            console.log("stop loading")
-            return false;
-        },
+        perform: () => false,
     },
 };
 
