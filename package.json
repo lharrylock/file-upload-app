@@ -21,7 +21,7 @@
   "devDependencies": {
     "@types/antd": "^1.0.0",
     "@types/axios": "^0.14.0",
-    "@types/chai": "^4.0.4",
+    "@types/chai": "^4.1.4",
     "@types/classnames": "^2.2.6",
     "@types/electron": "^1.6.10",
     "@types/enzyme": "^3.1.3",
