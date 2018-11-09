@@ -15,6 +15,7 @@ import {
     SELECT_PAGE,
 } from "./constants";
 import {
+    AddStageFilesAction,
     AppPage,
     DeselectFileAction,
     SelectFileAction,
@@ -59,8 +60,8 @@ const actionToConfigMap: TypeToDescriptionMap = {
         }),
     },
     [ADD_STAGE_FILES]: {
-        accepts: (action: AnyAction): action is SelectFileAction => action.type === ADD_STAGE_FILES,
-        perform: (state: SelectionStateBranch, action: SelectFileAction) => {
+        accepts: (action: AnyAction): action is AddStageFilesAction => action.type === ADD_STAGE_FILES,
+        perform: (state: SelectionStateBranch, action: AddStageFilesAction) => {
             return {
                 ...state,
                 stagedFiles: [...state.stagedFiles, ...castArray(action.payload)],
