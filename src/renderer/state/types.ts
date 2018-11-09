@@ -1,8 +1,10 @@
 import { AxiosInstance } from "axios";
 import { AnyAction } from "redux";
+import { CreateLogic } from "redux-logic/definitions/logic";
 
 import { MetadataStateBranch } from "./metadata/types";
 import { SelectionStateBranch } from "./selection/types";
+import Process = CreateLogic.Config.Process;
 
 export interface ActionDescription {
     accepts: (action: AnyAction) => boolean;
@@ -22,6 +24,8 @@ export interface ReduxLogicDeps {
     getState: () => State;
     ctx?: any;
 }
+
+export type ReduxProcessDeps = Process.DepObj<State, AnyAction, ReduxLogicDeps, undefined>;
 
 export type ReduxLogicNextCb = (action: AnyAction) => void;
 export type ReduxLogicDoneCb = () => void;

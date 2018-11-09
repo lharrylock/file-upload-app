@@ -1,16 +1,13 @@
 import { AxiosResponse } from "axios";
 import { createLogic } from "redux-logic";
 
-import { ReduxLogicDeps } from "../types";
+import { ReduxProcessDeps } from "../types";
 
 import { receiveMetadata } from "./actions";
 import { REQUEST_METADATA } from "./constants";
 
 const requestMetadata = createLogic({
-    // processOptions: {
-    //     successType: receiveMetadata,
-    // },
-    process(deps: ReduxLogicDeps) {
+    process: (deps: ReduxProcessDeps) => {
         const {
             baseApiUrl,
             httpClient,
@@ -22,6 +19,9 @@ const requestMetadata = createLogic({
             .catch((reason) => {
                 console.log(reason); // tslint:disable-line:no-console
             });
+    },
+    processOptions: {
+        successType: receiveMetadata,
     },
     type: REQUEST_METADATA,
 });
