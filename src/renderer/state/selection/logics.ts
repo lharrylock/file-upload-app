@@ -64,7 +64,7 @@ const loadFilesLogic = createLogic({
             // map and for-of does not exist on type FileList so we have to use a basic for loop
             // tslint:disable-next-line
             for (let i = 0; i < filesToLoad.length; i++) {
-                const fileToLoad = filesToLoad[i];
+                const fileToLoad = filesToLoad[i] as unknown as { name: string; path: string; };
                 uploadFilePromises.push(
                     getUploadFilePromise(fileToLoad.name, dirname(fileToLoad.path))
                 );

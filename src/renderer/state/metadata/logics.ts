@@ -7,9 +7,9 @@ import { receiveMetadata } from "./actions";
 import { REQUEST_METADATA } from "./constants";
 
 const requestMetadata = createLogic({
-    processOptions: {
-        successType: receiveMetadata,
-    },
+    // processOptions: {
+    //     successType: receiveMetadata,
+    // },
     process(deps: ReduxLogicDeps) {
         const {
             baseApiUrl,
