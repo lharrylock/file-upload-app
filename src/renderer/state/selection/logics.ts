@@ -17,7 +17,7 @@ import { AppPage, UploadFile } from "./types";
 const getUploadFilePromise = (name: string, path: string): Promise<UploadFile> => (
     new Promise((resolve, reject) => {
         stat(resolvePath(path, name), (err: NodeJS.ErrnoException, stats: Stats) => {
-            if (err) {
+            if (err || !stats) {
                 reject(err);
             }
 
