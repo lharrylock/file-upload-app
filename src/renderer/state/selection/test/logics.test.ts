@@ -8,13 +8,15 @@ import selections from "../";
 import { AppPage } from "../types";
 
 describe("Selection logics", () => {
+    const FILE_NAME = "cells.txt";
+    const FILE_DIR = "files";
+    const FULL_PATH = resolve(__dirname, FILE_DIR, FILE_NAME);
+
     describe("loadFilesLogic", () => {
-        let files: FileList;
-        const FILE_NAME = "cells.txt";
-        const FILE_DIR = "files";
+        let fileList: FileList;
 
         beforeEach(() => {
-            files = {
+            fileList = {
                 length: 1,
                 0: {
                     name: FILE_NAME,
@@ -22,6 +24,7 @@ describe("Selection logics", () => {
                 },
             } as unknown as FileList;
         });
+
         it("Goes to EnterBarcode page if on DragAndDrop page", () => {
             const store = createReduxStore(mockState);
 
@@ -29,7 +32,7 @@ describe("Selection logics", () => {
             expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.DragAndDrop);
 
             // apply
-            store.dispatch(selections.actions.loadFilesFromDragAndDrop(files));
+            store.dispatch(selections.actions.loadFilesFromDragAndDrop(fileList));
 
             // after
             store.subscribe(() => {
@@ -50,7 +53,7 @@ describe("Selection logics", () => {
             expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.EnterBarcode);
 
             // apply
-            store.dispatch(selections.actions.loadFilesFromDragAndDrop(files));
+            store.dispatch(selections.actions.loadFilesFromDragAndDrop(fileList));
 
             // after
             store.subscribe(() => {
@@ -65,7 +68,7 @@ describe("Selection logics", () => {
             expect(selections.selectors.getStagedFiles(store.getState()).length).to.equal(0);
 
             // apply
-            store.dispatch(selections.actions.loadFilesFromDragAndDrop(files));
+            store.dispatch(selections.actions.loadFilesFromDragAndDrop(fileList));
 
             store.subscribe(() => {
                 // after
@@ -76,17 +79,52 @@ describe("Selection logics", () => {
                 expect(file.getIsDirectory()).to.equal(false);
                 expect(file.name).to.equal(FILE_NAME);
                 expect(file.path).to.equal(resolve(__dirname, FILE_DIR));
-                expect(file.fullPath).to.equal(resolve(__dirname, FILE_DIR, FILE_NAME));
+                expect(file.fullPath).to.equal(FULL_PATH);
             });
         });
     });
-    describe("openFilesLogic", () => {
-        it("Goes to EnterBarcode page if on DragAndDrop page", () => {
 
+    describe("openFilesLogic", () => {
+        let filePaths: string[];
+
+        beforeEach(() => {
+            filePaths = [FULL_PATH];
         });
 
         it("Goes to EnterBarcode page if on DragAndDrop page", () => {
+            const store = createReduxStore(mockState);
 
+            // before
+            expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.DragAndDrop);
+
+            // apply
+            store.dispatch(selections.actions.openFilesFromDialog(filePaths));
+
+            // after
+            store.subscribe(() => {
+                expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.EnterBarcode);
+            });
+        });
+
+        it("Does not change page if not on DragAndDrop page", () => {
+            const store = createReduxStore({
+                ...mockState,
+                selection: {
+                    ...mockState.selection,
+                    page: AppPage.EnterBarcode,
+                },
+            });
+
+            // before
+            expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.EnterBarcode);
+
+            // apply
+            store.dispatch(selections.actions.openFilesFromDialog(filePaths));
+
+            // after
+            store.subscribe(() => {
+                expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.EnterBarcode);
+            });
         });
     });
 });
