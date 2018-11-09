@@ -5,7 +5,7 @@ import createReduxStore from "../../configure-store";
 import { mockState } from "../../test/mocks";
 
 import selections from "../";
-import { AppPage } from "../types";
+import { AppPage, UploadFile } from "../types";
 
 describe("Selection logics", () => {
     const FILE_NAME = "cells.txt";
@@ -13,6 +13,22 @@ describe("Selection logics", () => {
     const FOLDER_NAME = "a_directory";
     const FILE_FULL_PATH = resolve(__dirname, TEST_FILES_DIR, FILE_NAME);
     const FOLDER_FULL_PATH = resolve(__dirname, TEST_FILES_DIR, FOLDER_NAME);
+    const EXPECTED_FILE_INDEX = 0;
+    const EXPECTED_FOLDER_INDEX = 1;
+
+    const testStagedFilesCreated = (stagedFiles: UploadFile[]) => {
+        const file = stagedFiles[EXPECTED_FILE_INDEX];
+        expect(file.getIsDirectory()).to.equal(false);
+        expect(file.name).to.equal(FILE_NAME);
+        expect(file.path).to.equal(resolve(__dirname, TEST_FILES_DIR));
+        expect(file.fullPath).to.equal(FILE_FULL_PATH);
+
+        const folder = stagedFiles[EXPECTED_FOLDER_INDEX];
+        expect(folder.getIsDirectory()).to.equal(true);
+        expect(folder.name).to.equal(FOLDER_NAME);
+        expect(folder.path).to.equal(resolve(__dirname, TEST_FILES_DIR));
+        expect(folder.fullPath).to.equal(FOLDER_FULL_PATH);
+    };
 
     describe("loadFilesLogic", () => {
         let fileList: FileList;
@@ -81,17 +97,7 @@ describe("Selection logics", () => {
                 const stagedFiles = selections.selectors.getStagedFiles(store.getState());
                 expect(stagedFiles.length).to.equal(fileList.length);
 
-                const file = stagedFiles[0];
-                expect(file.getIsDirectory()).to.equal(false);
-                expect(file.name).to.equal(FILE_NAME);
-                expect(file.path).to.equal(resolve(__dirname, TEST_FILES_DIR));
-                expect(file.fullPath).to.equal(FILE_FULL_PATH);
-
-                const folder = stagedFiles[1];
-                expect(folder.getIsDirectory()).to.equal(true);
-                expect(folder.name).to.equal(FOLDER_NAME);
-                expect(folder.path).to.equal(resolve(__dirname, TEST_FILES_DIR));
-                expect(folder.fullPath).to.equal(FOLDER_FULL_PATH);
+                testStagedFilesCreated(stagedFiles);
             });
         });
     });
@@ -100,7 +106,7 @@ describe("Selection logics", () => {
         let filePaths: string[];
 
         beforeEach(() => {
-            filePaths = [FILE_FULL_PATH];
+            filePaths = [FILE_FULL_PATH, FOLDER_FULL_PATH];
         });
 
         it("Goes to EnterBarcode page if on DragAndDrop page", () => {
@@ -139,8 +145,22 @@ describe("Selection logics", () => {
             });
         });
 
-        // it("Stages all files opened", () => {
-        //
-        // });
+        it("Stages all files opened", () => {
+            const store = createReduxStore(mockState);
+
+            // before
+            expect(selections.selectors.getStagedFiles(store.getState()).length).to.equal(0);
+
+            // apply
+            store.dispatch(selections.actions.openFilesFromDialog(filePaths));
+
+            store.subscribe(() => {
+                // after
+                const stagedFiles = selections.selectors.getStagedFiles(store.getState());
+                expect(stagedFiles.length).to.equal(filePaths.length);
+
+                testStagedFilesCreated(stagedFiles);
+            });
+        });
     });
 });
