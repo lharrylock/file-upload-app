@@ -1,11 +1,14 @@
 import { expect } from "chai";
 import { resolve } from "path";
+import { Simulate } from "react-dom/test-utils";
 
 import createReduxStore from "../../configure-store";
+import { isLoading } from "../../index";
 import { mockState } from "../../test/mocks";
 
 import selections from "../";
 import { AppPage, UploadFile } from "../types";
+import select = Simulate.select;
 
 describe("Selection logics", () => {
     const FILE_NAME = "cells.txt";
@@ -34,6 +37,9 @@ describe("Selection logics", () => {
         let fileList: FileList;
 
         beforeEach(() => {
+            // a FileList (https://developer.mozilla.org/en-US/docs/Web/API/FileList) does not have a constructor
+            // and must implement some iterator methods. For the purposes of keeping these tests simple, we're casting
+            // it twice to make the transpiler happy.
             fileList = {
                 length: 2,
                 0: {
@@ -100,6 +106,47 @@ describe("Selection logics", () => {
                 testStagedFilesCreated(stagedFiles);
             });
         });
+
+        it ("should stop loading on success", () => {
+            const store = createReduxStore(mockState);
+
+            // before
+            expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+
+            // apply
+            store.dispatch(selections.actions.loadFilesFromDragAndDrop(fileList));
+
+            store.subscribe(() => {
+                // after
+                expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+            });
+        });
+
+        it ("should stop loading on error", () => {
+            const store = createReduxStore(mockState);
+
+            // before
+            expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+
+            // apply
+            fileList = {
+                length: 2,
+                0: {
+                    name: "does_not_exist.txt",
+                    path: FILE_FULL_PATH,
+                },
+                1: {
+                    name: FOLDER_NAME,
+                    path: FOLDER_FULL_PATH,
+                },
+            } as unknown as FileList;
+            store.dispatch(selections.actions.loadFilesFromDragAndDrop(fileList));
+
+            store.subscribe(() => {
+                // after
+                expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+            });
+        });
     });
 
     describe("openFilesLogic", () => {
@@ -160,6 +207,37 @@ describe("Selection logics", () => {
                 expect(stagedFiles.length).to.equal(filePaths.length);
 
                 testStagedFilesCreated(stagedFiles);
+            });
+        });
+
+        it ("should stop loading on success", () => {
+            const store = createReduxStore(mockState);
+
+            // before
+            expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+
+            // apply
+            store.dispatch(selections.actions.openFilesFromDialog(filePaths));
+
+            store.subscribe(() => {
+                // after
+                expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+            });
+        });
+
+        it ("should stop loading on error", () => {
+            const store = createReduxStore(mockState);
+
+            // before
+            expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+
+            // apply
+            filePaths = [resolve(__dirname, TEST_FILES_DIR, "does_not_exist.txt")];
+            store.dispatch(selections.actions.openFilesFromDialog(filePaths));
+
+            store.subscribe(() => {
+                // after
+                expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
             });
         });
     });
