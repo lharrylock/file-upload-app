@@ -1,5 +1,5 @@
 import {
-    ADD_STAGE_FILES,
+    ADD_STAGE_FILES, CLEAR_STAGED_FILES,
     DESELECT_FILE,
     LOAD_FILES,
     OPEN_FILES,
@@ -9,7 +9,7 @@ import {
 } from "./constants";
 import {
     AddStageFilesAction,
-    AppPage,
+    AppPage, ClearStagedFilesAction,
     DeselectFileAction,
     DragAndDropFileList,
     LoadFilesFromDragAndDropAction,
@@ -67,5 +67,11 @@ export function selectPage(page: AppPage): SelectPageAction {
     return {
         payload: page,
         type: SELECT_PAGE,
+    };
+}
+
+export function clearStagedFiles(): ClearStagedFilesAction {
+    return {
+        type: CLEAR_STAGED_FILES,
     };
 }

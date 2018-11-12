@@ -1,12 +1,12 @@
-import { Spin } from "antd";
 import * as React from "react";
 import { connect } from "react-redux";
 
+import FolderTree from "../../components/FolderTree/index";
 import {
     isLoading,
     selection,
 } from "../../state";
-import { AppPage } from "../../state/selection/types";
+import { AppPage, ClearStagedFilesAction, SelectFileAction, UploadFile } from "../../state/selection/types";
 import { State } from "../../state/types";
 
 import DragAndDropSquare from "../DragAndDropSquare/index";
@@ -14,7 +14,10 @@ import DragAndDropSquare from "../DragAndDropSquare/index";
 const styles = require("./styles.css");
 
 interface AppProps {
+    files: UploadFile[];
     loading: boolean;
+    onCheck?: (files: string[]) => SelectFileAction;
+    onClear?: () => ClearStagedFilesAction;
     page: AppPage;
 }
 
@@ -28,7 +31,10 @@ const APP_PAGE_TO_CONTAINER_MAP = new Map<AppPage, JSX.Element>([
 class App extends React.Component<AppProps, {}> {
     public render() {
         const {
+            files,
             loading,
+            onCheck,
+            onClear,
             page,
         } = this.props;
 
@@ -37,10 +43,12 @@ class App extends React.Component<AppProps, {}> {
         return (
             <div className={styles.container}>
                 {showFolderTree &&
-                    <div>
-                        <div>Future Folder Tree</div>
-                        {loading && <Spin size="large"/>}
-                    </div>
+                   <FolderTree
+                       files={files}
+                       isLoading={loading}
+                       onCheck={onCheck}
+                       onClear={onClear}
+                   />
                 }
                 {APP_PAGE_TO_CONTAINER_MAP.get(page)}
             </div>
@@ -50,9 +58,15 @@ class App extends React.Component<AppProps, {}> {
 
 function mapStateToProps(state: State) {
     return {
+        files: state.selection.stagedFiles,
         loading: isLoading.selectors.getValue(state),
         page: selection.selectors.getAppPage(state),
     };
 }
 
-export default connect(mapStateToProps, {})(App);
+const dispatchToPropsMap = {
+    onCheck: selection.actions.selectFile,
+    onClear: selection.actions.clearStagedFiles,
+};
+
+export default connect(mapStateToProps, dispatchToPropsMap)(App);

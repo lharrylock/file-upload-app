@@ -68,6 +68,10 @@ export interface SelectPageAction {
     type: string;
 }
 
+export interface ClearStagedFilesAction {
+    type: string;
+}
+
 export interface DragAndDropFileList {
     readonly length: number;
     [index: number]: DragAndDropFile;
