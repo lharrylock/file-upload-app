@@ -17,7 +17,8 @@ import {
 export interface ReduxLogicDependencies {
     baseMmsUrl: string;
     httpClient: {
-        get: SinonStub
+        get: SinonStub,
+        post: SinonStub,
     };
 }
 

@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 
 import { selection } from "../../state";
 import {
+    DragAndDropFileList,
     LoadFilesFromDragAndDropAction,
     LoadFilesFromOpenDialogAction,
 } from "../../state/selection/types";
@@ -21,7 +22,7 @@ const styles = require("./style.css");
 
 interface DragAndDropSquareProps {
     className?: string;
-    onDrop: (files: FileList) => LoadFilesFromDragAndDropAction;
+    onDrop: (files: DragAndDropFileList) => LoadFilesFromDragAndDropAction;
     onOpen: (files: string[]) => LoadFilesFromOpenDialogAction;
 }
 

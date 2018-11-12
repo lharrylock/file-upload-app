@@ -1,14 +1,12 @@
 import { expect } from "chai";
 import { resolve } from "path";
-import { Simulate } from "react-dom/test-utils";
 
 import createReduxStore from "../../configure-store";
 import { isLoading } from "../../index";
 import { mockState } from "../../test/mocks";
 
 import selections from "../";
-import { AppPage, UploadFile } from "../types";
-import select = Simulate.select;
+import { AppPage, DragAndDropFileList, UploadFile } from "../types";
 
 describe("Selection logics", () => {
     const FILE_NAME = "cells.txt";
@@ -34,7 +32,7 @@ describe("Selection logics", () => {
     };
 
     describe("loadFilesLogic", () => {
-        let fileList: FileList;
+        let fileList: DragAndDropFileList;
 
         beforeEach(() => {
             // a FileList (https://developer.mozilla.org/en-US/docs/Web/API/FileList) does not have a constructor
@@ -50,7 +48,7 @@ describe("Selection logics", () => {
                     name: FOLDER_NAME,
                     path: FOLDER_FULL_PATH,
                 },
-            } as unknown as FileList;
+            };
         });
 
         it("Goes to EnterBarcode page if on DragAndDrop page", () => {
@@ -139,7 +137,7 @@ describe("Selection logics", () => {
                     name: FOLDER_NAME,
                     path: FOLDER_FULL_PATH,
                 },
-            } as unknown as FileList;
+            };
             store.dispatch(selections.actions.loadFilesFromDragAndDrop(fileList));
 
             store.subscribe(() => {

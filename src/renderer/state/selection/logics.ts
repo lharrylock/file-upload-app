@@ -6,13 +6,17 @@ import { createLogic } from "redux-logic";
 
 import { startLoading, stopLoading } from "../isLoading/actions";
 
-import { ReduxLogicDeps, ReduxLogicDoneCb, ReduxLogicNextCb } from "../types";
+import {
+    ReduxLogicDependencies,
+    ReduxLogicDoneCb,
+    ReduxLogicNextCb,
+} from "../types";
 import { batchActions } from "../util";
 
 import { selectPage, stageFiles } from "./actions";
 import { LOAD_FILES, OPEN_FILES } from "./constants";
 import { getAppPage } from "./selectors";
-import { AppPage, UploadFile } from "./types";
+import { AppPage, DragAndDropFileList, UploadFile } from "./types";
 
 const getUploadFilePromise = (name: string, path: string): Promise<UploadFile> => (
     new Promise((resolve, reject) => {
@@ -45,7 +49,7 @@ const stageFilesAndStopLoading = (uploadFilePromises: Array<Promise<UploadFile>>
         });
 };
 
-const openFilesTransformLogic = ({ action, getState }: ReduxLogicDeps, next: (action: AnyAction) => void) => {
+const openFilesTransformLogic = ({ action, getState }: ReduxLogicDependencies, next: (action: AnyAction) => void) => {
     const actions = [action, startLoading()];
     const page: AppPage = getAppPage(getState());
     if (page === AppPage.DragAndDrop) {
@@ -55,11 +59,11 @@ const openFilesTransformLogic = ({ action, getState }: ReduxLogicDeps, next: (ac
 };
 
 const loadFilesLogic = createLogic({
-    process: ({ action }: ReduxLogicDeps, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
+    process: ({ action }: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
         const originalAction = action.payload.filter((a: AnyAction) => a.type === LOAD_FILES);
 
         if (!isEmpty(originalAction)) {
-            const filesToLoad: FileList = originalAction[0].payload;
+            const filesToLoad: DragAndDropFileList = originalAction[0].payload;
             const uploadFilePromises: Array<Promise<UploadFile>> = [];
             // map and for-of does not exist on type FileList so we have to use a basic for loop
             // tslint:disable-next-line
@@ -78,7 +82,7 @@ const loadFilesLogic = createLogic({
 });
 
 const openFilesLogic = createLogic({
-    process: ({ action }: ReduxLogicDeps, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
+    process: ({ action }: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
         const originalAction = action.payload.filter((a: AnyAction) => a.type === OPEN_FILES);
 
         if (!isEmpty(originalAction)) {

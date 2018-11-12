@@ -11,6 +11,7 @@ import {
     AddStageFilesAction,
     AppPage,
     DeselectFileAction,
+    DragAndDropFileList,
     LoadFilesFromDragAndDropAction,
     LoadFilesFromOpenDialogAction,
     SelectFileAction,
@@ -41,7 +42,7 @@ export function selectMetadata(key: string, payload: string | number): SelectMet
     };
 }
 
-export function loadFilesFromDragAndDrop(files: FileList): LoadFilesFromDragAndDropAction {
+export function loadFilesFromDragAndDrop(files: DragAndDropFileList): LoadFilesFromDragAndDropAction {
     return {
         payload: files,
         type: LOAD_FILES,
