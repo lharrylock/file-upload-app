@@ -8,19 +8,26 @@ import { TypeToDescriptionMap } from "../types";
 import { makeReducer } from "../util";
 
 import {
+    ADD_STAGE_FILES,
     DESELECT_FILE,
     SELECT_FILE,
     SELECT_METADATA,
+    SELECT_PAGE,
 } from "./constants";
 import {
+    AddStageFilesAction,
+    AppPage,
     DeselectFileAction,
     SelectFileAction,
     SelectionStateBranch,
     SelectMetadataAction,
+    SelectPageAction,
 } from "./types";
 
 export const initialState = {
     files: [],
+    page: AppPage.DragAndDrop,
+    stagedFiles: [],
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {
@@ -44,6 +51,22 @@ const actionToConfigMap: TypeToDescriptionMap = {
             ...state,
             [action.key]: action.payload,
         }),
+    },
+    [SELECT_PAGE]: {
+        accepts: (action: AnyAction): action is SelectPageAction => action.type === SELECT_PAGE,
+        perform: (state: SelectionStateBranch, action: SelectPageAction) => ({
+            ...state,
+            page: action.payload,
+        }),
+    },
+    [ADD_STAGE_FILES]: {
+        accepts: (action: AnyAction): action is AddStageFilesAction => action.type === ADD_STAGE_FILES,
+        perform: (state: SelectionStateBranch, action: AddStageFilesAction) => {
+            return {
+                ...state,
+                stagedFiles: [...state.stagedFiles, ...castArray(action.payload)],
+            };
+        },
     },
 };
 
