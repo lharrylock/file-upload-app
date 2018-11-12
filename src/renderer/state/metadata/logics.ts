@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { createLogic } from "redux-logic";
 
 import { ReduxLogicDependencies } from "../types";
@@ -12,7 +12,7 @@ const requestMetadata = createLogic({
         return httpClient
             .get(`${baseMmsUrl}/metadata`)
             .then((metadata: AxiosResponse) => metadata.data)
-            .catch((reason: any) => {
+            .catch((reason: AxiosError) => {
                 console.log(reason); // tslint:disable-line:no-console
             });
     },
