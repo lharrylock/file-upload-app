@@ -20,7 +20,7 @@ interface AppProps {
     files: UploadFile[];
     getFilesInFolder: (folderToExpand: UploadFile) => GetFilesInFolderAction;
     loading: boolean;
-    onCheck?: (files: string[]) => SelectFileAction;
+    onCheck: (files: string[]) => SelectFileAction;
     page: AppPage;
 }
 

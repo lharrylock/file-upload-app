@@ -20,12 +20,28 @@ interface FolderTreeProps {
 }
 
 interface FolderTreeState {
+    // Used to prevent requesting child files/folders more than once
     expandedFolders: Set<string>;
 }
 
 const FOLDER_TAG = "(folder)";
 
 class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
+    // Recursively searches files and the child files for the first file whose full path is equivalent to path
+    private static getMatchingFileFromPath(files: UploadFile[], path: string): UploadFile | null {
+        for (const file of files) {
+            if (file.getIsDirectory()) {
+                if (file.fullPath === path) {
+                    return file;
+                } else if (path.indexOf(file.fullPath) === 0) {
+                    return FolderTree.getMatchingFileFromPath(file.files, path);
+                }
+            }
+        }
+
+        return null;
+    }
+
     constructor(props: FolderTreeProps) {
         super(props);
         this.state = {
@@ -34,51 +50,6 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
 
         this.onExpand = this.onExpand.bind(this);
         this.onSelect = this.onSelect.bind(this);
-    }
-
-    public onSelect(files: string[]) {
-        const filesExcludingFolders = files.filter((file: string) => !file.includes(FOLDER_TAG));
-        this.props.onCheck(filesExcludingFolders);
-    }
-
-    public onExpand(expandedKeys: string[]): void {
-        // find UploadFile to send
-        expandedKeys.forEach((key) => {
-            if (!this.state.expandedFolders.has(key)) {
-                this.setState({expandedFolders: this.state.expandedFolders.add(key)});
-                const folderToUpdate = this.getMatchingFileFromPath(this.props.files, key.slice(0, -FOLDER_TAG.length));
-
-                if (folderToUpdate) {
-                    this.props.getFilesInFolder(folderToUpdate);
-                }
-            }
-        });
-    }
-
-    public getMatchingFileFromPath(files: UploadFile[], path: string): UploadFile | null {
-        for (const file of files) {
-            if (file.getIsDirectory()) {
-                if (file.fullPath === path) {
-                    return file;
-                } else if (path.indexOf(file.fullPath) === 0) {
-                    return this.getMatchingFileFromPath(file.files, path);
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public renderChildDirectories(file: UploadFile): React.ReactNode {
-        if (!file.getIsDirectory()) {
-            return <Tree.TreeNode title={file.name} key={file.fullPath} isLeaf={true}/>;
-        }
-
-        return (
-            <Tree.TreeNode title={file.name} key={file.fullPath + FOLDER_TAG} isLeaf={false}>
-                {file.files.map((child: UploadFile) => this.renderChildDirectories(child))}
-            </Tree.TreeNode>
-        );
     }
 
     public render() {
@@ -113,6 +84,39 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
                     {isLoading && <Spin size="large"/>}
                 </div>
             </div>
+        );
+    }
+
+    private onSelect(files: string[]) {
+        const filesExcludingFolders = files.filter((file: string) => !file.includes(FOLDER_TAG));
+        this.props.onCheck(filesExcludingFolders);
+    }
+
+    private onExpand(expandedKeys: string[]): void {
+        // find UploadFile to send
+        expandedKeys.forEach((key) => {
+            // prevents us from requesting child files/directories more than once
+            if (!this.state.expandedFolders.has(key)) {
+                this.setState({expandedFolders: this.state.expandedFolders.add(key)});
+                const filePath: string = key.slice(0, -FOLDER_TAG.length);
+                const folderToUpdate = FolderTree.getMatchingFileFromPath(this.props.files, filePath);
+
+                if (folderToUpdate) {
+                    this.props.getFilesInFolder(folderToUpdate);
+                }
+            }
+        });
+    }
+
+    private renderChildDirectories(file: UploadFile): React.ReactNode {
+        if (!file.getIsDirectory()) {
+            return <Tree.TreeNode title={file.name} key={file.fullPath} isLeaf={true}/>;
+        }
+
+        return (
+            <Tree.TreeNode title={file.name} key={file.fullPath + FOLDER_TAG} isLeaf={false}>
+                {file.files.map((child: UploadFile) => this.renderChildDirectories(child))}
+            </Tree.TreeNode>
         );
     }
 }
