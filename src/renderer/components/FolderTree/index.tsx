@@ -66,7 +66,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
                 if (file.fullPath === path) {
                     return file;
                 } else if (path.indexOf(file.fullPath) === 0) {
-                    return this.getMatchingFileFromPath([file], path);
+                    return this.getMatchingFileFromPath(file.files, path);
                 }
             }
         }
