@@ -49,7 +49,7 @@ export interface SelectMetadataAction {
 }
 
 export interface LoadFilesFromDragAndDropAction {
-    payload: FileList;
+    payload: DragAndDropFileList;
     type: string;
 }
 
@@ -66,6 +66,16 @@ export interface AddStageFilesAction {
 export interface SelectPageAction {
     payload: AppPage;
     type: string;
+}
+
+export interface DragAndDropFileList {
+    readonly length: number;
+    [index: number]: DragAndDropFile;
+}
+
+export interface DragAndDropFile {
+    readonly name: string;
+    readonly path: string;
 }
 
 export enum AppPage {

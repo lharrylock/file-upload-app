@@ -86,8 +86,6 @@ task main(type: NodeTask) {
 }
 
 task test(type: NodeTask) {
-    dependsOn npmInstall
-
     environment = [TS_NODE_PROJECT: "tsconfig.commonjs.json", NODE_ENV: "production"]
     script = file("${npmBin}/mocha")
     args = ["--opts", "mocha.opts", "src/**/test/*.{ts,tsx}"]

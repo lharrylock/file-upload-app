@@ -1,8 +1,10 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance, AxiosPromise, AxiosRequestConfig } from "axios";
 import { AnyAction } from "redux";
+import { CreateLogic } from "redux-logic/definitions/logic";
 
 import { MetadataStateBranch } from "./metadata/types";
 import { SelectionStateBranch } from "./selection/types";
+import Process = CreateLogic.Config.Process;
 
 export interface ActionDescription {
     accepts: (action: AnyAction) => boolean;
@@ -15,13 +17,16 @@ export interface BatchedAction {
     payload: AnyAction[];
 }
 
-export interface ReduxLogicDeps {
-    action: AnyAction;
-    baseApiUrl: string;
-    httpClient: AxiosInstance;
-    getState: () => State;
+export interface ReduxLogicExtraDependencies {
+    baseMmsUrl: string;
+    httpClient: {
+        get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>;
+        post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
+    };
     ctx?: any;
 }
+
+export type ReduxLogicDependencies = Process.DepObj<State, AnyAction, ReduxLogicExtraDependencies>;
 
 export type ReduxLogicNextCb = (action: AnyAction) => void;
 export type ReduxLogicDoneCb = () => void;

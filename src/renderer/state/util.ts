@@ -40,7 +40,7 @@ function actionIsBatched(action: AnyAction): action is BatchedAction {
 }
 
 export function enableBatching<S>(reducer: Reducer<S>): Reducer<S> {
-    return function batchingReducer(state: S | undefined , action: AnyAction): S {
+    return function batchingReducer(state: S, action: AnyAction): S {
         if (actionIsBatched(action) && state) {
             return action.payload.reduce(batchingReducer, state);
         }
