@@ -1,10 +1,9 @@
-import { Button, Icon, Spin, Tree } from "antd";
+import { Icon, Spin, Tree } from "antd";
 import * as classNames from "classnames";
 import * as React from "react";
 
 import { GetFilesInFolderAction } from "../../state/metadata/types";
 import {
-    ClearStagedFilesAction,
     SelectFileAction,
 } from "../../state/selection/types";
 import { UploadFile } from "../../state/types";
@@ -17,7 +16,6 @@ interface FolderTreeProps {
     getFilesInFolder: (folderToExpand: UploadFile) => GetFilesInFolderAction;
     isLoading?: boolean;
     onCheck?: (files: string[]) => SelectFileAction;
-    onClear?: () => ClearStagedFilesAction;
 }
 
 interface FolderTreeState {
@@ -33,7 +31,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
         this.state = {
             expandedFolders: new Set<string>(),
         };
-        this.clearAll = this.clearAll.bind(this);
+
         this.onExpand = this.onExpand.bind(this);
         this.onSelect = this.onSelect.bind(this);
     }
@@ -74,13 +72,6 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
         return null;
     }
 
-    public clearAll(): void {
-        // todo ugly
-        if (this.props.onClear) {
-            this.props.onClear();
-        }
-    }
-
     public renderChildDirectories(file: UploadFile): React.ReactNode {
         if (!file.getIsDirectory() || !file.files) {
             return <Tree.TreeNode title={file.name} key={file.fullPath} isLeaf={true}/>;
@@ -111,8 +102,6 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
                     <span className={styles.brandName}>AICS File Uploader</span>
                 </div>
                 <div className={styles.fileTree}>
-                    <Button onClick={this.clearAll} icon="delete" shape="circle"/>
-                    <Button icon="upload" shape="circle"/>
                     {!isLoading && <Tree.DirectoryTree
                         checkable={false}
                         multiple={true}

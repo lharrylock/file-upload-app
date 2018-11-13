@@ -10,7 +10,6 @@ import { metadata } from "../../state/index";
 import { GetFilesInFolderAction } from "../../state/metadata/types";
 import {
     AppPage,
-    ClearStagedFilesAction,
     SelectFileAction,
 } from "../../state/selection/types";
 import { State, UploadFile } from "../../state/types";
@@ -24,7 +23,6 @@ interface AppProps {
     getFilesInFolder: (folderToExpand: UploadFile) => GetFilesInFolderAction;
     loading: boolean;
     onCheck?: (files: string[]) => SelectFileAction;
-    onClear?: () => ClearStagedFilesAction;
     page: AppPage;
 }
 
@@ -42,7 +40,6 @@ class App extends React.Component<AppProps, {}> {
             getFilesInFolder,
             loading,
             onCheck,
-            onClear,
             page,
         } = this.props;
 
@@ -57,7 +54,6 @@ class App extends React.Component<AppProps, {}> {
                        getFilesInFolder={getFilesInFolder}
                        isLoading={loading}
                        onCheck={onCheck}
-                       onClear={onClear}
                    />
                 }
                 {APP_PAGE_TO_CONTAINER_MAP.get(page)}
@@ -77,7 +73,6 @@ function mapStateToProps(state: State) {
 const dispatchToPropsMap = {
     getFilesInFolder: metadata.actions.getFilesInFolder,
     onCheck: selection.actions.selectFile,
-    onClear: selection.actions.clearStagedFiles,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(App);
