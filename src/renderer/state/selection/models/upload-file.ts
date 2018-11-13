@@ -1,6 +1,8 @@
 import { resolve as resolvePath } from "path";
 
-export class UploadFile {
+import { UploadFile } from "../types";
+
+export class UploadFileImpl implements UploadFile {
     public name: string;
     public path: string;
     // this will get populated once the folder is expanded
