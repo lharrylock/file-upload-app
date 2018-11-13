@@ -1,11 +1,15 @@
+import { UploadFile } from "../types";
+
 import {
+    GET_FILES_IN_FOLDER,
     RECEIVE_METADATA,
     REQUEST_METADATA,
 } from "./constants";
 import {
+    GetFilesInFolderAction,
     MetadataStateBranch,
     ReceiveAction,
-    RequestAction
+    RequestAction,
 } from "./types";
 
 export function receiveMetadata(payload: MetadataStateBranch = {}): ReceiveAction {
@@ -18,5 +22,12 @@ export function receiveMetadata(payload: MetadataStateBranch = {}): ReceiveActio
 export function requestMetadata(): RequestAction {
     return {
         type: REQUEST_METADATA,
+    };
+}
+
+export function getFilesInFolder(folder: UploadFile): GetFilesInFolderAction {
+    return {
+        payload: folder,
+        type: GET_FILES_IN_FOLDER,
     };
 }

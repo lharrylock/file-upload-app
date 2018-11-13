@@ -6,7 +6,8 @@ import { isLoading } from "../../index";
 import { mockState } from "../../test/mocks";
 
 import selections from "../";
-import { AppPage, DragAndDropFileList, UploadFile } from "../types";
+import { UploadFile } from "../../types";
+import { AppPage, DragAndDropFileList } from "../types";
 
 describe("Selection logics", () => {
     const FILE_NAME = "cells.txt";

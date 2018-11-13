@@ -9,14 +9,14 @@ import { startLoading, stopLoading } from "../isLoading/actions";
 import {
     ReduxLogicDependencies,
     ReduxLogicDoneCb,
-    ReduxLogicNextCb,
+    ReduxLogicNextCb, ReduxLogicTransformDependencies, UploadFile,
 } from "../types";
 import { batchActions } from "../util";
 
-import { selectPage, stageFiles } from "./actions";
-import { LOAD_FILES, OPEN_FILES } from "./constants";
-import { getAppPage } from "./selectors";
-import { AppPage, DragAndDropFileList, UploadFile } from "./types";
+import { selectPage, stageFiles, updateStagedFiles } from "./actions";
+import { GET_FILES_IN_FOLDER, LOAD_FILES, OPEN_FILES } from "./constants";
+import { getAppPage, getStagedFiles } from "./selectors";
+import { AppPage, DragAndDropFileList } from "./types";
 
 const getUploadFilePromise = (name: string, path: string): Promise<UploadFile> => (
     new Promise((resolve, reject) => {
@@ -49,7 +49,7 @@ const stageFilesAndStopLoading = (uploadFilePromises: Array<Promise<UploadFile>>
         });
 };
 
-const openFilesTransformLogic = ({ action, getState }: ReduxLogicDependencies, next: (action: AnyAction) => void) => {
+const openFilesTransformLogic = ({ action, getState }: ReduxLogicDependencies, next: ReduxLogicNextCb) => {
     const actions = [action, startLoading()];
     const page: AppPage = getAppPage(getState());
     if (page === AppPage.DragAndDrop) {
@@ -99,7 +99,39 @@ const openFilesLogic = createLogic({
     type: OPEN_FILES,
 });
 
+const getNewStagedFiles = (files: UploadFile[], fileToUpdate: UploadFile): UploadFile[] => {
+    return files.map((file: UploadFile) => {
+        if (file.fullPath === fileToUpdate.fullPath) {
+            return fileToUpdate;
+        } else if (fileToUpdate.fullPath.indexOf(file.fullPath) === 0) {
+            file.files = getNewStagedFiles(file.files, fileToUpdate);
+            return file;
+        }
+
+        return file;
+    });
+};
+
+const getFilesInFolderLogic = createLogic({
+    transform: ({ action, getState }: ReduxLogicTransformDependencies,
+                next: ReduxLogicNextCb) => {
+        const folder: UploadFile = action.payload;
+        folder.loadFiles()
+            .then((filePromises: Array<Promise<UploadFile>>) => {
+                Promise.all(filePromises)
+                    .then((files: UploadFile[]) => {
+                        folder.files = files;
+                        const stagedFiles = [...getStagedFiles(getState())];
+                        next(updateStagedFiles(getNewStagedFiles(stagedFiles, folder)));
+                    });
+                    // .catch((reason: any) => console.log(reason));
+            });
+    },
+    type: GET_FILES_IN_FOLDER,
+});
+
 export default [
     loadFilesLogic,
     openFilesLogic,
+    getFilesInFolderLogic,
 ];

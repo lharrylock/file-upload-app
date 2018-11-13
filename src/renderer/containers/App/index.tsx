@@ -1,20 +1,27 @@
 import * as React from "react";
 import { connect } from "react-redux";
 
-import FolderTree from "../../components/FolderTree/index";
+import FolderTree from "../../components/FolderTree";
 import {
     isLoading,
     selection,
 } from "../../state";
-import { AppPage, ClearStagedFilesAction, SelectFileAction, UploadFile } from "../../state/selection/types";
-import { State } from "../../state/types";
+import { metadata } from "../../state/index";
+import { GetFilesInFolderAction } from "../../state/metadata/types";
+import {
+    AppPage,
+    ClearStagedFilesAction,
+    SelectFileAction,
+} from "../../state/selection/types";
+import { State, UploadFile } from "../../state/types";
 
-import DragAndDropSquare from "../DragAndDropSquare/index";
+import DragAndDropSquare from "../DragAndDropSquare";
 
 const styles = require("./styles.css");
 
 interface AppProps {
     files: UploadFile[];
+    getFilesInFolder: (folderToExpand: UploadFile) => GetFilesInFolderAction;
     loading: boolean;
     onCheck?: (files: string[]) => SelectFileAction;
     onClear?: () => ClearStagedFilesAction;
@@ -32,6 +39,7 @@ class App extends React.Component<AppProps, {}> {
     public render() {
         const {
             files,
+            getFilesInFolder,
             loading,
             onCheck,
             onClear,
@@ -45,6 +53,7 @@ class App extends React.Component<AppProps, {}> {
                 {showFolderTree &&
                    <FolderTree
                        files={files}
+                       getFilesInFolder={getFilesInFolder}
                        isLoading={loading}
                        onCheck={onCheck}
                        onClear={onClear}
@@ -65,6 +74,7 @@ function mapStateToProps(state: State) {
 }
 
 const dispatchToPropsMap = {
+    getFilesInFolder: metadata.actions.getFilesInFolder,
     onCheck: selection.actions.selectFile,
     onClear: selection.actions.clearStagedFiles,
 };

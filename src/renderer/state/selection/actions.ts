@@ -1,11 +1,15 @@
+import { UploadFile } from "../types";
+
 import {
-    ADD_STAGE_FILES, CLEAR_STAGED_FILES,
+    ADD_STAGE_FILES,
+    CLEAR_STAGED_FILES,
     DESELECT_FILE,
     LOAD_FILES,
     OPEN_FILES,
     SELECT_FILE,
     SELECT_METADATA,
     SELECT_PAGE,
+    UPDATE_STAGED_FILES,
 } from "./constants";
 import {
     AddStageFilesAction,
@@ -17,7 +21,7 @@ import {
     SelectFileAction,
     SelectMetadataAction,
     SelectPageAction,
-    UploadFile,
+    UpdateStagedFilesAction,
 } from "./types";
 
 export function selectFile(fileId: string | string[]): SelectFileAction {
@@ -73,5 +77,12 @@ export function selectPage(page: AppPage): SelectPageAction {
 export function clearStagedFiles(): ClearStagedFilesAction {
     return {
         type: CLEAR_STAGED_FILES,
+    };
+}
+
+export function updateStagedFiles(files: UploadFile[]): UpdateStagedFilesAction {
+    return {
+        payload: files,
+        type: UPDATE_STAGED_FILES,
     };
 }

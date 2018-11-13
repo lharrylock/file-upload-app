@@ -13,6 +13,7 @@ import {
     SELECT_FILE,
     SELECT_METADATA,
     SELECT_PAGE,
+    UPDATE_STAGED_FILES,
 } from "./constants";
 import {
     AddStageFilesAction,
@@ -22,6 +23,7 @@ import {
     SelectionStateBranch,
     SelectMetadataAction,
     SelectPageAction,
+    UpdateStagedFilesAction,
 } from "./types";
 
 export const initialState = {
@@ -61,12 +63,17 @@ const actionToConfigMap: TypeToDescriptionMap = {
     },
     [ADD_STAGE_FILES]: {
         accepts: (action: AnyAction): action is AddStageFilesAction => action.type === ADD_STAGE_FILES,
-        perform: (state: SelectionStateBranch, action: AddStageFilesAction) => {
-            return {
-                ...state,
-                stagedFiles: [...state.stagedFiles, ...castArray(action.payload)],
-            };
-        },
+        perform: (state: SelectionStateBranch, action: AddStageFilesAction) => ({
+            ...state,
+            stagedFiles: [...state.stagedFiles, ...castArray(action.payload)],
+        }),
+    },
+    [UPDATE_STAGED_FILES]: {
+        accepts: (action: AnyAction): action is UpdateStagedFilesAction => action.type === UPDATE_STAGED_FILES,
+        perform: (state: SelectionStateBranch, action: UpdateStagedFilesAction) => ({
+            ...state,
+            stagedFiles: action.payload,
+        }),
     },
 };
 
