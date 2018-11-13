@@ -16,14 +16,13 @@ interface FolderTreeProps {
     getFilesInFolder: (folderToExpand: UploadFile) => GetFilesInFolderAction;
     isLoading?: boolean;
     isSelectable: boolean;
-    onCheck?: (files: string[]) => SelectFileAction;
+    onCheck: (files: string[]) => SelectFileAction;
 }
 
 interface FolderTreeState {
     expandedFolders: Set<string>;
 }
 
-// todo figure out if this is necessary
 const FOLDER_TAG = "(folder)";
 
 class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
@@ -38,11 +37,8 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
     }
 
     public onSelect(files: string[]) {
-        // todo ugly
         const filesExcludingFolders = files.filter((file: string) => !file.includes(FOLDER_TAG));
-        if (this.props.onCheck) {
-            this.props.onCheck(filesExcludingFolders);
-        }
+        this.props.onCheck(filesExcludingFolders);
     }
 
     public onExpand(expandedKeys: string[]): void {
@@ -74,7 +70,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
     }
 
     public renderChildDirectories(file: UploadFile): React.ReactNode {
-        if (!file.getIsDirectory() || !file.files) {
+        if (!file.getIsDirectory()) {
             return <Tree.TreeNode title={file.name} key={file.fullPath} isLeaf={true}/>;
         }
 
