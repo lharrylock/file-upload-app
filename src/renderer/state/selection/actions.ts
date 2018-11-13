@@ -12,7 +12,8 @@ import {
 } from "./constants";
 import {
     AddStageFilesAction,
-    AppPage, ClearStagedFilesAction,
+    AppPage,
+    ClearStagedFilesAction,
     DeselectFileAction,
     DragAndDropFileList,
     GetFilesInFolderAction,
@@ -21,7 +22,8 @@ import {
     SelectFileAction,
     SelectMetadataAction,
     SelectPageAction,
-    UpdateStagedFilesAction, UploadFile,
+    UpdateStagedFilesAction,
+    UploadFile,
 } from "./types";
 
 export function selectFile(fileId: string | string[]): SelectFileAction {
