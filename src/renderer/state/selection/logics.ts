@@ -36,9 +36,6 @@ const stageFilesAndStopLoading = (uploadFilePromises: Array<Promise<UploadFile>>
                                   done: ReduxLogicDoneCb) => {
     Promise.all(uploadFilePromises)
         .then((uploadFiles: UploadFile[]) => {
-            // TODO display these files in FolderTree
-            // tslint:disable-next-line
-            console.log("staged files", uploadFiles);
             dispatch(batchActions([
                 stageFiles(uploadFiles),
                 stopLoading(),
@@ -125,8 +122,8 @@ const getFilesInFolderLogic = createLogic({
                         folder.files = files;
                         const stagedFiles = [...getStagedFiles(getState())];
                         next(updateStagedFiles(getNewStagedFiles(stagedFiles, folder)));
-                    });
-                    // .catch((reason: any) => console.log(reason));
+                    })
+                    .catch((reason: string) => console.log(reason));
             });
     },
     type: GET_FILES_IN_FOLDER,
