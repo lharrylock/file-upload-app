@@ -18,6 +18,15 @@ import { LOAD_FILES, OPEN_FILES } from "./constants";
 import { getAppPage } from "./selectors";
 import { AppPage, DragAndDropFileList, UploadFile } from "./types";
 
+const mergeChildPaths = (filePaths: string[]): string[] => {
+    filePaths = uniq(filePaths);
+
+    return filePaths.filter((filePath) => {
+        const otherFilePaths = filePaths.filter((otherFilePath) => otherFilePath !== filePath);
+        return !otherFilePaths.find((otherFilePath) => filePath.indexOf(otherFilePath) === 0);
+    });
+};
+
 const getUploadFilePromise = (name: string, path: string): Promise<UploadFile> => (
     new Promise((resolve, reject) => {
         stat(resolvePath(path, name), (err: NodeJS.ErrnoException, stats: Stats) => {
@@ -81,24 +90,12 @@ const loadFilesLogic = createLogic({
     type: LOAD_FILES,
 });
 
-const mergeChildPaths = (filePaths: string[]): string[] => {
-    filePaths = uniq(filePaths);
-
-    return filePaths.filter((filePath) => {
-        const otherFilePaths = filePaths.filter((otherFilePath) => otherFilePath !== filePath);
-        return !otherFilePaths.find((otherFilePath) => {
-            return filePath.indexOf(otherFilePath) === 0;
-        });
-    });
-};
-
 const openFilesLogic = createLogic({
     process: ({ action }: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
         const originalAction = action.payload.filter((a: AnyAction) => a.type === OPEN_FILES);
 
         if (!isEmpty(originalAction)) {
             const filesToLoad: string[] = mergeChildPaths(originalAction[0].payload);
-            console.log(filesToLoad)
 
             const uploadFilePromises: Array<Promise<UploadFile>> = filesToLoad.map(
                 (filePath: string) => getUploadFilePromise(basename(filePath), dirname(filePath))

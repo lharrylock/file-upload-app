@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { resolve } from "path";
+import { dirname, resolve } from "path";
 
 import createReduxStore from "../../configure-store";
 import { isLoading } from "../../index";
@@ -205,6 +205,30 @@ describe("Selection logics", () => {
                 expect(stagedFiles.length).to.equal(filePaths.length);
 
                 testStagedFilesCreated(stagedFiles);
+            });
+        });
+
+        it("Removes child files or directories", () => {
+            const store = createReduxStore(mockState);
+
+            // before
+            expect(selections.selectors.getStagedFiles(store.getState()).length).to.equal(0);
+
+            // apply
+            const filePathsWithDuplicates = [
+                resolve(FOLDER_FULL_PATH, "test.txt"),
+                FOLDER_FULL_PATH,
+                resolve(FOLDER_FULL_PATH, "test2.txt"),
+            ];
+            store.dispatch(selections.actions.openFilesFromDialog(filePathsWithDuplicates));
+
+            store.subscribe(() => {
+                // after
+                const stagedFiles = selections.selectors.getStagedFiles(store.getState());
+                expect(stagedFiles.length).to.equal(1);
+                expect(stagedFiles[0].getIsDirectory()).to.equal(true);
+                expect(stagedFiles[0].path).to.equal(dirname(FOLDER_FULL_PATH));
+                expect(stagedFiles[0].name).to.equal(FOLDER_NAME);
             });
         });
 
