@@ -82,3 +82,9 @@ export enum AppPage {
     UploadJobs,
     UploadComplete,
 }
+
+export interface AppPageConfig {
+    container: JSX.Element;
+    folderTreeVisible: boolean;
+    folderTreeSelectable: boolean;
+}
