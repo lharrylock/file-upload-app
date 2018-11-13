@@ -1,5 +1,12 @@
 import { MetadataStateBranch } from "../metadata/types";
-import { UploadFile } from "../types";
+
+export interface UploadFile {
+    name: string;
+    path: string;
+    files: UploadFile[];
+    fullPath: string;
+    getIsDirectory(): boolean;
+}
 
 export interface DeselectFileAction {
     payload: string | string[];
