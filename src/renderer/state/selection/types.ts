@@ -2,7 +2,7 @@ import { resolve as resolvePath } from "path";
 
 import { MetadataStateBranch } from "../metadata/types";
 
-export class UploadFile {
+export class UploadFile implements UploadFile {
     public name: string;
     public path: string;
     // this will get populated once the folder is expanded
@@ -23,6 +23,13 @@ export class UploadFile {
     public getIsDirectory(): boolean {
         return this.isDirectory;
     }
+}
+export interface UploadFile {
+    name: string;
+    path: string;
+    files: UploadFile[];
+    fullPath: string;
+    getIsDirectory(): boolean;
 }
 
 export interface DeselectFileAction {
