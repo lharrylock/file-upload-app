@@ -1,7 +1,7 @@
+import { GET_FILES_IN_FOLDER } from "../selection/constants";
 import { UploadFile } from "../types";
 
 import {
-    GET_FILES_IN_FOLDER,
     RECEIVE_METADATA,
     REQUEST_METADATA,
 } from "./constants";
