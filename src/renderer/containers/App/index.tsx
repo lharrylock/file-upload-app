@@ -20,7 +20,7 @@ interface AppProps {
     files: UploadFile[];
     getFilesInFolder: (folderToExpand: UploadFile) => GetFilesInFolderAction;
     loading: boolean;
-    onCheck: (files: string[]) => SelectFileAction;
+    selectFile: (files: string[]) => SelectFileAction;
     page: AppPage;
 }
 
@@ -43,7 +43,7 @@ class App extends React.Component<AppProps, {}> {
             files,
             getFilesInFolder,
             loading,
-            onCheck,
+            selectFile,
             page,
         } = this.props;
 
@@ -62,7 +62,7 @@ class App extends React.Component<AppProps, {}> {
                        getFilesInFolder={getFilesInFolder}
                        isLoading={loading}
                        isSelectable={pageConfig.folderTreeSelectable}
-                       onCheck={onCheck}
+                       onCheck={selectFile}
                    />
                 }
                 {pageConfig.container}
@@ -81,7 +81,7 @@ function mapStateToProps(state: State) {
 
 const dispatchToPropsMap = {
     getFilesInFolder: selection.actions.getFilesInFolder,
-    onCheck: selection.actions.selectFile,
+    selectFile: selection.actions.selectFile,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(App);
