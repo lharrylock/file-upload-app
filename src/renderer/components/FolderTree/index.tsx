@@ -33,7 +33,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
     private static getMatchingFolderFromPath(files: UploadFile[], path: string): UploadFile | null {
         for (const file of files) {
             // we're looking for a folder so don't return anything if file is not a folder.
-            if (file.getIsDirectory()) {
+            if (file.isDirectory) {
 
                 // we've found the folder if the fullPath matches with the path we're searching for
                 if (file.fullPath === path) {
@@ -118,7 +118,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
     }
 
     private renderChildDirectories(file: UploadFile): React.ReactNode {
-        if (!file.getIsDirectory()) {
+        if (!file.isDirectory) {
             return <Tree.TreeNode title={file.name} key={file.fullPath} isLeaf={true}/>;
         }
 

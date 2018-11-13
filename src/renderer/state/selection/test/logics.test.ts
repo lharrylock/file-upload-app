@@ -273,14 +273,14 @@ describe("Selection logics", () => {
                 const stagedFolderContainsSecretsFolder = !!stagedFolder.files.find((file) => {
                     return file.name === "secrets" &&
                         file.path === FOLDER_FULL_PATH &&
-                        file.getIsDirectory();
+                        file.isDirectory;
                 });
                 expect(stagedFolderContainsSecretsFolder).to.equal(true);
 
                 const stagedFolderContainsTxtFile = !!stagedFolder.files.find((file) => {
                     return file.name === "more_cells.txt" &&
                         file.path === FOLDER_FULL_PATH &&
-                        !file.getIsDirectory();
+                        !file.isDirectory;
                 });
                 expect(stagedFolderContainsTxtFile).to.equal(true);
             });
