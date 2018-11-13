@@ -8,8 +8,7 @@ export class UploadFileImpl implements UploadFile {
     public path: string;
     // this will get populated once the folder is expanded
     public files: UploadFile[] = [];
-
-    private readonly isDirectory: boolean;
+    public readonly isDirectory: boolean;
 
     constructor(name: string, path: string, isDirectory: boolean) {
         this.name = name;
@@ -21,12 +20,8 @@ export class UploadFileImpl implements UploadFile {
         return resolvePath(this.path, this.name);
     }
 
-    public getIsDirectory(): boolean {
-        return this.isDirectory;
-    }
-
     public loadFiles(): Promise<Array<Promise<UploadFile>>> {
-        if (this.getIsDirectory()) {
+        if (this.isDirectory) {
             return new Promise((resolve, reject) => {
                 readdir(this.fullPath, (err: NodeJS.ErrnoException, files: string[]) => {
                     if (err) {

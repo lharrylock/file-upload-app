@@ -5,7 +5,7 @@ export interface UploadFile {
     path: string;
     files: UploadFile[];
     fullPath: string;
-    getIsDirectory(): boolean;
+    isDirectory: boolean;
     loadFiles(): Promise<Array<Promise<UploadFile>>>;
 }
 
