@@ -7,8 +7,7 @@ export class UploadFileImpl implements UploadFile {
     public path: string;
     // this will get populated once the folder is expanded
     public files: UploadFile[] = [];
-
-    private readonly isDirectory: boolean;
+    public readonly isDirectory: boolean;
 
     constructor(name: string, path: string, isDirectory: boolean) {
         this.name = name;
@@ -18,9 +17,5 @@ export class UploadFileImpl implements UploadFile {
 
     get fullPath(): string {
         return resolvePath(this.path, this.name);
-    }
-
-    public getIsDirectory(): boolean {
-        return this.isDirectory;
     }
 }

@@ -19,13 +19,13 @@ describe("Selection logics", () => {
 
     const testStagedFilesCreated = (stagedFiles: UploadFile[]) => {
         const file = stagedFiles[EXPECTED_FILE_INDEX];
-        expect(file.getIsDirectory()).to.equal(false);
+        expect(file.isDirectory).to.equal(false);
         expect(file.name).to.equal(FILE_NAME);
         expect(file.path).to.equal(resolve(__dirname, TEST_FILES_DIR));
         expect(file.fullPath).to.equal(FILE_FULL_PATH);
 
         const folder = stagedFiles[EXPECTED_FOLDER_INDEX];
-        expect(folder.getIsDirectory()).to.equal(true);
+        expect(folder.isDirectory).to.equal(true);
         expect(folder.name).to.equal(FOLDER_NAME);
         expect(folder.path).to.equal(resolve(__dirname, TEST_FILES_DIR));
         expect(folder.fullPath).to.equal(FOLDER_FULL_PATH);
