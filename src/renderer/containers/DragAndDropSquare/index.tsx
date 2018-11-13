@@ -29,8 +29,9 @@ interface DragAndDropSquareProps {
 interface DragAndDropSquareState {
     // Keeps track of net number of drag events into component.
     // Used to determine if the element is being hovered or not.
-    // It is necessary because the child elements also will fire this event so we
-    // need to keep track of how many children we enter and leave.
+    // This is guaranteed to be 1 or greater when a file is hovered within this component.
+    // Making this a boolean doesn't work because child elements will also fire
+    // drag/drop events (and this can't be prevented).
     dragEnterCount: number;
 }
 
