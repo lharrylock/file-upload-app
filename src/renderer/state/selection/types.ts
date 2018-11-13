@@ -51,10 +51,6 @@ export interface SelectPageAction {
     type: string;
 }
 
-export interface ClearStagedFilesAction {
-    type: string;
-}
-
 export interface UpdateStagedFilesAction {
     payload: UploadFile[];
     type: string;

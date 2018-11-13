@@ -1,6 +1,5 @@
 import {
     ADD_STAGE_FILES,
-    CLEAR_STAGED_FILES,
     DESELECT_FILE,
     GET_FILES_IN_FOLDER,
     LOAD_FILES,
@@ -13,7 +12,6 @@ import {
 import {
     AddStageFilesAction,
     AppPage,
-    ClearStagedFilesAction,
     DeselectFileAction,
     DragAndDropFileList,
     GetFilesInFolderAction,
@@ -73,12 +71,6 @@ export function selectPage(page: AppPage): SelectPageAction {
     return {
         payload: page,
         type: SELECT_PAGE,
-    };
-}
-
-export function clearStagedFiles(): ClearStagedFilesAction {
-    return {
-        type: CLEAR_STAGED_FILES,
     };
 }
 
