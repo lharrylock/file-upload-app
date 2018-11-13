@@ -9,7 +9,9 @@ import { startLoading, stopLoading } from "../isLoading/actions";
 import {
     ReduxLogicDependencies,
     ReduxLogicDoneCb,
-    ReduxLogicNextCb, ReduxLogicTransformDependencies, UploadFile,
+    ReduxLogicNextCb,
+    ReduxLogicTransformDependencies,
+    UploadFile,
 } from "../types";
 import { batchActions } from "../util";
 
