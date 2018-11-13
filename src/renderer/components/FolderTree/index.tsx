@@ -20,7 +20,7 @@ interface FolderTreeProps {
 }
 
 interface FolderTreeState {
-    // Used to prevent requesting child files/folders more than once
+    // Keeps track of folders that have been expanded. Used only for preventing duplicate requests to get children.
     expandedFolders: Set<string>;
 }
 
@@ -28,14 +28,22 @@ interface FolderTreeState {
 const FOLDER_TAG = "(folder)";
 
 class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
-    // Recursively searches files and the child files for the first file whose full path is equivalent to path
-    private static getMatchingFileFromPath(files: UploadFile[], path: string): UploadFile | null {
+
+    // Recursively searches files and the child files for the first folder whose full path is equivalent to path
+    private static getMatchingFolderFromPath(files: UploadFile[], path: string): UploadFile | null {
         for (const file of files) {
+            // we're looking for a folder so don't return anything if file is not a folder.
             if (file.getIsDirectory()) {
+
+                // we've found the folder if the fullPath matches with the path we're searching for
                 if (file.fullPath === path) {
                     return file;
+
+                // If the path we're searching for starts with the fullPath of the current folder,
+                // search the children of that folder.
+                // e.g. file.fullPath = "/Users/bob/Documents" and path = "/Users/bob/Documents/secrets.txt"
                 } else if (path.indexOf(file.fullPath) === 0) {
-                    return FolderTree.getMatchingFileFromPath(file.files, path);
+                    return FolderTree.getMatchingFolderFromPath(file.files, path);
                 }
             }
         }
@@ -100,7 +108,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
             if (!this.state.expandedFolders.has(key)) {
                 this.setState({expandedFolders: this.state.expandedFolders.add(key)});
                 const filePath: string = key.slice(0, -FOLDER_TAG.length);
-                const folderToUpdate = FolderTree.getMatchingFileFromPath(this.props.files, filePath);
+                const folderToUpdate = FolderTree.getMatchingFolderFromPath(this.props.files, filePath);
 
                 if (folderToUpdate) {
                     this.props.getFilesInFolder(folderToUpdate);
