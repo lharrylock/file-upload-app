@@ -52,6 +52,7 @@ class App extends React.Component<AppProps, {}> {
             <div className={styles.container}>
                 {showFolderTree &&
                    <FolderTree
+                       className={styles.folderTree}
                        files={files}
                        getFilesInFolder={getFilesInFolder}
                        isLoading={loading}
