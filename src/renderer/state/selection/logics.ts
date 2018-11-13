@@ -15,6 +15,7 @@ import { batchActions } from "../util";
 
 import { selectPage, stageFiles } from "./actions";
 import { LOAD_FILES, OPEN_FILES } from "./constants";
+import { UploadFileImpl } from "./models/upload-file";
 import { getAppPage } from "./selectors";
 import { AppPage, DragAndDropFileList, UploadFile } from "./types";
 
@@ -25,7 +26,7 @@ const getUploadFilePromise = (name: string, path: string): Promise<UploadFile> =
                 return reject(err);
             }
 
-            return resolve(new UploadFile(name, path, stats.isDirectory()));
+            return resolve(new UploadFileImpl(name, path, stats.isDirectory()));
         });
     })
 );
