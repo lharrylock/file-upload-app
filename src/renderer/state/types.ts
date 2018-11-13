@@ -1,6 +1,4 @@
 import { AxiosPromise, AxiosRequestConfig } from "axios";
-import { readdir, stat, Stats } from "fs";
-import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { CreateLogic } from "redux-logic/definitions/logic";
 

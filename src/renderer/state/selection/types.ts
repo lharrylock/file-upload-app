@@ -56,6 +56,11 @@ export interface UpdateStagedFilesAction {
     type: string;
 }
 
+export interface GetFilesInFolderAction {
+    payload: UploadFile;
+    type: string;
+}
+
 export interface DragAndDropFileList {
     readonly length: number;
     [index: number]: DragAndDropFile;
@@ -64,11 +69,6 @@ export interface DragAndDropFileList {
 export interface DragAndDropFile {
     readonly name: string;
     readonly path: string;
-}
-
-export interface GetFilesInFolderAction {
-    payload: UploadFile;
-    type: string;
 }
 
 export enum AppPage {
