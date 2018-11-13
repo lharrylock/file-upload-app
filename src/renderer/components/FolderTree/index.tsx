@@ -24,6 +24,7 @@ interface FolderTreeState {
     expandedFolders: Set<string>;
 }
 
+// Added to the keys used for Tree.TreeNode in order to quickly identify folders from files.
 const FOLDER_TAG = "(folder)";
 
 class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
