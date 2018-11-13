@@ -15,6 +15,7 @@ interface FolderTreeProps {
     files: UploadFile[];
     getFilesInFolder: (folderToExpand: UploadFile) => GetFilesInFolderAction;
     isLoading?: boolean;
+    isSelectable: boolean;
     onCheck?: (files: string[]) => SelectFileAction;
 }
 
@@ -89,6 +90,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
             className,
             files,
             isLoading,
+            isSelectable,
         } = this.props;
 
         if (!files) {
@@ -108,6 +110,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
                         defaultExpandAll={false}
                         onSelect={this.onSelect}
                         onExpand={this.onExpand}
+                        selectable={isSelectable}
                     >
                         {files.map((file: UploadFile) => this.renderChildDirectories(file))}
                     </Tree.DirectoryTree>}
