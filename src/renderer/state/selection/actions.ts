@@ -1,9 +1,8 @@
-import { UploadFile } from "../types";
-
 import {
     ADD_STAGE_FILES,
     CLEAR_STAGED_FILES,
     DESELECT_FILE,
+    GET_FILES_IN_FOLDER,
     LOAD_FILES,
     OPEN_FILES,
     SELECT_FILE,
@@ -16,12 +15,13 @@ import {
     AppPage, ClearStagedFilesAction,
     DeselectFileAction,
     DragAndDropFileList,
+    GetFilesInFolderAction,
     LoadFilesFromDragAndDropAction,
     LoadFilesFromOpenDialogAction,
     SelectFileAction,
     SelectMetadataAction,
     SelectPageAction,
-    UpdateStagedFilesAction,
+    UpdateStagedFilesAction, UploadFile,
 } from "./types";
 
 export function selectFile(fileId: string | string[]): SelectFileAction {
@@ -84,5 +84,12 @@ export function updateStagedFiles(files: UploadFile[]): UpdateStagedFilesAction 
     return {
         payload: files,
         type: UPDATE_STAGED_FILES,
+    };
+}
+
+export function getFilesInFolder(folder: UploadFile): GetFilesInFolderAction {
+    return {
+        payload: folder,
+        type: GET_FILES_IN_FOLDER,
     };
 }

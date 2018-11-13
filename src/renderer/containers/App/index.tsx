@@ -6,13 +6,13 @@ import {
     isLoading,
     selection,
 } from "../../state";
-import { metadata } from "../../state/index";
-import { GetFilesInFolderAction } from "../../state/metadata/types";
 import {
     AppPage,
+    GetFilesInFolderAction,
     SelectFileAction,
+    UploadFile,
 } from "../../state/selection/types";
-import { State, UploadFile } from "../../state/types";
+import { State } from "../../state/types";
 
 import DragAndDropSquare from "../DragAndDropSquare";
 
@@ -71,7 +71,7 @@ function mapStateToProps(state: State) {
 }
 
 const dispatchToPropsMap = {
-    getFilesInFolder: metadata.actions.getFilesInFolder,
+    getFilesInFolder: selection.actions.getFilesInFolder,
     onCheck: selection.actions.selectFile,
 };
 

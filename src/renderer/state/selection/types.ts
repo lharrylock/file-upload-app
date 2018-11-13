@@ -6,6 +6,7 @@ export interface UploadFile {
     files: UploadFile[];
     fullPath: string;
     getIsDirectory(): boolean;
+    loadFiles(): Promise<Array<Promise<UploadFile>>>;
 }
 
 export interface DeselectFileAction {
@@ -67,6 +68,11 @@ export interface DragAndDropFileList {
 export interface DragAndDropFile {
     readonly name: string;
     readonly path: string;
+}
+
+export interface GetFilesInFolderAction {
+    payload: UploadFile;
+    type: string;
 }
 
 export enum AppPage {

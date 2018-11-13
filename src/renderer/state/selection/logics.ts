@@ -1,5 +1,5 @@
 import { stat, Stats } from "fs";
-import { isEmpty, uniq } from "lodash";
+import { isEmpty } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";

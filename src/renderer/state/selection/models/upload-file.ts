@@ -1,4 +1,5 @@
-import { resolve as resolvePath } from "path";
+import { readdir, stat, Stats } from "fs";
+import { basename, dirname, resolve as resolvePath } from "path";
 
 import { UploadFile } from "../types";
 
@@ -22,5 +23,34 @@ export class UploadFileImpl implements UploadFile {
 
     public getIsDirectory(): boolean {
         return this.isDirectory;
+    }
+
+    public loadFiles(): Promise<Array<Promise<UploadFile>>> {
+        if (this.getIsDirectory()) {
+            return new Promise((resolve, reject) => {
+                readdir(this.fullPath, (err: NodeJS.ErrnoException, files: string[]) => {
+                    if (err) {
+                        return reject(err);
+                    }
+
+                    return resolve(files.map((file: string) => {
+                        const filePath = resolvePath(this.fullPath, file);
+                        return new Promise((resolve2, reject2) => {
+                            stat(filePath, (err2: NodeJS.ErrnoException, stats: Stats) => {
+                                if (err2 || !stats) {
+                                    return reject2(err2);
+                                }
+
+                                return resolve2(
+                                    new UploadFileImpl(basename(filePath), dirname(filePath), stats.isDirectory())
+                                );
+                            });
+                        });
+                    }));
+                });
+            });
+        }
+
+        return Promise.reject("Not a directory");
     }
 }

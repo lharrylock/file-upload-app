@@ -2,11 +2,11 @@ import { Icon, Spin, Tree } from "antd";
 import * as classNames from "classnames";
 import * as React from "react";
 
-import { GetFilesInFolderAction } from "../../state/metadata/types";
 import {
+    GetFilesInFolderAction,
     SelectFileAction,
+    UploadFile,
 } from "../../state/selection/types";
-import { UploadFile } from "../../state/types";
 
 const styles = require("./style.css");
 
