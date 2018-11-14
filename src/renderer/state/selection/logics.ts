@@ -132,6 +132,7 @@ const getFilesInFolderLogic = createLogic({
                         const stagedFiles = [...getStagedFiles(getState())];
                         next(updateStagedFiles(getNewStagedFiles(stagedFiles, folder)));
                     })
+                    // tslint:disable-next-line
                     .catch((reason: string) => console.log(reason));
             });
     },

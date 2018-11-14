@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 
 import FolderTree from "../../components/FolderTree";
-import { isLoading, selection, } from "../../state";
+import { isLoading, selection } from "../../state";
 import {
     AppPage,
     AppPageConfig,

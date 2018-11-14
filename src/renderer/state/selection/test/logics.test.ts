@@ -228,7 +228,7 @@ describe("Selection logics", () => {
                 // after
                 const stagedFiles = selections.selectors.getStagedFiles(store.getState());
                 expect(stagedFiles.length).to.equal(1);
-                expect(stagedFiles[0].getIsDirectory()).to.equal(true);
+                expect(stagedFiles[0].isDirectory).to.equal(true);
                 expect(stagedFiles[0].path).to.equal(dirname(FOLDER_FULL_PATH));
                 expect(stagedFiles[0].name).to.equal(FOLDER_NAME);
             });
