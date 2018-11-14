@@ -1,8 +1,9 @@
+import "aics-react-labkey/dist/styles.css";
 import * as React from "react";
 import { connect } from "react-redux";
 
 import FolderTree from "../../components/FolderTree";
-import { isLoading, selection, } from "../../state";
+import { isLoading, selection } from "../../state";
 import {
     AppPage,
     AppPageConfig,
@@ -13,6 +14,7 @@ import {
 import { State } from "../../state/types";
 
 import DragAndDropSquare from "../DragAndDropSquare";
+import EnterBarcode from "../EnterBarcode";
 
 const styles = require("./styles.css");
 
@@ -31,7 +33,7 @@ const APP_PAGE_TO_CONFIG_MAP = new Map<AppPage, AppPageConfig>([
         folderTreeVisible: false,
     }],
     [AppPage.EnterBarcode, {
-        container:  <div key="enterBarcode">TODO</div>,
+        container:  <EnterBarcode key="enterBarcode"/>,
         folderTreeSelectable: false,
         folderTreeVisible: true,
     }],

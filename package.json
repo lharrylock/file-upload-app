@@ -65,6 +65,7 @@
     "webpack-shell-plugin": "^0.5.0"
   },
   "dependencies": {
+    "aics-react-labkey": "^4.1.0",
     "antd": "^3.10.4",
     "classnames": "^2.2.6",
     "core-js": "^2.5.7",
