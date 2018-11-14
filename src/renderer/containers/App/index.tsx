@@ -33,7 +33,7 @@ const APP_PAGE_TO_CONFIG_MAP = new Map<AppPage, AppPageConfig>([
         folderTreeVisible: false,
     }],
     [AppPage.EnterBarcode, {
-        container:  <EnterBarcode key="enterBarcode"/>,
+        container:  <EnterBarcode key="enterBarcode" className={styles.mainContent}/>,
         folderTreeSelectable: false,
         folderTreeVisible: true,
     }],

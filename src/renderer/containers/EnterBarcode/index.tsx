@@ -1,4 +1,5 @@
 import { LabKeyOptionSelector } from "aics-react-labkey";
+import { Button } from "antd";
 import * as classNames from "classnames";
 import {
     debounce,
@@ -9,14 +10,10 @@ import { connect } from "react-redux";
 import {
     State,
 } from "../../state";
+import LabkeyQueryService from "../../util/labkey-query-service";
+import { Plate } from "../../util/labkey-query-service/index";
 
 const styles = require("./style.css");
-const BARCODES = [
-    "550000012",
-    "3500002386",
-    "3500002385",
-    "3500002370",
-];
 
 interface EnterBarcodeProps {
     className?: string;
@@ -30,6 +27,7 @@ interface EnterBarcodeState {
 
 interface BarcodeOption {
     barcode: string;
+    plateId: number;
 }
 
 class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState> {
@@ -38,8 +36,8 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
             return Promise.resolve(null);
         }
 
-        return new Promise((resolve) => setTimeout(resolve, 500, {
-            options: BARCODES.map((b: string) => ({barcode: b})),
+        return LabkeyQueryService.Get.platesByBarcode(input).then((plates: Plate[]) => ({
+            options: plates.map((plate: Plate) => ({barcode: plate.BarCode, plateId: plate.PlateId})),
         }));
     }
 
@@ -57,10 +55,11 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
             <div
                 className={classNames(className, styles.container)}
             >
+                <div className={styles.title}>PLATE BARCODE</div>
+                <div className={styles.formPrompt}>
+                    Enter a barcode associated with at least one of these files.
+                </div>
                 <div className={styles.form}>
-                    <div className={styles.formPrompt}>
-                        Enter a plate barcode associated with at least one of these files to the left.
-                    </div>
                     <LabKeyOptionSelector
                         required={true}
                         async={true}
@@ -73,12 +72,12 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
                         disabled={false}
                         error={error}
                         clearable={true}
-                        placeholder="Enter barcode"
+                        placeholder="barcode"
                         loadOptions={EnterBarcode.getBarcodesAsync}
                         autoload={false}
                     />
+                    <Button type="primary" size="large" className={styles.button}>Save and Continue</Button>
                 </div>
-
             </div>
         );
     }
