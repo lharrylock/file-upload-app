@@ -1,5 +1,5 @@
 import { stat, Stats } from "fs";
-import { isEmpty } from "lodash";
+import { isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
@@ -19,6 +19,15 @@ import { GET_FILES_IN_FOLDER, LOAD_FILES, OPEN_FILES } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
 import { getAppPage, getStagedFiles } from "./selectors";
 import { AppPage, DragAndDropFileList, UploadFile } from "./types";
+
+const mergeChildPaths = (filePaths: string[]): string[] => {
+    filePaths = uniq(filePaths);
+
+    return filePaths.filter((filePath) => {
+        const otherFilePaths = filePaths.filter((otherFilePath) => otherFilePath !== filePath);
+        return !otherFilePaths.find((otherFilePath) => filePath.indexOf(otherFilePath) === 0);
+    });
+};
 
 const getUploadFilePromise = (name: string, path: string): Promise<UploadFile> => (
     new Promise((resolve, reject) => {
@@ -85,7 +94,7 @@ const openFilesLogic = createLogic({
         const originalAction = action.payload.filter((a: AnyAction) => a.type === OPEN_FILES);
 
         if (!isEmpty(originalAction)) {
-            const filesToLoad: string[] = originalAction[0].payload;
+            const filesToLoad: string[] = mergeChildPaths(originalAction[0].payload);
 
             const uploadFilePromises: Array<Promise<UploadFile>> = filesToLoad.map(
                 (filePath: string) => getUploadFilePromise(basename(filePath), dirname(filePath))
