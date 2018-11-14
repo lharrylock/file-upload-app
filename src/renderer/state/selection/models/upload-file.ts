@@ -21,31 +21,31 @@ export class UploadFileImpl implements UploadFile {
     }
 
     public loadFiles(): Promise<Array<Promise<UploadFile>>> {
-        if (this.isDirectory) {
-            return new Promise((resolve, reject) => {
-                readdir(this.fullPath, (err: NodeJS.ErrnoException, files: string[]) => {
-                    if (err) {
-                        return reject(err);
-                    }
-
-                    return resolve(files.map((file: string) => {
-                        const filePath = resolvePath(this.fullPath, file);
-                        return new Promise((resolve2, reject2) => {
-                            stat(filePath, (err2: NodeJS.ErrnoException, stats: Stats) => {
-                                if (err2 || !stats) {
-                                    return reject2(err2);
-                                }
-
-                                return resolve2(
-                                    new UploadFileImpl(basename(filePath), dirname(filePath), stats.isDirectory())
-                                );
-                            });
-                        });
-                    }));
-                });
-            });
+        if (!this.isDirectory) {
+            return Promise.reject("Not a directory");
         }
 
-        return Promise.reject("Not a directory");
+        return new Promise((resolve, reject) => {
+            readdir(this.fullPath, (err: NodeJS.ErrnoException, files: string[]) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                return resolve(files.map((file: string) => {
+                    const filePath = resolvePath(this.fullPath, file);
+                    return new Promise((resolve2, reject2) => {
+                        stat(filePath, (err2: NodeJS.ErrnoException, stats: Stats) => {
+                            if (err2 || !stats) {
+                                return reject2(err2);
+                            }
+
+                            return resolve2(
+                                new UploadFileImpl(basename(filePath), dirname(filePath), stats.isDirectory())
+                            );
+                        });
+                    });
+                }));
+            });
+        });
     }
 }
