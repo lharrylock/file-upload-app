@@ -6,8 +6,16 @@
   }
 
   & .form {
+    padding: 1em 0;
+
+    & .form-group {
+      padding: 1em 0;
+    }
+  }
+
+  & .create-barcode-link {
     padding-top: 1em;
-    height: 100%;
+    display: block;
   }
 
   & .button {

@@ -1,15 +1,11 @@
 import { LabKeyOptionSelector } from "aics-react-labkey";
-import { Button } from "antd";
+import { Anchor, Button } from "antd";
 import * as classNames from "classnames";
-import {
-    debounce,
-} from "lodash";
+import { debounce } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
 
-import {
-    State,
-} from "../../state";
+import { State } from "../../state";
 import { selection } from "../../state";
 import { SelectBarcodeAction } from "../../state/selection/types";
 import LabkeyQueryService from "../../util/labkey-query-service";
@@ -25,7 +21,6 @@ interface EnterBarcodeProps {
 
 interface EnterBarcodeState {
     barcode?: string;
-    error?: string;
 }
 
 interface BarcodeOption {
@@ -55,7 +50,7 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
     }
 
     public render() {
-        const {barcode, error} = this.state;
+        const {barcode} = this.state;
         const {className} = this.props;
         return (
             <div
@@ -76,12 +71,12 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
                         selected={barcode}
                         onOptionSelection={this.setBarcode}
                         disabled={false}
-                        error={error}
                         clearable={true}
                         placeholder="barcode"
                         loadOptions={EnterBarcode.getBarcodesAsync}
                         autoload={false}
                     />
+                    <a href="#" className={styles.createBarcodeLink}>I don't have a barcode</a>
                     <Button
                         type="primary"
                         size="large"
