@@ -6,7 +6,7 @@ import { createLogic } from "redux-logic";
 
 import { startLoading, stopLoading } from "../isLoading/actions";
 
-import { ReduxLogicDependencies, ReduxLogicDoneCb, ReduxLogicNextCb, ReduxLogicTransformDependencies, } from "../types";
+import { ReduxLogicDependencies, ReduxLogicDoneCb, ReduxLogicNextCb, ReduxLogicTransformDependencies } from "../types";
 import { batchActions } from "../util";
 
 import { selectPage, stageFiles, updateStagedFiles } from "./actions";
