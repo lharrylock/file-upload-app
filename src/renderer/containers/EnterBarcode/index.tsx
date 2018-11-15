@@ -13,12 +13,13 @@ import {
 import { selection } from "../../state";
 import { SelectBarcodeAction } from "../../state/selection/types";
 import LabkeyQueryService from "../../util/labkey-query-service";
-import { Plate } from "../../util/labkey-query-service/index";
+import { Plate } from "../../util/labkey-query-service";
 
 const styles = require("./style.css");
 
 interface EnterBarcodeProps {
     className?: string;
+    barcode?: string;
     selectBarcode: (barcode: string) => SelectBarcodeAction;
 }
 
@@ -45,7 +46,9 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
 
     constructor(props: EnterBarcodeProps) {
         super(props);
-        this.state = {};
+        this.state = {
+            barcode: props.barcode,
+        };
         this.setBarcode = this.setBarcode.bind(this);
         this.saveAndContinue = this.saveAndContinue.bind(this);
         EnterBarcode.getBarcodesAsync = debounce(EnterBarcode.getBarcodesAsync, 500);
@@ -106,7 +109,7 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
 
 function mapStateToProps(state: State) {
     return {
-
+        barcode: selection.selectors.getSelectedBarcode(state),
     };
 }
 
