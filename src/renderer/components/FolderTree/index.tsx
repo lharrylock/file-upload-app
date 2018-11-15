@@ -41,7 +41,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
 
                 // If the path we're searching for starts with the fullPath of the current folder,
                 // search the children of that folder.
-                // e.g. file.fullPath = "/Users/bob/Documents" and path = "/Users/bob/Documents/secrets.txt"
+                // e.g. file.fullPath = "/Users/bob/Documents" and path = "/Users/bob/Documents/secrets"
                 } else if (path.indexOf(file.fullPath) === 0) {
                     return FolderTree.getMatchingFolderFromPath(file.files, path);
                 }
