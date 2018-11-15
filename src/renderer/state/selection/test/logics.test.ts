@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { isEmpty } from "lodash";
 import { dirname, resolve } from "path";
 
 import createReduxStore from "../../configure-store";
@@ -6,6 +7,7 @@ import { isLoading } from "../../index";
 import { mockState } from "../../test/mocks";
 
 import selections from "../";
+import { UploadFileImpl } from "../models/upload-file";
 import { AppPage, DragAndDropFileList, UploadFile } from "../types";
 
 describe("Selection logics", () => {
@@ -226,7 +228,7 @@ describe("Selection logics", () => {
                 // after
                 const stagedFiles = selections.selectors.getStagedFiles(store.getState());
                 expect(stagedFiles.length).to.equal(1);
-                expect(stagedFiles[0].getIsDirectory()).to.equal(true);
+                expect(stagedFiles[0].isDirectory).to.equal(true);
                 expect(stagedFiles[0].path).to.equal(dirname(FOLDER_FULL_PATH));
                 expect(stagedFiles[0].name).to.equal(FOLDER_NAME);
             });
@@ -260,6 +262,51 @@ describe("Selection logics", () => {
             store.subscribe(() => {
                 // after
                 expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+            });
+        });
+    });
+
+    describe("getFilesInFolderLogic", () => {
+        it("should add child files to folder", () => {
+            const folder = new UploadFileImpl(FOLDER_NAME, dirname(FOLDER_FULL_PATH), true);
+            const stagedFiles = [
+                new UploadFileImpl(FILE_NAME, dirname(FILE_FULL_PATH), false),
+                folder,
+            ];
+            const store = createReduxStore({
+                ...mockState,
+                selection: {
+                    ...mockState.selection,
+                    stagedFiles,
+                },
+            });
+
+            // before
+            const stagedFilesBefore = selections.selectors.getStagedFiles(store.getState());
+            expect(isEmpty(stagedFilesBefore[EXPECTED_FOLDER_INDEX].files)).to.equal(true);
+
+            // apply
+            store.dispatch(selections.actions.getFilesInFolder(folder));
+
+            store.subscribe(() => {
+                // after
+                const stagedFilesAfter = selections.selectors.getStagedFiles(store.getState());
+                const stagedFolder = stagedFilesAfter[EXPECTED_FOLDER_INDEX];
+                expect(stagedFolder.files.length).to.equal(2);
+
+                const stagedFolderContainsSecretsFolder = !!stagedFolder.files.find((file) => {
+                    return file.name === "secrets" &&
+                        file.path === FOLDER_FULL_PATH &&
+                        file.isDirectory;
+                });
+                expect(stagedFolderContainsSecretsFolder).to.equal(true);
+
+                const stagedFolderContainsTxtFile = !!stagedFolder.files.find((file) => {
+                    return file.name === "more_cells.txt" &&
+                        file.path === FOLDER_FULL_PATH &&
+                        !file.isDirectory;
+                });
+                expect(stagedFolderContainsTxtFile).to.equal(true);
             });
         });
     });

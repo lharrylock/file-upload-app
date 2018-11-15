@@ -3,4 +3,8 @@
   width: 100%;
   display: flex;
   font-size: 16px;
+
+  & .folder-tree {
+    flex-basis: 350px;
+  }
 }

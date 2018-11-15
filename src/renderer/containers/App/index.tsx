@@ -1,48 +1,71 @@
-import { Spin } from "antd";
 import * as React from "react";
 import { connect } from "react-redux";
 
+import FolderTree from "../../components/FolderTree";
+import { isLoading, selection } from "../../state";
 import {
-    isLoading,
-    selection,
-} from "../../state";
-import { AppPage } from "../../state/selection/types";
+    AppPage,
+    AppPageConfig,
+    GetFilesInFolderAction,
+    SelectFileAction,
+    UploadFile,
+} from "../../state/selection/types";
 import { State } from "../../state/types";
 
-import DragAndDropSquare from "../DragAndDropSquare/index";
+import DragAndDropSquare from "../DragAndDropSquare";
 
 const styles = require("./styles.css");
 
 interface AppProps {
+    files: UploadFile[];
+    getFilesInFolder: (folderToExpand: UploadFile) => GetFilesInFolderAction;
     loading: boolean;
+    selectFile: (files: string[]) => SelectFileAction;
     page: AppPage;
 }
 
-// This map will be used to determine which React Container to display
-// based on the selected page stored in the app store
-const APP_PAGE_TO_CONTAINER_MAP = new Map<AppPage, JSX.Element>([
-    [AppPage.DragAndDrop, <DragAndDropSquare key="dragAndDrop"/>],
-    [AppPage.EnterBarcode, <div key="enterBarcode">TODO</div>],
+const APP_PAGE_TO_CONFIG_MAP = new Map<AppPage, AppPageConfig>([
+    [AppPage.DragAndDrop, {
+        container: <DragAndDropSquare key="dragAndDrop"/>,
+        folderTreeSelectable: false,
+        folderTreeVisible: false,
+    }],
+    [AppPage.EnterBarcode, {
+        container:  <div key="enterBarcode">TODO</div>,
+        folderTreeSelectable: false,
+        folderTreeVisible: true,
+    }],
 ]);
 
 class App extends React.Component<AppProps, {}> {
     public render() {
         const {
+            files,
+            getFilesInFolder,
             loading,
+            selectFile,
             page,
         } = this.props;
 
-        const showFolderTree = page !== AppPage.DragAndDrop;
+        const pageConfig = APP_PAGE_TO_CONFIG_MAP.get(page);
+
+        if (!pageConfig) {
+            return null;
+        }
 
         return (
             <div className={styles.container}>
-                {showFolderTree &&
-                    <div>
-                        <div>Future Folder Tree</div>
-                        {loading && <Spin size="large"/>}
-                    </div>
+                {pageConfig.folderTreeVisible &&
+                   <FolderTree
+                       className={styles.folderTree}
+                       files={files}
+                       getFilesInFolder={getFilesInFolder}
+                       isLoading={loading}
+                       isSelectable={pageConfig.folderTreeSelectable}
+                       onCheck={selectFile}
+                   />
                 }
-                {APP_PAGE_TO_CONTAINER_MAP.get(page)}
+                {pageConfig.container}
             </div>
         );
     }
@@ -50,9 +73,15 @@ class App extends React.Component<AppProps, {}> {
 
 function mapStateToProps(state: State) {
     return {
+        files: state.selection.stagedFiles,
         loading: isLoading.selectors.getValue(state),
         page: selection.selectors.getAppPage(state),
     };
 }
 
-export default connect(mapStateToProps, {})(App);
+const dispatchToPropsMap = {
+    getFilesInFolder: selection.actions.getFilesInFolder,
+    selectFile: selection.actions.selectFile,
+};
+
+export default connect(mapStateToProps, dispatchToPropsMap)(App);

@@ -5,7 +5,7 @@ import {
 import {
     MetadataStateBranch,
     ReceiveAction,
-    RequestAction
+    RequestAction,
 } from "./types";
 
 export function receiveMetadata(payload: MetadataStateBranch = {}): ReceiveAction {

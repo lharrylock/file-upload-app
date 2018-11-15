@@ -1,10 +1,11 @@
-import { AxiosInstance, AxiosPromise, AxiosRequestConfig } from "axios";
+import { AxiosPromise, AxiosRequestConfig } from "axios";
 import { AnyAction } from "redux";
 import { CreateLogic } from "redux-logic/definitions/logic";
 
 import { MetadataStateBranch } from "./metadata/types";
 import { SelectionStateBranch } from "./selection/types";
 import Process = CreateLogic.Config.Process;
+import DepObj = CreateLogic.Config.DepObj;
 
 export interface ActionDescription {
     accepts: (action: AnyAction) => boolean;
@@ -27,6 +28,7 @@ export interface ReduxLogicExtraDependencies {
 }
 
 export type ReduxLogicDependencies = Process.DepObj<State, AnyAction, ReduxLogicExtraDependencies>;
+export type ReduxLogicTransformDependencies = DepObj<State, AnyAction, ReduxLogicExtraDependencies>;
 
 export type ReduxLogicNextCb = (action: AnyAction) => void;
 export type ReduxLogicDoneCb = () => void;

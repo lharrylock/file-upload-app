@@ -6,6 +6,7 @@ export interface UploadFile {
     files: UploadFile[];
     fullPath: string;
     isDirectory: boolean;
+    loadFiles(): Promise<Array<Promise<UploadFile>>>;
 }
 
 export interface DeselectFileAction {
@@ -15,7 +16,6 @@ export interface DeselectFileAction {
 
 export interface SelectionStateBranch {
     [key: string]: any;
-    files: string[];
     page: AppPage;
     stagedFiles: UploadFile[];
 }
@@ -51,6 +51,16 @@ export interface SelectPageAction {
     type: string;
 }
 
+export interface UpdateStagedFilesAction {
+    payload: UploadFile[];
+    type: string;
+}
+
+export interface GetFilesInFolderAction {
+    payload: UploadFile;
+    type: string;
+}
+
 export interface DragAndDropFileList {
     readonly length: number;
     [index: number]: DragAndDropFile;
@@ -67,4 +77,10 @@ export enum AppPage {
     PlateMetadataEntry,
     UploadJobs,
     UploadComplete,
+}
+
+export interface AppPageConfig {
+    container: JSX.Element;
+    folderTreeVisible: boolean;
+    folderTreeSelectable: boolean;
 }
