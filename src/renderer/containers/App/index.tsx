@@ -16,6 +16,7 @@ import { State } from "../../state/types";
 import DragAndDropSquare from "../DragAndDropSquare";
 import EnterBarcode from "../EnterBarcode";
 
+import "../../styles/fonts.css";
 const styles = require("./styles.css");
 
 interface AppProps {

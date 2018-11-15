@@ -62,7 +62,7 @@ class DragAndDropSquare extends React.Component<DragAndDropSquareProps, DragAndD
             >
                 <div className={styles.content}>
                     <Icon type="upload" className={styles.uploadIcon} />
-                    <div>Drag and Drop</div>
+                    <div>Drag&nbsp;and&nbsp;Drop</div>
                     <div>- or -</div>
                     <Button type="primary" size="large" onClick={this.onBrowse} className={styles.button}>
                         Browse
