@@ -28,9 +28,12 @@ interface FolderTreeState {
 const FOLDER_TAG = "(folder)";
 
 class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
+    public static getFolderKey(path: string): string {
+        return `${path}${FOLDER_TAG}`;
+    }
 
     // Recursively searches files and the child files for the first folder whose full path is equivalent to path
-    private static getMatchingFolderFromPath(files: UploadFile[], path: string): UploadFile | null {
+    public static getMatchingFolderFromPath(files: UploadFile[], path: string): UploadFile | null {
         for (const file of files) {
             // we're looking for a folder so don't return anything if file is not a folder.
             if (file.isDirectory) {
@@ -41,7 +44,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
 
                 // If the path we're searching for starts with the fullPath of the current folder,
                 // search the children of that folder.
-                // e.g. file.fullPath = "/Users/bob/Documents" and path = "/Users/bob/Documents/secrets.txt"
+                // e.g. file.fullPath = "/Users/bob/Documents" and path = "/Users/bob/Documents/secrets"
                 } else if (path.indexOf(file.fullPath) === 0) {
                     return FolderTree.getMatchingFolderFromPath(file.files, path);
                 }
@@ -123,7 +126,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
         }
 
         return (
-            <Tree.TreeNode title={file.name} key={file.fullPath + FOLDER_TAG} isLeaf={false}>
+            <Tree.TreeNode title={file.name} key={FolderTree.getFolderKey(file.fullPath)} isLeaf={false}>
                 {file.files.map((child: UploadFile) => this.renderChildDirectories(child))}
             </Tree.TreeNode>
         );
