@@ -26,7 +26,7 @@ describe("<FolderTree/>", () => {
         files = [
             testFolder,
         ];
-        testFolderKey = `${testFolder.fullPath}(folder)`;
+        testFolderKey = FolderTree.getFolderKey(testFolder.fullPath);
     });
 
     describe("onExpand", () => {
@@ -81,5 +81,27 @@ describe("<FolderTree/>", () => {
         });
     });
 
+    describe("getMatchingFolderFromPath", () => {
+        it("should return null if files does not contain match", () => {
+            const result = FolderTree.getMatchingFolderFromPath(files, "/i-dont-exist");
+            expect(result).to.equal(null);
+        });
 
+        it("should return folder if it exists at the top level", () => {
+            const result = FolderTree.getMatchingFolderFromPath(files, testFolder.fullPath);
+            const fullPath = result ? result.fullPath : "";
+            expect(fullPath).to.equal(testFolder.fullPath);
+        });
+
+        it("should return folder if it exists within another folder", () => {
+            const targetFolder = new UploadFileImpl("secrets", testFolder.fullPath, true);
+            testFolder.files = [
+                new UploadFileImpl("animals", testFolder.fullPath, true),
+                targetFolder,
+            ];
+            const result = FolderTree.getMatchingFolderFromPath([testFolder], targetFolder.fullPath);
+            const fullPath = result ? result.fullPath : "";
+            expect(fullPath).to.equal(targetFolder.fullPath);
+        });
+    });
 });
