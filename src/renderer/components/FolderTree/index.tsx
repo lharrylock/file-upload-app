@@ -80,7 +80,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
             <div className={classNames(className, styles.container)}>
                 <div className={styles.logoContainer}>
                     <Icon type="cloud-upload" className={styles.logo}/>
-                    <span className={styles.brandName}>AICS File Uploader</span>
+                    <span className={styles.brandName}>AICS&nbsp;File&nbsp;Uploader</span>
                 </div>
                 <div className={styles.fileTree}>
                     {!isLoading && <Tree.DirectoryTree

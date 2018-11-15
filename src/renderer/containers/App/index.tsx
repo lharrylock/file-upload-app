@@ -14,6 +14,7 @@ import { State } from "../../state/types";
 
 import DragAndDropSquare from "../DragAndDropSquare";
 
+import "../../styles/fonts.css";
 const styles = require("./styles.css");
 
 interface AppProps {
@@ -31,7 +32,7 @@ const APP_PAGE_TO_CONFIG_MAP = new Map<AppPage, AppPageConfig>([
         folderTreeVisible: false,
     }],
     [AppPage.EnterBarcode, {
-        container:  <div key="enterBarcode">TODO</div>,
+        container:  <div key="enterBarcode" className={styles.mainContent}>TODO</div>,
         folderTreeSelectable: false,
         folderTreeVisible: true,
     }],
