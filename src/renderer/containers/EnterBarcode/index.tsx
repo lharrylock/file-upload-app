@@ -10,6 +10,8 @@ import { connect } from "react-redux";
 import {
     State,
 } from "../../state";
+import { selection } from "../../state";
+import { SelectBarcodeAction } from "../../state/selection/types";
 import LabkeyQueryService from "../../util/labkey-query-service";
 import { Plate } from "../../util/labkey-query-service/index";
 
@@ -17,7 +19,7 @@ const styles = require("./style.css");
 
 interface EnterBarcodeProps {
     className?: string;
-    getPlateFromBarcode: (barcode: string) => void;
+    selectBarcode: (barcode: string) => SelectBarcodeAction;
 }
 
 interface EnterBarcodeState {
@@ -45,6 +47,7 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
         super(props);
         this.state = {};
         this.setBarcode = this.setBarcode.bind(this);
+        this.saveAndContinue = this.saveAndContinue.bind(this);
         EnterBarcode.getBarcodesAsync = debounce(EnterBarcode.getBarcodesAsync, 500);
     }
 
@@ -76,7 +79,15 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
                         loadOptions={EnterBarcode.getBarcodesAsync}
                         autoload={false}
                     />
-                    <Button type="primary" size="large" className={styles.button}>Save and Continue</Button>
+                    <Button
+                        type="primary"
+                        size="large"
+                        className={styles.button}
+                        onClick={this.saveAndContinue}
+                        disabled={!this.state.barcode}
+                    >
+                        Save and Continue
+                    </Button>
                 </div>
             </div>
         );
@@ -84,10 +95,12 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
 
     private setBarcode(option: BarcodeOption): void {
         this.setState(option);
-        // this.props.getPlateFromBarcode(option.barcode);
+    }
 
-        // tslint:disable-next-line
-        console.log(option.barcode);
+    private saveAndContinue(): void {
+        if (this.state.barcode) {
+            this.props.selectBarcode(this.state.barcode);
+        }
     }
 }
 
@@ -98,8 +111,7 @@ function mapStateToProps(state: State) {
 }
 
 const dispatchToPropsMap = {
-    // tslint:disable-next-line
-    getPlateFromBarcode: (barcode: string) => console.log(barcode),
+    selectBarcode: selection.actions.selectBarcode,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(EnterBarcode);

@@ -6,16 +6,11 @@ import { createLogic } from "redux-logic";
 
 import { startLoading, stopLoading } from "../isLoading/actions";
 
-import {
-    ReduxLogicDependencies,
-    ReduxLogicDoneCb,
-    ReduxLogicNextCb,
-    ReduxLogicTransformDependencies,
-} from "../types";
+import { ReduxLogicDependencies, ReduxLogicDoneCb, ReduxLogicNextCb, ReduxLogicTransformDependencies, } from "../types";
 import { batchActions } from "../util";
 
 import { selectPage, stageFiles, updateStagedFiles } from "./actions";
-import { GET_FILES_IN_FOLDER, LOAD_FILES, OPEN_FILES } from "./constants";
+import { GET_FILES_IN_FOLDER, LOAD_FILES, OPEN_FILES, SELECT_BARCODE } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
 import { getAppPage, getStagedFiles } from "./selectors";
 import { AppPage, DragAndDropFileList, UploadFile } from "./types";
@@ -139,8 +134,20 @@ const getFilesInFolderLogic = createLogic({
     type: GET_FILES_IN_FOLDER,
 });
 
+const selectBarcodeLogic = createLogic({
+    transform: ({ action, getState }: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
+
+        next(batchActions([
+            selectPage(AppPage.PlateMetadataEntry),
+            action,
+        ]));
+    },
+    type: SELECT_BARCODE,
+});
+
 export default [
     loadFilesLogic,
     openFilesLogic,
     getFilesInFolderLogic,
+    selectBarcodeLogic,
 ];

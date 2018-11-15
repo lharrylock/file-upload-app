@@ -10,6 +10,7 @@ import { makeReducer } from "../util";
 import {
     ADD_STAGE_FILES,
     DESELECT_FILE,
+    SELECT_BARCODE,
     SELECT_FILE,
     SELECT_METADATA,
     SELECT_PAGE,
@@ -19,6 +20,7 @@ import {
     AddStageFilesAction,
     AppPage,
     DeselectFileAction,
+    SelectBarcodeAction,
     SelectFileAction,
     SelectionStateBranch,
     SelectMetadataAction,
@@ -38,6 +40,13 @@ const actionToConfigMap: TypeToDescriptionMap = {
         perform: (state: SelectionStateBranch, action: DeselectFileAction) => ({
             ...state,
             files: without(state.files, ...castArray(action.payload)),
+        }),
+    },
+    [SELECT_BARCODE]: {
+        accepts: (action: AnyAction): action is SelectBarcodeAction => action.type === SELECT_BARCODE,
+        perform: (state: SelectionStateBranch, action: SelectBarcodeAction) => ({
+            ...state,
+            barcode: action.payload,
         }),
     },
     [SELECT_FILE]: {
