@@ -59,21 +59,21 @@ class FormPage extends React.Component<FormPageProps, {}> {
                     </div>
                 </div>
                 <div className={styles.buttonContainer}>
-                    {onBack && <Button
+                    {onBack ? <Button
                         size="large"
                         onClick={this.onBack}
                         disabled={backButtonDisabled}
                     >
                         {backButtonName}
-                    </Button>}
-                    {onSave && <Button
+                    </Button> : <div/>}
+                    {onSave ? <Button
                         type="primary"
                         size="large"
                         onClick={this.onSave}
                         disabled={saveButtonDisabled}
                     >
                         {saveButtonName}
-                    </Button>}
+                    </Button> : <div/>}
                 </div>
             </div>
         );
