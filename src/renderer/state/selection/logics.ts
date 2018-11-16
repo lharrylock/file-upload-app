@@ -136,7 +136,6 @@ const getFilesInFolderLogic = createLogic({
 
 const selectBarcodeLogic = createLogic({
     transform: ({ action, getState }: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
-
         next(batchActions([
             selectPage(AppPage.PlateMetadataEntry),
             action,
