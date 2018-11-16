@@ -1,12 +1,10 @@
 import { LabKeyOptionSelector } from "aics-react-labkey";
-import { Anchor, Button } from "antd";
-import * as classNames from "classnames";
 import { debounce } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
 
-import { State } from "../../state";
-import { selection } from "../../state";
+import FormPage from "../../components/FormPage";
+import { selection, State } from "../../state";
 import { SelectBarcodeAction } from "../../state/selection/types";
 import LabkeyQueryService from "../../util/labkey-query-service";
 import { Plate } from "../../util/labkey-query-service";
@@ -53,41 +51,29 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
         const {barcode} = this.state;
         const {className} = this.props;
         return (
-            <div
-                className={classNames(className, styles.container)}
+            <FormPage
+                className={className}
+                formTitle="PLATE BARCODE"
+                formPrompt="Enter a barcode associated with at least one of these files."
+                saveButtonDisabled={!this.state.barcode}
+                onSave={this.saveAndContinue}
             >
-                <div className={styles.title}>PLATE BARCODE</div>
-                <div className={styles.formPrompt}>
-                    Enter a barcode associated with at least one of these files.
-                </div>
-                <div className={styles.form}>
-                    <LabKeyOptionSelector
-                        required={true}
-                        async={true}
-                        id="single-selector-async"
-                        label="Plate Barcode"
-                        optionIdKey="barcode"
-                        optionNameKey="barcode"
-                        selected={barcode}
-                        onOptionSelection={this.setBarcode}
-                        disabled={false}
-                        clearable={true}
-                        placeholder="barcode"
-                        loadOptions={EnterBarcode.getBarcodesAsync}
-                        autoload={false}
-                    />
-                    <a href="#" className={styles.createBarcodeLink}>I don't have a barcode</a>
-                    <Button
-                        type="primary"
-                        size="large"
-                        className={styles.button}
-                        onClick={this.saveAndContinue}
-                        disabled={!this.state.barcode}
-                    >
-                        Save and Continue
-                    </Button>
-                </div>
-            </div>
+                <LabKeyOptionSelector
+                    required={true}
+                    async={true}
+                    label="Plate Barcode"
+                    optionIdKey="barcode"
+                    optionNameKey="barcode"
+                    selected={barcode}
+                    onOptionSelection={this.setBarcode}
+                    disabled={false}
+                    clearable={true}
+                    placeholder="barcode"
+                    loadOptions={EnterBarcode.getBarcodesAsync}
+                    autoload={false}
+                />
+                <a href="#" className={styles.createBarcodeLink}>I don't have a barcode</a>
+            </FormPage>
         );
     }
 

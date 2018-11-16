@@ -1,26 +1,4 @@
-.container {
-  padding: 3em;
-
-  & .form-prompt {
-    font-size: 22px;
-  }
-
-  & .form {
-    padding: 1em 0;
-
-    & .form-group {
-      padding: 1em 0;
-    }
-  }
-
-  & .create-barcode-link {
-    padding-top: 1em;
-    display: block;
-  }
-
-  & .button {
-    position: fixed;
-    bottom: 3em;
-    right: 3em;
-  }
+.create-barcode-link {
+  padding-top: 1em;
+  display: block;
 }
