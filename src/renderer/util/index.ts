@@ -3,6 +3,8 @@ import {
     isFunction,
 } from "lodash";
 
+import LabkeyQueryService from "./labkey-query-service";
+
 export function bindAll<T>(obj: T, methods: Array<() => any>) {
     const setOfMethods = new Set(methods);
     forOwn(obj.constructor.prototype, (value, key) => {
@@ -11,3 +13,7 @@ export function bindAll<T>(obj: T, methods: Array<() => any>) {
         }
     });
 }
+
+export {
+    LabkeyQueryService,
+};

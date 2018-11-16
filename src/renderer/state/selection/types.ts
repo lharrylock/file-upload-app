@@ -16,6 +16,7 @@ export interface DeselectFileAction {
 
 export interface SelectionStateBranch {
     [key: string]: any;
+    barcode?: string;
     page: AppPage;
     stagedFiles: UploadFile[];
 }
@@ -58,6 +59,11 @@ export interface UpdateStagedFilesAction {
 
 export interface GetFilesInFolderAction {
     payload: UploadFile;
+    type: string;
+}
+
+export interface SelectBarcodeAction {
+    payload: string;
     type: string;
 }
 

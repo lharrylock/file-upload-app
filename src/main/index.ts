@@ -10,7 +10,14 @@ let win: BrowserWindow | undefined;
 
 function createWindow() {
     // Create the browser window.
-    win = new BrowserWindow({width: 800, height: 600});
+    win = new BrowserWindow({
+        height: 750,
+        webPreferences: {
+            // Disables same-origin policy and allows us to query Labkey
+            webSecurity: false,
+        },
+        width: 1000,
+    });
 
     // and load the index.html of the app.
     win.loadURL(url.format({

@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  flex-direction: column;
+
+  & .content {
+    flex: 1;
+  }
+
+  & .title {
+    text-transform: uppercase;
+  }
+
+  & .form-prompt {
+    font-size: 22px;
+  }
+
+  & .form {
+    padding: 1em 0;
+  }
+
+  & .button-container {
+    flex: 0 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+}

@@ -4,6 +4,7 @@ import {
     GET_FILES_IN_FOLDER,
     LOAD_FILES,
     OPEN_FILES,
+    SELECT_BARCODE,
     SELECT_FILE,
     SELECT_METADATA,
     SELECT_PAGE,
@@ -17,6 +18,7 @@ import {
     GetFilesInFolderAction,
     LoadFilesFromDragAndDropAction,
     LoadFilesFromOpenDialogAction,
+    SelectBarcodeAction,
     SelectFileAction,
     SelectMetadataAction,
     SelectPageAction,
@@ -85,5 +87,12 @@ export function getFilesInFolder(folder: UploadFile): GetFilesInFolderAction {
     return {
         payload: folder,
         type: GET_FILES_IN_FOLDER,
+    };
+}
+
+export function selectBarcode(barcode: string): SelectBarcodeAction {
+    return {
+        payload: barcode,
+        type: SELECT_BARCODE,
     };
 }

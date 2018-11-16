@@ -71,7 +71,13 @@ task buildMain(type: NodeTask) {
 }
 
 task dev(type: NodeTask) {
-    environment = [NODE_ENV: "development", START_HOT: 1]
+    environment = [
+            NODE_ENV: "development",
+            START_HOT: 1,
+            LABKEY_PROTOCOL: "http",
+            LABKEY_HOST: "localhost",
+            LABKEY_PORT: 8080
+    ]
 
     script = file("${npmBin}/webpack-dev-server")
     args = ["--config", "webpack/webpack.renderer.js"]
