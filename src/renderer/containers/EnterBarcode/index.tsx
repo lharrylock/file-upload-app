@@ -1,4 +1,4 @@
-import { LabKeyOptionSelector } from "aics-react-labkey";
+import { LabkeyOption, LabKeyOptionSelector } from "aics-react-labkey";
 import { debounce } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -19,6 +19,7 @@ interface EnterBarcodeProps {
 
 interface EnterBarcodeState {
     barcode?: string;
+    plateId?: number;
 }
 
 interface BarcodeOption {
@@ -77,8 +78,15 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
         );
     }
 
-    private setBarcode(option: BarcodeOption): void {
-        this.setState(option);
+    private setBarcode(option: BarcodeOption | null): void {
+        if (option) {
+            this.setState(option);
+        } else {
+            this.setState({
+                barcode: undefined,
+                plateId: undefined,
+            });
+        }
     }
 
     private saveAndContinue(): void {
