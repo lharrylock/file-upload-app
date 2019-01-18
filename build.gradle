@@ -73,7 +73,7 @@ task buildMain(type: NodeTask) {
 task dev(type: NodeTask) {
     environment = [
             NODE_ENV: "development",
-            START_HOT: 1,
+            START_MAIN: 1,
             LABKEY_PROTOCOL: "http",
             LABKEY_HOST: "localhost",
             LABKEY_PORT: 8080
@@ -85,7 +85,7 @@ task dev(type: NodeTask) {
 
 task main(type: NodeTask) {
     dependsOn buildMain
-    environment = [NODE_ENV: "development", START_HOT: 1]
+    environment = [NODE_ENV: "development", START_MAIN: 1]
 
     script = file("${npmBin}/electron")
     args = ["dist/main.js"]
