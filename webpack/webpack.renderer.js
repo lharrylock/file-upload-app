@@ -62,7 +62,8 @@ module.exports = ({ analyze, env } = {}) => ({
                                     {
                                         libraryName: "antd",
                                         libraryDirectory: "es",
-                                        style: "css"
+                                        style: "index",
+                                        styleExt: "less"
                                     },
                                     {
                                         libraryName: "lodash",
@@ -107,6 +108,30 @@ module.exports = ({ analyze, env } = {}) => ({
                                     require("postcss-cssnext")(),
                                 ]
                             }
+                        }
+                    ]
+                })
+            },
+            {
+                test: /\.less$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: [
+                        {
+                            loader: "css-loader",
+                        },
+                        {
+                            loader: "less-loader",
+                            options: {
+                                modifyVars: {
+                                    "primary-color": "#1DA57A",
+                                    "link-color": "#1DA57A",
+                                    "border-radius-base": "2px",
+                                    "font-size-base": "18px",
+                                    "font-family"  : "Nunito"
+                                },
+                                javascriptEnabled: true,
+                            },
                         }
                     ]
                 })
