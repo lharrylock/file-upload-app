@@ -16,7 +16,7 @@ declare module "aics-react-labkey" {
         optionIdKey: string;
         optionNameKey?: string;
         selected?: LabkeyOption | LabkeyOption[];
-        onOptionSelection: (option: LabkeyOption) => void;
+        onOptionSelection: (option: LabkeyOption | null) => void;
         error?: boolean;
         multiSelect?: boolean;
         placeholder?: string;
