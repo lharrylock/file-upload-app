@@ -124,11 +124,11 @@ module.exports = ({ analyze, env } = {}) => ({
                             loader: "less-loader",
                             options: {
                                 modifyVars: {
-                                    'primary-color': '#1DA57A',
-                                    'link-color': '#1DA57A',
-                                    'border-radius-base': '2px',
-                                    'font-size-base': '18px',
-                                    'font-family'  : "Nunito"
+                                    "primary-color": "#1DA57A",
+                                    "link-color": "#1DA57A",
+                                    "border-radius-base": "2px",
+                                    "font-size-base": "18px",
+                                    "font-family"  : "Nunito"
                                 },
                                 javascriptEnabled: true,
                             },
