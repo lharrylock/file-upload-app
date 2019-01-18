@@ -29,7 +29,7 @@ module.exports = ({ analyze, env } = {}) => ({
             poll: 100
         },
         before() {
-            if (process.env.START_HOT) {
+            if (process.env.START_MAIN) {
                 console.log("Starting Main Process...");
                 spawn("./gradlew", ["main"], {
                     shell: true,
@@ -174,5 +174,6 @@ module.exports = ({ analyze, env } = {}) => ({
       }
     },
     mode: "development",
-    target: "electron-renderer"
+    target: "electron-renderer",
+    devtool: "inline-source-map"
 });
