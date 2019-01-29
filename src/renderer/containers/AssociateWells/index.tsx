@@ -1,7 +1,8 @@
 import * as classNames from "classnames";
 import * as React from "react";
 import { connect } from "react-redux";
-import FormPage from "../../components/FormPage/index";
+
+import FormPage from "../../components/FormPage";
 
 import {
     selection,
@@ -25,7 +26,7 @@ class AssociateWells extends React.Component<Props, {}> {
 
     public render() {
         const { className, wells } = this.props;
-        console.log(wells);
+        // console.log(wells);
         return (
             <FormPage
                 className={classNames(className, styles.container)}
@@ -40,7 +41,7 @@ class AssociateWells extends React.Component<Props, {}> {
     }
 
     private saveAndContinue(): void {
-
+        const x = 1;
     }
 }
 

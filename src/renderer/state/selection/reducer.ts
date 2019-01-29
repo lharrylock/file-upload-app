@@ -14,6 +14,7 @@ import {
     SELECT_FILE,
     SELECT_METADATA,
     SELECT_PAGE,
+    SET_WELLS,
     UPDATE_STAGED_FILES,
 } from "./constants";
 import {
@@ -25,6 +26,7 @@ import {
     SelectionStateBranch,
     SelectMetadataAction,
     SelectPageAction,
+    SetWellsAction,
     UpdateStagedFilesAction,
 } from "./types";
 
@@ -69,6 +71,15 @@ const actionToConfigMap: TypeToDescriptionMap = {
             ...state,
             page: action.payload,
         }),
+    },
+    [SET_WELLS]: {
+        accepts: (action: AnyAction): action is SetWellsAction => action.type === SET_WELLS,
+        perform: (state: SelectionStateBranch, action: SetWellsAction) => {
+            // console.log("set wells", action.payload);
+            return {
+                wells: action.payload,
+            };
+        },
     },
     [ADD_STAGE_FILES]: {
         accepts: (action: AnyAction): action is AddStageFilesAction => action.type === ADD_STAGE_FILES,
