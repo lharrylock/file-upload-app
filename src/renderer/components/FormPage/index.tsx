@@ -6,7 +6,7 @@ const styles = require("./style.css");
 
 interface FormPageProps {
     backButtonDisabled?: boolean;
-    children: JSX.Element | JSX.Element[];
+    children: JSX.Element | JSX.Element[] | string;
     className?: string;
     formTitle: string;
     formPrompt: string;
