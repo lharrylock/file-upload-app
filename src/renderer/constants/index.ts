@@ -4,7 +4,8 @@ export const APP_ID = "file-upload-app";
 
 // Metadata Management Service
 export const MMS_VERSION = "1.0";
-export const MMS_BASE_URL = `/metadata-management-service/${MMS_VERSION}`;
+// todo: use env variables?
+export const MMS_BASE_URL = `http://localhost:8080/metadata-management-service/${MMS_VERSION}`;
 
 // Labkey
 const {

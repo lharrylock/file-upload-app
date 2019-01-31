@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 
 import FormPage from "../../components/FormPage";
 import { selection, State } from "../../state";
+import { selectBarcode } from "../../state/selection/actions";
 import { SelectBarcodeAction } from "../../state/selection/types";
 import LabkeyQueryService from "../../util/labkey-query-service";
 import { Plate } from "../../util/labkey-query-service";
@@ -14,7 +15,7 @@ const styles = require("./style.css");
 interface EnterBarcodeProps {
     className?: string;
     barcode?: string;
-    selectBarcode: (barcode: string) => SelectBarcodeAction;
+    selectBarcode: (barcode: string, plateId: number) => SelectBarcodeAction;
 }
 
 interface EnterBarcodeState {
@@ -90,8 +91,8 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
     }
 
     private saveAndContinue(): void {
-        if (this.state.barcode) {
-            this.props.selectBarcode(this.state.barcode);
+        if (this.state.barcode && this.state.plateId) {
+            this.props.selectBarcode(this.state.barcode, this.state.plateId);
         }
     }
 }
@@ -103,7 +104,7 @@ function mapStateToProps(state: State) {
 }
 
 const dispatchToPropsMap = {
-    selectBarcode: selection.actions.selectBarcode,
+    selectBarcode,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(EnterBarcode);

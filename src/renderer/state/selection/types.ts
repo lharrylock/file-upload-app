@@ -64,7 +64,10 @@ export interface GetFilesInFolderAction {
 }
 
 export interface SelectBarcodeAction {
-    payload: string;
+    payload: {
+        barcode: string;
+        plateId: number;
+    };
     type: string;
 }
 
@@ -169,9 +172,9 @@ export interface ViabilityResult {
 }
 
 export interface Well {
-    id: number;
+    wellid: number;
     cellPopulations: CellPopulation[];
-    modified: boolean; // todo need?
+    modified?: boolean; // todo need?
     solutions: Solution[];
     viabilityResults: ViabilityResult[];
 }

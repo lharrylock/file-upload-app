@@ -1,15 +1,17 @@
+import { AxiosError, AxiosResponse } from "axios";
 import { stat, Stats } from "fs";
 import { isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
 
+import { LABKEY_SELECT_ROWS_URL } from "../../constants";
 import { startLoading, stopLoading } from "../isLoading/actions";
 
 import { ReduxLogicDependencies, ReduxLogicDoneCb, ReduxLogicNextCb, ReduxLogicTransformDependencies } from "../types";
 import { batchActions } from "../util";
 
-import { selectPage, stageFiles, updateStagedFiles } from "./actions";
+import { selectPage, setWells, stageFiles, updateStagedFiles } from "./actions";
 import { GET_FILES_IN_FOLDER, LOAD_FILES, OPEN_FILES, SELECT_BARCODE } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
 import { getAppPage, getStagedFiles } from "./selectors";
@@ -135,11 +137,22 @@ const getFilesInFolderLogic = createLogic({
 });
 
 const selectBarcodeLogic = createLogic({
-    transform: ({ action, getState }: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
-        next(batchActions([
-            selectPage(AppPage.AssociateWells),
-            action,
-        ]));
+    transform: ({ action, getState, httpClient, baseMmsUrl }: ReduxLogicTransformDependencies,
+                next: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
+        const url = `${baseMmsUrl}/plate/${action.payload.plateId}/well`;
+        httpClient.get(url)
+            .then((response: AxiosResponse) => {
+                next(batchActions([
+                    selectPage(AppPage.AssociateWells),
+                    setWells(response.data.data),
+                    action,
+                ]));
+            })
+            .catch((response: AxiosError) => {
+                // tslint:disable-next-line
+                console.log(response);
+                next(action);
+            });
     },
     type: SELECT_BARCODE,
 });

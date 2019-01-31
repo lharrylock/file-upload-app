@@ -34,6 +34,7 @@ export const initialState = {
     files: [],
     page: AppPage.DragAndDrop,
     stagedFiles: [],
+    wells: undefined,
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {
@@ -48,7 +49,7 @@ const actionToConfigMap: TypeToDescriptionMap = {
         accepts: (action: AnyAction): action is SelectBarcodeAction => action.type === SELECT_BARCODE,
         perform: (state: SelectionStateBranch, action: SelectBarcodeAction) => ({
             ...state,
-            barcode: action.payload,
+            ...action.payload,
         }),
     },
     [SELECT_FILE]: {
@@ -74,12 +75,10 @@ const actionToConfigMap: TypeToDescriptionMap = {
     },
     [SET_WELLS]: {
         accepts: (action: AnyAction): action is SetWellsAction => action.type === SET_WELLS,
-        perform: (state: SelectionStateBranch, action: SetWellsAction) => {
-            // console.log("set wells", action.payload);
-            return {
-                wells: action.payload,
-            };
-        },
+        perform: (state: SelectionStateBranch, action: SetWellsAction) => ({
+            ...state,
+            wells: action.payload,
+        }),
     },
     [ADD_STAGE_FILES]: {
         accepts: (action: AnyAction): action is AddStageFilesAction => action.type === ADD_STAGE_FILES,
