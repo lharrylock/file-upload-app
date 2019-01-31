@@ -1,12 +1,9 @@
 import { AicsGrid, AicsGridCell } from "aics-react-labkey";
-import * as classNames from "classnames";
 import * as React from "react";
 
 import { SelectWellsAction, Well } from "../../state/selection/types";
 
 import WellComponent from "../Well";
-
-const styles = require("./style.css");
 
 interface PlateProps {
     className?: string;
@@ -59,7 +56,7 @@ class Plate extends React.Component<PlateProps, PlateState> {
         } = this.state;
 
         return (
-            <div className={classNames(styles.container, className)}>
+            <div className={className}>
                 <AicsGrid
                     selectMode="multi"
                     cellHeight="80px"
