@@ -15,7 +15,7 @@ import { selectPage, setWells, stageFiles, updateStagedFiles } from "./actions";
 import { GET_FILES_IN_FOLDER, LOAD_FILES, OPEN_FILES, SELECT_BARCODE } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
 import { getAppPage, getStagedFiles } from "./selectors";
-import { AppPage, DragAndDropFileList, UploadFile } from "./types";
+import { AppPage, DragAndDropFileList, UploadFile, Well } from "./types";
 
 const mergeChildPaths = (filePaths: string[]): string[] => {
     filePaths = uniq(filePaths);
@@ -142,9 +142,16 @@ const selectBarcodeLogic = createLogic({
         const url = `${baseMmsUrl}/plate/${action.payload.plateId}/well`;
         httpClient.get(url)
             .then((response: AxiosResponse) => {
+                const wells: Well[][] = response.data.data.map(
+                    (row: Well[]) => row.map((well: Well) => ({
+                        ...well,
+                        modified: !isEmpty(well.cellPopulations) || !isEmpty(well.solutions)
+                            || !isEmpty(well.viabilityResults),
+                    }))
+                );
                 next(batchActions([
                     selectPage(AppPage.AssociateWells),
-                    setWells(response.data.data),
+                    setWells(wells),
                     action,
                 ]));
             })

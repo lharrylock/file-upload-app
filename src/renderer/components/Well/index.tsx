@@ -1,5 +1,6 @@
 import { Popover } from "antd";
 import * as classNames from "classnames";
+import { isEmpty } from "lodash";
 import * as React from "react";
 
 import { CellPopulation, Solution, ViabilityResult, Well } from "../../state/selection/types";
@@ -164,9 +165,9 @@ class WellComponent extends React.Component<WellProps, {}> {
         return (
             <div>
                 {cellPopulations && this.getCellPopulations(cellPopulations)}
-                <hr/>
+                {!isEmpty(solutions) && <hr/>}
                 {solutions && this.getSolutions(solutions)}
-                <hr/>
+                {!isEmpty(viabilityResults) && <hr/>}
                 {viabilityResults && this.getViabilityResults(viabilityResults)}
             </div>
         );
