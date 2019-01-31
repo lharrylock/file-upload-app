@@ -17,7 +17,7 @@ export interface DeselectFileAction {
 export interface SelectionStateBranch {
     [key: string]: any;
     barcode?: string;
-    wells?: Well[];
+    wells?: Well[][];
     page: AppPage;
     stagedFiles: UploadFile[];
 }
@@ -73,6 +73,11 @@ export interface SelectBarcodeAction {
 
 export interface SetWellsAction {
     payload: Well[][];
+    type: string;
+}
+
+export interface SelectWellsAction {
+    payload: number[];
     type: string;
 }
 
@@ -172,7 +177,7 @@ export interface ViabilityResult {
 }
 
 export interface Well {
-    wellid: number;
+    wellId: number;
     cellPopulations: CellPopulation[];
     modified?: boolean; // todo need?
     solutions: Solution[];

@@ -3,6 +3,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 
 import FormPage from "../../components/FormPage";
+import Plate from "../../components/Plate/index";
 
 import {
     selection,
@@ -14,7 +15,7 @@ const styles = require("./style.css");
 
 interface Props {
     className?: string;
-    wells?: Well[];
+    wells?: Well[][];
 }
 
 class AssociateWells extends React.Component<Props, {}> {
@@ -26,7 +27,6 @@ class AssociateWells extends React.Component<Props, {}> {
 
     public render() {
         const { className, wells } = this.props;
-        // console.log(wells);
         return (
             <FormPage
                 className={classNames(className, styles.container)}
@@ -35,7 +35,7 @@ class AssociateWells extends React.Component<Props, {}> {
                 saveButtonDisabled={true}
                 onSave={this.saveAndContinue}
             >
-                <span>Hello from AssociateWells container</span>
+                {wells ? <Plate wells={wells}/> : "Oops no wells found"}
             </FormPage>
         );
     }
