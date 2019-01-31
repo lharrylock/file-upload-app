@@ -1,0 +1,6 @@
+.container {
+  & .well-text {
+    display: block;
+    text-align: center;
+  }
+}
