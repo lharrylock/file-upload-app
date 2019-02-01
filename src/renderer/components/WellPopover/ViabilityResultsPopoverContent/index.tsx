@@ -2,6 +2,7 @@ import * as classNames from "classnames";
 import * as React from "react";
 
 import { ViabilityResult } from "../../../state/selection/types";
+import KeyValueDisplay from "../KeyValueDisplay/index";
 
 const styles = require("./style.css");
 const NULL_TEXT = "None";
@@ -40,9 +41,19 @@ const ViabilityResultsPopoverContent: React.SFC<ViabilityResultsPopoverContentPr
                     return (
                         <React.Fragment key={i}>
                             <strong>Viability Result</strong><br />
-                            <strong>Viability: </strong>{viability || NULL_TEXT}<br />
-                            <strong>Viable Cell Count: </strong>{viableCellCountPerUnit || NULL_TEXT}/{viableCellCountsUnits}<br/>
-                            <strong>Suspension Volume: </strong>{suspensionVolume || NULL_TEXT} {suspensionVolumeUnits}<br />
+                            <KeyValueDisplay keyName="Viability" value={viability || NULL_TEXT}/>
+                            <KeyValueDisplay
+                                keyName="Viable Cell Count"
+                                value={`${viableCellCountPerUnit || NULL_TEXT}/${viableCellCountsUnits}`}
+                            />
+                            <KeyValueDisplay
+                                keyName="Viable Cell Count"
+                                value={`${viableCellCountPerUnit || NULL_TEXT}/${viableCellCountsUnits}`}
+                            />
+                            <KeyValueDisplay
+                                keyName="Suspension Volume"
+                                value={`${suspensionVolume || NULL_TEXT} ${suspensionVolumeUnits}`}
+                            />
                         </React.Fragment>
                     );
                 })

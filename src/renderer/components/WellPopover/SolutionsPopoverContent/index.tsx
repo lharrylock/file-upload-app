@@ -2,6 +2,7 @@ import * as classNames from "classnames";
 import * as React from "react";
 
 import { Solution } from "../../../state/selection/types";
+import KeyValueDisplay from "../KeyValueDisplay/index";
 
 const styles = require("./style.css");
 const NULL_TEXT = "None";
@@ -39,14 +40,17 @@ const SolutionsPopoverContent: React.SFC<SolutionsPopoverContentProps> = (props)
                     const concentrationUnits = "TODO";
                     concentrationLine = (
                         <React.Fragment>
-                            <strong>Concentration: </strong>{concentration} {concentrationUnits}<br />
+                            <KeyValueDisplay keyName="Concentration" value={`${concentration} ${concentrationUnits}`}/>
                         </React.Fragment>
                     );
                     // Due to a DB constraint, dilution factor part and total always both have values, or are both null
                 } else if (dilutionFactorPart && dilutionFactorTotal) {
                     concentrationLine = (
                         <React.Fragment>
-                            <strong>Dilution Factor: </strong>{dilutionFactorPart}:{dilutionFactorTotal}<br />
+                            <KeyValueDisplay
+                                keyName="Dilution Factor"
+                                value={`${dilutionFactorPart}:${dilutionFactorTotal}`}
+                            />
                         </React.Fragment>
                     );
                 }
@@ -58,9 +62,9 @@ const SolutionsPopoverContent: React.SFC<SolutionsPopoverContentProps> = (props)
                     <React.Fragment key={i}>
                         {i !== 0 && <hr />}
                         <strong>{`Solution ${i + 1}`}</strong><br />
-                        <strong>Solution: </strong>{solutionName || NULL_TEXT}<br />
+                        <KeyValueDisplay keyName="Solution" value={solutionName || NULL_TEXT}/>
                         {concentrationLine}
-                        <strong>Volume: </strong>{volume || NULL_TEXT} {volumeUnits}<br />
+                        <KeyValueDisplay keyName="Volume" value={`${volume || NULL_TEXT} ${volumeUnits}`}/>
                     </React.Fragment>
                 );
             })}

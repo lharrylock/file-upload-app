@@ -2,6 +2,7 @@ import * as classNames from "classnames";
 import * as React from "react";
 
 import { CellPopulation } from "../../../state/selection/types";
+import KeyValueDisplay from "../KeyValueDisplay/index";
 
 const styles = require("./style.css");
 const NULL_TEXT = "None";
@@ -37,14 +38,14 @@ const CellPopulationsPopoverContent: React.SFC<CellPopulationsPopoverContentProp
                         if (sourcePlateWell) {
                             sourceText = (
                                 <React.Fragment>
-                                    <strong>Source Plate: </strong>{sourcePlateWell.plateBarcode}<br />
-                                    <strong>Well: </strong>{sourcePlateWell.wellLabel}<br />
+                                    <KeyValueDisplay keyName="Source Plate" value={sourcePlateWell.plateBarcode}/>
+                                    <KeyValueDisplay keyName="Well" value={sourcePlateWell.wellLabel}/>
                                 </React.Fragment>
                             );
                         } else if (sourceVial) {
                             sourceText = (
                                 <React.Fragment>
-                                    <strong>Source Vial: </strong>{sourceVial.barcode}<br />
+                                    <KeyValueDisplay keyName="Source Vial" value={sourceVial.barcode}/>
                                 </React.Fragment>
                             );
                         }
@@ -52,18 +53,18 @@ const CellPopulationsPopoverContent: React.SFC<CellPopulationsPopoverContentProp
                         populationText = (
                             <React.Fragment>
                                 {sourceText}
-                                <strong>Cell Line: </strong>{wellCellPopulation.cellLineName}<br />
-                                <strong>Clone: </strong>{wellCellPopulation.clone || NULL_TEXT}<br />
-                                <strong>Passage: </strong>{wellCellPopulation.passage || NULL_TEXT}<br />
+                                <KeyValueDisplay keyName="Cell Line" value={wellCellPopulation.cellLineName}/>
+                                <KeyValueDisplay keyName="Clone" value={wellCellPopulation.clone || NULL_TEXT}/>
+                                <KeyValueDisplay keyName="Passage" value={wellCellPopulation.passage || NULL_TEXT}/>
                             </React.Fragment>
                         );
                     }
                     return (
                         <React.Fragment key={i}>
                             {i !== 0 && <hr />}
-                            <strong>{`Cell Population ${i + 1}`}</strong><br />
+                            <div className={styles.label}>{`Cell Population ${i + 1}`}</div><br />
                             {populationText}
-                            <strong>Seeding Density: </strong>{entry.seedingDensity || NULL_TEXT}<br />
+                            <KeyValueDisplay keyName="Seeding Density" value={entry.seedingDensity || NULL_TEXT}/>
                         </React.Fragment>
                     );
                 })
