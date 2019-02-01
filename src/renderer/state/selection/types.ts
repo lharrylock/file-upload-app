@@ -137,23 +137,16 @@ export interface Unit {
     UnitsId: number;
 }
 
-// todo change naming
 export interface SolutionLot {
-    Catalog: string;
-    Concentration: number;
-    "ConcentrationUnitsId/Name": string;
-    DilutionFactorPart: any; // todo
-    DilutionFactorTotal: any; // todo
-    Lot: string;
-    "Name/SolutionLotName": string;
-    "SolutionId/Name": string;
-    SolutionLotId: number;
-    "VendorId/Name": string;
+    concentration: number;
+    concentrationUnitsId: string;
+    dilutionFactorPart: number;
+    dilutionFactorTotal: number;
+    solutionName: string;
 }
 
 export interface CellPopulation {
     seedingDensity: string;
-    shortid: string; // todo
     sourceCellPopulation?: CellPopulationInfo;
     sourcePlateWell?: CellPopulationInfo; // CellPopulation;
     sourceVial?: any; // todo
@@ -161,19 +154,17 @@ export interface CellPopulation {
 }
 
 export interface Solution {
-    shortid: string;
     solutionLot: SolutionLot;
     volume: string;
-    volumeUnits: Unit;
+    volumeUnitsId: number;
 }
 
 export interface ViabilityResult {
-    shortid: string;
     suspensionVolume: string;
-    suspensionVolumeUnits: Unit;
-    viability: string;
-    viableCellCountPerUnit: string;
-    viableCellCountUnits: Unit;
+    suspensionVolumeUnitId: number;
+    viability: number;
+    viableCellCountPerUnit: number;
+    viableCellCountUnitId: number;
 }
 
 export interface Well {

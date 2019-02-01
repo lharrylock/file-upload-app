@@ -5,6 +5,10 @@ import { SelectWellsAction, Well } from "../../state/selection/types";
 
 import WellComponent from "../Well";
 
+const MODIFIED_WELL_COLOR = "rgb(221, 216, 241)";
+const DEFAULT_WELL_COLOR = "rgb(226, 228, 227)";
+const WELL_WIDTH = "80px";
+
 interface PlateProps {
     className?: string;
     selectWells?: (wells: number[]) => SelectWellsAction;
@@ -16,6 +20,14 @@ interface PlateState {
 }
 
 class Plate extends React.Component<PlateProps, PlateState> {
+    public static getWellDisplayText(cellData: Well): string | JSX.Element {
+        return <WellComponent well={cellData}/>;
+    }
+
+    public static wellColorSelector(cellData: Well): string {
+        return cellData.modified ? MODIFIED_WELL_COLOR : DEFAULT_WELL_COLOR;
+    }
+
     constructor(props: PlateProps) {
         super(props);
         this.state = {
@@ -23,8 +35,6 @@ class Plate extends React.Component<PlateProps, PlateState> {
         };
         this.handleWellClick = this.handleWellClick.bind(this);
         this.handleSelectedWellsChanged = this.handleSelectedWellsChanged.bind(this);
-        this.wellColorSelector = this.wellColorSelector.bind(this);
-        this.getWellDisplayText = this.getWellDisplayText.bind(this);
     }
 
     public handleWellClick(event: React.MouseEvent<HTMLDivElement>, row: number, col: number, data: Well): void {
@@ -38,35 +48,24 @@ class Plate extends React.Component<PlateProps, PlateState> {
         this.setState({selectedWells});
     }
 
-    public wellColorSelector(cellData: Well): string {
-        return cellData.modified ? "rgb(221, 216, 241)" : "rgb(226, 228, 227)";
-    }
-
-    public getWellDisplayText(cellData: Well): string | JSX.Element {
-        return <WellComponent well={cellData}/>;
-    }
-
     public render() {
         const {
             className,
             wells,
         } = this.props;
-        const {
-            selectedWells,
-        } = this.state;
 
         return (
             <div className={className}>
                 <AicsGrid
                     selectMode="multi"
-                    cellHeight="80px"
-                    cellWidth="80px"
+                    cellHeight={WELL_WIDTH}
+                    cellWidth={WELL_WIDTH}
                     fontSize="14px"
-                    selectedCells={selectedWells}
+                    selectedCells={this.state.selectedWells}
                     onCellClick={this.handleWellClick}
                     onSelectedCellsChanged={this.handleSelectedWellsChanged}
-                    displayBackground={this.wellColorSelector}
-                    displayText={this.getWellDisplayText}
+                    displayBackground={Plate.wellColorSelector}
+                    displayText={Plate.getWellDisplayText}
                     cells={wells}
                 />
             </div>
