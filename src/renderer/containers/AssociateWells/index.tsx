@@ -1,4 +1,3 @@
-import * as classNames from "classnames";
 import * as React from "react";
 import { connect } from "react-redux";
 
@@ -10,8 +9,6 @@ import {
     State,
 } from "../../state";
 import { Well } from "../../state/selection/types";
-
-const styles = require("./style.css");
 
 interface Props {
     className?: string;
@@ -29,7 +26,7 @@ class AssociateWells extends React.Component<Props, {}> {
         const { className, wells } = this.props;
         return (
             <FormPage
-                className={classNames(className, styles.container)}
+                className={className}
                 formTitle="ASSOCIATE WELLS"
                 formPrompt="Associate files and wells by selecting them and clicking Associate"
                 saveButtonDisabled={true}

@@ -4,7 +4,7 @@ export const APP_ID = "file-upload-app";
 
 // Metadata Management Service
 export const MMS_VERSION = "1.0";
-// todo: use env variables?
+// todo: FMS-397 use env variables for protocol, host, and port
 export const MMS_BASE_URL = `http://localhost:8080/metadata-management-service/${MMS_VERSION}`;
 
 // Labkey
