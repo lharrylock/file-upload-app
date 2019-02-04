@@ -4,18 +4,18 @@ import {
 } from "./constants";
 import {
     MetadataStateBranch,
-    ReceiveAction,
-    RequestAction,
+    ReceiveMetadataAction,
+    RequestMetadataAction,
 } from "./types";
 
-export function receiveMetadata(payload: MetadataStateBranch = {}): ReceiveAction {
+export function receiveMetadata(payload: MetadataStateBranch = {units: []}): ReceiveMetadataAction {
     return {
         payload,
         type: RECEIVE_METADATA,
     };
 }
 
-export function requestMetadata(): RequestAction {
+export function requestMetadata(): RequestMetadataAction {
     return {
         type: REQUEST_METADATA,
     };

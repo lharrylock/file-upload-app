@@ -24,23 +24,22 @@ const SolutionsPopoverContent: React.SFC<SolutionsPopoverContentProps> = (props)
 
     return (
         <div className={classNames(styles.container, className)}>
-            {solutions.map(({solutionLot, volume, volumeUnitsId}: Solution, i) => {
+            {solutions.map(({solutionLot, volume, volumeUnitDisplay}: Solution, i) => {
                 const {
                     concentration,
-                    concentrationUnitsId,
+                    concentrationUnitsDisplay,
                     dilutionFactorPart,
                     dilutionFactorTotal,
                     solutionName,
                 } = solutionLot;
 
                 let concentrationLine: JSX.Element | null = null;
-                // Due to a DB constraint, concentration and it"s units always both have values, or are both null
-                if (concentration && concentrationUnitsId) {
-                    // todo: get human readable value using id
-                    const concentrationUnits = "TODO";
+                // Due to a DB constraint, concentration and its units always both have values, or are both null
+                if (concentration && concentrationUnitsDisplay) {
+                    const concentrationDisplay = `${concentration} ${concentrationUnitsDisplay}`;
                     concentrationLine = (
                         <React.Fragment>
-                            <KeyValueDisplay keyName="Concentration" value={`${concentration} ${concentrationUnits}`}/>
+                            <KeyValueDisplay keyName="Concentration" value={concentrationDisplay}/>
                         </React.Fragment>
                     );
                     // Due to a DB constraint, dilution factor part and total always both have values, or are both null
@@ -55,16 +54,13 @@ const SolutionsPopoverContent: React.SFC<SolutionsPopoverContentProps> = (props)
                     );
                 }
 
-                // todo: get human readable value using id
-                const volumeUnits = "TODO";
-
                 return (
                     <React.Fragment key={i}>
                         {i !== 0 && <hr />}
                         <strong>{`Solution ${i + 1}`}</strong><br />
                         <KeyValueDisplay keyName="Solution" value={solutionName || NULL_TEXT}/>
                         {concentrationLine}
-                        <KeyValueDisplay keyName="Volume" value={`${volume || NULL_TEXT} ${volumeUnits}`}/>
+                        <KeyValueDisplay keyName="Volume" value={`${volume || NULL_TEXT} ${volumeUnitDisplay}`}/>
                     </React.Fragment>
                 );
             })}

@@ -6,15 +6,15 @@ import { makeReducer } from "../util";
 import { RECEIVE_METADATA } from "./constants";
 import {
     MetadataStateBranch,
-    ReceiveAction,
+    ReceiveMetadataAction,
 } from "./types";
 
 export const initialState = {};
 
 const actionToConfigMap: TypeToDescriptionMap = {
     [RECEIVE_METADATA]: {
-        accepts: (action: AnyAction): action is ReceiveAction => action.type === RECEIVE_METADATA,
-        perform: (state: MetadataStateBranch, action: ReceiveAction) => ({ ...state, ...action.payload }),
+        accepts: (action: AnyAction): action is ReceiveMetadataAction => action.type === RECEIVE_METADATA,
+        perform: (state: MetadataStateBranch, action: ReceiveMetadataAction) => ({ ...state, ...action.payload }),
     },
 };
 

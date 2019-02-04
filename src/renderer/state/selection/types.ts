@@ -131,15 +131,16 @@ export interface CellPopulationInfo {
 
 // todo naming
 export interface Unit {
-    Description: string;
-    Name: string;
-    Type: string;
-    UnitsId: number;
+    description: string;
+    name: string;
+    type: string;
+    unitsId: number;
 }
 
 export interface SolutionLot {
     concentration: number;
-    concentrationUnitsId: string;
+    concentrationUnitsId: number;
+    concentrationUnitsDisplay?: string;
     dilutionFactorPart: number;
     dilutionFactorTotal: number;
     solutionName: string;
@@ -156,7 +157,8 @@ export interface CellPopulation {
 export interface Solution {
     solutionLot: SolutionLot;
     volume: string;
-    volumeUnitsId: number;
+    volumeUnitId: number;
+    volumeUnitDisplay?: string;
 }
 
 export interface ViabilityResult {
@@ -165,6 +167,7 @@ export interface ViabilityResult {
     viability: number;
     viableCellCountPerUnit: number;
     viableCellCountUnitId: number;
+    viableCellCountUnitDisplay?: string;
 }
 
 export interface Well {

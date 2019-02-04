@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 
 import FolderTree from "../../components/FolderTree";
 import { isLoading, selection } from "../../state";
+import { requestMetadata } from "../../state/metadata/actions";
+import { RequestMetadataAction } from "../../state/metadata/types";
 import {
     AppPage,
     AppPageConfig,
@@ -24,6 +26,7 @@ interface AppProps {
     files: UploadFile[];
     getFilesInFolder: (folderToExpand: UploadFile) => GetFilesInFolderAction;
     loading: boolean;
+    requestMetadata: () => RequestMetadataAction;
     selectFile: (files: string[]) => SelectFileAction;
     page: AppPage;
 }
@@ -47,6 +50,10 @@ const APP_PAGE_TO_CONFIG_MAP = new Map<AppPage, AppPageConfig>([
 ]);
 
 class App extends React.Component<AppProps, {}> {
+    public componentDidMount() {
+        this.props.requestMetadata();
+    }
+
     public render() {
         const {
             files,
@@ -90,6 +97,7 @@ function mapStateToProps(state: State) {
 
 const dispatchToPropsMap = {
     getFilesInFolder: selection.actions.getFilesInFolder,
+    requestMetadata,
     selectFile: selection.actions.selectFile,
 };
 

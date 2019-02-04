@@ -45,7 +45,7 @@ class AssociateWells extends React.Component<Props, {}> {
 function mapStateToProps(state: State, props: Props): Props {
     return {
         className: props.className,
-        wells: selection.selectors.getWells(state),
+        wells: selection.selectors.getWellsWithUnits(state),
     };
 }
 
