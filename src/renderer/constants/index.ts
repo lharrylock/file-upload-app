@@ -22,5 +22,4 @@ export const LABKEY_SELECT_ROWS_URL = (schema: string, table: string, additional
 };
 
 // Metadata Management Service
-// todo: FMS-397 use env variables for protocol, host, and port
 export const MMS_BASE_URL = `${MMS_PROTOCOL}://${MMS_HOST}:${MMS_PORT}/metadata-management-service`;
