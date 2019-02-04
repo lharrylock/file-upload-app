@@ -74,9 +74,6 @@ task dev(type: NodeTask) {
     environment = [
             NODE_ENV: "development",
             START_MAIN: 1,
-            LABKEY_PROTOCOL: "http",
-            LABKEY_HOST: "localhost",
-            LABKEY_PORT: 8080
     ]
 
     script = file("${npmBin}/webpack-dev-server")
