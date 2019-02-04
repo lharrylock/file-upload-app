@@ -16,7 +16,7 @@ interface Props {
 }
 
 class AssociateWells extends React.Component<Props, {}> {
-    constructor(props: {}) {
+    constructor(props: Props) {
         super(props);
         this.state = {};
         this.saveAndContinue = this.saveAndContinue.bind(this);
