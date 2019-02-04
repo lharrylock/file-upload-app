@@ -45,7 +45,7 @@ declare module "aics-react-labkey" {
         | LabkeyOptionSelectorCreateProps;
 
     export class LabKeyOptionSelector extends React.Component<LabkeyOptionSelectorProps, {}> {
-        constructor(props: LabKeyOptionSelectorProps);
+        constructor(props: LabkeyOptionSelectorProps);
         public render(): JSX.Element | null;
     }
 }
