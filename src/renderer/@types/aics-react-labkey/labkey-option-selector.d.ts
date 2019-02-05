@@ -41,11 +41,11 @@ declare module "aics-react-labkey" {
         creatable: boolean;
     }
 
-    type LabkeyOptionSelectorProps = LabKeyOptionSelectorDefaultProps | LabkeyOptionSelectorAsyncProps
+    type LabkeyOptionSelectorProps = LabkeyOptionSelectorDefaultProps | LabkeyOptionSelectorAsyncProps
         | LabkeyOptionSelectorCreateProps;
 
-    export class LabKeyOptionSelector extends React.Component<LabKeyOptionSelectorProps, {}> {
-        constructor(props: LabKeyOptionSelectorProps);
+    export class LabKeyOptionSelector extends React.Component<LabkeyOptionSelectorProps, {}> {
+        constructor(props: LabkeyOptionSelectorProps);
         public render(): JSX.Element | null;
     }
 }
