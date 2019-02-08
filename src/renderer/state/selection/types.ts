@@ -129,14 +129,6 @@ export interface CellPopulationInfo {
     wellLabel: string;
 }
 
-// todo naming
-export interface Unit {
-    description: string;
-    name: string;
-    type: string;
-    unitsId: number;
-}
-
 export interface SolutionLot {
     concentration: number;
     concentrationUnitsId: number;
