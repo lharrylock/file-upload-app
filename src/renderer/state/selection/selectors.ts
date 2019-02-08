@@ -24,7 +24,7 @@ export const getWellsWithUnits = createSelector([
     }
 
     return wells.map((wellRow: Well[]) => wellRow.map((well) => {
-        const solutions: Solution[] = well.solutions.map((s) => {
+        const solutions: Solution[] = well.solutions.map((s: Solution) => {
             const volumeUnit: Unit | undefined = units.find((u) => u.unitsId === s.volumeUnitId);
             const concentrationUnit: Unit | undefined = units
                 .find((u) => u.unitsId === s.solutionLot.concentrationUnitsId);
@@ -38,7 +38,7 @@ export const getWellsWithUnits = createSelector([
                 ...solutionLot,
             };
         });
-        const viabilityResults: ViabilityResult[] = well.viabilityResults.map((v) => {
+        const viabilityResults: ViabilityResult[] = well.viabilityResults.map((v: ViabilityResult) => {
             const unit: Unit | undefined = units.find((u) => u.unitsId === v.suspensionVolumeUnitId);
             return {
                 ...v,

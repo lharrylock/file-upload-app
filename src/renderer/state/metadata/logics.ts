@@ -1,20 +1,19 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { createLogic } from "redux-logic";
 
-import { LABKEY_SELECT_ROWS_URL } from "../../constants/index";
-import { Unit } from "../selection/types";
+import { LABKEY_SELECT_ROWS_URL } from "../../constants";
+import { LK_MICROSCOPY_SCHEMA } from "../../constants/index";
 
 import { ReduxLogicDependencies } from "../types";
 
 import { receiveMetadata } from "./actions";
 import { REQUEST_METADATA } from "./constants";
-import { LabkeyUnit, ReceiveMetadataAction } from "./types";
+import { LabkeyUnit, ReceiveMetadataAction, Unit } from "./types";
 
 const requestMetadata = createLogic({
     process: ({baseMmsUrl, httpClient}: ReduxLogicDependencies, dispatch: (action: ReceiveMetadataAction) => void,
               done: () => void) => {
-        // todo constants for schema and table
-        const getUnitsURL = LABKEY_SELECT_ROWS_URL("Microscopy", "Units");
+        const getUnitsURL = LABKEY_SELECT_ROWS_URL(LK_MICROSCOPY_SCHEMA, "Units");
         return Promise.all([
             httpClient.get(getUnitsURL),
         ])
@@ -25,7 +24,6 @@ const requestMetadata = createLogic({
                     type: unit.Type,
                     unitsId: unit.UnitsId,
                 }));
-
                 dispatch(receiveMetadata({
                     units,
                 }));

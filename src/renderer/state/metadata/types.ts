@@ -1,5 +1,3 @@
-import { Unit } from "../selection/types";
-
 export interface MetadataStateBranch {
     [key: string]: any;
     units?: Unit[];
@@ -12,6 +10,13 @@ export interface ReceiveMetadataAction {
 
 export interface RequestMetadataAction {
     type: string;
+}
+
+export interface Unit {
+    description: string;
+    name: string;
+    type: string;
+    unitsId: number;
 }
 
 export interface LabkeyUnit {

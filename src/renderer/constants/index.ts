@@ -23,3 +23,6 @@ export const LABKEY_SELECT_ROWS_URL = (schema: string, table: string, additional
 
 // Metadata Management Service
 export const MMS_BASE_URL = `${MMS_PROTOCOL}://${MMS_HOST}:${MMS_PORT}/metadata-management-service`;
+
+// Labkey Schemas
+export const LK_MICROSCOPY_SCHEMA = "microscopy";
