@@ -1,4 +1,4 @@
-import { LabKeyOptionSelector } from "aics-react-labkey";
+import { LabkeyOption, LabKeyOptionSelector } from "aics-react-labkey";
 import { debounce } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -9,22 +9,18 @@ import { SelectBarcodeAction } from "../../state/selection/types";
 import LabkeyQueryService from "../../util/labkey-query-service";
 import { Plate } from "../../util/labkey-query-service";
 
+import { BarcodeOption } from "./BarcodeOption";
 const styles = require("./style.css");
 
 interface EnterBarcodeProps {
     className?: string;
     barcode?: string;
-    selectBarcode: (barcode: string) => SelectBarcodeAction;
+    selectBarcode: (barcode: string, plateId: number) => SelectBarcodeAction;
 }
 
 interface EnterBarcodeState {
     barcode?: string;
     plateId?: number;
-}
-
-interface BarcodeOption {
-    barcode: string;
-    plateId: number;
 }
 
 class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState> {
@@ -49,7 +45,7 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
     }
 
     public render() {
-        const {barcode} = this.state;
+        const {barcode, plateId} = this.state;
         const {className} = this.props;
         return (
             <FormPage
@@ -65,9 +61,8 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
                     label="Plate Barcode"
                     optionIdKey="barcode"
                     optionNameKey="barcode"
-                    selected={barcode}
+                    selected={{barcode, plateId}}
                     onOptionSelection={this.setBarcode}
-                    disabled={false}
                     clearable={true}
                     placeholder="barcode"
                     loadOptions={EnterBarcode.getBarcodesAsync}
@@ -78,7 +73,7 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
         );
     }
 
-    private setBarcode(option: BarcodeOption | null): void {
+    private setBarcode(option: LabkeyOption | null): void {
         if (option) {
             this.setState(option);
         } else {
@@ -90,8 +85,8 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
     }
 
     private saveAndContinue(): void {
-        if (this.state.barcode) {
-            this.props.selectBarcode(this.state.barcode);
+        if (this.state.barcode && this.state.plateId) {
+            this.props.selectBarcode(this.state.barcode, this.state.plateId);
         }
     }
 }
