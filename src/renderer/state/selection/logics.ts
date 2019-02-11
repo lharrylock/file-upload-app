@@ -12,7 +12,7 @@ import { ReduxLogicDependencies, ReduxLogicDoneCb, ReduxLogicNextCb, ReduxLogicT
 import { batchActions } from "../util";
 
 import { selectPage, setWells, stageFiles, updateStagedFiles } from "./actions";
-import { GET_FILES_IN_FOLDER, LOAD_FILES, OPEN_FILES, SELECT_BARCODE } from "./constants";
+import { GET_FILES_IN_FOLDER, getWellsUrl, LOAD_FILES, OPEN_FILES, SELECT_BARCODE } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
 import { getAppPage, getStagedFiles } from "./selectors";
 import { AppPage, DragAndDropFileList, UploadFile, Well } from "./types";
@@ -139,8 +139,7 @@ const getFilesInFolderLogic = createLogic({
 const selectBarcodeLogic = createLogic({
     transform: ({ action, getState, httpClient, baseMmsUrl }: ReduxLogicTransformDependencies,
                 next: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
-        const url = `${baseMmsUrl}/plate/${action.payload.plateId}/well`;
-        httpClient.get(url)
+        httpClient.get(getWellsUrl({baseMmsUrl, plateId: action.payload.plateId}))
             .then((response: AxiosResponse) => {
                 const wells: Well[][] = response.data.data.map(
                     (row: Well[]) => row.map((well: Well) => ({
