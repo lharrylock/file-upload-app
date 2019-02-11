@@ -26,8 +26,8 @@ declare module "aics-react-labkey" {
 
     // Async mode props
     export interface LabkeyOptionSelectorAsyncProps extends LabkeyOptionSelectorCommonProps {
-        async?: boolean;
-        loadOptions?: (input: string) => Promise<{ options: LabkeyOption[] } | null>;
+        async: boolean;
+        loadOptions: (input: string) => Promise<{ options: LabkeyOption[] } | null>;
     }
 
     // Creatable mode props
