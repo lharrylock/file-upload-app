@@ -4,7 +4,7 @@ import * as React from "react";
 import { ViabilityResult } from "../../../state/selection/types";
 import KeyValueDisplay from "../KeyValueDisplay/index";
 
-const styles = require("./style.css");
+const styles = require("../style.css");
 const NULL_TEXT = "None";
 
 export interface ViabilityResultsPopoverContentProps {
@@ -40,7 +40,7 @@ const ViabilityResultsPopoverContent: React.SFC<ViabilityResultsPopoverContentPr
 
                     return (
                         <React.Fragment key={i}>
-                            <strong>Viability Result</strong><br />
+                            <div className={styles.label}>Viability Result</div>
                             <KeyValueDisplay keyName="Viability" value={viability || NULL_TEXT}/>
                             <KeyValueDisplay
                                 keyName="Viable Cell Count"

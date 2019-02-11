@@ -4,7 +4,7 @@ import * as React from "react";
 import { Solution } from "../../../state/selection/types";
 import KeyValueDisplay from "../KeyValueDisplay/index";
 
-const styles = require("./style.css");
+const styles = require("../style.css");
 const NULL_TEXT = "None";
 
 export interface SolutionsPopoverContentProps {

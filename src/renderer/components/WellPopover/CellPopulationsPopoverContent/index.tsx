@@ -2,9 +2,9 @@ import * as classNames from "classnames";
 import * as React from "react";
 
 import { CellPopulation } from "../../../state/selection/types";
-import KeyValueDisplay from "../KeyValueDisplay/index";
+import KeyValueDisplay from "../KeyValueDisplay";
 
-const styles = require("./style.css");
+const styles = require("../style.css");
 const NULL_TEXT = "None";
 
 export interface CellPopulationsPopoverContentProps {
