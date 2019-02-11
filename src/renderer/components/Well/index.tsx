@@ -1,8 +1,9 @@
 import { Popover } from "antd";
 import * as classNames from "classnames";
+import { first } from "lodash";
 import * as React from "react";
 
-import { Well } from "../../state/selection/types";
+import { CellPopulation, Well } from "../../state/selection/types";
 import WellPopover from "../WellPopover/index";
 
 const styles = require("./style.css");
@@ -16,27 +17,6 @@ class WellComponent extends React.Component<WellProps, {}> {
     constructor(props: WellProps) {
         super(props);
         this.getWellText = this.getWellText.bind(this);
-    }
-
-    public getWellText() {
-        const { well } = this.props;
-        let wellText: JSX.Element | null = null;
-        if (well.cellPopulations && well.cellPopulations.length > 0) {
-            // The well is only big enough to fit the text for one Cell Population,
-            // so show the info from the first one added
-            const { wellCellPopulation } = well.cellPopulations[0];
-
-            if (wellCellPopulation) {
-                wellText = (
-                    <React.Fragment>
-                        <div className={styles.wellText}>{wellCellPopulation.cellLineName}</div>
-                        <div className={styles.wellText}>{`C${wellCellPopulation.clone || "_N/A"}`}</div>
-                        <div className={styles.wellText}>{`P${wellCellPopulation.passage || "_N/A"}`}</div>
-                    </React.Fragment>
-                );
-            }
-        }
-        return wellText;
     }
 
     public render() {
@@ -61,6 +41,27 @@ class WellComponent extends React.Component<WellProps, {}> {
                 {wellContent}
             </Popover>
         );
+    }
+
+    private getWellText() {
+        const { well } = this.props;
+
+        const cellPopulation: CellPopulation | undefined = first(well.cellPopulations);
+        if (cellPopulation) {
+
+            const wellCellPopulation = cellPopulation.wellCellPopulation;
+            if (wellCellPopulation) {
+                return (
+                    <React.Fragment>
+                        <div className={styles.wellText}>{wellCellPopulation.cellLineName}</div>
+                        <div className={styles.wellText}>{`C${wellCellPopulation.clone || "_N/A"}`}</div>
+                        <div className={styles.wellText}>{`P${wellCellPopulation.passage || "_N/A"}`}</div>
+                    </React.Fragment>
+                );
+            }
+        }
+
+        return null;
     }
 }
 
