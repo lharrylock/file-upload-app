@@ -1,5 +1,4 @@
 // todo lisah 11/15/18 DT-51 create npm module so this can be shared
-
 declare module "aics-react-labkey" {
     export interface LabkeyOption {
         [id: string]: any;
@@ -7,9 +6,6 @@ declare module "aics-react-labkey" {
 
     export interface LabkeyOptionSelectorCommonProps {
         id?: string;
-        disabled?: boolean;
-        clearable?: boolean;
-        autoload?: boolean;
         label: string;
         optionIdKey: string;
         optionNameKey?: string;
@@ -25,18 +21,18 @@ declare module "aics-react-labkey" {
 
     // Default mode props
     export interface LabkeyOptionSelectorDefaultProps extends LabkeyOptionSelectorCommonProps {
-        options?: LabkeyOption[];
+        options: LabkeyOption[];
     }
 
     // Async mode props
     export interface LabkeyOptionSelectorAsyncProps extends LabkeyOptionSelectorCommonProps {
         async?: boolean;
-        loadOptions?: () => Promise<{ options: LabkeyOption[] } | null>;
+        loadOptions?: (input: string) => Promise<{ options: LabkeyOption[] } | null>;
     }
 
     // Creatable mode props
     export interface LabkeyOptionSelectorCreateProps extends LabkeyOptionSelectorCommonProps {
-        creatable?: boolean;
+        creatable: boolean;
     }
 
     type LabkeyOptionSelectorProps = LabkeyOptionSelectorDefaultProps | LabkeyOptionSelectorAsyncProps

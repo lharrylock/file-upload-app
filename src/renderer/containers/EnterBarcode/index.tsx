@@ -9,7 +9,6 @@ import { SelectBarcodeAction } from "../../state/selection/types";
 import LabkeyQueryService from "../../util/labkey-query-service";
 import { Plate } from "../../util/labkey-query-service";
 
-import { BarcodeOption } from "./BarcodeOption";
 const styles = require("./style.css");
 
 interface EnterBarcodeProps {
@@ -24,7 +23,7 @@ interface EnterBarcodeState {
 }
 
 class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState> {
-    private static getBarcodesAsync(input: string): Promise<{options: BarcodeOption[]} | null> {
+    private static getBarcodesAsync(input: string): Promise<{options: LabkeyOption[]} | null> {
         if (!input) {
             return Promise.resolve(null);
         }
@@ -56,17 +55,15 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
                 onSave={this.saveAndContinue}
             >
                 <LabKeyOptionSelector
-                    required={true}
-                    async={true}
                     label="Plate Barcode"
                     optionIdKey="barcode"
                     optionNameKey="barcode"
                     selected={{barcode, plateId}}
                     onOptionSelection={this.setBarcode}
-                    clearable={true}
-                    placeholder="barcode"
+                    required={true}
+                    async={true}
                     loadOptions={EnterBarcode.getBarcodesAsync}
-                    autoload={false}
+                    placeholder="barcode"
                 />
                 <a href="#" className={styles.createBarcodeLink}>I don't have a barcode</a>
             </FormPage>
