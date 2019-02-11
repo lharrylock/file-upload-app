@@ -40,7 +40,6 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
         };
         this.setBarcode = this.setBarcode.bind(this);
         this.saveAndContinue = this.saveAndContinue.bind(this);
-        EnterBarcode.getBarcodesAsync = debounce(EnterBarcode.getBarcodesAsync, 500);
     }
 
     public render() {
