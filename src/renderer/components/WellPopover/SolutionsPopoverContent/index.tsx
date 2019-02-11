@@ -57,7 +57,7 @@ const SolutionsPopoverContent: React.SFC<SolutionsPopoverContentProps> = (props)
                 return (
                     <React.Fragment key={i}>
                         {i !== 0 && <hr />}
-                        <strong>{`Solution ${i + 1}`}</strong><br />
+                        <div className={styles.label}>{`Solution ${i + 1}`}</div>
                         <KeyValueDisplay keyName="Solution" value={solutionName || NULL_TEXT}/>
                         {concentrationLine}
                         <KeyValueDisplay keyName="Volume" value={`${volume || NULL_TEXT} ${volumeUnitDisplay}`}/>

@@ -62,7 +62,7 @@ const CellPopulationsPopoverContent: React.SFC<CellPopulationsPopoverContentProp
                     return (
                         <React.Fragment key={i}>
                             {i !== 0 && <hr />}
-                            <div className={styles.label}>{`Cell Population ${i + 1}`}</div><br />
+                            <div className={styles.label}>{`Cell Population ${i + 1}`}</div>
                             {populationText}
                             <KeyValueDisplay keyName="Seeding Density" value={entry.seedingDensity || NULL_TEXT}/>
                         </React.Fragment>
