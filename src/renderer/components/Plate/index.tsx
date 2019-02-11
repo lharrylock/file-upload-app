@@ -7,7 +7,7 @@ import WellComponent from "../Well";
 
 const MODIFIED_WELL_COLOR = "rgb(221, 216, 241)";
 const DEFAULT_WELL_COLOR = "rgb(226, 228, 227)";
-const WELL_WIDTH = "80px";
+const WELL_WIDTH = "60px";
 
 interface PlateProps {
     className?: string;
