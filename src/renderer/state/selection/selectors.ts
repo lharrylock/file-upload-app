@@ -40,10 +40,12 @@ export const getWellsWithUnits = createSelector([
             };
         });
         const viabilityResults: ViabilityResult[] = well.viabilityResults.map((v: ViabilityResult) => {
-            const unit: Unit | undefined = units.find((u) => u.unitsId === v.suspensionVolumeUnitId);
+            const suspensionVolumUnit: Unit | undefined = units.find((u) => u.unitsId === v.suspensionVolumeUnitId);
+            const viableCellCountUnit: Unit | undefined = units.find((u) => u.unitsId === v.viableCellCountUnitId);
             return {
                 ...v,
-                viableCellCountUnitDisplay: unit ? unit.name : NO_UNIT,
+                suspensionVolumeUnitDisplay: suspensionVolumUnit ? suspensionVolumUnit.name : NO_UNIT,
+                viableCellCountUnitDisplay: viableCellCountUnit ? viableCellCountUnit.name : NO_UNIT,
             };
         });
         return {

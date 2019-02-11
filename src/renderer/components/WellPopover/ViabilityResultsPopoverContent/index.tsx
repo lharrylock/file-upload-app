@@ -28,15 +28,11 @@ const ViabilityResultsPopoverContent: React.FunctionComponent<ViabilityResultsPo
                 viabilityResults.map((result, i) => {
                     const {
                         suspensionVolume,
-                        suspensionVolumeUnitId,
+                        suspensionVolumeUnitDisplay,
                         viability,
                         viableCellCountPerUnit,
-                        viableCellCountUnitId,
+                        viableCellCountUnitDisplay,
                     } = result;
-
-                    // todo: get human readable value using id
-                    const viableCellCountsUnits = "TODO";
-                    const suspensionVolumeUnits = "TODO";
 
                     return (
                         <React.Fragment key={i}>
@@ -44,15 +40,15 @@ const ViabilityResultsPopoverContent: React.FunctionComponent<ViabilityResultsPo
                             <KeyValueDisplay keyName="Viability" value={viability || NULL_TEXT}/>
                             <KeyValueDisplay
                                 keyName="Viable Cell Count"
-                                value={`${viableCellCountPerUnit || NULL_TEXT}/${viableCellCountsUnits}`}
+                                value={`${viableCellCountPerUnit || NULL_TEXT}/${viableCellCountUnitDisplay}`}
                             />
                             <KeyValueDisplay
                                 keyName="Viable Cell Count"
-                                value={`${viableCellCountPerUnit || NULL_TEXT}/${viableCellCountsUnits}`}
+                                value={`${viableCellCountPerUnit || NULL_TEXT}/${viableCellCountUnitDisplay}`}
                             />
                             <KeyValueDisplay
                                 keyName="Suspension Volume"
-                                value={`${suspensionVolume || NULL_TEXT} ${suspensionVolumeUnits}`}
+                                value={`${suspensionVolume || NULL_TEXT} ${suspensionVolumeUnitDisplay}`}
                             />
                         </React.Fragment>
                     );

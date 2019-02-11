@@ -156,6 +156,7 @@ export interface Solution {
 export interface ViabilityResult {
     suspensionVolume: string;
     suspensionVolumeUnitId: number;
+    suspensionVolumeUnitDisplay?: string;
     viability: number;
     viableCellCountPerUnit: number;
     viableCellCountUnitId: number;
