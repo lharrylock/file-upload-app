@@ -12,7 +12,7 @@ export interface CellPopulationsPopoverContentProps {
     cellPopulations?: CellPopulation[];
 }
 
-const CellPopulationsPopoverContent: React.SFC<CellPopulationsPopoverContentProps> = (props) => {
+const CellPopulationsPopoverContent: React.FunctionComponent<CellPopulationsPopoverContentProps> = (props) => {
     const {
         className,
         cellPopulations,

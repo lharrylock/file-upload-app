@@ -15,7 +15,7 @@ export interface WellPopoverProps {
     well: Well;
 }
 
-const WellPopover: React.SFC<WellPopoverProps> = (props) => {
+const WellPopover: React.FunctionComponent<WellPopoverProps> = (props) => {
     const {
         className,
         well,

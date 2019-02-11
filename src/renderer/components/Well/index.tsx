@@ -47,9 +47,9 @@ class WellComponent extends React.Component<WellProps, {}> {
         const { well } = this.props;
 
         const cellPopulation: CellPopulation | undefined = first(well.cellPopulations);
-        if (cellPopulation) {
 
-            const wellCellPopulation = cellPopulation.wellCellPopulation;
+        if (cellPopulation) {
+            const { wellCellPopulation } = cellPopulation;
             if (wellCellPopulation) {
                 return (
                     <React.Fragment>

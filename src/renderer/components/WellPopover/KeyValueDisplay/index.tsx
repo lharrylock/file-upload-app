@@ -9,7 +9,7 @@ export interface KeyValueDisplayProps {
     value: string | number;
 }
 
-const KeyValueDisplay: React.SFC<KeyValueDisplayProps> = (props) => {
+const KeyValueDisplay: React.FunctionComponent<KeyValueDisplayProps> = (props) => {
     const {
         className,
         keyName,

@@ -12,7 +12,7 @@ export interface SolutionsPopoverContentProps {
     solutions?: Solution[];
 }
 
-const SolutionsPopoverContent: React.SFC<SolutionsPopoverContentProps> = (props) => {
+const SolutionsPopoverContent: React.FunctionComponent<SolutionsPopoverContentProps> = (props) => {
     const {
         className,
         solutions,

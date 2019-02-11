@@ -12,7 +12,7 @@ export interface ViabilityResultsPopoverContentProps {
     viabilityResults?: ViabilityResult[];
 }
 
-const ViabilityResultsPopoverContent: React.SFC<ViabilityResultsPopoverContentProps> = (props) => {
+const ViabilityResultsPopoverContent: React.FunctionComponent<ViabilityResultsPopoverContentProps> = (props) => {
     const {
         className,
         viabilityResults,
