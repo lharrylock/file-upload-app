@@ -1,17 +1,11 @@
 // todo lisah 11/15/18 DT-51 create npm module so this can be shared
 declare module "aics-react-labkey" {
-    export interface LabkeyOptionWithoutDisplayName {
-        [optionIdKey: string]: string;
+    export interface LabkeyOption {
+        [id: string]: any;
     }
-
-    export interface LabkeyOptionWithDisplayName extends LabkeyOptionWithoutDisplayName {
-        [optionNameKey: string]: string;
-    }
-
-    type LabkeyOption = LabkeyOptionWithoutDisplayName | LabkeyOptionWithDisplayName;
 
     export interface LabkeyOptionSelectorCommonProps {
-        id: string;
+        id?: string;
         label: string;
         optionIdKey: string;
         optionNameKey?: string;
@@ -33,7 +27,7 @@ declare module "aics-react-labkey" {
     // Async mode props
     export interface LabkeyOptionSelectorAsyncProps extends LabkeyOptionSelectorCommonProps {
         async: boolean;
-        loadOptions: () => Promise<{ options: LabkeyOption[] } | null>;
+        loadOptions: (input: string) => Promise<{ options: LabkeyOption[] } | null>;
     }
 
     // Creatable mode props
