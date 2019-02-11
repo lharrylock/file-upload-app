@@ -9,6 +9,7 @@ import SolutionsPopoverContent from "./SolutionsPopoverContent/index";
 import ViabilityResultsPopoverContent from "./ViabilityResultsPopoverContent/index";
 
 const styles = require("./style.css");
+export const NULL_TEXT = "None";
 
 export interface WellPopoverProps {
     className?: string;

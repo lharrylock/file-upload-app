@@ -2,10 +2,10 @@ import * as classNames from "classnames";
 import * as React from "react";
 
 import { ViabilityResult } from "../../../state/selection/types";
+import { NULL_TEXT } from "../index";
 import KeyValueDisplay from "../KeyValueDisplay/index";
 
 const styles = require("../style.css");
-const NULL_TEXT = "None";
 
 export interface ViabilityResultsPopoverContentProps {
     className?: string;
