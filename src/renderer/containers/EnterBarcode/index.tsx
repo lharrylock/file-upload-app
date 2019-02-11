@@ -55,13 +55,13 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
                 onSave={this.saveAndContinue}
             >
                 <LabKeyOptionSelector
+                    required={true}
+                    async={true}
                     label="Plate Barcode"
                     optionIdKey="barcode"
                     optionNameKey="barcode"
                     selected={{barcode, plateId}}
                     onOptionSelection={this.setBarcode}
-                    required={true}
-                    async={true}
                     loadOptions={EnterBarcode.getBarcodesAsync}
                     placeholder="barcode"
                 />
