@@ -3,7 +3,9 @@ import * as React from "react";
 import { connect } from "react-redux";
 
 import FormPage from "../../components/FormPage";
-import { selection, State } from "../../state";
+import { State } from "../../state";
+import { selectBarcode } from "../../state/selection/actions";
+import { getSelectedBarcode } from "../../state/selection/selectors";
 import { SelectBarcodeAction } from "../../state/selection/types";
 import LabkeyQueryService from "../../util/labkey-query-service";
 import { Plate } from "../../util/labkey-query-service";
@@ -88,12 +90,12 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
 
 function mapStateToProps(state: State) {
     return {
-        barcode: selection.selectors.getSelectedBarcode(state),
+        barcode: getSelectedBarcode(state),
     };
 }
 
 const dispatchToPropsMap = {
-    selectBarcode: selection.actions.selectBarcode,
+    selectBarcode,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(EnterBarcode);
