@@ -1,5 +1,4 @@
 import { AicsGrid, AicsGridCell } from "aics-react-labkey";
-import { isEmpty } from "lodash";
 import * as React from "react";
 
 import { SelectWellsAction, Well } from "../../state/selection/types";
@@ -21,7 +20,7 @@ interface PlateState {
 }
 
 class Plate extends React.Component<PlateProps, PlateState> {
-    public static getWellDisplayText(cellData: Well): string | JSX.Element {
+    public static getWellDisplayText(cellData: Well): JSX.Element {
         return <WellComponent well={cellData}/>;
     }
 

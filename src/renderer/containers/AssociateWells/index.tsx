@@ -19,7 +19,6 @@ class AssociateWells extends React.Component<Props, {}> {
     constructor(props: Props) {
         super(props);
         this.state = {};
-        this.saveAndContinue = this.saveAndContinue.bind(this);
     }
 
     public render() {
@@ -30,15 +29,10 @@ class AssociateWells extends React.Component<Props, {}> {
                 formTitle="ASSOCIATE WELLS"
                 formPrompt="Associate files and wells by selecting them and clicking Associate"
                 saveButtonDisabled={true}
-                onSave={this.saveAndContinue}
             >
                 {wells ? <Plate wells={wells}/> : "Oops no wells found"}
             </FormPage>
         );
-    }
-
-    private saveAndContinue(): void {
-        const x = 1;
     }
 }
 

@@ -166,7 +166,7 @@ export interface ViabilityResult {
 export interface Well {
     wellId: number;
     cellPopulations: CellPopulation[];
-    modified?: boolean; // todo need?
+    modified?: boolean;
     solutions: Solution[];
     viabilityResults: ViabilityResult[];
 }
