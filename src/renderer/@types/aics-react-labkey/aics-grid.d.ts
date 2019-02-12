@@ -6,7 +6,7 @@ declare module "aics-react-labkey" {
 
     export interface AicsGridProps {
         selectedCells: AicsGridCell[];
-        selectMode: "multi" | "single" | "contiguous" | "non-contiguous" | "disabled";
+        selectMode?: "multi" | "single" | "contiguous" | "non-contiguous" | "disabled";
         cellHeight?: string;
         cellWidth?: string;
         fontSize?: string;
