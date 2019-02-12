@@ -30,7 +30,7 @@ class AssociateWells extends React.Component<Props, {}> {
                 formPrompt="Associate files and wells by selecting them and clicking Associate"
                 saveButtonDisabled={true}
             >
-                {wells ? <Plate wells={wells}/> : "Oops no wells found"}
+                {wells ? <Plate wells={wells}/> : <span>"Oops no wells found"</span>}
             </FormPage>
         );
     }
