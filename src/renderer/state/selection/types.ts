@@ -63,7 +63,10 @@ export interface GetFilesInFolderAction {
 }
 
 export interface SelectBarcodeAction {
-    payload: string;
+    payload: {
+        barcode: string;
+        plateId: number;
+    };
     type: string;
 }
 
