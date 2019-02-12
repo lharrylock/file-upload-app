@@ -34,18 +34,18 @@ class Plate extends React.Component<PlateProps, PlateState> {
         this.state = {
             selectedWells: [],
         };
-        this.handleSelectedWellsChanged = this.handleSelectedWellsChanged.bind(this);
+        this.handleWellClick = this.handleWellClick.bind(this);
     }
 
-    public handleSelectedWellsChanged(selectedCells: AicsGridCell[]): void {
-        this.setState({selectedWells: selectedCells});
-        const wells: number[] = selectedCells
-            .map((cell) => this.props.wells[cell.row][cell.col])
-            .filter((w) => w && w.modified)
-            .map((w) => w.wellId);
+    public handleWellClick(event: React.MouseEvent<HTMLDivElement>, row: number, col: number, data: Well): void {
+        event.preventDefault();
 
-        if (this.props.selectWells && !isEmpty(wells)) {
-            this.props.selectWells(wells);
+        if (data.modified) {
+            this.setState({selectedWells: [{col, row}]});
+
+            if (this.props.selectWells) {
+                this.props.selectWells([data.wellId]);
+            }
         }
     }
 
@@ -58,15 +58,15 @@ class Plate extends React.Component<PlateProps, PlateState> {
         return (
             <div className={className}>
                 <AicsGrid
-                    selectMode="multi"
+                    selectMode="single"
                     cellHeight={WELL_WIDTH}
                     cellWidth={WELL_WIDTH}
                     fontSize="14px"
                     selectedCells={this.state.selectedWells}
-                    onSelectedCellsChanged={this.handleSelectedWellsChanged}
                     displayBackground={Plate.wellColorSelector}
                     displayText={Plate.getWellDisplayText}
                     cells={wells}
+                    onCellClick={this.handleWellClick}
                 />
             </div>
         );
