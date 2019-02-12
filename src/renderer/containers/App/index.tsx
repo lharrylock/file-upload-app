@@ -41,7 +41,7 @@ const APP_PAGE_TO_CONFIG_MAP = new Map<AppPage, AppPageConfig>([
         folderTreeSelectable: false,
         folderTreeVisible: true,
     }],
-    [AppPage.PlateMetadataEntry, {
+    [AppPage.AssociateWells, {
         container:  <div key="plateMetadataEntry" className={styles.mainContent}>TODO</div>,
         folderTreeSelectable: true,
         folderTreeVisible: true,

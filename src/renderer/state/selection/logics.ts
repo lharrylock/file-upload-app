@@ -1,3 +1,4 @@
+import { AxiosError, AxiosResponse } from "axios";
 import { stat, Stats } from "fs";
 import { isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
@@ -9,11 +10,11 @@ import { startLoading, stopLoading } from "../isLoading/actions";
 import { ReduxLogicDependencies, ReduxLogicDoneCb, ReduxLogicNextCb, ReduxLogicTransformDependencies } from "../types";
 import { batchActions } from "../util";
 
-import { selectPage, stageFiles, updateStagedFiles } from "./actions";
-import { GET_FILES_IN_FOLDER, LOAD_FILES, OPEN_FILES, SELECT_BARCODE } from "./constants";
+import { selectPage, setWells, stageFiles, updateStagedFiles } from "./actions";
+import { GET_FILES_IN_FOLDER, getWellsUrl, LOAD_FILES, OPEN_FILES, SELECT_BARCODE } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
 import { getAppPage, getStagedFiles } from "./selectors";
-import { AppPage, DragAndDropFileList, UploadFile } from "./types";
+import { AppPage, DragAndDropFileList, UploadFile, Well } from "./types";
 
 const mergeChildPaths = (filePaths: string[]): string[] => {
     filePaths = uniq(filePaths);
@@ -135,11 +136,28 @@ const getFilesInFolderLogic = createLogic({
 });
 
 const selectBarcodeLogic = createLogic({
-    transform: ({ action, getState }: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
-        next(batchActions([
-            selectPage(AppPage.PlateMetadataEntry),
-            action,
-        ]));
+    transform: ({ action, getState, httpClient, baseMmsUrl }: ReduxLogicTransformDependencies,
+                next: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
+        httpClient.get(getWellsUrl({baseMmsUrl, plateId: action.payload.plateId}))
+            .then((response: AxiosResponse) => {
+                const wells: Well[][] = response.data.data.map(
+                    (row: Well[]) => row.map((well: Well) => ({
+                        ...well,
+                        modified: !isEmpty(well.cellPopulations) || !isEmpty(well.solutions)
+                        || !isEmpty(well.viabilityResults),
+                    }))
+                );
+                next(batchActions([
+                    selectPage(AppPage.AssociateWells),
+                    setWells(wells),
+                    action,
+                ]));
+            })
+            .catch((response: AxiosError) => {
+                // tslint:disable-next-line
+                console.log(response);
+                next(action);
+            });
     },
     type: SELECT_BARCODE,
 });
