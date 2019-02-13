@@ -139,7 +139,7 @@ const selectBarcodeLogic = createLogic({
     transform: ({ action, getState, httpClient, baseMmsUrl }: ReduxLogicTransformDependencies,
                 next: ReduxLogicNextCb) => {
         const plateId = action.payload.plateId;
-        httpClient.get(`${baseMmsUrl}/1.0/plate/${plateId}/well`)
+        httpClient.get(`${baseMmsUrl}/1.0/plate/${plateId}/well/`)
             .then((response: AxiosResponse) => {
                 const wells: Well[][] = response.data.data;
                 next(batchActions([
