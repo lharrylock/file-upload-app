@@ -18,9 +18,9 @@ export const getWells = (state: State) => state.selection.wells;
 // COMPOSED SELECTORS
 const NO_UNIT = "";
 
-export const getWellsWithModified = createSelector([getWells], (wells?: Well[][]) => {
+export const getWellsWithModified = createSelector([getWells], (wells?: Well[][]): Well[][] => {
     if (!wells || wells.length === 0) {
-        return wells;
+        return wells || [];
     }
 
     return wells.map(
@@ -34,8 +34,8 @@ export const getWellsWithModified = createSelector([getWells], (wells?: Well[][]
 export const getWellsWithUnitsAndModified = createSelector([
     getWellsWithModified,
     getUnits,
-], (wells?: Well[][], units?: Unit[]): Well[][] | undefined => {
-    if (!wells || !units) {
+], (wells: Well[][], units?: Unit[]): Well[][] => {
+    if (!units || !units.length) {
         return wells;
     }
 

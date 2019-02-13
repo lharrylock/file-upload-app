@@ -9,6 +9,7 @@ export const mockState: State = {
         files: [],
         page: AppPage.DragAndDrop,
         stagedFiles: [],
+        wells: [],
     },
 };
 
