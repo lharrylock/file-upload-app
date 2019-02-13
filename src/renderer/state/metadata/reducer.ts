@@ -9,7 +9,9 @@ import {
     ReceiveMetadataAction,
 } from "./types";
 
-export const initialState = {};
+export const initialState = {
+    units: [],
+};
 
 const actionToConfigMap: TypeToDescriptionMap = {
     [RECEIVE_METADATA]: {

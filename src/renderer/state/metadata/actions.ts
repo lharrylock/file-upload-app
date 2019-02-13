@@ -8,7 +8,7 @@ import {
     RequestMetadataAction,
 } from "./types";
 
-export function receiveMetadata(payload: MetadataStateBranch = {}): ReceiveMetadataAction {
+export function receiveMetadata(payload: MetadataStateBranch = {units: []}): ReceiveMetadataAction {
     return {
         payload,
         type: RECEIVE_METADATA,

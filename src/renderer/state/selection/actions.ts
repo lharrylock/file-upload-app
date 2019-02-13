@@ -8,6 +8,7 @@ import {
     SELECT_FILE,
     SELECT_METADATA,
     SELECT_PAGE,
+    SET_WELLS,
     UPDATE_STAGED_FILES,
 } from "./constants";
 import {
@@ -22,8 +23,10 @@ import {
     SelectFileAction,
     SelectMetadataAction,
     SelectPageAction,
+    SetWellsAction,
     UpdateStagedFilesAction,
     UploadFile,
+    Well,
 } from "./types";
 
 export function selectFile(fileId: string | string[]): SelectFileAction {
@@ -97,5 +100,12 @@ export function selectBarcode(barcode: string, plateId: number): SelectBarcodeAc
             plateId,
         },
         type: SELECT_BARCODE,
+    };
+}
+
+export function setWells(wells: Well[][]): SetWellsAction {
+    return {
+        payload: wells,
+        type: SET_WELLS,
     };
 }
