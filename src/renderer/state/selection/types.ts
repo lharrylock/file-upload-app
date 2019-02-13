@@ -18,7 +18,7 @@ export interface SelectionStateBranch {
     [key: string]: any;
     barcode?: string;
     plateId?: number;
-    wells?: Well[][];
+    wells: Well[][];
     page: AppPage;
     stagedFiles: UploadFile[];
 }

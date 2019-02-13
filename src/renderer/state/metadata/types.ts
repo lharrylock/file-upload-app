@@ -1,6 +1,6 @@
 export interface MetadataStateBranch {
     [key: string]: any;
-    units?: Unit[];
+    units: Unit[];
 }
 
 export interface ReceiveMetadataAction {

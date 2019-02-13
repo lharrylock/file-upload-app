@@ -32,6 +32,7 @@ export const initialState = {
     files: [],
     page: AppPage.DragAndDrop,
     stagedFiles: [],
+    wells: [],
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {

@@ -6,11 +6,14 @@ export const mockState: State = {
     feedback: {
         isLoading: false,
     },
-    metadata: {},
+    metadata: {
+        units: [],
+    },
     selection: {
         files: [],
         page: AppPage.DragAndDrop,
         stagedFiles: [],
+        wells: [],
     },
 };
 
