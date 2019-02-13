@@ -42,19 +42,19 @@ export interface PopulationEdit {
     donorPlasmidBatchName: string;
 }
 export interface CellPopulationInfo {
-    cellLineId: number;
-    cellLineName: string;
-    cellPopulationId: number;
-    clone: string;
-    edits: PopulationEdit[];
-    passage: number;
-    plateBarcode: string;
-    plateId: number;
-    seedingDensity: string;
-    stageId: number;
-    stageName: string;
-    wellId: number;
-    wellLabel: string;
+    cellLineId?: number;
+    cellLineName?: string;
+    cellPopulationId?: number;
+    clone?: string;
+    edits?: PopulationEdit[];
+    passage?: number;
+    plateBarcode?: string;
+    plateId?: number;
+    seedingDensity?: string;
+    stageId?: number;
+    stageName?: string;
+    wellId?: number;
+    wellLabel?: string;
 }
 
 export interface SolutionLot {
@@ -69,8 +69,10 @@ export interface SolutionLot {
 export interface CellPopulation {
     seedingDensity: string;
     sourceCellPopulation?: CellPopulationInfo;
-    sourcePlateWell?: CellPopulationInfo; // CellPopulation;
-    sourceVial?: any; // todo
+    sourcePlateWell?: CellPopulationInfo;
+    sourceVial?: {
+        barcode: string;
+    };
     wellCellPopulation?: CellPopulationInfo;
 }
 

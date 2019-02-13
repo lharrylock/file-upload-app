@@ -137,16 +137,10 @@ const getFilesInFolderLogic = createLogic({
 
 const selectBarcodeLogic = createLogic({
     transform: ({ action, getState, httpClient, baseMmsUrl }: ReduxLogicTransformDependencies,
-                next: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
+                next: ReduxLogicNextCb) => {
         httpClient.get(getWellsUrl({baseMmsUrl, plateId: action.payload.plateId}))
             .then((response: AxiosResponse) => {
-                const wells: Well[][] = response.data.data.map(
-                    (row: Well[]) => row.map((well: Well) => ({
-                        ...well,
-                        modified: !isEmpty(well.cellPopulations) || !isEmpty(well.solutions)
-                        || !isEmpty(well.viabilityResults),
-                    }))
-                );
+                const wells: Well[][] = response.data.data;
                 next(batchActions([
                     selectPage(AppPage.AssociateWells),
                     setWells(wells),

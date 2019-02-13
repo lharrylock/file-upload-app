@@ -1,6 +1,7 @@
+import { isEmpty } from "lodash";
 import { createSelector } from "reselect";
-import { getUnits } from "../metadata/selectors";
 
+import { getUnits } from "../metadata/selectors";
 import { Unit } from "../metadata/types";
 import { State } from "../types";
 
@@ -16,8 +17,22 @@ export const getWells = (state: State) => state.selection.wells;
 
 // COMPOSED SELECTORS
 const NO_UNIT = "";
-export const getWellsWithUnits = createSelector([
-    getWells,
+
+export const getWellsWithModified = createSelector([getWells], (wells?: Well[][]) => {
+    if (!wells || wells.length === 0) {
+        return wells;
+    }
+
+    return wells.map(
+        (row: Well[]) => row.map((well: Well) => ({
+            ...well,
+            modified: !isEmpty(well.cellPopulations) || !isEmpty(well.solutions) || !isEmpty(well.viabilityResults),
+        }))
+    );
+});
+
+export const getWellsWithUnitsAndModified = createSelector([
+    getWellsWithModified,
     getUnits,
 ], (wells?: Well[][], units?: Unit[]): Well[][] | undefined => {
     if (!wells || !units) {
@@ -35,8 +50,8 @@ export const getWellsWithUnits = createSelector([
             };
             return {
                 ...s,
+                solutionLot,
                 volumeUnitDisplay:  volumeUnit ? volumeUnit.name : NO_UNIT,
-                ...solutionLot,
             };
         });
         const viabilityResults: ViabilityResult[] = well.viabilityResults.map((v: ViabilityResult) => {
@@ -48,6 +63,7 @@ export const getWellsWithUnits = createSelector([
                 viableCellCountUnitDisplay: viableCellCountUnit ? viableCellCountUnit.name : NO_UNIT,
             };
         });
+
         return {
             ...well,
             solutions,
