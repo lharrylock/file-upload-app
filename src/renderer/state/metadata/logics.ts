@@ -30,6 +30,7 @@ const requestMetadata = createLogic({
             })
             .catch((reason: AxiosError) => {
                 console.log(reason); // tslint:disable-line:no-console
+                // todo: show alert
             })
             .then(done);
     },

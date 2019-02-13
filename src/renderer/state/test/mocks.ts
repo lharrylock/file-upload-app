@@ -4,7 +4,9 @@ import { State } from "../types";
 
 export const mockState: State = {
     isLoading: false,
-    metadata: {},
+    metadata: {
+        units: [],
+    },
     selection: {
         files: [],
         page: AppPage.DragAndDrop,
