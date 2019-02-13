@@ -2,8 +2,8 @@ import { expect } from "chai";
 import { isEmpty } from "lodash";
 import { dirname, resolve } from "path";
 
+import { feedback } from "../../";
 import createReduxStore from "../../configure-store";
-import { isLoading } from "../../index";
 import { mockState } from "../../test/mocks";
 
 import selections from "../";
@@ -111,14 +111,14 @@ describe("Selection logics", () => {
             const store = createReduxStore(mockState);
 
             // before
-            expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+            expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
 
             // apply
             store.dispatch(selections.actions.loadFilesFromDragAndDrop(fileList));
 
             store.subscribe(() => {
                 // after
-                expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+                expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
             });
         });
 
@@ -126,7 +126,7 @@ describe("Selection logics", () => {
             const store = createReduxStore(mockState);
 
             // before
-            expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+            expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
 
             // apply
             fileList = {
@@ -144,7 +144,7 @@ describe("Selection logics", () => {
 
             store.subscribe(() => {
                 // after
-                expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+                expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
             });
         });
     });
@@ -238,14 +238,14 @@ describe("Selection logics", () => {
             const store = createReduxStore(mockState);
 
             // before
-            expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+            expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
 
             // apply
             store.dispatch(selections.actions.openFilesFromDialog(filePaths));
 
             store.subscribe(() => {
                 // after
-                expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+                expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
             });
         });
 
@@ -253,7 +253,7 @@ describe("Selection logics", () => {
             const store = createReduxStore(mockState);
 
             // before
-            expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+            expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
 
             // apply
             filePaths = [resolve(__dirname, TEST_FILES_DIR, "does_not_exist.txt")];
@@ -261,7 +261,7 @@ describe("Selection logics", () => {
 
             store.subscribe(() => {
                 // after
-                expect(isLoading.selectors.getValue(store.getState())).to.equal(false);
+                expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
             });
         });
     });

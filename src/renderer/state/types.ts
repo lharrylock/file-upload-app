@@ -34,7 +34,9 @@ export type ReduxLogicNextCb = (action: AnyAction) => void;
 export type ReduxLogicDoneCb = () => void;
 
 export interface State {
-    isLoading: boolean;
+    feedback: {
+        isLoading: boolean
+    };
     metadata: MetadataStateBranch;
     selection: SelectionStateBranch;
 }
