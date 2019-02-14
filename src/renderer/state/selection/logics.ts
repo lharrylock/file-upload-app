@@ -5,7 +5,7 @@ import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
 
-import { startLoading, stopLoading } from "../isLoading/actions";
+import { startLoading, stopLoading } from "../feedback/actions";
 
 import { ReduxLogicDependencies, ReduxLogicDoneCb, ReduxLogicNextCb, ReduxLogicTransformDependencies } from "../types";
 import { batchActions } from "../util";

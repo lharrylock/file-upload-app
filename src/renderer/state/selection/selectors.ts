@@ -16,7 +16,7 @@ export const getStagedFiles = (state: State) => state.selection.stagedFiles;
 export const getWells = (state: State) => state.selection.wells;
 
 // COMPOSED SELECTORS
-const NO_UNIT = "(Unit Not Found)";
+export const NO_UNIT = "(Unit Not Found)";
 
 export const getWellsWithModified = createSelector([getWells], (wells?: Well[][]): Well[][] => {
     if (!wells || wells.length === 0) {

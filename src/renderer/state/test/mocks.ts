@@ -3,7 +3,9 @@ import { AppPage } from "../selection/types";
 import { State } from "../types";
 
 export const mockState: State = {
-    isLoading: false,
+    feedback: {
+        isLoading: false,
+    },
     metadata: {
         units: [],
     },
