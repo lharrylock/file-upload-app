@@ -1,9 +1,24 @@
-import { START_LOADING, STOP_LOADING } from "./constants";
+import { CLEAR_ALERT, SET_ALERT, START_LOADING, STOP_LOADING } from "./constants";
 
 import {
+    AppAlert,
+    ClearAlertAction, SetAlertAction,
     StartLoadingAction,
     StopLoadingAction,
 } from "./types";
+
+export function setAlert(payload: AppAlert): SetAlertAction {
+    return {
+        payload,
+        type: SET_ALERT,
+    };
+}
+
+export function clearAlert(): ClearAlertAction {
+    return {
+        type: CLEAR_ALERT,
+    };
+}
 
 export function startLoading(): StartLoadingAction {
     return {

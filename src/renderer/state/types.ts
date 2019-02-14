@@ -2,6 +2,7 @@ import { AxiosPromise, AxiosRequestConfig } from "axios";
 import { AnyAction } from "redux";
 import { CreateLogic } from "redux-logic/definitions/logic";
 
+import { FeedbackStateBranch } from "./feedback/types";
 import { MetadataStateBranch } from "./metadata/types";
 import { SelectionStateBranch } from "./selection/types";
 import Process = CreateLogic.Config.Process;
@@ -34,9 +35,7 @@ export type ReduxLogicNextCb = (action: AnyAction) => void;
 export type ReduxLogicDoneCb = () => void;
 
 export interface State {
-    feedback: {
-        isLoading: boolean
-    };
+    feedback: FeedbackStateBranch;
     metadata: MetadataStateBranch;
     selection: SelectionStateBranch;
 }
