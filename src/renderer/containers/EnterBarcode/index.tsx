@@ -1,9 +1,14 @@
 import { LabkeyOption, LabKeyOptionSelector } from "aics-react-labkey";
+import { AxiosError } from "axios";
+import { debounce } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
+import { ActionCreator } from "redux";
 
 import FormPage from "../../components/FormPage";
 import { State } from "../../state";
+import { setAlert } from "../../state/feedback/actions";
+import { AlertType, SetAlertAction } from "../../state/feedback/types";
 import { selectBarcode } from "../../state/selection/actions";
 import { getSelectedBarcode } from "../../state/selection/selectors";
 import { SelectBarcodeAction } from "../../state/selection/types";
@@ -15,7 +20,8 @@ const styles = require("./style.css");
 interface EnterBarcodeProps {
     className?: string;
     barcode?: string;
-    selectBarcode: (barcode: string, plateId: number) => SelectBarcodeAction;
+    selectBarcode: ActionCreator<SelectBarcodeAction>;
+    setAlert: ActionCreator<SetAlertAction>;
 }
 
 interface EnterBarcodeState {
@@ -23,17 +29,23 @@ interface EnterBarcodeState {
     plateId?: number;
 }
 
-class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState> {
-    private static getBarcodesAsync(input: string): Promise<{options: LabkeyOption[]} | null> {
-        if (!input) {
-            return Promise.resolve(null);
-        }
-
-        return LabkeyQueryService.Get.platesByBarcode(input).then((plates: Plate[]) => ({
-            options: plates.map((plate: Plate) => ({barcode: plate.BarCode, plateId: plate.PlateId})),
-        }));
+const createGetBarcodesAsyncFunction = (onErr: (reason: AxiosError) => void) =>
+    (input: string): Promise<{options: LabkeyOption[]} | null> => {
+    if (!input) {
+        return Promise.resolve(null);
     }
 
+    return LabkeyQueryService.Get.platesByBarcode(input)
+        .then((plates: Plate[]) => ({
+            options: plates.map((plate: Plate) => ({barcode: plate.BarCode, plateId: plate.PlateId})),
+        }))
+        .catch((err) => {
+            onErr(err);
+            return err;
+        });
+};
+
+class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState> {
     constructor(props: EnterBarcodeProps) {
         super(props);
         this.state = {
@@ -41,6 +53,8 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
         };
         this.setBarcode = this.setBarcode.bind(this);
         this.saveAndContinue = this.saveAndContinue.bind(this);
+        this.setAlert = this.setAlert.bind(this);
+        this.setAlert = debounce(this.setAlert, 2000);
     }
 
     public render() {
@@ -62,12 +76,20 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
                     optionNameKey="barcode"
                     selected={{barcode, plateId}}
                     onOptionSelection={this.setBarcode}
-                    loadOptions={EnterBarcode.getBarcodesAsync}
+                    loadOptions={createGetBarcodesAsyncFunction(this.setAlert)}
                     placeholder="barcode"
                 />
                 <a href="#" className={styles.createBarcodeLink}>I don't have a barcode</a>
             </FormPage>
         );
+    }
+
+    private setAlert(error: AxiosError): void {
+        this.props.setAlert({
+            message: error.message,
+            statusCode: error.response ? error.response.status : undefined,
+            type: AlertType.ERROR,
+        });
     }
 
     private setBarcode(option: LabkeyOption | null): void {
@@ -96,6 +118,7 @@ function mapStateToProps(state: State) {
 
 const dispatchToPropsMap = {
     selectBarcode,
+    setAlert,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(EnterBarcode);

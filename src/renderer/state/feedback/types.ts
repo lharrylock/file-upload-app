@@ -14,6 +14,7 @@ export interface StopLoadingAction {
 }
 
 export interface AppAlert {
+    statusCode?: number;
     message: string;
     onNo?: AnyAction;
     onYes?: AnyAction;

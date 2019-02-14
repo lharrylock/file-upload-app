@@ -23,6 +23,7 @@ const reducers = {
 };
 
 const logics = [
+    ...feedback.logics,
     ...metadata.logics,
     ...selection.logics,
 ];
