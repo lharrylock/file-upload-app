@@ -5,14 +5,23 @@ import {
 import { makeReducer } from "../util";
 
 import {
-    CLEAR_ALERT, SET_ALERT,
+    ADD_REQUEST_IN_PROGRESS,
+    CLEAR_ALERT, REMOVE_REQUEST_IN_PROGRESS, SET_ALERT,
     START_LOADING,
     STOP_LOADING,
 } from "./constants";
-import { ClearAlertAction, FeedbackStateBranch, SetAlertAction, StartLoadingAction, StopLoadingAction } from "./types";
+import {
+    AddRequestInProgressAction,
+    ClearAlertAction,
+    FeedbackStateBranch, RemoveRequestInProgressAction,
+    SetAlertAction,
+    StartLoadingAction,
+    StopLoadingAction
+} from "./types";
 
 export const initialState: FeedbackStateBranch = {
     isLoading: false,
+    requestsInProgress: new Set(),
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {
@@ -41,6 +50,31 @@ const actionToConfigMap: TypeToDescriptionMap = {
     [STOP_LOADING]: {
         accepts: (action: AnyAction): action is StopLoadingAction => action.type === STOP_LOADING,
         perform: () => ({ isLoading: false }),
+    },
+    [ADD_REQUEST_IN_PROGRESS]: {
+        accepts: (action: AnyAction): action is AddRequestInProgressAction => action.type === ADD_REQUEST_IN_PROGRESS,
+        perform: (state: FeedbackStateBranch, action: AddRequestInProgressAction) => {
+            const requestsInProgress = new Set(state.requestsInProgress);
+            requestsInProgress.add(action.payload);
+
+            return {
+                ...state,
+                requestsInProgress,
+            };
+        },
+    },
+    [REMOVE_REQUEST_IN_PROGRESS]: {
+        accepts: (action: AnyAction): action is RemoveRequestInProgressAction =>
+            action.type === REMOVE_REQUEST_IN_PROGRESS,
+        perform: (state: FeedbackStateBranch, action: RemoveRequestInProgressAction) => {
+            const requestsInProgress = new Set(state.requestsInProgress);
+            requestsInProgress.delete(action.payload);
+
+            return {
+                ...state,
+                requestsInProgress,
+            };
+        },
     },
 };
 

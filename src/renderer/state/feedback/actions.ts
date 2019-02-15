@@ -1,8 +1,16 @@
-import { CLEAR_ALERT, SET_ALERT, START_LOADING, STOP_LOADING } from "./constants";
+import {
+    ADD_REQUEST_IN_PROGRESS,
+    CLEAR_ALERT,
+    REMOVE_REQUEST_IN_PROGRESS,
+    SET_ALERT,
+    START_LOADING,
+    STOP_LOADING
+} from "./constants";
 
 import {
+    AddRequestInProgressAction,
     AppAlert,
-    ClearAlertAction, SetAlertAction,
+    ClearAlertAction, HttpRequestType, RemoveRequestInProgressAction, SetAlertAction,
     StartLoadingAction,
     StopLoadingAction,
 } from "./types";
@@ -28,5 +36,19 @@ export function startLoading(): StartLoadingAction {
 export function stopLoading(): StopLoadingAction {
     return {
         type: STOP_LOADING,
+    };
+}
+
+export function addRequestToInProgress(payload: HttpRequestType): AddRequestInProgressAction {
+    return {
+        payload,
+        type: ADD_REQUEST_IN_PROGRESS,
+    };
+}
+
+export function removeRequestFromInProgress(payload: HttpRequestType): RemoveRequestInProgressAction {
+    return {
+        payload,
+        type: REMOVE_REQUEST_IN_PROGRESS,
     };
 }

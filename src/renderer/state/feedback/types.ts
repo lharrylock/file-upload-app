@@ -3,6 +3,7 @@ import { AnyAction } from "redux";
 export interface FeedbackStateBranch {
     alert?: AppAlert;
     isLoading: boolean;
+    requestsInProgress: Set<HttpRequestType>;
 }
 
 export interface StartLoadingAction {
@@ -34,4 +35,18 @@ export interface SetAlertAction {
 
 export interface ClearAlertAction {
     type: string;
+}
+
+export enum HttpRequestType {
+    GET_WELLS = 1,
+}
+
+export interface AddRequestInProgressAction {
+    type: string;
+    payload: HttpRequestType;
+}
+
+export interface RemoveRequestInProgressAction {
+    type: string;
+    payload: HttpRequestType;
 }
