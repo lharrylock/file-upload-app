@@ -28,7 +28,7 @@ const logics = [
     ...selection.logics,
 ];
 
-const reduxLogicDependencies = {
+export const reduxLogicDependencies = {
     baseMmsUrl: MMS_BASE_URL,
     httpClient: axios,
 };

@@ -1,17 +1,25 @@
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { stat, Stats } from "fs";
 import { isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
 
-import { startLoading, stopLoading } from "../feedback/actions";
+import { setAlert, startLoading, stopLoading } from "../feedback/actions";
+import { AlertType } from "../feedback/types";
 
-import { ReduxLogicDependencies, ReduxLogicDoneCb, ReduxLogicNextCb, ReduxLogicTransformDependencies } from "../types";
+import {
+    AicsErrorResponse,
+    AicsResponse, AicsSuccessResponse,
+    ReduxLogicDependencies,
+    ReduxLogicDoneCb,
+    ReduxLogicNextCb,
+    ReduxLogicTransformDependencies
+} from "../types";
 import { batchActions } from "../util";
 
 import { selectPage, setWells, stageFiles, updateStagedFiles } from "./actions";
-import { GET_FILES_IN_FOLDER, LOAD_FILES, OPEN_FILES, SELECT_BARCODE } from "./constants";
+import { API_WAIT_TIME_SECONDS, GET_FILES_IN_FOLDER, LOAD_FILES, OPEN_FILES, SELECT_BARCODE } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
 import { getAppPage, getStagedFiles } from "./selectors";
 import { AppPage, DragAndDropFileList, UploadFile, Well } from "./types";
@@ -135,24 +143,44 @@ const getFilesInFolderLogic = createLogic({
     type: GET_FILES_IN_FOLDER,
 });
 
+async function getWells({ action, getState, httpClient, baseMmsUrl }: ReduxLogicTransformDependencies,
+                        plateId: number): Promise<AxiosResponse<AicsSuccessResponse<Well[][]>>> {
+
+    return httpClient.get(`${baseMmsUrl}/1.0/plate/${plateId}/well/`);
+}
+
 const selectBarcodeLogic = createLogic({
-    transform: ({ action, getState, httpClient, baseMmsUrl }: ReduxLogicTransformDependencies,
-                next: ReduxLogicNextCb) => {
+    transform: async (deps: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
+        const { action } = deps;
         const plateId = action.payload.plateId;
-        httpClient.get(`${baseMmsUrl}/1.0/plate/${plateId}/well/`)
-            .then((response: AxiosResponse) => {
-                const wells: Well[][] = response.data.data;
+        const startTime = (new Date()).getTime() / 1000;
+        let currentTime = startTime;
+        let successfulResponse = false;
+        while (currentTime - startTime < API_WAIT_TIME_SECONDS && !successfulResponse) {
+            try {
+                const response = await getWells(deps, plateId);
+                const wells: Well[][] = response.data.data[0];
+                successfulResponse = true;
                 next(batchActions([
                     selectPage(AppPage.AssociateWells),
                     setWells(wells),
                     action,
                 ]));
-            })
-            .catch((response: AxiosError) => {
+            } catch (e) {
                 // tslint:disable-next-line
-                console.log(response);
-                next(action);
-            });
+                console.log("Retrying GET wells request", e);
+            }
+
+            currentTime = (new Date()).getTime() / 1000;
+        }
+
+        next(batchActions([
+            action,
+            setAlert({
+                message: `Could not retrieve wells for barcode ${action.payload.barcode}`,
+                type: AlertType.ERROR,
+            }),
+        ]));
     },
     type: SELECT_BARCODE,
 });

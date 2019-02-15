@@ -19,12 +19,14 @@ export interface BatchedAction {
     payload: AnyAction[];
 }
 
+export interface HttpClient {
+    get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>;
+    post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
+}
+
 export interface ReduxLogicExtraDependencies {
     baseMmsUrl: string;
-    httpClient: {
-        get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>;
-        post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
-    };
+    httpClient: HttpClient;
     ctx?: any;
 }
 
@@ -42,4 +44,23 @@ export interface State {
 
 export interface TypeToDescriptionMap {
     [propName: string ]: ActionDescription;
+}
+
+export interface AicsResponse {
+    responseType: "SUCCESS" | "SERVER_ERROR" | "CLIENT_ERROR";
+}
+
+export interface AicsSuccessResponse<T> extends AicsResponse {
+    data: T[];
+    totalCount: number;
+    hasMore?: boolean;
+    offset: number;
+}
+
+export interface AicsErrorResponse extends AicsResponse {
+    error?: string;
+    hostName?: string;
+    time?: string;
+    message?: string;
+    cause?: string;
 }

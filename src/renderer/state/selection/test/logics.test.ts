@@ -1,14 +1,19 @@
+import axios, { AxiosResponse } from "axios";
 import { expect } from "chai";
 import { isEmpty } from "lodash";
 import { dirname, resolve } from "path";
+import sinon, { SinonStub } from "sinon";
 
 import { feedback } from "../../";
-import createReduxStore from "../../configure-store";
+import createReduxStore, { reduxLogicDependencies } from "../../configure-store";
+import { createMockReduxStore } from "../../test/configure-mock-store";
 import { mockState } from "../../test/mocks";
 
 import selections from "../";
+import { AicsResponse, AicsSuccessResponse } from "../../types";
 import { UploadFileImpl } from "../models/upload-file";
-import { AppPage, DragAndDropFileList, UploadFile } from "../types";
+import { getAppPage, getSelectedBarcode, getSelectedPlateId, getWells } from "../selectors";
+import { AppPage, DragAndDropFileList, UploadFile, Well } from "../types";
 
 describe("Selection logics", () => {
     const FILE_NAME = "cells.txt";
@@ -308,6 +313,86 @@ describe("Selection logics", () => {
                 });
                 expect(stagedFolderContainsTxtFile).to.equal(true);
             });
+        });
+    });
+
+    describe("selectBarcodeLogic", () => {
+        const barcode = "1234";
+        const plateId = 1;
+        let mockEmptyWell: Well;
+        let mockOkResponse: AxiosResponse<AicsSuccessResponse<Well[][]>>;
+        let mockBadGatewayResponse: AxiosResponse;
+        const createMockReduxLogicDeps = (getStub: SinonStub) => ({
+            ...reduxLogicDependencies,
+            httpClient: {
+                ...axios,
+                get: getStub,
+                post: sinon.stub(),
+            },
+        });
+
+        beforeEach(() => {
+            mockEmptyWell = {
+                cellPopulations: [],
+                solutions: [],
+                viabilityResults: [],
+                wellId: 1,
+            };
+            mockOkResponse = {
+                config: {},
+                data: {
+                    data: [[[mockEmptyWell]]],
+                    offset: 0,
+                    responseType: "SUCCESS",
+                    totalCount: 1,
+                },
+                headers: {},
+                status: 200,
+                statusText: "",
+            };
+            mockBadGatewayResponse = {
+                ...mockOkResponse,
+                data: {
+                    data: [],
+                },
+                status: 502,
+            };
+        });
+
+        it("Sets wells, page, barcode, and plateId if GET wells is OK", () => {
+            const getStub = sinon.stub().resolves(mockOkResponse);
+            const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
+
+            store.dispatch(selections.actions.selectBarcode(barcode, plateId));
+            store.subscribe(() => {
+                const state = store.getState();
+                expect(getWells(state)).to.not.be.empty;
+                expect(getAppPage(state)).to.equal(AppPage.AssociateWells);
+                expect(getSelectedBarcode(state)).to.equal(barcode);
+                expect(getSelectedPlateId(state)).to.equal(plateId);
+            });
+        });
+
+        it("Retries GET wells if first response is not OK", () => {
+            const getStub = sinon.stub();
+            getStub.onCall(0).returns(mockBadGatewayResponse);
+            getStub.onCall(1).returns(mockOkResponse);
+            const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
+
+            store.dispatch(selections.actions.selectBarcode(barcode, plateId));
+            store.subscribe(() => {
+                expect(getStub.callCount).to.equal(2);
+                const state = store.getState();
+                expect(getWells(state)).to.not.be.empty;
+                expect(getAppPage(state)).to.equal(AppPage.AssociateWells);
+                expect(getSelectedBarcode(state)).to.equal(barcode);
+                expect(getSelectedPlateId(state)).to.equal(plateId);
+            });
+
+        });
+
+        it("Sets alert if response is not OK after 50 calls", () => {
+
         });
     });
 });
