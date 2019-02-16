@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Icon, Spin } from "antd";
 import * as classNames from "classnames";
 import * as React from "react";
 
@@ -12,6 +12,7 @@ interface FormPageProps {
     formPrompt: string;
     saveButtonName?: string;
     saveButtonDisabled?: boolean;
+    saveInProgress?: boolean;
     onSave?: () => any;
     backButtonName?: string;
     onBack?: () => any;
@@ -23,7 +24,14 @@ class FormPage extends React.Component<FormPageProps, {}> {
         backButtonName: "Go Back",
         saveButtonDisabled: false,
         saveButtonName: "Save and Continue",
+        saveInProgress: false,
     };
+
+    private static getSpinner(saveInProgress: boolean = false) {
+        const indicator = <Icon type="loading" style={{fontSize: 24, paddingLeft: 12, paddingRight: 12}} spin={true} />;
+        const style = {fontSize: 24, paddingLeft: 12, paddingRight: 12};
+        return saveInProgress && <Spin indicator={indicator} style={style} />;
+    }
 
     constructor(props: FormPageProps) {
         super(props);
@@ -42,6 +50,7 @@ class FormPage extends React.Component<FormPageProps, {}> {
             formTitle,
             onSave,
             onBack,
+            saveInProgress,
             saveButtonDisabled,
             saveButtonName,
         } = this.props;
@@ -72,7 +81,8 @@ class FormPage extends React.Component<FormPageProps, {}> {
                         onClick={this.onSave}
                         disabled={saveButtonDisabled}
                     >
-                        {saveButtonName}
+                        {saveInProgress ? "Saving" : saveButtonName}
+                        {FormPage.getSpinner(saveInProgress)}
                     </Button> : <div/>}
                 </div>
             </div>

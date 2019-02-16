@@ -8,18 +8,20 @@ import { ActionCreator } from "redux";
 import FormPage from "../../components/FormPage";
 import { State } from "../../state";
 import { setAlert } from "../../state/feedback/actions";
-import { AlertType, SetAlertAction } from "../../state/feedback/types";
+import { getRequestsInProgressContains } from "../../state/feedback/selectors";
+import { AlertType, HttpRequestType, SetAlertAction } from "../../state/feedback/types";
 import { selectBarcode } from "../../state/selection/actions";
 import { getSelectedBarcode } from "../../state/selection/selectors";
 import { SelectBarcodeAction } from "../../state/selection/types";
-import LabkeyQueryService from "../../util/labkey-query-service";
-import { Plate } from "../../util/labkey-query-service";
+import LabkeyQueryService, { Plate } from "../../util/labkey-query-service";
 
 const styles = require("./style.css");
 
 interface EnterBarcodeProps {
+    // cancelSave: ActionCreator<Cance>
     className?: string;
     barcode?: string;
+    saveInProgress: boolean;
     selectBarcode: ActionCreator<SelectBarcodeAction>;
     setAlert: ActionCreator<SetAlertAction>;
 }
@@ -59,14 +61,15 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
 
     public render() {
         const {barcode, plateId} = this.state;
-        const {className} = this.props;
+        const {className, saveInProgress} = this.props;
         return (
             <FormPage
                 className={className}
                 formTitle="PLATE BARCODE"
                 formPrompt="Enter a barcode associated with at least one of these files."
-                saveButtonDisabled={!this.state.barcode}
+                saveButtonDisabled={!this.state.barcode || saveInProgress}
                 onSave={this.saveAndContinue}
+                saveInProgress={saveInProgress}
             >
                 <LabKeyOptionSelector
                     required={true}
@@ -95,6 +98,10 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
     private setBarcode(option: LabkeyOption | null): void {
         if (option) {
             this.setState(option);
+
+            if (this.props.saveInProgress) {
+                // this.props.cancelSave();
+            }
         } else {
             this.setState({
                 barcode: undefined,
@@ -113,6 +120,7 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
 function mapStateToProps(state: State) {
     return {
         barcode: getSelectedBarcode(state),
+        saveInProgress: getRequestsInProgressContains(state, HttpRequestType.GET_WELLS),
     };
 }
 

@@ -56,6 +56,10 @@ const APP_PAGE_TO_CONFIG_MAP = new Map<AppPage, AppPageConfig>([
     }],
 ]);
 
+message.config({
+    maxCount: 1,
+});
+
 class App extends React.Component<AppProps, {}> {
     public componentDidMount() {
         this.props.requestMetadata();
@@ -87,7 +91,7 @@ class App extends React.Component<AppProps, {}> {
                     dispatchClearAlert();
                     break;
                 default:
-                    message.info(alertBody, 2);
+                    message.info(alertBody, 5);
                     dispatchClearAlert();
                     break;
             }

@@ -5,21 +5,28 @@ import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
 
-import { setAlert, startLoading, stopLoading } from "../feedback/actions";
-import { AlertType } from "../feedback/types";
+import { API_WAIT_TIME_SECONDS } from "../constants";
 
 import {
-    AicsErrorResponse,
-    AicsResponse, AicsSuccessResponse,
+    addRequestToInProgress, clearAlert,
+    removeRequestFromInProgress,
+    setAlert,
+    startLoading,
+    stopLoading
+} from "../feedback/actions";
+import { AlertType, HttpRequestType } from "../feedback/types";
+
+import {
+    AicsSuccessResponse, HTTP_STATUS,
     ReduxLogicDependencies,
     ReduxLogicDoneCb,
     ReduxLogicNextCb,
     ReduxLogicTransformDependencies
 } from "../types";
-import { batchActions } from "../util";
+import { batchActions, getActionFromBatch } from "../util";
 
 import { selectPage, setWells, stageFiles, updateStagedFiles } from "./actions";
-import { API_WAIT_TIME_SECONDS, GET_FILES_IN_FOLDER, LOAD_FILES, OPEN_FILES, SELECT_BARCODE } from "./constants";
+import { GET_FILES_IN_FOLDER, LOAD_FILES, OPEN_FILES, SELECT_BARCODE } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
 import { getAppPage, getStagedFiles } from "./selectors";
 import { AppPage, DragAndDropFileList, UploadFile, Well } from "./types";
@@ -150,36 +157,77 @@ async function getWells({ action, getState, httpClient, baseMmsUrl }: ReduxLogic
 }
 
 const selectBarcodeLogic = createLogic({
-    transform: async (deps: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
-        const { action } = deps;
-        const plateId = action.payload.plateId;
-        const startTime = (new Date()).getTime() / 1000;
-        let currentTime = startTime;
-        let successfulResponse = false;
-        while (currentTime - startTime < API_WAIT_TIME_SECONDS && !successfulResponse) {
-            try {
-                const response = await getWells(deps, plateId);
-                const wells: Well[][] = response.data.data[0];
-                successfulResponse = true;
-                next(batchActions([
-                    selectPage(AppPage.AssociateWells),
-                    setWells(wells),
-                    action,
-                ]));
-            } catch (e) {
-                // tslint:disable-next-line
-                console.log("Retrying GET wells request", e);
+    process: async (deps: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
+        const action = getActionFromBatch(deps.action, SELECT_BARCODE);
+
+        if (!action) {
+            done();
+        } else {
+            const plateId = action.payload.plateId;
+            const startTime = (new Date()).getTime() / 1000;
+            let currentTime = startTime;
+            let receivedSuccessfulResponse = false;
+            let receivedNonGatewayError = false;
+            let sentRetryAlert = false;
+            while (currentTime - startTime < API_WAIT_TIME_SECONDS && !receivedSuccessfulResponse
+            && !receivedNonGatewayError) {
+                try {
+                    const response = await getWells(deps, plateId);
+                    const wells: Well[][] = response.data.data[0];
+                    receivedSuccessfulResponse = true;
+                    dispatch(clearAlert());
+                    dispatch(batchActions([
+                        selectPage(AppPage.AssociateWells),
+                        setWells(wells),
+                        removeRequestFromInProgress(HttpRequestType.GET_WELLS),
+                        action,
+                    ]));
+                } catch (e) {
+                    // tslint:disable-next-line
+                    console.log("Retrying GET wells request", e.response);
+
+                    if (e.response && e.response.status === HTTP_STATUS.BAD_GATEWAY) {
+                        if (!sentRetryAlert) {
+                            dispatch(
+                                setAlert({
+                                    manualClear: true,
+                                    message: "Server might be down. Retrying GET wells request...",
+                                    type: AlertType.INFO,
+                                })
+                            );
+                            sentRetryAlert = true;
+                        }
+                    } else {
+                        receivedNonGatewayError = true;
+                    }
+                }
+
+                currentTime = (new Date()).getTime() / 1000;
             }
 
-            currentTime = (new Date()).getTime() / 1000;
+            if (receivedSuccessfulResponse) {
+                done();
+            } else {
+                const message = sentRetryAlert ? "Could not contact server. Make sure MMS is running." :
+                    `Could not retrieve wells for barcode ${action.payload.barcode}`;
+                dispatch(batchActions([
+                    action,
+                    removeRequestFromInProgress(HttpRequestType.GET_WELLS),
+                    setAlert({
+                        message,
+                        type: AlertType.ERROR,
+                    }),
+                ]));
+
+                done();
+            }
         }
 
+    },
+    transform: ({action}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
         next(batchActions([
+            addRequestToInProgress(HttpRequestType.GET_WELLS),
             action,
-            setAlert({
-                message: `Could not retrieve wells for barcode ${action.payload.barcode}`,
-                type: AlertType.ERROR,
-            }),
         ]));
     },
     type: SELECT_BARCODE,

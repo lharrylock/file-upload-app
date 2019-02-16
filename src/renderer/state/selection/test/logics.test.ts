@@ -391,8 +391,8 @@ describe("Selection logics", () => {
 
         });
 
-        it("Sets alert if response is not OK after 50 calls", () => {
-
-        });
+        // it("Sets alert if response is not OK after 50 calls", () => {
+        //
+        // });
     });
 });
