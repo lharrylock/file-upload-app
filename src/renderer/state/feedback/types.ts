@@ -26,6 +26,7 @@ export enum AlertType {
     WARN = 1,
     SUCCESS,
     ERROR,
+    INFO,
 }
 
 export interface SetAlertAction {
