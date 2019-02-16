@@ -57,10 +57,7 @@ export interface AicsSuccessResponse<T> extends AicsResponse {
     offset: number;
 }
 
-export interface AicsErrorResponse extends AicsResponse {
-    error?: string;
-    hostName?: string;
-    time?: string;
-    message?: string;
-    cause?: string;
+export enum HTTP_STATUS {
+    INTERNAL_SERVER_ERROR = 500,
+    BAD_GATEWAY = 502,
 }
