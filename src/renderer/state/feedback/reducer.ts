@@ -45,11 +45,17 @@ const actionToConfigMap: TypeToDescriptionMap = {
     },
     [START_LOADING]: {
         accepts: (action: AnyAction): action is StartLoadingAction => action.type === START_LOADING,
-        perform: () => ({ isLoading: true }),
+        perform: (state: FeedbackStateBranch) => ({
+            ...state,
+            isLoading: true,
+        }),
     },
     [STOP_LOADING]: {
         accepts: (action: AnyAction): action is StopLoadingAction => action.type === STOP_LOADING,
-        perform: () => ({ isLoading: false }),
+        perform: (state: FeedbackStateBranch) => ({
+            ...state,
+            isLoading: false,
+        }),
     },
     [ADD_REQUEST_IN_PROGRESS]: {
         accepts: (action: AnyAction): action is AddRequestInProgressAction => action.type === ADD_REQUEST_IN_PROGRESS,
