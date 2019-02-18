@@ -8,7 +8,7 @@ import { createLogic } from "redux-logic";
 import { API_WAIT_TIME_SECONDS } from "../constants";
 
 import {
-    addRequestToInProgress, clearAlert,
+    addRequestToInProgress,
     removeRequestFromInProgress,
     setAlert,
     startLoading,
