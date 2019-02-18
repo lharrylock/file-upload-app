@@ -192,7 +192,7 @@ const selectBarcodeLogic = createLogic({
                                 setAlert({
                                     manualClear: true,
                                     message: "Server might be down. Retrying GET wells request...",
-                                    type: AlertType.INFO,
+                                    type: AlertType.WARN,
                                 })
                             );
                             sentRetryAlert = true;

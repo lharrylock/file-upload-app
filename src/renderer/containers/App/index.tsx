@@ -68,21 +68,22 @@ class App extends React.Component<AppProps, {}> {
     public componentDidUpdate() {
         const { alert, dispatch } = this.props;
         if (alert) {
-            const { message: alertText, type} = alert;
+            const { message: alertText, manualClear, type} = alert;
             const alertBody = <div>{alertText}</div>;
+            const duration = manualClear ? 0 : ALERT_DURATION;
 
             switch (type) {
                 case AlertType.WARN:
-                    message.warn(alertBody, ALERT_DURATION);
+                    message.warn(alertBody, duration);
                     break;
                 case AlertType.SUCCESS:
-                    message.success(alertBody, ALERT_DURATION);
+                    message.success(alertBody, duration);
                     break;
                 case AlertType.ERROR:
-                    message.error(alertBody, ALERT_DURATION);
+                    message.error(alertBody, duration);
                     break;
                 default:
-                    message.info(alertBody, ALERT_DURATION);
+                    message.info(alertBody, duration);
                     break;
             }
             dispatch(clearAlert());

@@ -1,5 +1,3 @@
-import { AnyAction } from "redux";
-
 export interface FeedbackStateBranch {
     alert?: AppAlert;
     isLoading: boolean;
@@ -15,8 +13,9 @@ export interface StopLoadingAction {
 }
 
 export interface AppAlert {
-    statusCode?: number;
+    manualClear?: boolean;
     message: string;
+    statusCode?: number;
     type: AlertType;
 }
 
