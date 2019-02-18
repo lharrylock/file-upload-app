@@ -4,7 +4,6 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { ActionCreator, AnyAction } from "redux";
 
-import AlertBody from "../../components/AlertBody";
 import FolderTree from "../../components/FolderTree";
 import { feedback, selection } from "../../state";
 import { clearAlert } from "../../state/feedback/actions";
@@ -26,6 +25,7 @@ import EnterBarcode from "../EnterBarcode";
 
 import "../../styles/fonts.css";
 const styles = require("./styles.css");
+const ALERT_DURATION = 2;
 
 interface AppProps {
     alert?: AppAlert;
@@ -68,33 +68,24 @@ class App extends React.Component<AppProps, {}> {
     public componentDidUpdate() {
         const { alert, dispatch } = this.props;
         if (alert) {
-            const { message: alertText, type, onNo, onYes} = alert;
-            const alertBody = (
-                <AlertBody
-                    message={alertText}
-                    onNo={onNo ? this.dismissAlert : undefined}
-                    onYes={onYes ? this.acceptAlert : undefined}
-                />
-            );
+            const { message: alertText, type} = alert;
+            const alertBody = <div>{alertText}</div>;
 
-            const dispatchClearAlert = () => dispatch(clearAlert());
             switch (type) {
                 case AlertType.WARN:
-                    message.warn(alertBody, 0, dispatchClearAlert);
+                    message.warn(alertBody, ALERT_DURATION);
                     break;
                 case AlertType.SUCCESS:
-                    message.success(alertBody, 2);
-                    dispatchClearAlert();
+                    message.success(alertBody, ALERT_DURATION);
                     break;
                 case AlertType.ERROR:
-                    message.error(alertBody, 2);
-                    dispatchClearAlert();
+                    message.error(alertBody, ALERT_DURATION);
                     break;
                 default:
-                    message.info(alertBody, 5);
-                    dispatchClearAlert();
+                    message.info(alertBody, ALERT_DURATION);
                     break;
             }
+            dispatch(clearAlert());
         }
     }
 
@@ -129,21 +120,6 @@ class App extends React.Component<AppProps, {}> {
             </div>
         );
     }
-
-    private dismissAlert = (): void => {
-        const { alert, dispatch } = this.props;
-        if (alert && alert.onNo) {
-            dispatch(alert.onNo);
-        }
-    }
-
-    private acceptAlert = () => {
-        const { alert, dispatch } = this.props;
-        if (alert && alert.onYes) {
-            dispatch(alert.onYes);
-        }
-    }
-
 }
 
 function mapStateToProps(state: State) {
