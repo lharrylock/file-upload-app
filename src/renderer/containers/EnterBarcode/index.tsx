@@ -18,7 +18,6 @@ import LabkeyQueryService, { Plate } from "../../util/labkey-query-service";
 const styles = require("./style.css");
 
 interface EnterBarcodeProps {
-    // cancelSave: ActionCreator<Cance>
     className?: string;
     barcode?: string;
     saveInProgress: boolean;
