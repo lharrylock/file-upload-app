@@ -97,10 +97,6 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
     private setBarcode(option: LabkeyOption | null): void {
         if (option) {
             this.setState(option);
-
-            if (this.props.saveInProgress) {
-                // this.props.cancelSave();
-            }
         } else {
             this.setState({
                 barcode: undefined,
