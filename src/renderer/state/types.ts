@@ -58,6 +58,8 @@ export interface AicsSuccessResponse<T> extends AicsResponse {
 }
 
 export enum HTTP_STATUS {
-    INTERNAL_SERVER_ERROR = 500,
     BAD_GATEWAY = 502,
+    BAD_REQUEST = 400,
+    INTERNAL_SERVER_ERROR = 500,
+    OK = 200,
 }

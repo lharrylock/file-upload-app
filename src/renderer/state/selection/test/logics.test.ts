@@ -1,17 +1,22 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { expect } from "chai";
 import { isEmpty } from "lodash";
 import { dirname, resolve } from "path";
-import { SinonStub } from "sinon";
 import * as sinon from "sinon";
+import { SinonStub } from "sinon";
+
+import selections from "../";
 
 import { feedback } from "../../";
 import createReduxStore, { reduxLogicDependencies } from "../../configure-store";
+import { API_WAIT_TIME_SECONDS } from "../../constants";
+import { getAlert, getRequestsInProgress } from "../../feedback/selectors";
+import { AlertType, AppAlert, HttpRequestType } from "../../feedback/types";
 import { createMockReduxStore } from "../../test/configure-mock-store";
 import { mockState } from "../../test/mocks";
-
-import selections from "../";
-import { AicsSuccessResponse } from "../../types";
+import { AicsSuccessResponse, HTTP_STATUS } from "../../types";
+import { selectBarcode } from "../actions";
+import { GENERIC_GET_WELLS_ERROR_MESSAGE, MMS_IS_DOWN_MESSAGE, MMS_MIGHT_BE_DOWN_MESSAGE } from "../logics";
 import { UploadFileImpl } from "../models/upload-file";
 import { getAppPage, getSelectedBarcode, getSelectedPlateId, getWells } from "../selectors";
 import { AppPage, DragAndDropFileList, UploadFile, Well } from "../types";
@@ -334,7 +339,7 @@ describe("Selection logics", () => {
         const plateId = 1;
         let mockEmptyWell: Well;
         let mockOkResponse: AxiosResponse<AicsSuccessResponse<Well[][]>>;
-        let mockBadGatewayResponse: AxiosResponse;
+        let mockBadGatewayResponse: AxiosError;
         const createMockReduxLogicDeps = (getStub: SinonStub) => ({
             ...reduxLogicDependencies,
             httpClient: {
@@ -360,20 +365,56 @@ describe("Selection logics", () => {
                     totalCount: 1,
                 },
                 headers: {},
-                status: 200,
+                status: HTTP_STATUS.OK,
                 statusText: "",
             };
             mockBadGatewayResponse = {
-                ...mockOkResponse,
-                data: {
+                config: {},
+                message: "Bad Gateway",
+                name: "",
+                response: {
+                    ...mockOkResponse,
                     data: [],
+                    status: HTTP_STATUS.BAD_GATEWAY,
+                    statusText: "Bad Gateway",
                 },
-                status: 502,
             };
+        });
+
+        it("Adds GET wells request to requests in progress", (done) => {
+            const getStub = sinon.stub().resolves(mockOkResponse);
+            const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
+            expect(getRequestsInProgress(store.getState()).has(HttpRequestType.GET_WELLS)).to.be.false;
+            let storeUpdates = 0;
+            store.subscribe(() => {
+                storeUpdates++;
+
+                if (storeUpdates === 1) {
+                    const state = store.getState();
+                    expect(getRequestsInProgress(state).has(HttpRequestType.GET_WELLS)).to.be.true;
+                    done();
+                }
+            });
+
+            store.dispatch(selectBarcode(barcode, plateId));
+        });
+
+        it ("removes GET wells from requests in progress if GET wells is OK", (done) => {
+            const getStub = sinon.stub().callsFake(() => {
+                store.subscribe(() => {
+                    expect(getRequestsInProgress(store.getState()).has(HttpRequestType.GET_WELLS)).to.be.false;
+                    done();
+                });
+            });
+            const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
+
+            store.dispatch(selectBarcode(barcode, plateId));
         });
 
         it("Sets wells, page, barcode, and plateId if GET wells is OK", (done) => {
             const getStub = sinon.stub().callsFake(() => {
+                // we add the subscription after the first store.dispatch because we're testing
+                // the process callback which gets called after the first store update
                 store.subscribe(() => {
                     const state = store.getState();
                     expect(getWells(state)).to.not.be.empty;
@@ -382,36 +423,106 @@ describe("Selection logics", () => {
                     expect(getSelectedPlateId(state)).to.equal(plateId);
                     done();
                 });
+
                 return mockOkResponse;
             });
             const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
 
-            store.dispatch(selections.actions.selectBarcode(barcode, plateId));
+            store.dispatch(selectBarcode(barcode, plateId));
 
         });
 
-        // it("Retries GET wells if first response is not OK", (done) => {
-        //     const getStub = sinon.stub();
-        //     getStub.onCall(0).returns(mockBadGatewayResponse);
-        //     getStub.onCall(1).returns(mockOkResponse);
-        //     const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
-        //
-        //     store.dispatch(selections.actions.selectBarcode(barcode, plateId));
-        //     store.subscribe(() => {
-        //         expect(getStub.callCount).to.equal(2);
-        //         const state = store.getState();
-        //         expect(getWells(state)).to.not.be.empty;
-        //         expect(getAppPage(state)).to.equal(AppPage.AssociateWells);
-        //         expect(getSelectedBarcode(state)).to.equal(barcode);
-        //         expect(getSelectedPlateId(state)).to.equal(plateId);
-        //
-        //         done();
-        //     });
-        //
-        // });
+        it("Does not retry GET wells request if response is non-Bad Gateway error", (done) => {
+            const getStub = sinon.stub().callsFake(() => {
+                store.subscribe(() => {
+                    const state = store.getState();
+                    expect(getRequestsInProgress(state).has(HttpRequestType.GET_WELLS)).to.be.false;
+                    expect(getStub.callCount).to.equal(1);
 
-        // it("Sets alert if response is not OK after 50 calls", () => {
-        //
+                    const alert = getAlert(state);
+                    expect(alert).to.not.be.undefined;
+
+                    if (alert) {
+                        expect(alert.type).to.equal(AlertType.ERROR);
+                        expect(alert.message).to.equal(GENERIC_GET_WELLS_ERROR_MESSAGE(barcode));
+                    }
+
+                    done();
+                });
+
+                return Promise.reject({
+                    ...mockOkResponse,
+                    status: HTTP_STATUS.BAD_REQUEST,
+                });
+            });
+
+            const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
+            store.dispatch(selectBarcode(barcode, plateId));
+        });
+
+        it("Shows error message if it only receives Bad Gateway error for 20 seconds", function(done) {
+            // here we're using a fake clock so that 20 seconds passes more quickly and to give control
+            // over to the test in terms of timing.
+            this.clock = sinon.useFakeTimers((new Date()).getTime());
+
+            // extends timeout for this test since we're testing a potentially long running process
+            const waitTime = API_WAIT_TIME_SECONDS * 1000 + 3000;
+            this.timeout(waitTime);
+
+            let secondsPassed = 0;
+            const incrementMs = 5000;
+
+            let firstAlert: AppAlert | undefined;
+
+            // increment clock on every get call by 5 seconds
+            const getStub = sinon.stub().callsFake(() => {
+                this.clock.tick(incrementMs);
+                secondsPassed += incrementMs / 1000;
+
+                if (!firstAlert) {
+                    firstAlert = getAlert(store.getState());
+                }
+
+                return Promise.reject(mockBadGatewayResponse);
+            });
+            const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
+
+            store.subscribe(() => {
+                if (secondsPassed >= API_WAIT_TIME_SECONDS) {
+                    const state = store.getState();
+                    const currentAlert: AppAlert | undefined = getAlert(state);
+                    expect(getStub.callCount).to.be.greaterThan(1);
+                    expect(firstAlert).to.not.be.undefined;
+
+                    if (firstAlert) {
+                        expect(firstAlert.type).to.equal(AlertType.WARN);
+                        expect(firstAlert.message).to.equal(MMS_MIGHT_BE_DOWN_MESSAGE);
+                    }
+
+                    expect(currentAlert).to.not.be.undefined;
+
+                    if (currentAlert) {
+                        expect(currentAlert.type).to.equal(AlertType.ERROR);
+                        expect(currentAlert.message).to.equal(MMS_IS_DOWN_MESSAGE);
+                    }
+
+                    done();
+                }
+            });
+
+            store.dispatch(selectBarcode(barcode, plateId));
+        });
+
+        // it("Can handle successful response after retrying GET wells request", (done) => {
+        //     const stub = sinon.stub().rejects({error: "you are wrong"});
+        //     try {
+        //         stub();
+        //         stub();
+        //         stub();
+        //     } finally {
+        //         expect(stub.callCount).to.equal(3);
+        //         done();
+        //     }
         // });
     });
 });

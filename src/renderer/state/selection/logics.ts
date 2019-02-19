@@ -155,6 +155,9 @@ async function getWells({ action, getState, httpClient, baseMmsUrl }: ReduxLogic
     return httpClient.get(`${baseMmsUrl}/1.0/plate/${plateId}/well/`);
 }
 
+export const GENERIC_GET_WELLS_ERROR_MESSAGE = (barcode: string) => `Could not retrieve wells for barcode ${barcode}`;
+export const MMS_IS_DOWN_MESSAGE = "Could not contact server. Make sure MMS is running.";
+export const MMS_MIGHT_BE_DOWN_MESSAGE = "Server might be down. Retrying GET wells request...";
 const selectBarcodeLogic = createLogic({
     process: async (deps: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
         const action = getActionFromBatch(deps.action, SELECT_BARCODE);
@@ -168,6 +171,7 @@ const selectBarcodeLogic = createLogic({
             let receivedSuccessfulResponse = false;
             let receivedNonGatewayError = false;
             let sentRetryAlert = false;
+
             while (currentTime - startTime < API_WAIT_TIME_SECONDS && !receivedSuccessfulResponse
             && !receivedNonGatewayError) {
                 try {
@@ -181,15 +185,12 @@ const selectBarcodeLogic = createLogic({
                         action,
                     ]));
                 } catch (e) {
-                    // tslint:disable-next-line
-                    console.log("Retrying GET wells request", e.response);
-
                     if (e.response && e.response.status === HTTP_STATUS.BAD_GATEWAY) {
                         if (!sentRetryAlert) {
                             dispatch(
                                 setAlert({
                                     manualClear: true,
-                                    message: "Server might be down. Retrying GET wells request...",
+                                    message: MMS_MIGHT_BE_DOWN_MESSAGE,
                                     type: AlertType.WARN,
                                 })
                             );
@@ -198,16 +199,16 @@ const selectBarcodeLogic = createLogic({
                     } else {
                         receivedNonGatewayError = true;
                     }
+                } finally {
+                    currentTime = (new Date()).getTime() / 1000;
                 }
-
-                currentTime = (new Date()).getTime() / 1000;
             }
 
             if (receivedSuccessfulResponse) {
                 done();
             } else {
-                const message = sentRetryAlert ? "Could not contact server. Make sure MMS is running." :
-                    `Could not retrieve wells for barcode ${action.payload.barcode}`;
+                const message = sentRetryAlert ? MMS_IS_DOWN_MESSAGE :
+                    GENERIC_GET_WELLS_ERROR_MESSAGE(action.payload.barcode);
                 dispatch(batchActions([
                     action,
                     removeRequestFromInProgress(HttpRequestType.GET_WELLS),
