@@ -417,6 +417,7 @@ describe("Selection logics", () => {
                 // the process callback which gets called after the first store update
                 store.subscribe(() => {
                     const state = store.getState();
+                    expect(getAlert(state)).to.be.undefined;
                     expect(getWells(state)).to.not.be.empty;
                     expect(getAppPage(state)).to.equal(AppPage.AssociateWells);
                     expect(getSelectedBarcode(state)).to.equal(barcode);
@@ -513,16 +514,28 @@ describe("Selection logics", () => {
             store.dispatch(selectBarcode(barcode, plateId));
         });
 
-        // it("Can handle successful response after retrying GET wells request", (done) => {
-        //     const stub = sinon.stub().rejects({error: "you are wrong"});
-        //     try {
-        //         stub();
-        //         stub();
-        //         stub();
-        //     } finally {
-        //         expect(stub.callCount).to.equal(3);
-        //         done();
-        //     }
-        // });
+        it("Can handle successful response after retrying GET wells request", function(done) {
+            this.timeout(API_WAIT_TIME_SECONDS * 1000 + 3000);
+            let okResponseReturned = false;
+            const getStub = sinon.stub()
+                .onFirstCall().rejects(mockBadGatewayResponse)
+                .onSecondCall().callsFake(() => {
+                    okResponseReturned = true;
+                    return Promise.resolve(mockOkResponse);
+                });
+            const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
+            store.subscribe(() => {
+                if (okResponseReturned) {
+                    const state = store.getState();
+                    expect(getAlert(state)).to.be.undefined;
+                    expect(getWells(state)).to.not.be.empty;
+                    expect(getAppPage(state)).to.equal(AppPage.AssociateWells);
+                    expect(getSelectedBarcode(state)).to.equal(barcode);
+                    expect(getSelectedPlateId(state)).to.equal(plateId);
+                    done();
+                }
+            });
+            store.dispatch(selectBarcode(barcode, plateId));
+        });
     });
 });

@@ -9,6 +9,7 @@ import { API_WAIT_TIME_SECONDS } from "../constants";
 
 import {
     addRequestToInProgress,
+    clearAlert,
     removeRequestFromInProgress,
     setAlert,
     startLoading,
@@ -205,6 +206,10 @@ const selectBarcodeLogic = createLogic({
             }
 
             if (receivedSuccessfulResponse) {
+                if (sentRetryAlert) {
+                    dispatch(clearAlert());
+                }
+
                 done();
             } else {
                 const message = sentRetryAlert ? MMS_IS_DOWN_MESSAGE :
