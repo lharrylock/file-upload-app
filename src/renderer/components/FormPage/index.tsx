@@ -28,9 +28,8 @@ class FormPage extends React.Component<FormPageProps, {}> {
     };
 
     private static getSpinner(saveInProgress: boolean = false) {
-        const indicator = <Icon type="loading" style={{fontSize: 24, paddingLeft: 12, paddingRight: 12}} spin={true} />;
-        const style = {fontSize: 24, paddingLeft: 12, paddingRight: 12};
-        return saveInProgress && <Spin indicator={indicator} style={style} />;
+        const indicator = <Icon type="loading" className={styles.loading} spin={true} />;
+        return saveInProgress && <Spin indicator={indicator}/>;
     }
 
     constructor(props: FormPageProps) {
