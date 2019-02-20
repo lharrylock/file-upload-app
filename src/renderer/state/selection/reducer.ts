@@ -13,7 +13,8 @@ import {
     SELECT_BARCODE,
     SELECT_FILE,
     SELECT_METADATA,
-    SELECT_PAGE, SET_WELLS,
+    SELECT_PAGE,
+    SET_WELLS,
     UPDATE_STAGED_FILES,
 } from "./constants";
 import {
@@ -24,7 +25,8 @@ import {
     SelectFileAction,
     SelectionStateBranch,
     SelectMetadataAction,
-    SelectPageAction, SetWellsAction,
+    SelectPageAction,
+    SetWellsAction,
     UpdateStagedFilesAction,
 } from "./types";
 

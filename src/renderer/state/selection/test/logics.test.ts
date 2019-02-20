@@ -337,7 +337,6 @@ describe("Selection logics", () => {
     describe("selectBarcodeLogic", () => {
         const barcode = "1234";
         const plateId = 1;
-        let mockEmptyWell: Well;
         let mockOkResponse: AxiosResponse<AicsSuccessResponse<Well[][]>>;
         let mockBadGatewayResponse: AxiosError;
         const createMockReduxLogicDeps = (getStub: SinonStub) => ({
@@ -350,7 +349,7 @@ describe("Selection logics", () => {
         });
 
         beforeEach(() => {
-            mockEmptyWell = {
+            const mockEmptyWell: Well = {
                 cellPopulations: [],
                 solutions: [],
                 viabilityResults: [],
@@ -366,7 +365,7 @@ describe("Selection logics", () => {
                 },
                 headers: {},
                 status: HTTP_STATUS.OK,
-                statusText: "",
+                statusText: "OK",
             };
             mockBadGatewayResponse = {
                 config: {},
@@ -405,6 +404,7 @@ describe("Selection logics", () => {
                     expect(getRequestsInProgress(store.getState()).has(HttpRequestType.GET_WELLS)).to.be.false;
                     done();
                 });
+                return Promise.resolve(mockOkResponse);
             });
             const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
 
@@ -424,7 +424,7 @@ describe("Selection logics", () => {
                     done();
                 });
 
-                return mockOkResponse;
+                return Promise.resolve(mockOkResponse);
             });
             const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
 

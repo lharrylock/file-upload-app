@@ -159,6 +159,7 @@ async function getWells({ action, getState, httpClient, baseMmsUrl }: ReduxLogic
 export const GENERIC_GET_WELLS_ERROR_MESSAGE = (barcode: string) => `Could not retrieve wells for barcode ${barcode}`;
 export const MMS_IS_DOWN_MESSAGE = "Could not contact server. Make sure MMS is running.";
 export const MMS_MIGHT_BE_DOWN_MESSAGE = "Server might be down. Retrying GET wells request...";
+
 const selectBarcodeLogic = createLogic({
     process: async (deps: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
         const action = getActionFromBatch(deps.action, SELECT_BARCODE);
