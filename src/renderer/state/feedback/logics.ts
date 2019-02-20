@@ -4,7 +4,7 @@ import { HTTP_STATUS, ReduxLogicNextCb, ReduxLogicTransformDependencies } from "
 
 import { SET_ALERT } from "./constants";
 
-const httpStatusToMessage: Map<number, string> = new Map([
+export const httpStatusToMessage: Map<number, string> = new Map([
     [HTTP_STATUS.INTERNAL_SERVER_ERROR, "Unknown error from server"],
     [HTTP_STATUS.BAD_GATEWAY, "Bad Gateway Error: Labkey or MMS is down."],
 ]);
@@ -14,7 +14,7 @@ const setAlertLogic = createLogic({
         const { payload } = action;
         const updatedPayload = { ...payload };
 
-        if (httpStatusToMessage.has(payload.statusCode)) {
+        if (httpStatusToMessage.has(payload.statusCode) && !payload.message) {
             updatedPayload.message = httpStatusToMessage.get(payload.statusCode);
         }
 

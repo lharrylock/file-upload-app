@@ -417,7 +417,6 @@ describe("Selection logics", () => {
                 // the process callback which gets called after the first store update
                 store.subscribe(() => {
                     const state = store.getState();
-                    expect(getAlert(state)).to.be.undefined;
                     expect(getWells(state)).to.not.be.empty;
                     expect(getAppPage(state)).to.equal(AppPage.AssociateWells);
                     expect(getSelectedBarcode(state)).to.equal(barcode);
@@ -527,11 +526,11 @@ describe("Selection logics", () => {
             store.subscribe(() => {
                 if (okResponseReturned) {
                     const state = store.getState();
-                    expect(getAlert(state)).to.be.undefined;
                     expect(getWells(state)).to.not.be.empty;
                     expect(getAppPage(state)).to.equal(AppPage.AssociateWells);
                     expect(getSelectedBarcode(state)).to.equal(barcode);
                     expect(getSelectedPlateId(state)).to.equal(plateId);
+                    okResponseReturned = false; // prevent more calls to done
                     done();
                 }
             });

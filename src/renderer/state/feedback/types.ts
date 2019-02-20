@@ -14,7 +14,7 @@ export interface StopLoadingAction {
 
 export interface AppAlert {
     manualClear?: boolean;
-    message: string;
+    message?: string;
     statusCode?: number;
     type: AlertType;
 }
