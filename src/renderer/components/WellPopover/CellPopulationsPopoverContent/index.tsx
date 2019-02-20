@@ -35,7 +35,7 @@ const CellPopulationsPopoverContent: React.FunctionComponent<CellPopulationsPopo
                     if (wellCellPopulation) {
                         // Show Source Plate Well or Vial info if available
                         let sourceText: JSX.Element | null = null;
-                        if (sourcePlateWell) {
+                        if (sourcePlateWell && sourcePlateWell.plateBarcode && sourcePlateWell.wellLabel) {
                             sourceText = (
                                 <React.Fragment>
                                     <KeyValueDisplay keyName="Source Plate" value={sourcePlateWell.plateBarcode}/>
@@ -53,7 +53,8 @@ const CellPopulationsPopoverContent: React.FunctionComponent<CellPopulationsPopo
                         populationText = (
                             <React.Fragment>
                                 {sourceText}
-                                <KeyValueDisplay keyName="Cell Line" value={wellCellPopulation.cellLineName}/>
+                                {wellCellPopulation.cellLineName &&
+                                <KeyValueDisplay keyName="Cell Line" value={wellCellPopulation.cellLineName}/>}
                                 <KeyValueDisplay keyName="Clone" value={wellCellPopulation.clone || NULL_TEXT}/>
                                 <KeyValueDisplay keyName="Passage" value={wellCellPopulation.passage || NULL_TEXT}/>
                             </React.Fragment>

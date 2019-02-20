@@ -18,7 +18,7 @@ export interface SelectionStateBranch {
     [key: string]: any;
     barcode?: string;
     plateId?: number;
-    wells?: Well[][];
+    wells: Well[][];
     page: AppPage;
     stagedFiles: UploadFile[];
 }
@@ -142,11 +142,6 @@ export interface SelectBarcodeAction {
 
 export interface SetWellsAction {
     payload: Well[][];
-    type: string;
-}
-
-export interface SelectWellsAction {
-    payload: number[];
     type: string;
 }
 

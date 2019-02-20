@@ -5,9 +5,9 @@ import FormPage from "../../components/FormPage";
 import Plate from "../../components/Plate/index";
 
 import {
-    selection,
     State,
 } from "../../state";
+import { getWellsWithUnitsAndModified } from "../../state/selection/selectors";
 import { Well } from "../../state/selection/types";
 
 interface Props {
@@ -39,7 +39,7 @@ class AssociateWells extends React.Component<Props, {}> {
 function mapStateToProps(state: State, props: Props): Props {
     return {
         className: props.className,
-        wells: selection.selectors.getWellsWithUnits(state),
+        wells: getWellsWithUnitsAndModified(state),
     };
 }
 

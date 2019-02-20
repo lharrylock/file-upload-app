@@ -10,14 +10,14 @@ import { MMS_BASE_URL } from "../constants";
 
 import {
     enableBatching,
-    isLoading,
+    feedback,
     metadata,
     selection,
     State,
 } from "./";
 
 const reducers = {
-    isLoading: isLoading.reducer,
+    feedback: feedback.reducer,
     metadata: metadata.reducer,
     selection: selection.reducer,
 };

@@ -1,4 +1,5 @@
 import * as classNames from "classnames";
+import { FunctionComponent } from "react";
 import * as React from "react";
 
 import { ViabilityResult } from "../../../state/selection/types";
@@ -12,7 +13,8 @@ export interface ViabilityResultsPopoverContentProps {
     viabilityResults?: ViabilityResult[];
 }
 
-const ViabilityResultsPopoverContent: React.FunctionComponent<ViabilityResultsPopoverContentProps> = (props) => {
+const ViabilityResultsPopoverContent: FunctionComponent<ViabilityResultsPopoverContentProps> =
+    (props: ViabilityResultsPopoverContentProps) => {
     const {
         className,
         viabilityResults,

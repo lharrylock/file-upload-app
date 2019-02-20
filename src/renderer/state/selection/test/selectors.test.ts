@@ -2,7 +2,7 @@ import { expect } from "chai";
 
 import { mockState, mockUnits } from "../../test/mocks";
 import { State } from "../../types";
-import { getWellsWithModified, getWellsWithUnitsAndModified } from "../selectors";
+import { getWellsWithModified, getWellsWithUnitsAndModified, NO_UNIT } from "../selectors";
 import { CellPopulation, Solution, ViabilityResult, Well } from "../types";
 
 describe("Selections selectors", () => {
@@ -67,9 +67,14 @@ describe("Selections selectors", () => {
         };
     });
 
+    const expectOneWell = (wells: Well[][]) => {
+        expect(wells.length).to.equal(1);
+        expect(wells[0].length).to.equal(1);
+    };
+
     describe ("getWellsWithModified", () => {
         it("sets modified as true on wells with cellPopulations", () => {
-            const result: Well[][] | undefined = getWellsWithModified({
+            const result: Well[][] = getWellsWithModified({
                 ...mockState,
                 selection: {
                     ...mockState.selection,
@@ -83,14 +88,14 @@ describe("Selections selectors", () => {
                     ],
                 },
             });
-            expect(!!result).to.be.true;
 
+            expectOneWell(result);
             if (result && result[0][0]) {
                 expect(result[0][0].modified).to.be.true;
             }
         });
         it("sets modified as true on wells with solutions", () => {
-            const result: Well[][] | undefined = getWellsWithModified({
+            const result: Well[][] = getWellsWithModified({
                 ...mockState,
                 selection: {
                     ...mockState.selection,
@@ -104,14 +109,14 @@ describe("Selections selectors", () => {
                     ],
                 },
             });
-            expect(!!result).to.be.true;
 
+            expectOneWell(result);
             if (result && result[0][0]) {
                 expect(result[0][0].modified).to.be.true;
             }
         });
         it("sets modified as true on wells with viabilityResults", () => {
-            const result: Well[][] | undefined = getWellsWithModified({
+            const result: Well[][] = getWellsWithModified({
                 ...mockState,
                 selection: {
                     ...mockState.selection,
@@ -125,15 +130,15 @@ describe("Selections selectors", () => {
                     ],
                 },
             });
-            expect(!!result).to.be.true;
 
+            expectOneWell(result);
             if (result && result[0][0]) {
                 expect(result[0][0].modified).to.be.true;
             }
         });
 
         it ("sets modified as false on wells without modifications", () => {
-            const result: Well[][] | undefined = getWellsWithModified({
+            const result: Well[][] = getWellsWithModified({
                 ...mockState,
                 selection: {
                     ...mockState.selection,
@@ -141,8 +146,7 @@ describe("Selections selectors", () => {
                 },
             });
 
-            expect(!!result).to.be.true;
-
+            expectOneWell(result);
             if (result && result[0][0]) {
                 expect(result[0][0].modified).to.be.false;
             }
@@ -150,37 +154,43 @@ describe("Selections selectors", () => {
     });
 
     describe("getWellsWithUnitsAndModified", () => {
-        it("returns unmodified wells if no units", () => {
-            const state = {
-                ...mockState,
-                selection: {
-                    ...mockState.selection,
-                    wells: [[mockEmptyWell]],
+        it("returns wells if no units", () => {
+            const result = getWellsWithUnitsAndModified({
+                ...mockStateWithNonEmptyWell,
+                metadata: {
+                    units: [],
                 },
-            };
+            });
 
-            const result = getWellsWithUnitsAndModified(state);
-
-            expect(getWellsWithModified(state)).to.equal(result);
+            expectOneWell(result);
+            if (result && result[0][0]) {
+                const well = result[0][0];
+                expect(well.solutions[0].volumeUnitDisplay).to.equal(NO_UNIT);
+                expect(well.solutions[0].solutionLot.concentrationUnitsDisplay).to.equal(NO_UNIT);
+                expect(well.viabilityResults[0].suspensionVolumeUnitDisplay).to.equal(NO_UNIT);
+                expect(well.viabilityResults[0].viableCellCountUnitDisplay).to.equal(NO_UNIT);
+            }
         });
 
-        it("returns undefined if wells undefined", () => {
+        it("returns empty array if no wells", () => {
             const result = getWellsWithUnitsAndModified({
                 ...mockState,
                 metadata: {
                     ...mockState.metadata,
                     units: mockUnits,
                 },
+                selection: {
+                    ...mockState.selection,
+                    wells: [],
+                },
             });
-            expect(result).to.be.undefined;
+            expect(result).to.be.empty;
         });
 
         it("populates display values", () => {
             const result = getWellsWithUnitsAndModified(mockStateWithNonEmptyWell);
 
-            expect(!!result).to.be.true;
-            expect(result).to.not.be.empty;
-
+            expectOneWell(result);
             if (result && result[0][0]) {
                 const well = result[0][0];
                 expect(well.solutions[0].volumeUnitDisplay).to.equal("unit1");

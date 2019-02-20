@@ -16,11 +16,11 @@ export const getStagedFiles = (state: State) => state.selection.stagedFiles;
 export const getWells = (state: State) => state.selection.wells;
 
 // COMPOSED SELECTORS
-const NO_UNIT = "";
+export const NO_UNIT = "(Unit Not Found)";
 
-export const getWellsWithModified = createSelector([getWells], (wells?: Well[][]) => {
+export const getWellsWithModified = createSelector([getWells], (wells?: Well[][]): Well[][] => {
     if (!wells || wells.length === 0) {
-        return wells;
+        return wells || [];
     }
 
     return wells.map(
@@ -34,11 +34,7 @@ export const getWellsWithModified = createSelector([getWells], (wells?: Well[][]
 export const getWellsWithUnitsAndModified = createSelector([
     getWellsWithModified,
     getUnits,
-], (wells?: Well[][], units?: Unit[]): Well[][] | undefined => {
-    if (!wells || !units) {
-        return wells;
-    }
-
+], (wells: Well[][], units: Unit[]): Well[][] => {
     return wells.map((wellRow: Well[]) => wellRow.map((well) => {
         const solutions: Solution[] = well.solutions.map((s: Solution) => {
             const volumeUnit: Unit | undefined = units.find((u) => u.unitsId === s.volumeUnitId);

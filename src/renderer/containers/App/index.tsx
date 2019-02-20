@@ -3,7 +3,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 
 import FolderTree from "../../components/FolderTree";
-import { isLoading, selection } from "../../state";
+import { feedback, selection } from "../../state";
 import { requestMetadata } from "../../state/metadata/actions";
 import { RequestMetadataAction } from "../../state/metadata/types";
 import {
@@ -90,7 +90,7 @@ class App extends React.Component<AppProps, {}> {
 function mapStateToProps(state: State) {
     return {
         files: state.selection.stagedFiles,
-        loading: isLoading.selectors.getValue(state),
+        loading: feedback.selectors.getIsLoading(state),
         page: selection.selectors.getAppPage(state),
     };
 }

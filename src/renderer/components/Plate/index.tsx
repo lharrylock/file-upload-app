@@ -1,7 +1,7 @@
 import { AicsGrid, AicsGridCell } from "aics-react-labkey";
 import * as React from "react";
 
-import { SelectWellsAction, Well } from "../../state/selection/types";
+import { Well } from "../../state/selection/types";
 
 import WellComponent from "../Well";
 
@@ -11,7 +11,6 @@ const WELL_WIDTH = "60px";
 
 interface PlateProps {
     className?: string;
-    selectWells?: (wells: number[]) => SelectWellsAction;
     wells: Well[][];
 }
 
@@ -41,10 +40,6 @@ class Plate extends React.Component<PlateProps, PlateState> {
 
         if (data.modified) {
             this.setState({selectedWells: [{col, row}]});
-
-            if (this.props.selectWells) {
-                this.props.selectWells([data.wellId]);
-            }
         }
     }
 
