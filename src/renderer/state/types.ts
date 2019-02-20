@@ -1,8 +1,8 @@
 import { AxiosPromise, AxiosRequestConfig } from "axios";
 import { AnyAction } from "redux";
 import { CreateLogic } from "redux-logic/definitions/logic";
-import { FeedbackStateBranch } from "./feedback/types";
 
+import { FeedbackStateBranch } from "./feedback/types";
 import { MetadataStateBranch } from "./metadata/types";
 import { SelectionStateBranch } from "./selection/types";
 import Process = CreateLogic.Config.Process;
