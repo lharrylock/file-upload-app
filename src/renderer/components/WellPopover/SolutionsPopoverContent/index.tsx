@@ -33,7 +33,7 @@ const SolutionsPopoverContent: React.FunctionComponent<SolutionsPopoverContentPr
                     solutionName,
                 } = solutionLot;
 
-                let concentrationLine: JSX.Element | null = null;
+                let concentrationLine: JSX.Element | undefined;
                 // Due to a DB constraint, concentration and its units always both have values, or are both null
                 if (concentration && concentrationUnitsDisplay) {
                     const concentrationDisplay = `${concentration} ${concentrationUnitsDisplay}`;
@@ -42,7 +42,7 @@ const SolutionsPopoverContent: React.FunctionComponent<SolutionsPopoverContentPr
                             <KeyValueDisplay keyName="Concentration" value={concentrationDisplay}/>
                         </React.Fragment>
                     );
-                    // Due to a DB constraint, dilution factor part and total always both have values, or are both null
+                // Due to a DB constraint, dilution factor part and total always both have values, or are both null
                 } else if (dilutionFactorPart && dilutionFactorTotal) {
                     concentrationLine = (
                         <React.Fragment>

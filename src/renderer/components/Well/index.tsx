@@ -24,7 +24,6 @@ class WellComponent extends React.Component<WellProps, {}> {
             className,
             well,
         } = this.props;
-        const {} = this.state;
 
         const wellContent = (
             <div className={classNames(styles.container, className)}>
