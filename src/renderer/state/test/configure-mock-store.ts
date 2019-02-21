@@ -33,7 +33,7 @@ const logics = [
     ...selection.logics,
 ];
 
-export function createReduxStore(initialState: State, reduxLogicDependencies: ReduxLogicDependencies) {
+export function createMockReduxStore(initialState: State, reduxLogicDependencies: ReduxLogicDependencies) {
     const logicMiddleware = createLogicMiddleware(logics, reduxLogicDependencies);
     const middleware = applyMiddleware(logicMiddleware);
     const rootReducer = enableBatching<State>(combineReducers(reducers));

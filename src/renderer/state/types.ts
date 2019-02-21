@@ -3,6 +3,7 @@ import { AnyAction } from "redux";
 import { CreateLogic } from "redux-logic/definitions/logic";
 import { FeedbackStateBranch } from "./feedback/types";
 
+import { FeedbackStateBranch } from "./feedback/types";
 import { MetadataStateBranch } from "./metadata/types";
 import { SelectionStateBranch } from "./selection/types";
 import Process = CreateLogic.Config.Process;
@@ -42,4 +43,22 @@ export interface State {
 
 export interface TypeToDescriptionMap {
     [propName: string ]: ActionDescription;
+}
+
+export interface AicsResponse {
+    responseType: "SUCCESS" | "SERVER_ERROR" | "CLIENT_ERROR";
+}
+
+export interface AicsSuccessResponse<T> extends AicsResponse {
+    data: T[];
+    totalCount: number;
+    hasMore?: boolean;
+    offset: number;
+}
+
+export enum HTTP_STATUS {
+    BAD_GATEWAY = 502,
+    BAD_REQUEST = 400,
+    INTERNAL_SERVER_ERROR = 500,
+    OK = 200,
 }
