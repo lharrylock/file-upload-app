@@ -27,7 +27,7 @@ class FormPage extends React.Component<FormPageProps, {}> {
         saveInProgress: false,
     };
 
-    private static getSpinner(saveInProgress: boolean = false) {
+    private static renderSpinner(saveInProgress: boolean = false) {
         const indicator = <Icon type="loading" className={styles.loading} spin={true} />;
         return saveInProgress && <Spin indicator={indicator}/>;
     }
@@ -81,7 +81,7 @@ class FormPage extends React.Component<FormPageProps, {}> {
                         disabled={saveButtonDisabled}
                     >
                         {saveInProgress ? "Saving" : saveButtonName}
-                        {FormPage.getSpinner(saveInProgress)}
+                        {FormPage.renderSpinner(saveInProgress)}
                     </Button> : <div/>}
                 </div>
             </div>

@@ -11,58 +11,55 @@ import { AlertType } from "../types";
 describe("Feedback logics", () => {
 
     describe("setAlertLogic", () => {
-        it("Updates message if alert has a recognized statusCode", (done) => {
+        it("Updates message if alert has a recognized statusCode", () => {
             const store = createReduxStore(mockState);
-            store.subscribe(() => {
-                const alert = getAlert(store.getState());
-                expect(alert).to.not.be.undefined;
 
-                if (alert) {
-                    expect(alert.message).to.equal(httpStatusToMessage.get(HTTP_STATUS.BAD_REQUEST));
-                }
-                done();
-            });
             store.dispatch(setAlert({
                 statusCode: HTTP_STATUS.BAD_REQUEST,
                 type: AlertType.WARN,
             }));
+
+            const alert = getAlert(store.getState());
+            expect(alert).to.not.be.undefined;
+
+            if (alert) {
+                expect(alert.message).to.equal(httpStatusToMessage.get(HTTP_STATUS.BAD_REQUEST));
+            }
         });
 
-        it("Does not update message if alert does not have a statusCode", (done) => {
+        it("Does not update message if alert does not have a statusCode", () => {
             const store = createReduxStore(mockState);
             const message = "Hello";
-            store.subscribe(() => {
-                const alert = getAlert(store.getState());
-                expect(alert).to.not.be.undefined;
 
-                if (alert) {
-                    expect(alert.message).to.equal(message);
-                }
-                done();
-            });
             store.dispatch(setAlert({
                 message,
                 type: AlertType.INFO,
             }));
+
+            const alert = getAlert(store.getState());
+            expect(alert).to.not.be.undefined;
+
+            if (alert) {
+                expect(alert.message).to.equal(message);
+            }
         });
 
-        it("Does not update message if alert already has a message", (done) => {
+        it("Does not update message if alert already has a message", () => {
             const store = createReduxStore(mockState);
             const message = "Hello world";
-            store.subscribe(() => {
-                const alert = getAlert(store.getState());
-                expect(alert).to.not.be.undefined;
 
-                if (alert) {
-                    expect(alert.message).to.equal(message);
-                }
-                done();
-            });
             store.dispatch(setAlert({
                 message,
                 statusCode: HTTP_STATUS.BAD_REQUEST,
                 type: AlertType.INFO,
             }));
+
+            const alert = getAlert(store.getState());
+            expect(alert).to.not.be.undefined;
+
+            if (alert) {
+                expect(alert.message).to.equal(message);
+            }
         });
     });
 });
