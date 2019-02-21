@@ -167,14 +167,14 @@ const selectBarcodeLogic = createLogic({
         if (!action) {
             done();
         } else {
-            const plateId = action.payload.plateId;
+            const { plateId } = action.payload;
             const startTime = (new Date()).getTime() / 1000;
             let currentTime = startTime;
             let receivedSuccessfulResponse = false;
             let receivedNonGatewayError = false;
             let sentRetryAlert = false;
 
-            while (currentTime - startTime < API_WAIT_TIME_SECONDS && !receivedSuccessfulResponse
+            while ((currentTime - startTime < API_WAIT_TIME_SECONDS) && !receivedSuccessfulResponse
             && !receivedNonGatewayError) {
                 try {
                     const response = await getWells(deps, plateId);
