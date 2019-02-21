@@ -1,3 +1,4 @@
+import { uniq } from "lodash";
 import { AnyAction } from "redux";
 
 import {
@@ -21,7 +22,7 @@ import {
 
 export const initialState: FeedbackStateBranch = {
     isLoading: false,
-    requestsInProgress: new Set(),
+    requestsInProgress: [],
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {
@@ -60,8 +61,7 @@ const actionToConfigMap: TypeToDescriptionMap = {
     [ADD_REQUEST_IN_PROGRESS]: {
         accepts: (action: AnyAction): action is AddRequestInProgressAction => action.type === ADD_REQUEST_IN_PROGRESS,
         perform: (state: FeedbackStateBranch, action: AddRequestInProgressAction) => {
-            const requestsInProgress = new Set(state.requestsInProgress);
-            requestsInProgress.add(action.payload);
+            const requestsInProgress = uniq([...state.requestsInProgress, action.payload]);
 
             return {
                 ...state,
@@ -73,8 +73,7 @@ const actionToConfigMap: TypeToDescriptionMap = {
         accepts: (action: AnyAction): action is RemoveRequestInProgressAction =>
             action.type === REMOVE_REQUEST_IN_PROGRESS,
         perform: (state: FeedbackStateBranch, action: RemoveRequestInProgressAction) => {
-            const requestsInProgress = new Set(state.requestsInProgress);
-            requestsInProgress.delete(action.payload);
+            const requestsInProgress = state.requestsInProgress.filter((req) => req !== action.payload);
 
             return {
                 ...state,

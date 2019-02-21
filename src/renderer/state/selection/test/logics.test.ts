@@ -10,7 +10,7 @@ import selections from "../";
 import { feedback } from "../../";
 import createReduxStore, { reduxLogicDependencies } from "../../configure-store";
 import { API_WAIT_TIME_SECONDS } from "../../constants";
-import { getAlert, getRequestsInProgress } from "../../feedback/selectors";
+import { getAlert, getRequestsInProgressContains } from "../../feedback/selectors";
 import { AlertType, AppAlert, HttpRequestType } from "../../feedback/types";
 import { createMockReduxStore } from "../../test/configure-mock-store";
 import { mockState } from "../../test/mocks";
@@ -383,14 +383,14 @@ describe("Selection logics", () => {
         it("Adds GET wells request to requests in progress", (done) => {
             const getStub = sinon.stub().resolves(mockOkResponse);
             const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
-            expect(getRequestsInProgress(store.getState()).has(HttpRequestType.GET_WELLS)).to.be.false;
+            expect(getRequestsInProgressContains(store.getState(), HttpRequestType.GET_WELLS)).to.be.false;
             let storeUpdates = 0;
             store.subscribe(() => {
                 storeUpdates++;
 
                 if (storeUpdates === 1) {
                     const state = store.getState();
-                    expect(getRequestsInProgress(state).has(HttpRequestType.GET_WELLS)).to.be.true;
+                    expect(getRequestsInProgressContains(state, HttpRequestType.GET_WELLS)).to.be.true;
                     done();
                 }
             });
@@ -401,7 +401,7 @@ describe("Selection logics", () => {
         it ("removes GET wells from requests in progress if GET wells is OK", (done) => {
             const getStub = sinon.stub().callsFake(() => {
                 store.subscribe(() => {
-                    expect(getRequestsInProgress(store.getState()).has(HttpRequestType.GET_WELLS)).to.be.false;
+                    expect(getRequestsInProgressContains(store.getState(), HttpRequestType.GET_WELLS)).to.be.false;
                     done();
                 });
                 return Promise.resolve(mockOkResponse);
@@ -436,7 +436,7 @@ describe("Selection logics", () => {
             const getStub = sinon.stub().callsFake(() => {
                 store.subscribe(() => {
                     const state = store.getState();
-                    expect(getRequestsInProgress(state).has(HttpRequestType.GET_WELLS)).to.be.false;
+                    expect(getRequestsInProgressContains(state, HttpRequestType.GET_WELLS)).to.be.false;
                     expect(getStub.callCount).to.equal(1);
 
                     const alert = getAlert(state);

@@ -1,7 +1,7 @@
 export interface FeedbackStateBranch {
     alert?: AppAlert;
     isLoading: boolean;
-    requestsInProgress: Set<HttpRequestType>;
+    requestsInProgress: HttpRequestType[];
 }
 
 export interface StartLoadingAction {
