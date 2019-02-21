@@ -1,14 +1,25 @@
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { expect } from "chai";
 import { isEmpty } from "lodash";
 import { dirname, resolve } from "path";
-
-import { feedback } from "../../";
-import createReduxStore from "../../configure-store";
-import { mockState } from "../../test/mocks";
+import * as sinon from "sinon";
+import { SinonStub } from "sinon";
 
 import selections from "../";
+
+import { feedback } from "../../";
+import createReduxStore, { reduxLogicDependencies } from "../../configure-store";
+import { API_WAIT_TIME_SECONDS } from "../../constants";
+import { getAlert, getRequestsInProgressContains } from "../../feedback/selectors";
+import { AlertType, AppAlert, HttpRequestType } from "../../feedback/types";
+import { createMockReduxStore } from "../../test/configure-mock-store";
+import { mockState } from "../../test/mocks";
+import { AicsSuccessResponse, HTTP_STATUS } from "../../types";
+import { selectBarcode } from "../actions";
+import { GENERIC_GET_WELLS_ERROR_MESSAGE, MMS_IS_DOWN_MESSAGE, MMS_MIGHT_BE_DOWN_MESSAGE } from "../logics";
 import { UploadFileImpl } from "../models/upload-file";
-import { AppPage, DragAndDropFileList, UploadFile } from "../types";
+import { getAppPage, getSelectedBarcode, getSelectedPlateId, getWells } from "../selectors";
+import { AppPage, DragAndDropFileList, UploadFile, Well } from "../types";
 
 describe("Selection logics", () => {
     const FILE_NAME = "cells.txt";
@@ -53,7 +64,7 @@ describe("Selection logics", () => {
             };
         });
 
-        it("Goes to EnterBarcode page if on DragAndDrop page", () => {
+        it("Goes to EnterBarcode page if on DragAndDrop page", (done) => {
             const store = createReduxStore(mockState);
 
             // before
@@ -65,10 +76,11 @@ describe("Selection logics", () => {
             // after
             store.subscribe(() => {
                 expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.EnterBarcode);
+                done();
             });
         });
 
-        it("Does not change page if not on DragAndDrop page", () => {
+        it("Does not change page if not on DragAndDrop page", (done) => {
             const store = createReduxStore({
                 ...mockState,
                 selection: {
@@ -86,10 +98,11 @@ describe("Selection logics", () => {
             // after
             store.subscribe(() => {
                 expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.EnterBarcode);
+                done();
             });
         });
 
-        it("stages all files loaded", () => {
+        it("stages all files loaded", (done) => {
             const store = createReduxStore(mockState);
 
             // before
@@ -104,10 +117,11 @@ describe("Selection logics", () => {
                 expect(stagedFiles.length).to.equal(fileList.length);
 
                 testStagedFilesCreated(stagedFiles);
+                done();
             });
         });
 
-        it ("should stop loading on success", () => {
+        it ("should stop loading on success", (done) => {
             const store = createReduxStore(mockState);
 
             // before
@@ -119,10 +133,11 @@ describe("Selection logics", () => {
             store.subscribe(() => {
                 // after
                 expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
+                done();
             });
         });
 
-        it ("should stop loading on error", () => {
+        it ("should stop loading on error", (done) => {
             const store = createReduxStore(mockState);
 
             // before
@@ -145,6 +160,7 @@ describe("Selection logics", () => {
             store.subscribe(() => {
                 // after
                 expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
+                done();
             });
         });
     });
@@ -156,7 +172,7 @@ describe("Selection logics", () => {
             filePaths = [FILE_FULL_PATH, FOLDER_FULL_PATH];
         });
 
-        it("Goes to EnterBarcode page if on DragAndDrop page", () => {
+        it("Goes to EnterBarcode page if on DragAndDrop page", (done) => {
             const store = createReduxStore(mockState);
 
             // before
@@ -168,10 +184,11 @@ describe("Selection logics", () => {
             // after
             store.subscribe(() => {
                 expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.EnterBarcode);
+                done();
             });
         });
 
-        it("Does not change page if not on DragAndDrop page", () => {
+        it("Does not change page if not on DragAndDrop page", (done) => {
             const store = createReduxStore({
                 ...mockState,
                 selection: {
@@ -189,10 +206,11 @@ describe("Selection logics", () => {
             // after
             store.subscribe(() => {
                 expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.EnterBarcode);
+                done();
             });
         });
 
-        it("Stages all files opened", () => {
+        it("Stages all files opened", (done) => {
             const store = createReduxStore(mockState);
 
             // before
@@ -207,10 +225,11 @@ describe("Selection logics", () => {
                 expect(stagedFiles.length).to.equal(filePaths.length);
 
                 testStagedFilesCreated(stagedFiles);
+                done();
             });
         });
 
-        it("Removes child files or directories", () => {
+        it("Removes child files or directories", (done) => {
             const store = createReduxStore(mockState);
 
             // before
@@ -231,10 +250,11 @@ describe("Selection logics", () => {
                 expect(stagedFiles[0].isDirectory).to.equal(true);
                 expect(stagedFiles[0].path).to.equal(dirname(FOLDER_FULL_PATH));
                 expect(stagedFiles[0].name).to.equal(FOLDER_NAME);
+                done();
             });
         });
 
-        it ("should stop loading on success", () => {
+        it ("should stop loading on success", (done) => {
             const store = createReduxStore(mockState);
 
             // before
@@ -246,10 +266,11 @@ describe("Selection logics", () => {
             store.subscribe(() => {
                 // after
                 expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
+                done();
             });
         });
 
-        it ("should stop loading on error", () => {
+        it ("should stop loading on error", (done) => {
             const store = createReduxStore(mockState);
 
             // before
@@ -262,12 +283,13 @@ describe("Selection logics", () => {
             store.subscribe(() => {
                 // after
                 expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
+                done();
             });
         });
     });
 
     describe("getFilesInFolderLogic", () => {
-        it("should add child files to folder", () => {
+        it("should add child files to folder", (done) => {
             const folder = new UploadFileImpl(FOLDER_NAME, dirname(FOLDER_FULL_PATH), true);
             const stagedFiles = [
                 new UploadFileImpl(FILE_NAME, dirname(FILE_FULL_PATH), false),
@@ -307,7 +329,212 @@ describe("Selection logics", () => {
                         !file.isDirectory;
                 });
                 expect(stagedFolderContainsTxtFile).to.equal(true);
+                done();
             });
+        });
+    });
+
+    describe("selectBarcodeLogic", () => {
+        const barcode = "1234";
+        const plateId = 1;
+        let mockOkResponse: AxiosResponse<AicsSuccessResponse<Well[][]>>;
+        let mockBadGatewayResponse: AxiosError;
+        const createMockReduxLogicDeps = (getStub: SinonStub) => ({
+            ...reduxLogicDependencies,
+            httpClient: {
+                ...axios,
+                get: getStub,
+                post: sinon.stub(),
+            },
+        });
+
+        beforeEach(() => {
+            const mockEmptyWell: Well = {
+                cellPopulations: [],
+                solutions: [],
+                viabilityResults: [],
+                wellId: 1,
+            };
+            mockOkResponse = {
+                config: {},
+                data: {
+                    data: [[[mockEmptyWell]]],
+                    offset: 0,
+                    responseType: "SUCCESS",
+                    totalCount: 1,
+                },
+                headers: {},
+                status: HTTP_STATUS.OK,
+                statusText: "OK",
+            };
+            mockBadGatewayResponse = {
+                config: {},
+                message: "Bad Gateway",
+                name: "",
+                response: {
+                    ...mockOkResponse,
+                    data: [],
+                    status: HTTP_STATUS.BAD_GATEWAY,
+                    statusText: "Bad Gateway",
+                },
+            };
+        });
+
+        it("Adds GET wells request to requests in progress", (done) => {
+            const getStub = sinon.stub().resolves(mockOkResponse);
+            const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
+            expect(getRequestsInProgressContains(store.getState(), HttpRequestType.GET_WELLS)).to.be.false;
+            let storeUpdates = 0;
+            store.subscribe(() => {
+                storeUpdates++;
+
+                if (storeUpdates === 1) {
+                    const state = store.getState();
+                    expect(getRequestsInProgressContains(state, HttpRequestType.GET_WELLS)).to.be.true;
+                    done();
+                }
+            });
+
+            store.dispatch(selectBarcode(barcode, plateId));
+        });
+
+        it ("removes GET wells from requests in progress if GET wells is OK", (done) => {
+            const getStub = sinon.stub().callsFake(() => {
+                store.subscribe(() => {
+                    expect(getRequestsInProgressContains(store.getState(), HttpRequestType.GET_WELLS)).to.be.false;
+                    done();
+                });
+                return Promise.resolve(mockOkResponse);
+            });
+            const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
+
+            store.dispatch(selectBarcode(barcode, plateId));
+        });
+
+        it("Sets wells, page, barcode, and plateId if GET wells is OK", (done) => {
+            const getStub = sinon.stub().callsFake(() => {
+                // we add the subscription after the first store.dispatch because we're testing
+                // the process callback which gets called after the first store update
+                store.subscribe(() => {
+                    const state = store.getState();
+                    expect(getWells(state)).to.not.be.empty;
+                    expect(getAppPage(state)).to.equal(AppPage.AssociateWells);
+                    expect(getSelectedBarcode(state)).to.equal(barcode);
+                    expect(getSelectedPlateId(state)).to.equal(plateId);
+                    done();
+                });
+
+                return Promise.resolve(mockOkResponse);
+            });
+            const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
+
+            store.dispatch(selectBarcode(barcode, plateId));
+
+        });
+
+        it("Does not retry GET wells request if response is non-Bad Gateway error", (done) => {
+            const getStub = sinon.stub().callsFake(() => {
+                store.subscribe(() => {
+                    const state = store.getState();
+                    expect(getRequestsInProgressContains(state, HttpRequestType.GET_WELLS)).to.be.false;
+                    expect(getStub.callCount).to.equal(1);
+
+                    const alert = getAlert(state);
+                    expect(alert).to.not.be.undefined;
+
+                    if (alert) {
+                        expect(alert.type).to.equal(AlertType.ERROR);
+                        expect(alert.message).to.equal(GENERIC_GET_WELLS_ERROR_MESSAGE(barcode));
+                    }
+
+                    done();
+                });
+
+                return Promise.reject({
+                    ...mockOkResponse,
+                    status: HTTP_STATUS.BAD_REQUEST,
+                });
+            });
+
+            const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
+            store.dispatch(selectBarcode(barcode, plateId));
+        });
+
+        it("Shows error message if it only receives Bad Gateway error for 20 seconds", function(done) {
+            // here we're using a fake clock so that 20 seconds passes more quickly and to give control
+            // over to the test in terms of timing.
+            this.clock = sinon.useFakeTimers((new Date()).getTime());
+
+            // extends timeout for this test since we're testing a potentially long running process
+            const waitTime = API_WAIT_TIME_SECONDS * 1000 + 3000;
+            this.timeout(waitTime);
+
+            let secondsPassed = 0;
+            const incrementMs = 5000;
+
+            let firstAlert: AppAlert | undefined;
+
+            // increment clock on every get call by 5 seconds
+            const getStub = sinon.stub().callsFake(() => {
+                this.clock.tick(incrementMs);
+                secondsPassed += incrementMs / 1000;
+
+                if (!firstAlert) {
+                    firstAlert = getAlert(store.getState());
+                }
+
+                return Promise.reject(mockBadGatewayResponse);
+            });
+            const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
+
+            store.subscribe(() => {
+                if (secondsPassed >= API_WAIT_TIME_SECONDS) {
+                    const state = store.getState();
+                    const currentAlert: AppAlert | undefined = getAlert(state);
+                    expect(getStub.callCount).to.be.greaterThan(1);
+                    expect(firstAlert).to.not.be.undefined;
+
+                    if (firstAlert) {
+                        expect(firstAlert.type).to.equal(AlertType.WARN);
+                        expect(firstAlert.message).to.equal(MMS_MIGHT_BE_DOWN_MESSAGE);
+                    }
+
+                    expect(currentAlert).to.not.be.undefined;
+
+                    if (currentAlert) {
+                        expect(currentAlert.type).to.equal(AlertType.ERROR);
+                        expect(currentAlert.message).to.equal(MMS_IS_DOWN_MESSAGE);
+                    }
+
+                    done();
+                }
+            });
+
+            store.dispatch(selectBarcode(barcode, plateId));
+        });
+
+        it("Can handle successful response after retrying GET wells request", function(done) {
+            this.timeout(API_WAIT_TIME_SECONDS * 1000 + 3000);
+            let okResponseReturned = false;
+            const getStub = sinon.stub()
+                .onFirstCall().rejects(mockBadGatewayResponse)
+                .onSecondCall().callsFake(() => {
+                    okResponseReturned = true;
+                    return Promise.resolve(mockOkResponse);
+                });
+            const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
+            store.subscribe(() => {
+                if (okResponseReturned) {
+                    const state = store.getState();
+                    expect(getWells(state)).to.not.be.empty;
+                    expect(getAppPage(state)).to.equal(AppPage.AssociateWells);
+                    expect(getSelectedBarcode(state)).to.equal(barcode);
+                    expect(getSelectedPlateId(state)).to.equal(plateId);
+                    okResponseReturned = false; // prevent more calls to done
+                    done();
+                }
+            });
+            store.dispatch(selectBarcode(barcode, plateId));
         });
     });
 });

@@ -5,6 +5,7 @@ import { State } from "../types";
 export const mockState: State = {
     feedback: {
         isLoading: false,
+        requestsInProgress: [],
     },
     metadata: {
         units: [],

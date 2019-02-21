@@ -94,6 +94,13 @@ const actionToConfigMap: TypeToDescriptionMap = {
             stagedFiles: action.payload,
         }),
     },
+    [SET_WELLS]: {
+        accepts: (action: AnyAction): action is SetWellsAction => action.type === SET_WELLS,
+        perform: (state: SelectionStateBranch, action: SetWellsAction) => ({
+            ...state,
+            wells: action.payload,
+        }),
+    },
 };
 
 export default makeReducer<SelectionStateBranch>(actionToConfigMap, initialState);
