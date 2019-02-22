@@ -19,7 +19,7 @@ export const getWells = (state: State) => state.selection.wells;
 // COMPOSED SELECTORS
 export const NO_UNIT = "(Unit Not Found)";
 
-export const getWellsWithModified = createSelector([getWells], (wells?: Well[][]): Well[][] => {
+export const getWellsWithModified = createSelector([getWells], (wells: Well[][]): Well[][] => {
     if (!wells || wells.length === 0) {
         return wells || [];
     }
