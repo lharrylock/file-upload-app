@@ -19,6 +19,7 @@ import {
     UploadFile,
 } from "../../state/selection/types";
 import { State } from "../../state/types";
+import AssociateWells from "../AssociateWells";
 
 import DragAndDropSquare from "../DragAndDropSquare";
 import EnterBarcode from "../EnterBarcode";
@@ -50,7 +51,7 @@ const APP_PAGE_TO_CONFIG_MAP = new Map<AppPage, AppPageConfig>([
         folderTreeVisible: true,
     }],
     [AppPage.AssociateWells, {
-        container:  <div key="plateMetadataEntry" className={styles.mainContent}>TODO</div>,
+        container:  <AssociateWells key="associateWells" className={styles.mainContent}/>,
         folderTreeSelectable: true,
         folderTreeVisible: true,
     }],

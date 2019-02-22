@@ -73,6 +73,13 @@ const actionToConfigMap: TypeToDescriptionMap = {
             page: action.payload,
         }),
     },
+    [SET_WELLS]: {
+        accepts: (action: AnyAction): action is SetWellsAction => action.type === SET_WELLS,
+        perform: (state: SelectionStateBranch, action: SetWellsAction) => ({
+            ...state,
+            wells: action.payload,
+        }),
+    },
     [ADD_STAGE_FILES]: {
         accepts: (action: AnyAction): action is AddStageFilesAction => action.type === ADD_STAGE_FILES,
         perform: (state: SelectionStateBranch, action: AddStageFilesAction) => ({

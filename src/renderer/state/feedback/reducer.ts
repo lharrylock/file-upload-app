@@ -7,14 +7,17 @@ import { makeReducer } from "../util";
 
 import {
     ADD_REQUEST_IN_PROGRESS,
-    CLEAR_ALERT, REMOVE_REQUEST_IN_PROGRESS, SET_ALERT,
+    CLEAR_ALERT,
+    REMOVE_REQUEST_IN_PROGRESS,
+    SET_ALERT,
     START_LOADING,
     STOP_LOADING,
 } from "./constants";
 import {
     AddRequestInProgressAction,
     ClearAlertAction,
-    FeedbackStateBranch, RemoveRequestInProgressAction,
+    FeedbackStateBranch,
+    RemoveRequestInProgressAction,
     SetAlertAction,
     StartLoadingAction,
     StopLoadingAction

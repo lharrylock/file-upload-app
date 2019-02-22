@@ -152,7 +152,7 @@ const getFilesInFolderLogic = createLogic({
 });
 
 async function getWells({ action, getState, httpClient, baseMmsUrl }: ReduxLogicTransformDependencies,
-                        plateId: number): Promise<AxiosResponse<AicsSuccessResponse<Well[][]>>> {
+                        plateId: number): Promise<AxiosResponse<AicsSuccessResponse<Well[]>>> {
     return httpClient.get(`${baseMmsUrl}/1.0/plate/${plateId}/well/`);
 }
 
@@ -178,7 +178,7 @@ const selectBarcodeLogic = createLogic({
             && !receivedNonGatewayError) {
                 try {
                     const response = await getWells(deps, plateId);
-                    const wells: Well[][] = response.data.data[0];
+                    const wells: Well[][] = response.data.data;
                     receivedSuccessfulResponse = true;
                     dispatch(batchActions([
                         selectPage(AppPage.AssociateWells),
