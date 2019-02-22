@@ -70,7 +70,7 @@
   },
   "dependencies": {
     "aics-react-labkey": "^4.1.0",
-    "antd": "^3.10.4",
+    "antd": "^3.13.4",
     "classnames": "^2.2.6",
     "core-js": "^2.5.7",
     "electron": "^2.0.5",
