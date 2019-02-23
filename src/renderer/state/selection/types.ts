@@ -17,6 +17,7 @@ export interface DeselectFileAction {
 export interface SelectionStateBranch {
     [key: string]: any;
     barcode?: string;
+    files: string[];
     plateId?: number;
     wells: Well[][];
     page: AppPage;

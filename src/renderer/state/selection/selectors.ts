@@ -68,3 +68,10 @@ export const getWellsWithUnitsAndModified = createSelector([
         };
     }));
 });
+
+export const getSelectedFile = createSelector([
+    getSelectedFiles,
+], (files: string[]) => {
+    // todo use lodash?
+    return files && files.length > 0 ? files[0] : undefined;
+});

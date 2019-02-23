@@ -56,7 +56,7 @@ const actionToConfigMap: TypeToDescriptionMap = {
         accepts: (action: AnyAction): action is SelectFileAction => action.type === SELECT_FILE,
         perform: (state: SelectionStateBranch, action: SelectFileAction) => ({
             ...state,
-            files: [...state.files, ...castArray(action.payload)],
+            files: [...castArray(action.payload)],
         }),
     },
     [SELECT_METADATA]: {
