@@ -159,7 +159,10 @@ module.exports = ({ analyze, env } = {}) => ({
     },
     plugins: getPluginsByEnv(env, analyze, "renderer"),
     resolve: {
-        extensions: [".ts", ".tsx", ".js", ".jsx", ".json"]
+        extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
+        alias: {
+            'react-dom': '@hot-loader/react-dom'
+        }
     },
     optimization: {
       splitChunks: {
