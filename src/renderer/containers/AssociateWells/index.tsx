@@ -1,6 +1,7 @@
 import { Button, Col, Row, Statistic } from "antd";
 import * as React from "react";
 import { connect } from "react-redux";
+import { ActionCreator } from "redux";
 
 import FormPage from "../../components/FormPage";
 import Plate from "../../components/Plate/index";
@@ -8,12 +9,14 @@ import Plate from "../../components/Plate/index";
 import {
     State,
 } from "../../state";
+import { associateFileAndWell } from "../../state/selection/actions";
 import { getSelectedFile, getWellsWithUnitsAndModified } from "../../state/selection/selectors";
-import { Well } from "../../state/selection/types";
+import { AssociateFileAndWellAction, Well } from "../../state/selection/types";
 
 const styles = require("./style.css");
 
 interface Props {
+    associate: ActionCreator<AssociateFileAndWellAction>;
     className?: string;
     selectedFile?: string;
     wells?: Well[][];
@@ -27,8 +30,10 @@ class AssociateWells extends React.Component<Props, AssociateWellsState> {
     constructor(props: Props) {
         super(props);
         this.state = {};
+        this.associate = this.associate.bind(this);
         this.selectWell = this.selectWell.bind(this);
         this.getSelectedWell = this.getSelectedWell.bind(this);
+        this.canAssociate = this.canAssociate.bind(this);
     }
 
     public render() {
@@ -50,7 +55,13 @@ class AssociateWells extends React.Component<Props, AssociateWellsState> {
                         <Statistic title="Selected File" value={selectedFile || "None"}/>
                     </Col>
                 </Row>
-                <Button type="primary" disabled={!selectedFile || !selectedWell}>Associate</Button>
+                <Button
+                    type="primary"
+                    disabled={!this.canAssociate()}
+                    onClick={this.associate}
+                >
+                    Associate
+                </Button>
                 {wells ? <Plate wells={wells} onWellClick={this.selectWell}/> :
                     <span>Plate does not have any well information!</span>}
             </FormPage>
@@ -61,6 +72,20 @@ class AssociateWells extends React.Component<Props, AssociateWellsState> {
         this.setState({selectedWell});
     }
 
+    private canAssociate(): boolean {
+        return !!(this.props.selectedFile && this.state.selectedWell);
+    }
+
+    private associate(): void {
+        const { selectedWell } = this.state;
+
+        if (this.canAssociate() && selectedWell) {
+            const { associate, selectedFile } = this.props;
+            this.setState({selectedWell: undefined});
+            associate(selectedFile, selectedWell.wellId);
+        }
+    }
+
     private getSelectedWell(): string {
         const { selectedWell } = this.state;
 
@@ -69,7 +94,7 @@ class AssociateWells extends React.Component<Props, AssociateWellsState> {
     }
 }
 
-function mapStateToProps(state: State, props: Props): Props {
+function mapStateToProps(state: State, props: Props) {
     return {
         className: props.className,
         selectedFile: getSelectedFile(state),
@@ -77,6 +102,8 @@ function mapStateToProps(state: State, props: Props): Props {
     };
 }
 
-const dispatchToPropsMap = {};
+const dispatchToPropsMap = {
+    associate: associateFileAndWell,
+};
 
 export default connect(mapStateToProps, dispatchToPropsMap)(AssociateWells);

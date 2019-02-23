@@ -1,5 +1,5 @@
 import {
-    ADD_STAGE_FILES,
+    ADD_STAGE_FILES, ASSOCIATE_FILE_AND_WELL,
     DESELECT_FILE,
     GET_FILES_IN_FOLDER,
     LOAD_FILES,
@@ -13,7 +13,7 @@ import {
 } from "./constants";
 import {
     AddStageFilesAction,
-    AppPage,
+    AppPage, AssociateFileAndWellAction,
     DeselectFileAction,
     DragAndDropFileList,
     GetFilesInFolderAction,
@@ -107,5 +107,15 @@ export function setWells(wells: Well[][]): SetWellsAction {
     return {
         payload: wells,
         type: SET_WELLS,
+    };
+}
+
+export function associateFileAndWell(fullPath: string, wellId: number): AssociateFileAndWellAction {
+    return {
+        payload: {
+            fullPath,
+            wellId,
+        },
+        type: ASSOCIATE_FILE_AND_WELL,
     };
 }

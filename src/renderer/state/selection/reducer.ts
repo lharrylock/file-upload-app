@@ -8,7 +8,7 @@ import { TypeToDescriptionMap } from "../types";
 import { makeReducer } from "../util";
 
 import {
-    ADD_STAGE_FILES,
+    ADD_STAGE_FILES, ASSOCIATE_FILE_AND_WELL,
     DESELECT_FILE,
     SELECT_BARCODE,
     SELECT_FILE,
@@ -19,7 +19,7 @@ import {
 } from "./constants";
 import {
     AddStageFilesAction,
-    AppPage,
+    AppPage, AssociateFileAndWellAction,
     DeselectFileAction,
     SelectBarcodeAction,
     SelectFileAction,
@@ -34,6 +34,7 @@ export const initialState = {
     files: [],
     page: AppPage.DragAndDrop,
     stagedFiles: [],
+    uploads: [],
     wells: [],
 };
 
@@ -99,6 +100,13 @@ const actionToConfigMap: TypeToDescriptionMap = {
         perform: (state: SelectionStateBranch, action: SetWellsAction) => ({
             ...state,
             wells: action.payload,
+        }),
+    },
+    [ASSOCIATE_FILE_AND_WELL]: {
+        accepts: (action: AnyAction): action is AssociateFileAndWellAction => action.type === ASSOCIATE_FILE_AND_WELL,
+        perform: (state: SelectionStateBranch, action: AssociateFileAndWellAction) => ({
+            ...state,
+            uploads: [...state.uploads, action.payload],
         }),
     },
 };

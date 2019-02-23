@@ -22,6 +22,7 @@ export interface SelectionStateBranch {
     wells: Well[][];
     page: AppPage;
     stagedFiles: UploadFile[];
+    uploads: UploadData[];
 }
 
 export interface SelectFileAction {
@@ -146,6 +147,14 @@ export interface SetWellsAction {
     type: string;
 }
 
+export interface AssociateFileAndWellAction {
+    payload: {
+        fullPath: string,
+        wellId: number,
+    };
+    type: string;
+}
+
 export interface DragAndDropFileList {
     readonly length: number;
     [index: number]: DragAndDropFile;
@@ -168,4 +177,9 @@ export interface AppPageConfig {
     container: JSX.Element;
     folderTreeVisible: boolean;
     folderTreeSelectable: boolean;
+}
+
+export interface UploadData {
+    filePath: string;
+    wellId: number;
 }
