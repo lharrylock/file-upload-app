@@ -19,14 +19,22 @@ interface Props {
     wells?: Well[][];
 }
 
-class AssociateWells extends React.Component<Props, {}> {
+interface AssociateWellsState {
+    selectedWell?: Well;
+}
+
+class AssociateWells extends React.Component<Props, AssociateWellsState> {
     constructor(props: Props) {
         super(props);
         this.state = {};
+        this.selectWell = this.selectWell.bind(this);
+        this.getSelectedWell = this.getSelectedWell.bind(this);
     }
 
     public render() {
         const { className, selectedFile, wells } = this.props;
+        const { selectedWell } = this.state;
+
         return (
             <FormPage
                 className={className}
@@ -35,19 +43,29 @@ class AssociateWells extends React.Component<Props, {}> {
                 saveButtonDisabled={true}
             >
                 <Row className={styles.associateRow}>
-                    <Col span={11}>
-                        <Statistic title="Selected File" value={selectedFile || "None"} />
+                    <Col span={4}>
+                        <Statistic title="Selected Well" value={this.getSelectedWell()} />
                     </Col>
-                    <Col span={11}>
-                        <Statistic title="Selected Well" value={112893} />
-                    </Col>
-                    <Col span={2}>
-                        <Button style={{ marginTop: 16 }} type="primary">Associate</Button>
+                    <Col span={20}>
+                        <Statistic title="Selected File" value={selectedFile || "None"}/>
                     </Col>
                 </Row>
-                {wells ? <Plate wells={wells}/> : <span>Plate does not have any well information!</span>}
+                <Button type="primary" disabled={!selectedFile || !selectedWell}>Associate</Button>
+                {wells ? <Plate wells={wells} onWellClick={this.selectWell}/> :
+                    <span>Plate does not have any well information!</span>}
             </FormPage>
         );
+    }
+
+    public selectWell(selectedWell: Well, row: number, column: number): void {
+        this.setState({selectedWell});
+    }
+
+    private getSelectedWell(): string {
+        const { selectedWell } = this.state;
+
+        // todo none text const
+        return selectedWell ? `${selectedWell.wellId}` : "None";
     }
 }
 

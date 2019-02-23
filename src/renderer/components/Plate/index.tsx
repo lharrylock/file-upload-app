@@ -11,6 +11,7 @@ const WELL_WIDTH = "60px";
 
 interface PlateProps {
     className?: string;
+    onWellClick: (well: Well, row: number, col: number) => void;
     wells: Well[][];
 }
 
@@ -40,6 +41,7 @@ class Plate extends React.Component<PlateProps, PlateState> {
 
         if (data.modified) {
             this.setState({selectedWells: [{col, row}]});
+            this.props.onWellClick(data, row, col);
         }
     }
 
