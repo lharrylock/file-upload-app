@@ -11,7 +11,12 @@ import {
     State,
 } from "../../state";
 import { associateFileAndWell, setWellsForUpload } from "../../state/selection/actions";
-import { getSelectedFile, getWellForUpload, getWellsWithUnitsAndModified } from "../../state/selection/selectors";
+import {
+    getSelectedFile,
+    getWellForUpload,
+    getWellIdToFileCount,
+    getWellsWithUnitsAndModified
+} from "../../state/selection/selectors";
 import { AssociateFileAndWellAction, SetWellsForUploadAction, Well } from "../../state/selection/types";
 
 const styles = require("./style.css");
@@ -23,6 +28,7 @@ interface AssociateWellsProps {
     selectedWell?: AicsGridCell;
     setWellsForUpload: ActionCreator<SetWellsForUploadAction>;
     wells?: Well[][];
+    wellIdToFileCount: Map<number, number>;
 }
 
 class AssociateWells extends React.Component<AssociateWellsProps, {}> {
@@ -35,7 +41,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
     }
 
     public render() {
-        const { className, selectedFile, selectedWell, wells } = this.props;
+        const { className, selectedFile, selectedWell, wells, wellIdToFileCount } = this.props;
         const selectedWells = selectedWell ? [selectedWell] : [];
 
         return (
@@ -63,8 +69,14 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
                     </Button>
                 </Card>
 
-                {wells ? <Plate wells={wells} onWellClick={this.selectWell} selectedWells={selectedWells}/> :
-                    <span>Plate does not have any well information!</span>}
+                {wells ? (
+                        <Plate
+                            wells={wells}
+                            onWellClick={this.selectWell}
+                            selectedWells={selectedWells}
+                            wellIdToFileCount={wellIdToFileCount}
+                        />
+                    ) : <span>Plate does not have any well information!</span>}
             </FormPage>
         );
     }
@@ -101,6 +113,7 @@ function mapStateToProps(state: State) {
     return {
         selectedFile: getSelectedFile(state),
         selectedWell: getWellForUpload(state),
+        wellIdToFileCount: getWellIdToFileCount(state),
         wells: getWellsWithUnitsAndModified(state),
     };
 }
