@@ -1,6 +1,9 @@
+import { AicsGridCell } from "aics-react-labkey";
 import {
-    ADD_STAGE_FILES, ASSOCIATE_FILE_AND_WELL,
+    ADD_STAGE_FILES,
+    ASSOCIATE_FILE_AND_WELL,
     DESELECT_FILE,
+    DESELECT_WELLS_FOR_UPLOAD,
     GET_FILES_IN_FOLDER,
     LOAD_FILES,
     OPEN_FILES,
@@ -9,12 +12,14 @@ import {
     SELECT_METADATA,
     SELECT_PAGE,
     SET_WELLS,
+    SET_WELLS_FOR_UPLOAD,
     UPDATE_STAGED_FILES,
 } from "./constants";
 import {
     AddStageFilesAction,
     AppPage, AssociateFileAndWellAction,
     DeselectFileAction,
+    DeselectWellsForUploadAction,
     DragAndDropFileList,
     GetFilesInFolderAction,
     LoadFilesFromDragAndDropAction,
@@ -24,6 +29,7 @@ import {
     SelectMetadataAction,
     SelectPageAction,
     SetWellsAction,
+    SetWellsForUploadAction,
     UpdateStagedFilesAction,
     UploadFile,
     Well,
@@ -110,11 +116,28 @@ export function setWells(wells: Well[][]): SetWellsAction {
     };
 }
 
-export function associateFileAndWell(fullPath: string, wellId: number): AssociateFileAndWellAction {
+export function setWellsForUpload(wells: AicsGridCell[]): SetWellsForUploadAction {
+    return {
+        payload: wells,
+        type: SET_WELLS_FOR_UPLOAD,
+    };
+}
+
+export function deselectWellsForUpload(wells: AicsGridCell[]): DeselectWellsForUploadAction {
+    return {
+        payload: wells,
+        type: DESELECT_WELLS_FOR_UPLOAD,
+    };
+}
+
+export function associateFileAndWell(fullPath: string, wellId: number, cell: AicsGridCell): AssociateFileAndWellAction {
     return {
         payload: {
-            fullPath,
-            wellId,
+            cell,
+            upload: {
+                fullPath,
+                wellId,
+            },
         },
         type: ASSOCIATE_FILE_AND_WELL,
     };

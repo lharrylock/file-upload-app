@@ -1,3 +1,4 @@
+import { AicsGridCell } from "aics-react-labkey";
 import { Button, Card, Col, Row, Statistic } from "antd";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -9,9 +10,9 @@ import Plate from "../../components/Plate/index";
 import {
     State,
 } from "../../state";
-import { associateFileAndWell } from "../../state/selection/actions";
-import { getSelectedFile, getWellsWithUnitsAndModified } from "../../state/selection/selectors";
-import { AssociateFileAndWellAction, Well } from "../../state/selection/types";
+import { associateFileAndWell, setWellsForUpload } from "../../state/selection/actions";
+import { getSelectedFile, getWellForUpload, getWellsWithUnitsAndModified } from "../../state/selection/selectors";
+import { AssociateFileAndWellAction, SetWellsForUploadAction, Well } from "../../state/selection/types";
 
 const styles = require("./style.css");
 
@@ -19,17 +20,14 @@ interface AssociateWellsProps {
     associateFileAndWell: ActionCreator<AssociateFileAndWellAction>;
     className?: string;
     selectedFile?: string;
+    selectedWell?: AicsGridCell;
+    setWellsForUpload: ActionCreator<SetWellsForUploadAction>;
     wells?: Well[][];
 }
 
-interface AssociateWellsState {
-    selectedWell?: Well;
-}
-
-class AssociateWells extends React.Component<AssociateWellsProps, AssociateWellsState> {
+class AssociateWells extends React.Component<AssociateWellsProps, {}> {
     constructor(props: AssociateWellsProps) {
         super(props);
-        this.state = {};
         this.associate = this.associate.bind(this);
         this.selectWell = this.selectWell.bind(this);
         this.getSelectedWell = this.getSelectedWell.bind(this);
@@ -37,7 +35,8 @@ class AssociateWells extends React.Component<AssociateWellsProps, AssociateWells
     }
 
     public render() {
-        const { className, selectedFile, wells } = this.props;
+        const { className, selectedFile, selectedWell, wells } = this.props;
+        const selectedWells = selectedWell ? [selectedWell] : [];
 
         return (
             <FormPage
@@ -64,47 +63,51 @@ class AssociateWells extends React.Component<AssociateWellsProps, AssociateWells
                     </Button>
                 </Card>
 
-                {wells ? <Plate wells={wells} onWellClick={this.selectWell}/> :
+                {wells ? <Plate wells={wells} onWellClick={this.selectWell} selectedWells={selectedWells}/> :
                     <span>Plate does not have any well information!</span>}
             </FormPage>
         );
     }
 
-    public selectWell(selectedWell: Well, row: number, column: number): void {
-        this.setState({selectedWell});
+    public selectWell(row: number, col: number): void {
+        this.props.setWellsForUpload([{row, col}]);
     }
 
     private canAssociate(): boolean {
-        return !!(this.props.selectedFile && this.state.selectedWell);
+        return !!(this.props.selectedFile && this.props.selectedWell);
     }
 
     private associate(): void {
-        const { selectedWell } = this.state;
+        const { selectedWell, wells } = this.props;
 
-        if (this.canAssociate() && selectedWell) {
+        if (this.canAssociate() && selectedWell && wells) {
             const { selectedFile } = this.props;
             this.setState({selectedWell: undefined});
-            this.props.associateFileAndWell(selectedFile, selectedWell.wellId);
+            const wellId = wells[selectedWell.row][selectedWell.col].wellId;
+            this.props.associateFileAndWell(selectedFile, wellId, selectedWell);
         }
     }
 
     private getSelectedWell(): string {
-        const { selectedWell } = this.state;
+        const { selectedWell } = this.props;
 
         // todo none text const
-        return selectedWell ? `${selectedWell.wellId}` : "None";
+        // todo B6 rather than 2, 6
+        return selectedWell ? `${selectedWell.row}, ${selectedWell.col}` : "None";
     }
 }
 
 function mapStateToProps(state: State) {
     return {
         selectedFile: getSelectedFile(state),
+        selectedWell: getWellForUpload(state),
         wells: getWellsWithUnitsAndModified(state),
     };
 }
 
 const dispatchToPropsMap = {
     associateFileAndWell,
+    setWellsForUpload,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(AssociateWells);

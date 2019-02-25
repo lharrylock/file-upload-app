@@ -11,15 +11,12 @@ const WELL_WIDTH = "60px";
 
 interface PlateProps {
     className?: string;
-    onWellClick: (well: Well, row: number, col: number) => void;
+    onWellClick: (row: number, col: number, well?: Well) => void;
     wells: Well[][];
-}
-
-interface PlateState {
     selectedWells: AicsGridCell[];
 }
 
-class Plate extends React.Component<PlateProps, PlateState> {
+class Plate extends React.Component<PlateProps, {}> {
     public static getWellDisplayText(cellData: Well): JSX.Element {
         return <WellComponent well={cellData}/>;
     }
@@ -30,9 +27,6 @@ class Plate extends React.Component<PlateProps, PlateState> {
 
     constructor(props: PlateProps) {
         super(props);
-        this.state = {
-            selectedWells: [],
-        };
         this.handleWellClick = this.handleWellClick.bind(this);
     }
 
@@ -40,14 +34,14 @@ class Plate extends React.Component<PlateProps, PlateState> {
         event.preventDefault();
 
         if (data.modified) {
-            this.setState({selectedWells: [{col, row}]});
-            this.props.onWellClick(data, row, col);
+            this.props.onWellClick(row, col, data);
         }
     }
 
     public render() {
         const {
             className,
+            selectedWells,
             wells,
         } = this.props;
 
@@ -58,7 +52,7 @@ class Plate extends React.Component<PlateProps, PlateState> {
                     cellHeight={WELL_WIDTH}
                     cellWidth={WELL_WIDTH}
                     fontSize="14px"
-                    selectedCells={this.state.selectedWells}
+                    selectedCells={selectedWells}
                     displayBackground={Plate.wellColorSelector}
                     displayText={Plate.getWellDisplayText}
                     cells={wells}

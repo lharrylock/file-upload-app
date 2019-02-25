@@ -1,4 +1,4 @@
-import { Icon, Spin, Tree } from "antd";
+import { Badge, Icon, Spin, Tree } from "antd";
 import * as classNames from "classnames";
 import * as React from "react";
 
@@ -128,8 +128,14 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
         if (!file.isDirectory) {
             const { isChecked: getIsChecked } = this.props;
             const isChecked = getIsChecked && getIsChecked(file);
+            const fileName: JSX.Element = <span className={styles.fileName}>{file.name}</span>;
+            // todo count
             const fileDisplay = isChecked ?
-                <span>{file.name}&nbsp;<Icon type="check"/></span> : file.name;
+                (
+                    <Badge count={1} style={{ backgroundColor: "#52c41a" }}>
+                        {fileName}
+                    </Badge>
+                ) : fileName;
             return <Tree.TreeNode title={fileDisplay} key={file.fullPath} isLeaf={true}/>;
         }
 

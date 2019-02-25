@@ -1,4 +1,5 @@
-import { isEmpty } from "lodash";
+import { AicsGridCell } from "aics-react-labkey";
+import { first, isEmpty } from "lodash";
 import { createSelector } from "reselect";
 
 import { getUnits } from "../metadata/selectors";
@@ -16,6 +17,7 @@ export const getAppPage = (state: State) => state.selection.page;
 export const getStagedFiles = (state: State) => state.selection.stagedFiles;
 export const getWells = (state: State) => state.selection.wells;
 export const getUploads = (state: State) => state.selection.uploads;
+export const getWellsForUpload = (state: State) => state.selection.wellsForUpload;
 
 // COMPOSED SELECTORS
 export const NO_UNIT = "(Unit Not Found)";
@@ -73,6 +75,11 @@ export const getWellsWithUnitsAndModified = createSelector([
 export const getSelectedFile = createSelector([
     getSelectedFiles,
 ], (files: string[]) => {
-    // todo use lodash?
-    return files && files.length > 0 ? files[0] : undefined;
+    return first(files);
+});
+
+export const getWellForUpload = createSelector([
+    getWellsForUpload,
+], (wells: AicsGridCell[]) => {
+    return first(wells);
 });

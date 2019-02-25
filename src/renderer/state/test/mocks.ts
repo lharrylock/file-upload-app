@@ -16,6 +16,7 @@ export const mockState: State = {
         stagedFiles: [],
         uploads: [],
         wells: [],
+        wellsForUpload: [],
     },
 };
 
