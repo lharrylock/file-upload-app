@@ -15,6 +15,7 @@ export const getSelectedFiles = (state: State) => state.selection.files;
 export const getAppPage = (state: State) => state.selection.page;
 export const getStagedFiles = (state: State) => state.selection.stagedFiles;
 export const getWells = (state: State) => state.selection.wells;
+export const getUploads = (state: State) => state.selection.uploads;
 
 // COMPOSED SELECTORS
 export const NO_UNIT = "(Unit Not Found)";

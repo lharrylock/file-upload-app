@@ -14,6 +14,7 @@ interface FolderTreeProps {
     className?: string;
     files: UploadFile[];
     getFilesInFolder: (folderToExpand: UploadFile) => GetFilesInFolderAction;
+    isChecked?: (file: UploadFile) => boolean;
     isLoading?: boolean;
     isSelectable: boolean;
     onCheck: (files: string[]) => SelectFileAction;
@@ -125,7 +126,11 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
 
     private renderChildDirectories(file: UploadFile): React.ReactNode {
         if (!file.isDirectory) {
-            return <Tree.TreeNode title={file.name} key={file.fullPath} isLeaf={true}/>;
+            const { isChecked: getIsChecked } = this.props;
+            const isChecked = getIsChecked && getIsChecked(file);
+            const fileDisplay = isChecked ?
+                <span>{file.name}&nbsp;<Icon type="check"/></span> : file.name;
+            return <Tree.TreeNode title={fileDisplay} key={file.fullPath} isLeaf={true}/>;
         }
 
         return (

@@ -148,10 +148,7 @@ export interface SetWellsAction {
 }
 
 export interface AssociateFileAndWellAction {
-    payload: {
-        fullPath: string,
-        wellId: number,
-    };
+    payload: UploadData;
     type: string;
 }
 
@@ -180,6 +177,6 @@ export interface AppPageConfig {
 }
 
 export interface UploadData {
-    filePath: string;
+    fullPath: string;
     wellId: number;
 }
