@@ -38,6 +38,7 @@ describe("<FolderTree/>", () => {
                         getFilesInFolder={getFilesInFolder}
                         isSelectable={false}
                         onCheck={ON_CHECK}
+                        selectedKeys={[]}
                 />
             );
 
@@ -61,6 +62,7 @@ describe("<FolderTree/>", () => {
                     getFilesInFolder={getFilesInFolder}
                     isSelectable={false}
                     onCheck={ON_CHECK}
+                    selectedKeys={[]}
                 />
             );
 

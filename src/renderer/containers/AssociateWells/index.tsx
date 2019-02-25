@@ -1,4 +1,4 @@
-import { Button, Col, Row, Statistic } from "antd";
+import { Button, Card, Col, Row, Statistic } from "antd";
 import * as React from "react";
 import { connect } from "react-redux";
 import { ActionCreator } from "redux";
@@ -15,8 +15,8 @@ import { AssociateFileAndWellAction, Well } from "../../state/selection/types";
 
 const styles = require("./style.css");
 
-interface Props {
-    associate: ActionCreator<AssociateFileAndWellAction>;
+interface AssociateWellsProps {
+    associateFileAndWell: ActionCreator<AssociateFileAndWellAction>;
     className?: string;
     selectedFile?: string;
     wells?: Well[][];
@@ -26,8 +26,8 @@ interface AssociateWellsState {
     selectedWell?: Well;
 }
 
-class AssociateWells extends React.Component<Props, AssociateWellsState> {
-    constructor(props: Props) {
+class AssociateWells extends React.Component<AssociateWellsProps, AssociateWellsState> {
+    constructor(props: AssociateWellsProps) {
         super(props);
         this.state = {};
         this.associate = this.associate.bind(this);
@@ -38,7 +38,6 @@ class AssociateWells extends React.Component<Props, AssociateWellsState> {
 
     public render() {
         const { className, selectedFile, wells } = this.props;
-        const { selectedWell } = this.state;
 
         return (
             <FormPage
@@ -47,21 +46,24 @@ class AssociateWells extends React.Component<Props, AssociateWellsState> {
                 formPrompt="Associate files and wells by selecting them and clicking Associate"
                 saveButtonDisabled={true}
             >
-                <Row className={styles.associateRow}>
-                    <Col span={4}>
-                        <Statistic title="Selected Well" value={this.getSelectedWell()} />
-                    </Col>
-                    <Col span={20}>
-                        <Statistic title="Selected File" value={selectedFile || "None"}/>
-                    </Col>
-                </Row>
-                <Button
-                    type="primary"
-                    disabled={!this.canAssociate()}
-                    onClick={this.associate}
-                >
-                    Associate
-                </Button>
+                <Card className={styles.form}>
+                    <Row className={styles.associateRow}>
+                        <Col span={4}>
+                            <Statistic title="Selected Well" value={this.getSelectedWell()} />
+                        </Col>
+                        <Col span={20}>
+                            <Statistic title="Selected File" value={selectedFile || "None"}/>
+                        </Col>
+                    </Row>
+                    <Button
+                        type="primary"
+                        disabled={!this.canAssociate()}
+                        onClick={this.associate}
+                    >
+                        Associate
+                    </Button>
+                </Card>
+
                 {wells ? <Plate wells={wells} onWellClick={this.selectWell}/> :
                     <span>Plate does not have any well information!</span>}
             </FormPage>
@@ -80,9 +82,9 @@ class AssociateWells extends React.Component<Props, AssociateWellsState> {
         const { selectedWell } = this.state;
 
         if (this.canAssociate() && selectedWell) {
-            const { associate, selectedFile } = this.props;
+            const { selectedFile } = this.props;
             this.setState({selectedWell: undefined});
-            associate(selectedFile, selectedWell.wellId);
+            this.props.associateFileAndWell(selectedFile, selectedWell.wellId);
         }
     }
 
@@ -94,16 +96,15 @@ class AssociateWells extends React.Component<Props, AssociateWellsState> {
     }
 }
 
-function mapStateToProps(state: State, props: Props) {
+function mapStateToProps(state: State) {
     return {
-        className: props.className,
         selectedFile: getSelectedFile(state),
         wells: getWellsWithUnitsAndModified(state),
     };
 }
 
 const dispatchToPropsMap = {
-    associate: associateFileAndWell,
+    associateFileAndWell,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(AssociateWells);

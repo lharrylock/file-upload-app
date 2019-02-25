@@ -2,7 +2,7 @@ import "aics-react-labkey/dist/styles.css";
 import { message } from "antd";
 import * as React from "react";
 import { connect } from "react-redux";
-import { ActionCreator, AnyAction } from "redux";
+import { ActionCreator } from "redux";
 
 import FolderTree from "../../components/FolderTree";
 import { feedback, selection } from "../../state";
@@ -36,6 +36,7 @@ interface AppProps {
     loading: boolean;
     requestMetadata: ActionCreator<RequestMetadataAction>;
     selectFile: ActionCreator<SelectFileAction>;
+    selectedFiles: string[];
     page: AppPage;
 }
 
@@ -98,6 +99,7 @@ class App extends React.Component<AppProps, {}> {
             getFilesInFolder,
             loading,
             selectFile,
+            selectedFiles,
             page,
         } = this.props;
 
@@ -117,6 +119,7 @@ class App extends React.Component<AppProps, {}> {
                        isLoading={loading}
                        isSelectable={pageConfig.folderTreeSelectable}
                        onCheck={selectFile}
+                       selectedKeys={selectedFiles}
                    />
                 }
                 {pageConfig.container}
@@ -131,6 +134,7 @@ function mapStateToProps(state: State) {
         files: state.selection.stagedFiles,
         loading: feedback.selectors.getIsLoading(state),
         page: selection.selectors.getAppPage(state),
+        selectedFiles: selection.selectors.getSelectedFiles(state),
     };
 }
 
