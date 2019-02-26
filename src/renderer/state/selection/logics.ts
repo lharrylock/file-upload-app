@@ -18,7 +18,8 @@ import {
 import { AlertType, HttpRequestType } from "../feedback/types";
 
 import {
-    AicsSuccessResponse, HTTP_STATUS,
+    AicsSuccessResponse,
+    HTTP_STATUS,
     ReduxLogicDependencies,
     ReduxLogicDoneCb,
     ReduxLogicNextCb,
@@ -257,7 +258,8 @@ const selectBarcodeLogic = createLogic({
 const selectFileLogic = createLogic({
     process: ({action, getState}: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
         const files: string[] = castArray(action.payload);
-        if (files.length === 1) {
+        const page: AppPage = getAppPage(getState());
+        if (files.length === 1 && page === AppPage.AssociateWells) {
             const file: string = files[0];
             const fileToGridCellMap = getFileToGridCellMap(getState());
             const associatedGridCell = fileToGridCellMap.has(file) ? fileToGridCellMap.get(file) : undefined;
