@@ -1,26 +1,23 @@
 @import "../../styles/colors.css";
+@import "../../styles/variables.css";
 
 .container {
-    overflow: auto;
-
-    & .logo-container {
-          color:  var(--brand-primary);
-          padding: 1rem;
+  overflow: auto;
+  & .logo-container {
+    color:  var(--brand-primary);
+    padding: 1rem;
+    background-color: white;
+    border-bottom: 1px solid var(--border-color);
 
     & .brand-name {
-          font-size: 20px;
-          vertical-align: middle;
-      }
+      font-size: 20px;
+      vertical-align: middle;
+    }
 
     & .logo {
-          font-size: 36px;
-          padding-right: 0.25rem;
-          position: relative;
-          top: 10px;
-      }
+      font-size: 36px;
+      padding-right: 0.25rem;
+      vertical-align: middle;
     }
-
-    .file-tree {
-        padding: 2em;
-    }
+  }
 }

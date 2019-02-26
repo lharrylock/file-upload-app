@@ -1,4 +1,4 @@
-import { Icon, Spin, Tree } from "antd";
+import { Affix, Icon, Spin, Tree } from "antd";
 import * as classNames from "classnames";
 import * as React from "react";
 
@@ -78,10 +78,12 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
 
         return (
             <div className={classNames(className, styles.container)}>
-                <div className={styles.logoContainer}>
-                    <Icon type="cloud-upload" className={styles.logo}/>
-                    <span className={styles.brandName}>AICS&nbsp;File&nbsp;Uploader</span>
-                </div>
+                <Affix offsetTop={0}>
+                    <div className={styles.logoContainer}>
+                        <Icon type="cloud-upload" className={styles.logo}/>
+                        <span className={styles.brandName}>AICS&nbsp;File&nbsp;Uploader</span>
+                    </div>
+                </Affix>
                 <div className={styles.fileTree}>
                     {!isLoading && <Tree.DirectoryTree
                         checkable={false}
