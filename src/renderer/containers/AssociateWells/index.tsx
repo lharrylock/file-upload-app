@@ -13,13 +13,14 @@ import {
 import { setWellsForUpload } from "../../state/selection/actions";
 import {
     getSelectedFile,
+    getSelectedWellAndFileAreAssociated,
     getWellForUpload,
     getWellsWithUnitsAndModified
 } from "../../state/selection/selectors";
 import { SetWellsForUploadAction, Well } from "../../state/selection/types";
-import { associateFileAndWell } from "../../state/upload/actions";
+import { associateFileAndWell, undoFileWellAssociation } from "../../state/upload/actions";
 import { getWellIdToFileCount } from "../../state/upload/selectors";
-import { AssociateFileAndWellAction } from "../../state/upload/types";
+import { AssociateFileAndWellAction, UndoFileWellAssociationAction } from "../../state/upload/types";
 
 const styles = require("./style.css");
 
@@ -31,6 +32,8 @@ interface AssociateWellsProps {
     setWellsForUpload: ActionCreator<SetWellsForUploadAction>;
     wells?: Well[][];
     wellIdToFileCount: Map<number, number>;
+    selectedWellAndFileAreAssociated: boolean;
+    undoAssociation: ActionCreator<UndoFileWellAssociationAction>;
 }
 
 class AssociateWells extends React.Component<AssociateWellsProps, {}> {
@@ -40,6 +43,8 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
         this.selectWell = this.selectWell.bind(this);
         this.getSelectedWell = this.getSelectedWell.bind(this);
         this.canAssociate = this.canAssociate.bind(this);
+        this.canUndoAssociation = this.canUndoAssociation.bind(this);
+        this.undoAssociation = this.undoAssociation.bind(this);
     }
 
     public render() {
@@ -62,13 +67,27 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
                             <Statistic title="Selected File" value={selectedFile || "None"}/>
                         </Col>
                     </Row>
-                    <Button
-                        type="primary"
-                        disabled={!this.canAssociate()}
-                        onClick={this.associate}
-                    >
-                        Associate
-                    </Button>
+                    <Row>
+                        <Col span={4}>
+                            <Button
+                                type="primary"
+                                disabled={!this.canAssociate()}
+                                onClick={this.associate}
+                            >
+                                Associate
+                            </Button>
+                        </Col>
+                        <Col span={4}>
+                            <Button
+                                type="default"
+                                disabled={!this.canUndoAssociation()}
+                                onClick={this.undoAssociation}
+                            >
+                                Undo Association
+                            </Button>
+                        </Col>
+                    </Row>
+
                 </Card>
 
                 {wells ? (
@@ -88,7 +107,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
     }
 
     private canAssociate(): boolean {
-        return !!(this.props.selectedFile && this.props.selectedWell);
+        return !!(this.props.selectedFile && this.props.selectedWell) && !this.props.selectedWellAndFileAreAssociated;
     }
 
     private associate(): void {
@@ -99,6 +118,16 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
             this.setState({selectedWell: undefined});
             const wellId = wells[selectedWell.row][selectedWell.col].wellId;
             this.props.associateFileAndWell(selectedFile, wellId, selectedWell);
+        }
+    }
+
+    private canUndoAssociation(): boolean {
+        return this.props.selectedWellAndFileAreAssociated;
+    }
+
+    private undoAssociation(): void {
+        if (this.canUndoAssociation()) {
+            this.props.undoAssociation(this.props.selectedFile);
         }
     }
 
@@ -115,6 +144,7 @@ function mapStateToProps(state: State) {
     return {
         selectedFile: getSelectedFile(state),
         selectedWell: getWellForUpload(state),
+        selectedWellAndFileAreAssociated: getSelectedWellAndFileAreAssociated(state),
         wellIdToFileCount: getWellIdToFileCount(state),
         wells: getWellsWithUnitsAndModified(state),
     };
@@ -123,6 +153,7 @@ function mapStateToProps(state: State) {
 const dispatchToPropsMap = {
     associateFileAndWell,
     setWellsForUpload,
+    undoAssociation: undoFileWellAssociation,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(AssociateWells);

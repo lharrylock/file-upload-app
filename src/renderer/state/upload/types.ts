@@ -16,3 +16,8 @@ export interface AssociateFileAndWellAction {
     };
     type: string;
 }
+
+export interface UndoFileWellAssociationAction {
+    payload: string;
+    type: string;
+}

@@ -1,4 +1,6 @@
+import { values } from "lodash";
 import { createSelector } from "reselect";
+
 import { State } from "../types";
 import { UploadStateBranch } from "./types";
 
@@ -27,7 +29,15 @@ export const getFileToMetadataCount = createSelector([getUpload], (upload: Uploa
     for (const fullPath in upload) {
         if (upload.hasOwnProperty(fullPath)) {
             const metadata = upload[fullPath];
-            const count = Object.keys(metadata).length;
+
+            const count = values(metadata).reduce((accum: number, next: any) => {
+                if (next !== undefined) {
+                    accum++;
+                }
+
+                return accum;
+            }, 0);
+
             fullPathToMetadataCount.set(fullPath, count);
         }
     }

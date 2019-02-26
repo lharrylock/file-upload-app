@@ -108,3 +108,21 @@ export const getFileToGridCellMap = createSelector([
        return accum;
    }, new Map<string, AicsGridCell | undefined>());
 });
+
+export const getSelectedWellAndFileAreAssociated = createSelector([
+    getFileToGridCellMap,
+    getSelectedFiles,
+    getWellsForUpload,
+], (
+    fileToGridCell: Map<string,
+    AicsGridCell | undefined>,
+    selectedFiles: string[],
+    selectedWells: AicsGridCell[]
+): boolean => {
+    if (isEmpty(selectedFiles) || isEmpty(selectedWells) || selectedFiles.length > 1 || selectedWells.length > 1) {
+        return false;
+    }
+
+    const metadata = fileToGridCell.get(selectedFiles[0]);
+    return !!metadata && metadata.row === selectedWells[0].row && metadata.col === selectedWells[0].col;
+});
