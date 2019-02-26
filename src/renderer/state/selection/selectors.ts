@@ -5,6 +5,8 @@ import { createSelector } from "reselect";
 import { getUnits } from "../metadata/selectors";
 import { Unit } from "../metadata/types";
 import { State } from "../types";
+import { getUpload } from "../upload/selectors";
+import { UploadMetadata, UploadStateBranch } from "../upload/types";
 
 import { Solution, SolutionLot, ViabilityResult, Well } from "./types";
 
@@ -16,7 +18,6 @@ export const getSelectedFiles = (state: State) => state.selection.files;
 export const getAppPage = (state: State) => state.selection.page;
 export const getStagedFiles = (state: State) => state.selection.stagedFiles;
 export const getWells = (state: State) => state.selection.wells;
-export const getUploads = (state: State) => state.selection.uploads;
 export const getWellsForUpload = (state: State) => state.selection.wellsForUpload;
 
 // COMPOSED SELECTORS
@@ -82,4 +83,28 @@ export const getWellForUpload = createSelector([
     getWellsForUpload,
 ], (wells: AicsGridCell[]) => {
     return first(wells);
+});
+
+export const getFileToGridCellMap = createSelector([
+    getUpload,
+    getSelectedFiles,
+    getWells,
+], (uploads: UploadStateBranch, selectedFiles: string[], wells: Well[][]) => {
+   return selectedFiles.reduce((accum: Map<string, AicsGridCell | undefined>, fullPath: string) => {
+       const uploadMetadataForFile: UploadMetadata = uploads[fullPath];
+       let cell: AicsGridCell | undefined;
+       if (uploadMetadataForFile) {
+           const targetWellId = uploadMetadataForFile.wellId;
+           wells.forEach((wellRow, row) => {
+               wellRow.forEach((well, col) => {
+                  if (well.wellId === targetWellId) {
+                    cell = {row, col};
+                  }
+               });
+           });
+       }
+
+       accum.set(fullPath, cell);
+       return accum;
+   }, new Map<string, AicsGridCell | undefined>());
 });

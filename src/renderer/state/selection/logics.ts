@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { stat, Stats } from "fs";
-import { isEmpty, uniq } from "lodash";
+import { castArray, isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
@@ -29,6 +29,7 @@ import { batchActions, getActionFromBatch } from "../util";
 import {
     selectPage,
     setWells,
+    setWellsForUpload,
     stageFiles,
     updateStagedFiles
 } from "./actions";
@@ -37,9 +38,14 @@ import {
     LOAD_FILES,
     OPEN_FILES,
     SELECT_BARCODE,
+    SELECT_FILE,
 } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
-import { getAppPage, getStagedFiles } from "./selectors";
+import {
+    getAppPage,
+    getFileToGridCellMap,
+    getStagedFiles,
+} from "./selectors";
 import { AppPage, DragAndDropFileList, UploadFile, Well } from "./types";
 
 const mergeChildPaths = (filePaths: string[]): string[] => {
@@ -248,9 +254,28 @@ const selectBarcodeLogic = createLogic({
     type: SELECT_BARCODE,
 });
 
+const selectFileLogic = createLogic({
+    process: ({action, getState}: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
+        const files: string[] = castArray(action.payload);
+        if (files.length === 1) {
+            const file: string = files[0];
+            const fileToGridCellMap = getFileToGridCellMap(getState());
+            const associatedGridCell = fileToGridCellMap.has(file) ? fileToGridCellMap.get(file) : undefined;
+
+            if (associatedGridCell) {
+                dispatch(setWellsForUpload([associatedGridCell]));
+            }
+        }
+
+        done();
+    },
+    type: SELECT_FILE,
+});
+
 export default [
     loadFilesLogic,
     openFilesLogic,
     getFilesInFolderLogic,
     selectBarcodeLogic,
+    selectFileLogic,
 ];
