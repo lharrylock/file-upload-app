@@ -27,14 +27,17 @@ import {
 import { batchActions, getActionFromBatch } from "../util";
 
 import {
-    deselectFile,
-    deselectWellsForUpload,
     selectPage,
     setWells,
     stageFiles,
     updateStagedFiles
 } from "./actions";
-import { ASSOCIATE_FILE_AND_WELL, GET_FILES_IN_FOLDER, LOAD_FILES, OPEN_FILES, SELECT_BARCODE } from "./constants";
+import {
+    GET_FILES_IN_FOLDER,
+    LOAD_FILES,
+    OPEN_FILES,
+    SELECT_BARCODE,
+} from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
 import { getAppPage, getStagedFiles } from "./selectors";
 import { AppPage, DragAndDropFileList, UploadFile, Well } from "./types";
@@ -245,21 +248,9 @@ const selectBarcodeLogic = createLogic({
     type: SELECT_BARCODE,
 });
 
-const associateFileAndWellLogic = createLogic({
-    transform: ({action}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
-      next(batchActions([
-          action,
-          deselectFile(action.payload.upload.fullPath),
-          deselectWellsForUpload([action.payload.cell]),
-      ]));
-    },
-    type: ASSOCIATE_FILE_AND_WELL,
-});
-
 export default [
     loadFilesLogic,
     openFilesLogic,
     getFilesInFolderLogic,
     selectBarcodeLogic,
-    associateFileAndWellLogic,
 ];

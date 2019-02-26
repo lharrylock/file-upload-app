@@ -10,14 +10,16 @@ import Plate from "../../components/Plate/index";
 import {
     State,
 } from "../../state";
-import { associateFileAndWell, setWellsForUpload } from "../../state/selection/actions";
+import { setWellsForUpload } from "../../state/selection/actions";
 import {
     getSelectedFile,
     getWellForUpload,
-    getWellIdToFileCount,
     getWellsWithUnitsAndModified
 } from "../../state/selection/selectors";
-import { AssociateFileAndWellAction, SetWellsForUploadAction, Well } from "../../state/selection/types";
+import { SetWellsForUploadAction, Well } from "../../state/selection/types";
+import { associateFileAndWell } from "../../state/upload/actions";
+import { getWellIdToFileCount } from "../../state/upload/selectors";
+import { AssociateFileAndWellAction } from "../../state/upload/types";
 
 const styles = require("./style.css");
 

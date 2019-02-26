@@ -6,7 +6,7 @@ import { getUnits } from "../metadata/selectors";
 import { Unit } from "../metadata/types";
 import { State } from "../types";
 
-import { Solution, SolutionLot, UploadData, ViabilityResult, Well } from "./types";
+import { Solution, SolutionLot, ViabilityResult, Well } from "./types";
 
 // BASIC SELECTORS
 export const getSelectedBarcode = (state: State) => state.selection.barcode;
@@ -82,20 +82,4 @@ export const getWellForUpload = createSelector([
     getWellsForUpload,
 ], (wells: AicsGridCell[]) => {
     return first(wells);
-});
-
-export const getWellIdToFileCount = createSelector([
-    getUploads,
-], (uploads: UploadData[]) => {
-    return uploads.reduce((accum: Map<number, number>, currentValue: UploadData) => {
-        const { wellId } = currentValue;
-        if (accum.has(wellId)) {
-            const count = accum.get(wellId) || 0;
-            accum.set(wellId, count + 1);
-        } else {
-            accum.set(wellId, 1);
-        }
-
-        return accum;
-    }, new Map());
 });

@@ -12,7 +12,6 @@ const WELL_WIDTH = "60px";
 
 interface PlateProps {
     className?: string;
-    numberFiles?: number;
     onWellClick: (row: number, col: number, well?: Well) => void;
     wells: Well[][];
     wellIdToFileCount: Map<number, number>;

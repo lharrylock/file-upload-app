@@ -25,7 +25,6 @@ export interface SelectionStateBranch {
     wellsForUpload: AicsGridCell[];
     page: AppPage;
     stagedFiles: UploadFile[];
-    uploads: UploadData[];
 }
 
 export interface SelectFileAction {
@@ -160,14 +159,6 @@ export interface DeselectWellsForUploadAction {
     type: string;
 }
 
-export interface AssociateFileAndWellAction {
-    payload: {
-        cell: AicsGridCell,
-        upload: UploadData,
-    };
-    type: string;
-}
-
 export interface DragAndDropFileList {
     readonly length: number;
     [index: number]: DragAndDropFile;
@@ -190,9 +181,4 @@ export interface AppPageConfig {
     container: JSX.Element;
     folderTreeVisible: boolean;
     folderTreeSelectable: boolean;
-}
-
-export interface UploadData {
-    fullPath: string;
-    wellId: number;
 }

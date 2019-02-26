@@ -15,4 +15,3 @@ export const GET_FILES_IN_FOLDER = makeConstant(BRANCH_NAME, "get-files-in-folde
 export const SET_WELLS = makeConstant(BRANCH_NAME, "set_wells");
 export const SET_WELLS_FOR_UPLOAD = makeConstant(BRANCH_NAME, "set-wells-for-upload");
 export const DESELECT_WELLS_FOR_UPLOAD = makeConstant(BRANCH_NAME, "deselect-wells-for-upload");
-export const ASSOCIATE_FILE_AND_WELL = makeConstant(BRANCH_NAME, "associate-file-and-well");

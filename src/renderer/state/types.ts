@@ -5,6 +5,7 @@ import { CreateLogic } from "redux-logic/definitions/logic";
 import { FeedbackStateBranch } from "./feedback/types";
 import { MetadataStateBranch } from "./metadata/types";
 import { SelectionStateBranch } from "./selection/types";
+import { UploadStateBranch } from "./upload/types";
 import Process = CreateLogic.Config.Process;
 import DepObj = CreateLogic.Config.DepObj;
 
@@ -38,6 +39,7 @@ export interface State {
     feedback: FeedbackStateBranch;
     metadata: MetadataStateBranch;
     selection: SelectionStateBranch;
+    upload: UploadStateBranch;
 }
 
 export interface TypeToDescriptionMap {

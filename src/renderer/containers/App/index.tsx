@@ -1,6 +1,5 @@
 import "aics-react-labkey/dist/styles.css";
 import { message } from "antd";
-import { includes } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
 import { ActionCreator } from "redux";
@@ -12,15 +11,15 @@ import { getAlert } from "../../state/feedback/selectors";
 import { AlertType, AppAlert, ClearAlertAction } from "../../state/feedback/types";
 import { requestMetadata } from "../../state/metadata/actions";
 import { RequestMetadataAction } from "../../state/metadata/types";
-import { getUploads } from "../../state/selection/selectors";
 import {
     AppPage,
     AppPageConfig,
     GetFilesInFolderAction,
-    SelectFileAction, UploadData,
+    SelectFileAction,
     UploadFile,
 } from "../../state/selection/types";
 import { State } from "../../state/types";
+import { getFileToMetadataCount } from "../../state/upload/selectors";
 import AssociateWells from "../AssociateWells";
 
 import DragAndDropSquare from "../DragAndDropSquare";
@@ -33,13 +32,13 @@ const ALERT_DURATION = 2;
 interface AppProps {
     alert?: AppAlert;
     clearAlert: ActionCreator<ClearAlertAction>;
+    fileToMetadataCount: Map<string, number>;
     files: UploadFile[];
     getFilesInFolder: ActionCreator<GetFilesInFolderAction>;
     loading: boolean;
     requestMetadata: ActionCreator<RequestMetadataAction>;
     selectFile: ActionCreator<SelectFileAction>;
     selectedFiles: string[];
-    uploads: UploadData[];
     page: AppPage;
 }
 
@@ -66,12 +65,6 @@ message.config({
 });
 
 class App extends React.Component<AppProps, {}> {
-
-    constructor(props: AppProps) {
-        super(props);
-        this.isFileChecked = this.isFileChecked.bind(this);
-    }
-
     public componentDidMount() {
         this.props.requestMetadata();
     }
@@ -104,6 +97,7 @@ class App extends React.Component<AppProps, {}> {
 
     public render() {
         const {
+            fileToMetadataCount,
             files,
             getFilesInFolder,
             loading,
@@ -129,28 +123,23 @@ class App extends React.Component<AppProps, {}> {
                        isSelectable={pageConfig.folderTreeSelectable}
                        onCheck={selectFile}
                        selectedKeys={selectedFiles}
-                       isChecked={this.isFileChecked}
+                       fileToMetadataCount={fileToMetadataCount}
                    />
                 }
                 {pageConfig.container}
             </div>
         );
     }
-
-    private isFileChecked(file: UploadFile): boolean {
-        const { uploads } = this.props;
-        return includes(uploads.map((u) => u.fullPath), file.fullPath);
-    }
 }
 
 function mapStateToProps(state: State) {
     return {
         alert: getAlert(state),
+        fileToMetadataCount: getFileToMetadataCount(state),
         files: state.selection.stagedFiles,
         loading: feedback.selectors.getIsLoading(state),
         page: selection.selectors.getAppPage(state),
         selectedFiles: selection.selectors.getSelectedFiles(state),
-        uploads: getUploads(state),
     };
 }
 

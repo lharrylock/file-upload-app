@@ -1,7 +1,6 @@
 import { AicsGridCell } from "aics-react-labkey";
 import {
     ADD_STAGE_FILES,
-    ASSOCIATE_FILE_AND_WELL,
     DESELECT_FILE,
     DESELECT_WELLS_FOR_UPLOAD,
     GET_FILES_IN_FOLDER,
@@ -17,7 +16,7 @@ import {
 } from "./constants";
 import {
     AddStageFilesAction,
-    AppPage, AssociateFileAndWellAction,
+    AppPage,
     DeselectFileAction,
     DeselectWellsForUploadAction,
     DragAndDropFileList,
@@ -127,18 +126,5 @@ export function deselectWellsForUpload(wells: AicsGridCell[]): DeselectWellsForU
     return {
         payload: wells,
         type: DESELECT_WELLS_FOR_UPLOAD,
-    };
-}
-
-export function associateFileAndWell(fullPath: string, wellId: number, cell: AicsGridCell): AssociateFileAndWellAction {
-    return {
-        payload: {
-            cell,
-            upload: {
-                fullPath,
-                wellId,
-            },
-        },
-        type: ASSOCIATE_FILE_AND_WELL,
     };
 }
