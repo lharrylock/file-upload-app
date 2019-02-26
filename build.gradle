@@ -28,7 +28,7 @@ apply plugin: "org.alleninstitute.docker-publish"
 
 node {
     version = "8.11.1"
-    npmVersion = "5.8.0"
+    npmVersion = "6.8.0"
     download = true
     nodeModulesDir = file("${project.projectDir}")
 }
