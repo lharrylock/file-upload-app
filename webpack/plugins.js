@@ -2,7 +2,7 @@ const path = require('path');
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
@@ -27,7 +27,7 @@ const PLUGINS_BY_PROCESS = {
             root: path.resolve(__dirname, '../'),
             watch: true,
         }),
-        new ExtractTextPlugin('style.css'),
+        new MiniCssExtractPlugin('style.css'),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, 'index.template.html')
         })

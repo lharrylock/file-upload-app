@@ -1,6 +1,6 @@
 const path = require("path");
 const getPluginsByEnv = require("./plugins");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const tsImportPluginFactory = require("ts-import-plugin");
 const spawn = require("child_process").spawn;
 
@@ -87,54 +87,56 @@ module.exports = ({ analyze, env } = {}) => ({
                 include: [
                     path.resolve(__dirname, "../", "src", "renderer")
                 ],
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: [
-                        {
-                            loader: "css-loader",
-                            options: {
-                                camelCase: true,
-                                importLoaders: 1,
-                                localIdentName: "[name]__[local]--[hash:base64:5]",
-                                modules: true
-                            }
-                        },
-                        {
-                            loader: "postcss-loader",
-                            options: {
-                                ident: "postcss",
-                                plugins: [
-                                    require("postcss-import"),
-                                    require("postcss-cssnext")(),
-                                ]
-                            }
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                    },
+                    {
+                        loader: "css-loader",
+                        options: {
+                            camelCase: true,
+                            importLoaders: 1,
+                            localIdentName: "[name]__[local]--[hash:base64:5]",
+                            modules: true
                         }
-                    ]
-                })
+                    },
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            ident: "postcss",
+                            plugins: [
+                                require("postcss-preset-env")({
+                                    stage: 0,
+                                }),
+                            ],
+                            // sourceMap: env !== Env.PRODUCTION, // todo: start including environment
+                        }
+                    },
+                ],
             },
             {
                 test: /\.less$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: [
-                        {
-                            loader: "css-loader",
-                        },
-                        {
-                            loader: "less-loader",
-                            options: {
-                                modifyVars: {
-                                    "primary-color": "#1DA57A",
-                                    "link-color": "#1DA57A",
-                                    "border-radius-base": "2px",
-                                    "font-size-base": "18px",
-                                    "font-family"  : "Nunito"
-                                },
-                                javascriptEnabled: true,
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                    },
+                    {
+                        loader: "css-loader",
+                    },
+                    {
+                        loader: "less-loader",
+                        options: {
+                            modifyVars: {
+                                "primary-color": "#1DA57A",
+                                "link-color": "#1DA57A",
+                                "border-radius-base": "2px",
+                                "font-size-base": "18px",
+                                "font-family"  : "Nunito"
                             },
-                        }
-                    ]
-                })
+                            javascriptEnabled: true,
+                        },
+                    }
+                ],
             },
 
             // this rule will handle any css imports out of node_modules; it does not apply PostCSS,
@@ -145,10 +147,10 @@ module.exports = ({ analyze, env } = {}) => ({
                 include: [
                     path.resolve(__dirname, "../", "node_modules")
                 ],
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: [{ loader: "css-loader" }],
-                }),
+                use: [
+                    { loader: MiniCssExtractPlugin.loader },
+                    { loader: "css-loader" },
+                ],
             },
 
             {
