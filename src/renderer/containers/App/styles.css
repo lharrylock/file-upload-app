@@ -1,4 +1,5 @@
 @import "../../styles/layout.css";
+@import "../../styles/variables.css";
 
 .container {
   height: 100%;
@@ -9,12 +10,12 @@
 
   & .folder-tree {
     flex: 0 0 350px;
+    box-shadow: var(--box-shadow)
   }
 
   & .main-content {
     width: 100%;
     height: 100%;
-    background-color: #eff0f2;
     padding: var(--main-content-padding);
   }
 }
