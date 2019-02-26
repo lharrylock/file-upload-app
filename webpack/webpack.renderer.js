@@ -105,7 +105,7 @@ module.exports = ({ analyze, env } = {}) => ({
                                 ident: "postcss",
                                 plugins: [
                                     require("postcss-import"),
-                                    require("postcss-cssnext")(),
+                                    require("postcss-preset-env")({stage: 0}),
                                 ]
                             }
                         }
