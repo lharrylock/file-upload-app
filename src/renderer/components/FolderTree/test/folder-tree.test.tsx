@@ -39,6 +39,7 @@ describe("<FolderTree/>", () => {
                         isSelectable={false}
                         onCheck={ON_CHECK}
                         selectedKeys={[]}
+                        fileToMetadataCount={new Map()}
                 />
             );
 
@@ -63,6 +64,7 @@ describe("<FolderTree/>", () => {
                     isSelectable={false}
                     onCheck={ON_CHECK}
                     selectedKeys={[]}
+                    fileToMetadataCount={new Map()}
                 />
             );
 
