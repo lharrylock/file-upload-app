@@ -5,7 +5,7 @@
   height: 100%;
   width: 100%;
   display: flex;
-  font-size: 16px;
+  font-size: 18px;
   font-family: 'Nunito', sans-serif;
 
   & .folder-tree {
