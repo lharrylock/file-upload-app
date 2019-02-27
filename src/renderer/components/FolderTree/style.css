@@ -38,7 +38,7 @@
 
   & :global(.ant-badge-count) {
     top: 0.9em;
-    right: -2em;
+    right: -1em;
   }
 }
 
