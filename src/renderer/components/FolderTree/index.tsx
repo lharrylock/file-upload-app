@@ -1,4 +1,4 @@
-import { Affix, Icon, Spin, Tree } from "antd";
+import { Icon, Spin, Tree } from "antd";
 import * as classNames from "classnames";
 import * as React from "react";
 
