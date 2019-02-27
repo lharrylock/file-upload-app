@@ -78,12 +78,10 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
 
         return (
             <div className={classNames(className, styles.container)}>
-                <Affix offsetTop={0}>
-                    <div className={styles.logoContainer}>
-                        <Icon type="cloud-upload" className={styles.logo}/>
-                        <span className={styles.brandName}>AICS&nbsp;File&nbsp;Uploader</span>
-                    </div>
-                </Affix>
+                <div className={styles.logoContainer}>
+                    <Icon type="cloud-upload" className={styles.logo}/>
+                    <span className={styles.brandName}>AICS&nbsp;File&nbsp;Uploader</span>
+                </div>
                 <div className={styles.fileTree}>
                     {!isLoading && <Tree.DirectoryTree
                         checkable={false}
