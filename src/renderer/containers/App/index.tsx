@@ -2,7 +2,7 @@ import "aics-react-labkey/dist/styles.css";
 import { message } from "antd";
 import * as React from "react";
 import { connect } from "react-redux";
-import { ActionCreator, AnyAction } from "redux";
+import { ActionCreator } from "redux";
 
 import FolderTree from "../../components/FolderTree";
 import { feedback, selection } from "../../state";

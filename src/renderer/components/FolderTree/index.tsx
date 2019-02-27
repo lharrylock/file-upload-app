@@ -122,11 +122,16 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
 
     private renderChildDirectories(file: UploadFile): React.ReactNode {
         if (!file.isDirectory) {
-            return <Tree.TreeNode title={file.name} key={file.fullPath} isLeaf={true}/>;
+            return <Tree.TreeNode className={styles.treeNode} title={file.name} key={file.fullPath} isLeaf={true}/>;
         }
 
         return (
-            <Tree.TreeNode title={file.name} key={FolderTree.getFolderKey(file.fullPath)} isLeaf={false}>
+            <Tree.TreeNode
+                title={file.name}
+                key={FolderTree.getFolderKey(file.fullPath)}
+                isLeaf={false}
+                className={styles.treeNode}
+            >
                 {file.files.map((child: UploadFile) => this.renderChildDirectories(child))}
             </Tree.TreeNode>
         );
