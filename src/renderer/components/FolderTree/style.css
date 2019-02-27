@@ -1,11 +1,17 @@
 @import "../../styles/colors.css";
 
+/* Nested for markup visualization only */
 .container {
-  overflow: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
   & .logo-container {
+    flex: 0 0 auto;
     color:  var(--brand-primary);
     padding: 1rem;
+    background-color: white;
+    border-bottom: 1px solid var(--border-color);
 
     & .brand-name {
       font-size: 20px;
@@ -15,13 +21,18 @@
     & .logo {
       font-size: 36px;
       padding-right: 0.25rem;
-      position: relative;
-      top: 10px;
+      vertical-align: middle;
     }
   }
 
-  .file-tree {
-    padding: 2em;
+  & .file-tree {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+
+    & :global(.ant-tree) .tree-node :global(.ant-tree-node-content-wrapper) {
+      display: inline;
+    }
   }
 
   & :global(.ant-badge-count) {
@@ -29,3 +40,8 @@
     right: -0.5em;
   }
 }
+
+.tree-node {
+  composes: ellipsis from "../../styles/variables.css";
+}
+
