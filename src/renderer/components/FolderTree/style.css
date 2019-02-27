@@ -1,5 +1,4 @@
 @import "../../styles/colors.css";
-@import "../../styles/variables.css";
 
 .container {
   overflow-y: auto;
@@ -24,15 +23,13 @@
   }
 
   & :global(.ant-tree) {
-    & li {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-
-      & :global(.ant-tree-node-content-wrapper) {
-        width: 100%;
-        display: inline;
-      }
+    & .tree-node :global(.ant-tree-node-content-wrapper) {
+      width: 100%;
+      display: inline;
     }
   }
+}
+
+.tree-node {
+  composes: ellipsis from "../../styles/variables.css";
 }
