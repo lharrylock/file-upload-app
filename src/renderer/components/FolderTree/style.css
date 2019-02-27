@@ -2,7 +2,9 @@
 @import "../../styles/variables.css";
 
 .container {
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+
   & .logo-container {
     color:  var(--brand-primary);
     padding: 1rem;
@@ -18,6 +20,19 @@
       font-size: 36px;
       padding-right: 0.25rem;
       vertical-align: middle;
+    }
+  }
+
+  & :global(.ant-tree) {
+    & li {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      & :global(.ant-tree-node-content-wrapper) {
+        width: 100%;
+        display: inline;
+      }
     }
   }
 }
