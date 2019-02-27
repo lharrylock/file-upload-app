@@ -128,10 +128,11 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
         if (!file.isDirectory) {
             const { fileToMetadataCount } = this.props;
             const fileName: JSX.Element = <span className={styles.fileName}>{file.name}</span>;
+            const count = fileToMetadataCount.has(file.fullPath) ? fileToMetadataCount.get(file.fullPath) : 0;
             // todo color constant
             const fileDisplay = (
-                <Badge count={fileToMetadataCount.get(file.fullPath)} style={{ backgroundColor: "#52c41a" }}>
-                    {fileName}
+                <Badge count={count} style={{ backgroundColor: "#52c41a" }}>
+                    <span>{fileName}</span>
                 </Badge>
             );
             return <Tree.TreeNode className={styles.treeNode} title={fileDisplay} key={file.fullPath} isLeaf={true}/>;
