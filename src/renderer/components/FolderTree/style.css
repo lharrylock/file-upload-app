@@ -1,5 +1,6 @@
 @import "../../styles/colors.css";
 
+/* Nested for markup visualization only */
 .container {
   height: 100%;
   display: flex;
