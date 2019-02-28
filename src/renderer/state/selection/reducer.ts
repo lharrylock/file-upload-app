@@ -1,5 +1,6 @@
 import {
     castArray,
+    uniq,
     without,
 } from "lodash";
 import { AnyAction } from "redux";
@@ -15,6 +16,7 @@ import {
     SELECT_METADATA,
     SELECT_PAGE,
     SET_WELLS,
+    SET_WELLS_FOR_UPLOAD,
     UPDATE_STAGED_FILES,
 } from "./constants";
 import {
@@ -27,6 +29,7 @@ import {
     SelectMetadataAction,
     SelectPageAction,
     SetWellsAction,
+    SetWellsForUploadAction,
     UpdateStagedFilesAction,
 } from "./types";
 
@@ -56,7 +59,7 @@ const actionToConfigMap: TypeToDescriptionMap = {
         accepts: (action: AnyAction): action is SelectFileAction => action.type === SELECT_FILE,
         perform: (state: SelectionStateBranch, action: SelectFileAction) => ({
             ...state,
-            files: [...state.files, ...castArray(action.payload)],
+            files: [...castArray(action.payload)],
         }),
     },
     [SELECT_METADATA]: {
@@ -99,6 +102,13 @@ const actionToConfigMap: TypeToDescriptionMap = {
         perform: (state: SelectionStateBranch, action: SetWellsAction) => ({
             ...state,
             wells: action.payload,
+        }),
+    },
+    [SET_WELLS_FOR_UPLOAD]: {
+        accepts: (action: AnyAction): action is SetWellsForUploadAction => action.type === SET_WELLS_FOR_UPLOAD,
+        perform: (state: SelectionStateBranch, action: SetWellsForUploadAction) => ({
+            ...state,
+            wellsForUpload: uniq(castArray(action.payload)),
         }),
     },
 };
