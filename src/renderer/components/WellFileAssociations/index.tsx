@@ -8,7 +8,7 @@ const styles = require("./style.css");
 
 interface WellInfoProps {
     className?: string;
-    selectedFile?: string;
+    selectedFiles: string[];
     well?: Well;
     wellDisplay: string;
     files: string[];
@@ -39,7 +39,7 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
     }
 
     private renderBody() {
-        const { associate, canAssociate, selectedFile, well } = this.props;
+        const { associate, canAssociate, selectedFiles, well } = this.props;
 
         if (!well) {
             return <Alert type="warning" message="No well selected"/>;
@@ -52,7 +52,11 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
                 </div>
                 <Row className={styles.addRow}>
                     <Col span={20}>
-                        <Statistic title="Selected File" value={selectedFile || "None"}/>
+                        <div>Selected File(s)</div>
+                        {isEmpty(selectedFiles) && <div>None</div>}
+                        {selectedFiles.map((file) => (
+                            <div key={file}>{file}</div>
+                        ))}
                     </Col>
                     <Col span={4}>
                         <Button

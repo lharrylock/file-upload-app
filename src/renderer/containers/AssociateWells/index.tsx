@@ -12,23 +12,23 @@ import {
 } from "../../state";
 import { setWellsForUpload } from "../../state/selection/actions";
 import {
-    getSelectedFile,
+    getSelectedFiles,
     getSelectedWellAndFileAreAssociated,
     getWellForUpload,
     getWellsWithUnitsAndModified
 } from "../../state/selection/selectors";
 import { SetWellsForUploadAction, Well } from "../../state/selection/types";
-import { associateFileAndWell, undoFileWellAssociation } from "../../state/upload/actions";
+import { associateFilesAndWell, undoFileWellAssociation } from "../../state/upload/actions";
 import { getWellIdToFiles } from "../../state/upload/selectors";
-import { AssociateFileAndWellAction, UndoFileWellAssociationAction } from "../../state/upload/types";
+import { AssociateFilesAndWellAction, UndoFileWellAssociationAction } from "../../state/upload/types";
 import { getWellDisplay } from "../../util/index";
 
 const styles = require("./style.css");
 
 interface AssociateWellsProps {
-    associateFileAndWell: ActionCreator<AssociateFileAndWellAction>;
+    associateFilesAndWell: ActionCreator<AssociateFilesAndWellAction>;
     className?: string;
-    selectedFile?: string;
+    selectedFiles: string[];
     selectedWell?: AicsGridCell;
     setWellsForUpload: ActionCreator<SetWellsForUploadAction>;
     wells?: Well[][];
@@ -48,7 +48,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
     }
 
     public render() {
-        const { className, selectedFile, selectedWell, wells, wellIdToFiles } = this.props;
+        const { className, selectedFiles, selectedWell, wells, wellIdToFiles } = this.props;
         const selectedWells = selectedWell ? [selectedWell] : [];
         const wellInfo = wells && selectedWell ? wells[selectedWell.row][selectedWell.col] : undefined;
         const files = wellInfo && wellIdToFiles.has(wellInfo.wellId) ? wellIdToFiles.get(wellInfo.wellId) : [];
@@ -65,7 +65,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
                     well={wellInfo}
                     wellDisplay={getWellDisplay(selectedWell)}
                     files={files || []}
-                    selectedFile={selectedFile}
+                    selectedFiles={selectedFiles}
                     associate={this.associate}
                     canAssociate={this.canAssociate()}
                     undoAssociation={this.undoAssociation}
@@ -87,17 +87,17 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
     }
 
     private canAssociate(): boolean {
-        return !!(this.props.selectedFile && this.props.selectedWell) && !this.props.selectedWellAndFileAreAssociated;
+        return !!(this.props.selectedFiles && this.props.selectedWell) && !this.props.selectedWellAndFileAreAssociated;
     }
 
     private associate(): void {
         const { selectedWell, wells } = this.props;
 
         if (this.canAssociate() && selectedWell && wells) {
-            const { selectedFile } = this.props;
+            const { selectedFiles } = this.props;
             this.setState({selectedWell: undefined});
             const wellId = wells[selectedWell.row][selectedWell.col].wellId;
-            this.props.associateFileAndWell(selectedFile, wellId, selectedWell);
+            this.props.associateFilesAndWell(selectedFiles, wellId, selectedWell);
         }
     }
 
@@ -116,7 +116,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
 
 function mapStateToProps(state: State) {
     return {
-        selectedFile: getSelectedFile(state),
+        selectedFiles: getSelectedFiles(state),
         selectedWell: getWellForUpload(state),
         selectedWellAndFileAreAssociated: getSelectedWellAndFileAreAssociated(state),
         wellIdToFiles: getWellIdToFiles(state),
@@ -125,7 +125,7 @@ function mapStateToProps(state: State) {
 }
 
 const dispatchToPropsMap = {
-    associateFileAndWell,
+    associateFilesAndWell,
     setWellsForUpload,
     undoAssociation: undoFileWellAssociation,
 };

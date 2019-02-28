@@ -8,10 +8,10 @@ export interface UploadMetadata {
     wellId: number;
 }
 
-export interface AssociateFileAndWellAction {
+export interface AssociateFilesAndWellAction {
     payload: {
         cell: AicsGridCell,
-        fullPath: string,
+        fullPaths: string[],
         wellId: number,
     };
     type: string;
