@@ -1,0 +1,24 @@
+@import "../../styles/colors.css";
+
+.files {
+  margin: 1em 0;
+}
+
+.add-row {
+  border: 1px dashed var(--border-color);
+  padding: 0.5em;
+}
+
+.file-row {
+  padding: 0.5em;
+
+  &:hover {
+    cursor: pointer;
+    background-color: aliceblue;
+  }
+}
+
+.container {
+  min-height: 300px;
+}
+

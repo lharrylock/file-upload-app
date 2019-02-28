@@ -5,7 +5,7 @@ import { Well } from "../../state/selection/types";
 
 import WellComponent from "../Well";
 
-const FINISHED_WELL_COLOR = "#52c41a";
+const FINISHED_WELL_COLOR = "#9ccc84";
 const MODIFIED_WELL_COLOR = "rgb(221, 216, 241)";
 const DEFAULT_WELL_COLOR = "rgb(226, 228, 227)";
 const WELL_WIDTH = "60px";
@@ -14,7 +14,7 @@ interface PlateProps {
     className?: string;
     onWellClick: (row: number, col: number, well?: Well) => void;
     wells: Well[][];
-    wellIdToFileCount: Map<number, number>;
+    wellIdToFiles: Map<number, string[]>;
     selectedWells: AicsGridCell[];
 }
 
@@ -30,7 +30,7 @@ class Plate extends React.Component<PlateProps, {}> {
     }
 
     public wellColorSelector(cellData: Well): string {
-        if ((this.props.wellIdToFileCount.get(cellData.wellId) || 0) > 0) {
+        if ((this.props.wellIdToFiles.get(cellData.wellId) || []).length > 0) {
             return FINISHED_WELL_COLOR;
         }
 
