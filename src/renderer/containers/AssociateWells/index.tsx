@@ -10,14 +10,14 @@ import WellFileAssociations from "../../components/WellFileAssociations/index";
 import {
     State,
 } from "../../state";
-import { setWellsForUpload } from "../../state/selection/actions";
+import { setWell } from "../../state/selection/actions";
 import {
     getSelectedFiles,
     getSelectedWellAndFileAreAssociated,
     getWellForUpload,
     getWellsWithUnitsAndModified
 } from "../../state/selection/selectors";
-import { SetWellsForUploadAction, Well } from "../../state/selection/types";
+import { SetWellAction, Well } from "../../state/selection/types";
 import { associateFilesAndWell, undoFileWellAssociation } from "../../state/upload/actions";
 import { getWellIdToFiles } from "../../state/upload/selectors";
 import { AssociateFilesAndWellAction, UndoFileWellAssociationAction } from "../../state/upload/types";
@@ -30,7 +30,7 @@ interface AssociateWellsProps {
     className?: string;
     selectedFiles: string[];
     selectedWell?: AicsGridCell;
-    setWellsForUpload: ActionCreator<SetWellsForUploadAction>;
+    setWell: ActionCreator<SetWellAction>;
     wells?: Well[][];
     wellIdToFiles: Map<number, string[]>;
     selectedWellAndFileAreAssociated: boolean;
@@ -83,7 +83,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
     }
 
     public selectWell(row: number, col: number): void {
-        this.props.setWellsForUpload([{row, col}]);
+        this.props.setWells([{row, col}]);
     }
 
     private canAssociate(): boolean {
@@ -126,7 +126,7 @@ function mapStateToProps(state: State) {
 
 const dispatchToPropsMap = {
     associateFilesAndWell,
-    setWellsForUpload,
+    setWell,
     undoAssociation: undoFileWellAssociation,
 };
 

@@ -13,9 +13,9 @@ const WELL_WIDTH = "60px";
 interface PlateProps {
     className?: string;
     onWellClick: (row: number, col: number, well?: Well) => void;
+    selectedWells: AicsGridCell[];
     wells: Well[][];
     wellIdToFiles: Map<number, string[]>;
-    selectedWells: AicsGridCell[];
 }
 
 class Plate extends React.Component<PlateProps, {}> {

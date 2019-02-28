@@ -1,6 +1,5 @@
 import {
     castArray,
-    uniq,
     without,
 } from "lodash";
 import { AnyAction } from "redux";
@@ -11,27 +10,25 @@ import { makeReducer } from "../util";
 import {
     ADD_STAGE_FILES,
     DESELECT_FILE,
-    DESELECT_WELLS_FOR_UPLOAD,
     SELECT_BARCODE,
     SELECT_FILE,
     SELECT_METADATA,
     SELECT_PAGE,
+    SET_WELL,
     SET_WELLS,
-    SET_WELLS_FOR_UPLOAD,
     UPDATE_STAGED_FILES,
 } from "./constants";
 import {
     AddStageFilesAction,
     AppPage,
     DeselectFileAction,
-    DeselectWellsForUploadAction,
     SelectBarcodeAction,
     SelectFileAction,
     SelectionStateBranch,
     SelectMetadataAction,
     SelectPageAction,
+    SetWellAction,
     SetWellsAction,
-    SetWellsForUploadAction,
     UpdateStagedFilesAction,
 } from "./types";
 
@@ -40,7 +37,6 @@ export const initialState = {
     page: AppPage.DragAndDrop,
     stagedFiles: [],
     wells: [],
-    wellsForUpload: [],
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {
@@ -107,19 +103,11 @@ const actionToConfigMap: TypeToDescriptionMap = {
             wells: action.payload,
         }),
     },
-    [SET_WELLS_FOR_UPLOAD]: {
-        accepts: (action: AnyAction): action is SetWellsForUploadAction => action.type === SET_WELLS_FOR_UPLOAD,
-        perform: (state: SelectionStateBranch, action: SetWellsForUploadAction) => ({
+    [SET_WELL]: {
+        accepts: (action: AnyAction): action is SetWellAction => action.type === SET_WELL,
+        perform: (state: SelectionStateBranch, action: SetWellAction) => ({
             ...state,
-            wellsForUpload: uniq(castArray(action.payload)),
-        }),
-    },
-    [DESELECT_WELLS_FOR_UPLOAD]: {
-        accepts: (action: AnyAction): action is DeselectWellsForUploadAction =>
-            action.type === DESELECT_WELLS_FOR_UPLOAD,
-        perform: (state: SelectionStateBranch, action: DeselectWellsForUploadAction) => ({
-            ...state,
-            wellsForUpload: without(state.wellsForUpload, ...castArray(action.payload)),
+            well: action.payload,
         }),
     },
 };

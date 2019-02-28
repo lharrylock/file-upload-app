@@ -19,7 +19,7 @@ export const getSelectedFiles = (state: State) => state.selection.files;
 export const getAppPage = (state: State) => state.selection.page;
 export const getStagedFiles = (state: State) => state.selection.stagedFiles;
 export const getWells = (state: State) => state.selection.wells;
-export const getWellsForUpload = (state: State) => state.selection.wellsForUpload;
+export const getWellForUpload = (state: State) => state.selection.well;
 
 // COMPOSED SELECTORS
 export const NO_UNIT = "(Unit Not Found)";
@@ -80,12 +80,6 @@ export const getSelectedFile = createSelector([
     return first(files);
 });
 
-export const getWellForUpload = createSelector([
-    getWellsForUpload,
-], (wells: AicsGridCell[]) => {
-    return first(wells);
-});
-
 export const getFileToGridCellMap = createSelector([
     getUpload,
     getSelectedFiles,
@@ -113,19 +107,19 @@ export const getFileToGridCellMap = createSelector([
 export const getSelectedWellAndFileAreAssociated = createSelector([
     getFileToGridCellMap,
     getSelectedFiles,
-    getWellsForUpload,
+    getWellForUpload,
 ], (
     fileToGridCell: Map<string,
     AicsGridCell | undefined>,
     selectedFiles: string[],
-    selectedWells: AicsGridCell[]
+    selectedWell: AicsGridCell
 ): boolean => {
-    if (isEmpty(selectedFiles) || isEmpty(selectedWells) || selectedFiles.length > 1 || selectedWells.length > 1) {
+    if (isEmpty(selectedFiles) || isEmpty(selectedWell) || selectedFiles.length > 1) {
         return false;
     }
 
     const metadata = fileToGridCell.get(selectedFiles[0]);
-    return !!metadata && metadata.row === selectedWells[0].row && metadata.col === selectedWells[0].col;
+    return !!metadata && metadata.row === selectedWell.row && metadata.col === selectedWell.col;
 });
 
 export const getWellIdToWellLabelMap = createSelector([

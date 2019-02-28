@@ -1,8 +1,8 @@
 import { AicsGridCell } from "aics-react-labkey";
+
 import {
     ADD_STAGE_FILES,
     DESELECT_FILE,
-    DESELECT_WELLS_FOR_UPLOAD,
     GET_FILES_IN_FOLDER,
     LOAD_FILES,
     OPEN_FILES,
@@ -10,15 +10,14 @@ import {
     SELECT_FILE,
     SELECT_METADATA,
     SELECT_PAGE,
+    SET_WELL,
     SET_WELLS,
-    SET_WELLS_FOR_UPLOAD,
     UPDATE_STAGED_FILES,
 } from "./constants";
 import {
     AddStageFilesAction,
     AppPage,
     DeselectFileAction,
-    DeselectWellsForUploadAction,
     DragAndDropFileList,
     GetFilesInFolderAction,
     LoadFilesFromDragAndDropAction,
@@ -27,8 +26,8 @@ import {
     SelectFileAction,
     SelectMetadataAction,
     SelectPageAction,
+    SetWellAction,
     SetWellsAction,
-    SetWellsForUploadAction,
     UpdateStagedFilesAction,
     UploadFile,
     Well,
@@ -115,16 +114,9 @@ export function setWells(wells: Well[][]): SetWellsAction {
     };
 }
 
-export function setWellsForUpload(wells: AicsGridCell[]): SetWellsForUploadAction {
+export function setWell(well: AicsGridCell): SetWellAction {
     return {
-        payload: wells,
-        type: SET_WELLS_FOR_UPLOAD,
-    };
-}
-
-export function deselectWellsForUpload(wells: AicsGridCell[]): DeselectWellsForUploadAction {
-    return {
-        payload: wells,
-        type: DESELECT_WELLS_FOR_UPLOAD,
+        payload: well,
+        type: SET_WELL,
     };
 }
