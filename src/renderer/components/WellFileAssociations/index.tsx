@@ -17,7 +17,7 @@ interface WellInfoProps {
     canAssociate: boolean;
 }
 
-class WellInfo extends React.Component<WellInfoProps, {}> {
+class WellFileAssociations extends React.Component<WellInfoProps, {}> {
 
     public constructor(props: WellInfoProps) {
         super(props);
@@ -100,4 +100,4 @@ class WellInfo extends React.Component<WellInfoProps, {}> {
     }
 }
 
-export default WellInfo;
+export default WellFileAssociations;
