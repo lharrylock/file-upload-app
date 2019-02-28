@@ -9,14 +9,14 @@ import Plate from "../../components/Plate/index";
 import {
     State,
 } from "../../state";
-import { setWellsForUpload } from "../../state/selection/actions";
+import { setWell } from "../../state/selection/actions";
 import { getWellForUpload, getWellsWithUnitsAndModified } from "../../state/selection/selectors";
-import { SetWellsForUploadAction, Well } from "../../state/selection/types";
+import { SetWellAction, Well } from "../../state/selection/types";
 
 interface Props {
     className?: string;
     selectedWell?: AicsGridCell;
-    setWellsForUpload: ActionCreator<SetWellsForUploadAction>;
+    setWell: ActionCreator<SetWellAction>;
     wells?: Well[][];
 }
 
@@ -48,7 +48,7 @@ class AssociateWells extends React.Component<Props, {}> {
     }
 
     public selectWell(row: number, col: number): void {
-        this.props.setWellsForUpload([{row, col}]);
+        this.props.setWell({row, col});
     }
 }
 
@@ -60,7 +60,7 @@ function mapStateToProps(state: State) {
 }
 
 const dispatchToPropsMap = {
-    setWellsForUpload,
+    setWell,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(AssociateWells);

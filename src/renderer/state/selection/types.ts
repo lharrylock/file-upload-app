@@ -21,7 +21,7 @@ export interface SelectionStateBranch {
     barcode?: string;
     plateId?: number;
     wells: Well[][];
-    wellsForUpload: AicsGridCell[];
+    well: AicsGridCell;
     page: AppPage;
     stagedFiles: UploadFile[];
 }
@@ -148,8 +148,8 @@ export interface SetWellsAction {
     type: string;
 }
 
-export interface SetWellsForUploadAction {
-    payload: AicsGridCell[];
+export interface SetWellAction {
+    payload: AicsGridCell;
     type: string;
 }
 
