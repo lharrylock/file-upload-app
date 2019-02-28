@@ -1,4 +1,4 @@
-import { Badge, Icon, Spin, Tree } from "antd";
+import { Icon, Spin, Tag, Tree } from "antd";
 import * as classNames from "classnames";
 import * as React from "react";
 
@@ -7,6 +7,7 @@ import {
     SelectFileAction,
     UploadFile,
 } from "../../state/selection/types";
+import { FileTag } from "../../state/upload/types";
 
 const styles = require("./style.css");
 
@@ -14,11 +15,11 @@ interface FolderTreeProps {
     className?: string;
     files: UploadFile[];
     getFilesInFolder: (folderToExpand: UploadFile) => GetFilesInFolderAction;
-    fileToMetadataCount: Map<string, number>;
     isLoading?: boolean;
     isSelectable: boolean;
     onCheck: (files: string[]) => SelectFileAction;
     selectedKeys: string[];
+    fileToTags: Map<string, FileTag[]>;
 }
 
 interface FolderTreeState {
@@ -126,14 +127,22 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
 
     private renderChildDirectories(file: UploadFile): React.ReactNode {
         if (!file.isDirectory) {
-            const { fileToMetadataCount } = this.props;
+            const { fileToTags } = this.props;
             const fileName: JSX.Element = <span className={styles.fileName}>{file.name}</span>;
-            const count = fileToMetadataCount.has(file.fullPath) ? fileToMetadataCount.get(file.fullPath) : 0;
-            // todo color constant
+            const tags: FileTag[] | undefined = fileToTags.get(file.fullPath);
+            let tagEls;
+            if (tags) {
+                tagEls = tags.map(
+                    (tag: {title: string, color: string}) => (
+                        <Tag color={tag.color} key={tag.title}>{tag.title}</Tag>
+                    ));
+            }
+
             const fileDisplay = (
-                <Badge count={count} style={{ backgroundColor: "#52c41a" }}>
+                <React.Fragment>
                     <span>{fileName}</span>
-                </Badge>
+                    {tagEls}
+                </React.Fragment>
             );
             return <Tree.TreeNode className={styles.treeNode} title={fileDisplay} key={file.fullPath} isLeaf={true}/>;
         }

@@ -11,6 +11,7 @@ import { getAlert } from "../../state/feedback/selectors";
 import { AlertType, AppAlert, ClearAlertAction } from "../../state/feedback/types";
 import { requestMetadata } from "../../state/metadata/actions";
 import { RequestMetadataAction } from "../../state/metadata/types";
+import { getFileToTags } from "../../state/selection/selectors";
 import {
     AppPage,
     AppPageConfig,
@@ -19,7 +20,7 @@ import {
     UploadFile,
 } from "../../state/selection/types";
 import { State } from "../../state/types";
-import { getFileToMetadataCount } from "../../state/upload/selectors";
+import { FileTag } from "../../state/upload/types";
 import AssociateWells from "../AssociateWells";
 
 import DragAndDropSquare from "../DragAndDropSquare";
@@ -32,7 +33,7 @@ const ALERT_DURATION = 2;
 interface AppProps {
     alert?: AppAlert;
     clearAlert: ActionCreator<ClearAlertAction>;
-    fileToMetadataCount: Map<string, number>;
+    fileToTags: Map<string, FileTag[]>;
     files: UploadFile[];
     getFilesInFolder: ActionCreator<GetFilesInFolderAction>;
     loading: boolean;
@@ -97,7 +98,7 @@ class App extends React.Component<AppProps, {}> {
 
     public render() {
         const {
-            fileToMetadataCount,
+            fileToTags,
             files,
             getFilesInFolder,
             loading,
@@ -123,7 +124,7 @@ class App extends React.Component<AppProps, {}> {
                        isSelectable={pageConfig.folderTreeSelectable}
                        onCheck={selectFile}
                        selectedKeys={selectedFiles}
-                       fileToMetadataCount={fileToMetadataCount}
+                       fileToTags={fileToTags}
                    />
                 }
                 {pageConfig.container}
@@ -135,7 +136,7 @@ class App extends React.Component<AppProps, {}> {
 function mapStateToProps(state: State) {
     return {
         alert: getAlert(state),
-        fileToMetadataCount: getFileToMetadataCount(state),
+        fileToTags: getFileToTags(state),
         files: state.selection.stagedFiles,
         loading: feedback.selectors.getIsLoading(state),
         page: selection.selectors.getAppPage(state),

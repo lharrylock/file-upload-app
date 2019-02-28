@@ -1,12 +1,13 @@
 import { AicsGridCell } from "aics-react-labkey";
 import { first, isEmpty } from "lodash";
 import { createSelector } from "reselect";
+import { getWellDisplay } from "../../util/index";
 
 import { getUnits } from "../metadata/selectors";
 import { Unit } from "../metadata/types";
 import { State } from "../types";
 import { getUpload } from "../upload/selectors";
-import { UploadMetadata, UploadStateBranch } from "../upload/types";
+import { FileTag, UploadMetadata, UploadStateBranch } from "../upload/types";
 
 import { Solution, SolutionLot, ViabilityResult, Well } from "./types";
 
@@ -125,4 +126,44 @@ export const getSelectedWellAndFileAreAssociated = createSelector([
 
     const metadata = fileToGridCell.get(selectedFiles[0]);
     return !!metadata && metadata.row === selectedWells[0].row && metadata.col === selectedWells[0].col;
+});
+
+export const getWellIdToWellLabelMap = createSelector([
+    getWells,
+], (wells: Well[][]) => {
+    const result = new Map<number, string>();
+    wells.forEach((wellRow: Well[], row) => {
+        wellRow.forEach((well: Well, col) => {
+            result.set(well.wellId, getWellDisplay({row, col}));
+        });
+    });
+
+    return result;
+});
+
+export const getFileToTags = createSelector([
+    getUpload,
+    getWellIdToWellLabelMap,
+], (upload: UploadStateBranch, wellIdToWellLabel: Map<number, string>):
+Map<string, FileTag[]> => {
+
+    const fullPathToTags = new Map<string, FileTag[]>();
+    for (const fullPath in upload) {
+        // Don't include JavaScript object meta properties
+        if (upload.hasOwnProperty(fullPath)) {
+            const metadata = upload[fullPath];
+            const tags: FileTag[] = [];
+
+            if (metadata.wellId && wellIdToWellLabel.has(metadata.wellId)) {
+                const wellTag: string = wellIdToWellLabel.get(metadata.wellId) || "";
+                tags.push({
+                    color: "magenta",
+                    title: wellTag,
+                });
+            }
+
+            fullPathToTags.set(fullPath, tags);
+        }
+    }
+    return fullPathToTags;
 });

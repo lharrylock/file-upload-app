@@ -1,3 +1,4 @@
+import { AicsGridCell } from "aics-react-labkey";
 import {
     forOwn,
     isFunction,
@@ -12,6 +13,16 @@ export function bindAll<T>(obj: T, methods: Array<() => any>) {
             Object.assign(obj, { [key]: value.bind(obj) });
         }
     });
+}
+
+export function getWellDisplay(well?: AicsGridCell): string {
+    if (!well) {
+        return "None";
+    }
+
+    const row = String.fromCharCode(97 +  (well.row % 26)).toUpperCase();
+    const col = well.col + 1;
+    return `${row}${col}`;
 }
 
 export {

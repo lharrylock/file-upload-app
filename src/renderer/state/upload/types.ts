@@ -21,3 +21,8 @@ export interface UndoFileWellAssociationAction {
     payload: string;
     type: string;
 }
+
+export interface FileTag {
+    title: string;
+    color: string;
+}

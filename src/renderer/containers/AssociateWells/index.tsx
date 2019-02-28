@@ -21,6 +21,7 @@ import { SetWellsForUploadAction, Well } from "../../state/selection/types";
 import { associateFileAndWell, undoFileWellAssociation } from "../../state/upload/actions";
 import { getWellIdToFiles } from "../../state/upload/selectors";
 import { AssociateFileAndWellAction, UndoFileWellAssociationAction } from "../../state/upload/types";
+import { getWellDisplay } from "../../util/index";
 
 const styles = require("./style.css");
 
@@ -37,16 +38,6 @@ interface AssociateWellsProps {
 }
 
 class AssociateWells extends React.Component<AssociateWellsProps, {}> {
-    private static getWellDisplay(well?: AicsGridCell): string {
-        if (!well) {
-            return "None";
-        }
-
-        const row = String.fromCharCode(97 +  (well.row % 26)).toUpperCase();
-        const col = well.col + 1;
-        return `${row}${col}`;
-    }
-
     constructor(props: AssociateWellsProps) {
         super(props);
         this.associate = this.associate.bind(this);
@@ -72,7 +63,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
                 <WellFileAssociations
                     className={styles.wellInfo}
                     well={wellInfo}
-                    wellDisplay={AssociateWells.getWellDisplay(selectedWell)}
+                    wellDisplay={getWellDisplay(selectedWell)}
                     files={files || []}
                     selectedFile={selectedFile}
                     associate={this.associate}

@@ -1,4 +1,4 @@
-import { uniq, values } from "lodash";
+import { uniq } from "lodash";
 import { createSelector } from "reselect";
 
 import { State } from "../types";
@@ -23,24 +23,4 @@ export const getWellIdToFiles = createSelector([getUpload], (upload: UploadState
     }
 
     return wellIdToFilesMap;
-});
-
-export const getFileToMetadataCount = createSelector([getUpload], (upload: UploadStateBranch) => {
-    const fullPathToMetadataCount = new Map<string, number>();
-    for (const fullPath in upload) {
-        if (upload.hasOwnProperty(fullPath)) {
-            const metadata = upload[fullPath];
-
-            const count = values(metadata).reduce((accum: number, next: any) => {
-                if (next !== undefined) {
-                    accum++;
-                }
-
-                return accum;
-            }, 0);
-
-            fullPathToMetadataCount.set(fullPath, count);
-        }
-    }
-    return fullPathToMetadataCount;
 });
