@@ -9,7 +9,6 @@ const associateFileAndWellLogic = createLogic({
         next(batchActions([
             action,
             deselectFile(action.payload.fullPath),
-            deselectWellsForUpload([action.payload.cell]),
         ]));
     },
     type: ASSOCIATE_FILE_AND_WELL,
