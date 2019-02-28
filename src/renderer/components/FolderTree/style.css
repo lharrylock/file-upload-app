@@ -31,18 +31,12 @@
     min-height: 0;
     overflow-y: auto;
 
-    & :global(.ant-tree) .tree-node :global(.ant-tree-node-content-wrapper), & :global(.ant-badge) {
+    & :global(.ant-tree) .tree-node :global(.ant-tree-node-content-wrapper) {
       display: inline;
     }
-  }
-
-  & :global(.ant-badge-count) {
-    top: 0.9em;
-    right: -1em;
   }
 }
 
 .tree-node {
   composes: ellipsis from "../../styles/variables.css";
 }
-
