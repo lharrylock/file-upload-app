@@ -8,7 +8,7 @@ const associateFileAndWellLogic = createLogic({
     transform: ({action}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
         next(batchActions([
             action,
-            deselectFile(action.payload.fullPath),
+            deselectFile(action.payload.fullPaths),
         ]));
     },
     type: ASSOCIATE_FILES_AND_WELL,
