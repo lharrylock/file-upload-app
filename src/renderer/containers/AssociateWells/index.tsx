@@ -43,7 +43,6 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
         this.associate = this.associate.bind(this);
         this.selectWell = this.selectWell.bind(this);
         this.canAssociate = this.canAssociate.bind(this);
-        this.undoAssociation = this.undoAssociation.bind(this);
     }
 
     public render() {
@@ -67,7 +66,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
                     selectedFiles={selectedFiles}
                     associate={this.associate}
                     canAssociate={this.canAssociate()}
-                    undoAssociation={this.undoAssociation}
+                    undoAssociation={this.props.undoAssociation}
                 />
                 {wells ? (
                         <Plate
@@ -98,10 +97,6 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
             const wellId = wells[selectedWell.row][selectedWell.col].wellId;
             this.props.associateFilesAndWell(selectedFiles, wellId, selectedWell);
         }
-    }
-
-    private undoAssociation(file: string): void {
-        this.props.undoAssociation(file);
     }
 }
 
