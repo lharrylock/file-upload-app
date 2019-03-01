@@ -42,7 +42,6 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
         super(props);
         this.associate = this.associate.bind(this);
         this.selectWell = this.selectWell.bind(this);
-        this.getSelectedWell = this.getSelectedWell.bind(this);
         this.canAssociate = this.canAssociate.bind(this);
         this.undoAssociation = this.undoAssociation.bind(this);
     }
@@ -103,14 +102,6 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
 
     private undoAssociation(file: string): void {
         this.props.undoAssociation(file);
-    }
-
-    private getSelectedWell(): string {
-        const { selectedWell } = this.props;
-
-        // todo none text const
-        // todo B6 rather than 2, 6
-        return selectedWell ? `${selectedWell.row}, ${selectedWell.col}` : "None";
     }
 }
 
