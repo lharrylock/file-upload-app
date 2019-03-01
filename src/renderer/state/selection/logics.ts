@@ -29,8 +29,8 @@ import { batchActions, getActionFromBatch } from "../util";
 
 import {
     selectPage,
+    setWell,
     setWells,
-    setWellsForUpload,
     stageFiles,
     updateStagedFiles
 } from "./actions";
@@ -265,7 +265,7 @@ const selectFileLogic = createLogic({
             const associatedGridCell = fileToGridCellMap.has(file) ? fileToGridCellMap.get(file) : undefined;
 
             if (associatedGridCell) {
-                dispatch(setWellsForUpload([associatedGridCell]));
+                dispatch(setWell(associatedGridCell));
             }
         }
 

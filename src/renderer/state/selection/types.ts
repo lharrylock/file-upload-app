@@ -22,7 +22,7 @@ export interface SelectionStateBranch {
     files: string[];
     plateId?: number;
     wells: Well[][];
-    well: AicsGridCell;
+    well?: AicsGridCell;
     page: AppPage;
     stagedFiles: UploadFile[];
 }
