@@ -83,7 +83,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
     }
 
     public selectWell(row: number, col: number): void {
-        this.props.setWells([{row, col}]);
+        this.props.setWell({row, col});
     }
 
     private canAssociate(): boolean {
