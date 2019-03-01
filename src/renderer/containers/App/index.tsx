@@ -19,6 +19,7 @@ import {
     UploadFile,
 } from "../../state/selection/types";
 import { State } from "../../state/types";
+import { FileTag } from "../../state/upload/types";
 import AssociateWells from "../AssociateWells";
 
 import DragAndDropSquare from "../DragAndDropSquare";
@@ -31,11 +32,13 @@ const ALERT_DURATION = 2;
 interface AppProps {
     alert?: AppAlert;
     clearAlert: ActionCreator<ClearAlertAction>;
+    fileToTags: Map<string, FileTag[]>;
     files: UploadFile[];
     getFilesInFolder: ActionCreator<GetFilesInFolderAction>;
     loading: boolean;
     requestMetadata: ActionCreator<RequestMetadataAction>;
     selectFile: ActionCreator<SelectFileAction>;
+    selectedFiles: string[];
     page: AppPage;
 }
 
@@ -94,10 +97,12 @@ class App extends React.Component<AppProps, {}> {
 
     public render() {
         const {
+            fileToTags,
             files,
             getFilesInFolder,
             loading,
             selectFile,
+            selectedFiles,
             page,
         } = this.props;
 
@@ -117,6 +122,8 @@ class App extends React.Component<AppProps, {}> {
                        isLoading={loading}
                        isSelectable={pageConfig.folderTreeSelectable}
                        onCheck={selectFile}
+                       selectedKeys={selectedFiles}
+                       fileToTags={fileToTags}
                    />
                 }
                 {pageConfig.container}
@@ -128,9 +135,11 @@ class App extends React.Component<AppProps, {}> {
 function mapStateToProps(state: State) {
     return {
         alert: getAlert(state),
+        fileToTags: new Map(),
         files: state.selection.stagedFiles,
         loading: feedback.selectors.getIsLoading(state),
         page: selection.selectors.getAppPage(state),
+        selectedFiles: selection.selectors.getSelectedFiles(state),
     };
 }
 

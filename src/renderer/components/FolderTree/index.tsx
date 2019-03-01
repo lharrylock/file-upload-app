@@ -1,4 +1,4 @@
-import { Icon, Spin, Tree } from "antd";
+import { Icon, Spin, Tag, Tree } from "antd";
 import * as classNames from "classnames";
 import * as React from "react";
 
@@ -7,6 +7,7 @@ import {
     SelectFileAction,
     UploadFile,
 } from "../../state/selection/types";
+import { FileTag } from "../../state/upload/types";
 
 const styles = require("./style.css");
 
@@ -17,6 +18,8 @@ interface FolderTreeProps {
     isLoading?: boolean;
     isSelectable: boolean;
     onCheck: (files: string[]) => SelectFileAction;
+    selectedKeys: string[];
+    fileToTags: Map<string, FileTag[]>;
 }
 
 interface FolderTreeState {
@@ -70,6 +73,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
             files,
             isLoading,
             isSelectable,
+            selectedKeys,
         } = this.props;
 
         if (!files) {
@@ -89,6 +93,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
                         defaultExpandAll={false}
                         onSelect={this.onSelect}
                         onExpand={this.onExpand}
+                        selectedKeys={selectedKeys}
                         selectable={isSelectable}
                     >
                         {files.map((file: UploadFile) => this.renderChildDirectories(file))}
@@ -122,7 +127,24 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
 
     private renderChildDirectories(file: UploadFile): React.ReactNode {
         if (!file.isDirectory) {
-            return <Tree.TreeNode className={styles.treeNode} title={file.name} key={file.fullPath} isLeaf={true}/>;
+            const {fileToTags} = this.props;
+            const fileName: JSX.Element = <span className={styles.fileName}>{file.name}</span>;
+            const tags: FileTag[] | undefined = fileToTags.get(file.fullPath);
+            let tagEls;
+            if (tags) {
+                tagEls = tags.map(
+                    (tag: { title: string, color: string }) => (
+                        <Tag color={tag.color} key={tag.title}>{tag.title}</Tag>
+                    ));
+            }
+
+            const fileDisplay = (
+                <React.Fragment>
+                    <span>{fileName}</span>
+                    {tagEls}
+                </React.Fragment>
+            );
+            return <Tree.TreeNode className={styles.treeNode} title={fileDisplay} key={file.fullPath} isLeaf={true}/>;
         }
 
         return (
