@@ -77,7 +77,7 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
                     <Icon type="file" className={styles.fileIcon} />{file}
                 </div>
                 <div className={styles.deleteButton}>
-                    <Button type="primary" shape="circle" icon="delete" onClick={this.undoAssociation(file)} />
+                    <Button type="danger" shape="circle" icon="delete" onClick={this.undoAssociation(file)} />
                 </div>
             </div>
         );
