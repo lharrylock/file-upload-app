@@ -1,3 +1,5 @@
+import { AicsGridCell } from "aics-react-labkey";
+
 import {
     ADD_STAGE_FILES,
     DESELECT_FILE,
@@ -8,6 +10,7 @@ import {
     SELECT_FILE,
     SELECT_METADATA,
     SELECT_PAGE,
+    SET_WELL,
     SET_WELLS,
     UPDATE_STAGED_FILES,
 } from "./constants";
@@ -23,6 +26,7 @@ import {
     SelectFileAction,
     SelectMetadataAction,
     SelectPageAction,
+    SetWellAction,
     SetWellsAction,
     UpdateStagedFilesAction,
     UploadFile,
@@ -107,5 +111,12 @@ export function setWells(wells: Well[][]): SetWellsAction {
     return {
         payload: wells,
         type: SET_WELLS,
+    };
+}
+
+export function setWell(well: AicsGridCell): SetWellAction {
+    return {
+        payload: well,
+        type: SET_WELL,
     };
 }

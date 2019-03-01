@@ -1,3 +1,5 @@
+import { AicsGridCell } from "aics-react-labkey";
+
 import { MetadataStateBranch } from "../metadata/types";
 
 export interface UploadFile {
@@ -19,6 +21,7 @@ export interface SelectionStateBranch {
     barcode?: string;
     plateId?: number;
     wells: Well[][];
+    well: AicsGridCell;
     page: AppPage;
     stagedFiles: UploadFile[];
 }
@@ -142,6 +145,11 @@ export interface SelectBarcodeAction {
 
 export interface SetWellsAction {
     payload: Well[][];
+    type: string;
+}
+
+export interface SetWellAction {
+    payload: AicsGridCell;
     type: string;
 }
 
