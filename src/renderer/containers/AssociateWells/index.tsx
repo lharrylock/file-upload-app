@@ -84,7 +84,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
 
     private canAssociate(): boolean {
         const { selectedFiles, selectedWell } = this.props;
-        return !!selectedWell && selectedFiles.filter((file) => !file.isAssociatedWithSelectedWell).length > 0;
+        return !!selectedWell && selectedFiles.length > 0;
     }
 
     private associate(): void {

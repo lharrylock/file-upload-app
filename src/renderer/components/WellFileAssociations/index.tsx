@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Col, Empty, Row, Statistic } from "antd";
+import { Alert, Button, Card, Empty, Icon } from "antd";
 import * as classNames from "classnames";
 import { isEmpty } from "lodash";
 import * as React from "react";
@@ -25,7 +25,6 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
         this.renderFiles = this.renderFiles.bind(this);
         this.renderFileRow = this.renderFileRow.bind(this);
         this.undoAssociation = this.undoAssociation.bind(this);
-        this.renderSelectedFiles = this.renderSelectedFiles.bind(this);
     }
 
     public render() {
@@ -40,33 +39,25 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
     }
 
     private renderBody() {
-        const { associate, canAssociate, well } = this.props;
-
-        if (!well) {
-            return <Alert type="warning" message="No well selected"/>;
-        }
+        const { associate, canAssociate, selectedFiles } = this.props;
 
         return (
-            <React.Fragment>
+            <div className={styles.cardContent}>
                 <div className={styles.files}>
                     {this.renderFiles()}
                 </div>
-                <Row className={styles.addRow}>
-                    <Col span={20}>
-                        <div>Selected File(s)</div>
-                        {this.renderSelectedFiles()}
-                    </Col>
-                    <Col span={4}>
-                        <Button
-                            type="primary"
-                            disabled={!canAssociate}
-                            onClick={associate}
-                        >
-                            Associate
-                        </Button>
-                    </Col>
-                </Row>
-            </React.Fragment>
+                <div className={styles.addRow}>
+                    <div className={styles.title}>Selected File(s): {selectedFiles.length}</div>
+                    <Button
+                        type="primary"
+                        disabled={!canAssociate}
+                        onClick={associate}
+                        className={styles.associateButton}
+                    >
+                        Associate
+                    </Button>
+                </div>
+            </div>
         );
     }
 
@@ -81,39 +72,15 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
 
     private renderFileRow(file: string) {
         return (
-            <Row className={styles.fileRow} key={file}>
-                <Col span={20}>
-                    {file}
-                </Col>
-                <Col span={4}>
-                    <Button
-                        type="default"
-                        onClick={this.undoAssociation(file)}
-                    >
-                        Remove
-                    </Button>
-                </Col>
-            </Row>
-        );
-    }
-
-    private renderSelectedFiles() {
-        const { selectedFiles } = this.props;
-        if (isEmpty(selectedFiles)) {
-            return <div>None</div>;
-        }
-
-        return selectedFiles.map((file: {fullPath: string, isAssociatedWithSelectedWell: boolean}) => {
-            const innerText = file.isAssociatedWithSelectedWell ? `(${file.fullPath})` : file.fullPath;
-            return (
-                <div
-                    key={file.fullPath}
-                    className={classNames({[styles.alreadyAssociatedFile]: file.isAssociatedWithSelectedWell})}
-                >
-                    {innerText}
+            <div className={styles.fileRow} key={file}>
+                <div className={styles.fileName}>
+                    <Icon type="file" className={styles.fileIcon} />{file}
                 </div>
-            );
-        });
+                <div className={styles.deleteButton}>
+                    <Button type="primary" shape="circle" icon="delete" onClick={this.undoAssociation(file)} />
+                </div>
+            </div>
+        );
     }
 
     private undoAssociation(file: string) {
