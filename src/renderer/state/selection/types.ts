@@ -1,6 +1,5 @@
-import { AicsGridCell } from "aics-react-labkey";
-
 import { MetadataStateBranch } from "../metadata/types";
+import { GridCell } from "../types";
 
 export interface UploadFile {
     name: string;
@@ -11,8 +10,7 @@ export interface UploadFile {
     loadFiles(): Promise<Array<Promise<UploadFile>>>;
 }
 
-export interface DeselectFileAction {
-    payload: string | string[];
+export interface DeselectFilesAction {
     type: string;
 }
 
@@ -22,7 +20,7 @@ export interface SelectionStateBranch {
     files: string[];
     plateId?: number;
     wells: Well[][];
-    well?: AicsGridCell;
+    well?: GridCell;
     page: AppPage;
     stagedFiles: UploadFile[];
 }
@@ -150,7 +148,7 @@ export interface SetWellsAction {
 }
 
 export interface SetWellAction {
-    payload: AicsGridCell;
+    payload: GridCell;
     type: string;
 }
 

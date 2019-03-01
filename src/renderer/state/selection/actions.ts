@@ -17,7 +17,7 @@ import {
 import {
     AddStageFilesAction,
     AppPage,
-    DeselectFileAction,
+    DeselectFilesAction,
     DragAndDropFileList,
     GetFilesInFolderAction,
     LoadFilesFromDragAndDropAction,
@@ -40,9 +40,8 @@ export function selectFile(fileId: string | string[]): SelectFileAction {
     };
 }
 
-export function deselectFile(fileId: string | string[]): DeselectFileAction {
+export function deselectFiles(): DeselectFilesAction {
     return {
-        payload: fileId,
         type: DESELECT_FILE,
     };
 }

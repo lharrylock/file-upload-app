@@ -8,7 +8,7 @@ const styles = require("./style.css");
 
 interface WellInfoProps {
     className?: string;
-    selectedFiles: string[];
+    selectedFiles: Array<{fullPath: string, isAssociatedWithSelectedWell: boolean}>;
     well?: Well;
     wellDisplay: string;
     files: string[];
@@ -25,6 +25,7 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
         this.renderFiles = this.renderFiles.bind(this);
         this.renderFileRow = this.renderFileRow.bind(this);
         this.undoAssociation = this.undoAssociation.bind(this);
+        this.renderSelectedFiles = this.renderSelectedFiles.bind(this);
     }
 
     public render() {
@@ -39,7 +40,7 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
     }
 
     private renderBody() {
-        const { associate, canAssociate, selectedFiles, well } = this.props;
+        const { associate, canAssociate, well } = this.props;
 
         if (!well) {
             return <Alert type="warning" message="No well selected"/>;
@@ -53,10 +54,7 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
                 <Row className={styles.addRow}>
                     <Col span={20}>
                         <div>Selected File(s)</div>
-                        {isEmpty(selectedFiles) && <div>None</div>}
-                        {selectedFiles.map((file) => (
-                            <div key={file}>{file}</div>
-                        ))}
+                        {this.renderSelectedFiles()}
                     </Col>
                     <Col span={4}>
                         <Button
@@ -97,6 +95,25 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
                 </Col>
             </Row>
         );
+    }
+
+    private renderSelectedFiles() {
+        const { selectedFiles } = this.props;
+        if (isEmpty(selectedFiles)) {
+            return <div>None</div>;
+        }
+
+        return selectedFiles.map((file: {fullPath: string, isAssociatedWithSelectedWell: boolean}) => {
+            const innerText = file.isAssociatedWithSelectedWell ? `(${file.fullPath})` : file.fullPath;
+            return (
+                <div
+                    key={file.fullPath}
+                    className={classNames({[styles.alreadyAssociatedFile]: file.isAssociatedWithSelectedWell})}
+                >
+                    {innerText}
+                </div>
+            );
+        });
     }
 
     private undoAssociation(file: string) {

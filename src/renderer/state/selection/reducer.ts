@@ -21,7 +21,7 @@ import {
 import {
     AddStageFilesAction,
     AppPage,
-    DeselectFileAction,
+    DeselectFilesAction,
     SelectBarcodeAction,
     SelectFileAction,
     SelectionStateBranch,
@@ -42,10 +42,10 @@ export const initialState = {
 
 const actionToConfigMap: TypeToDescriptionMap = {
     [DESELECT_FILE]: {
-        accepts: (action: AnyAction): action is DeselectFileAction => action.type === DESELECT_FILE,
-        perform: (state: SelectionStateBranch, action: DeselectFileAction) => ({
+        accepts: (action: AnyAction): action is DeselectFilesAction => action.type === DESELECT_FILE,
+        perform: (state: SelectionStateBranch) => ({
             ...state,
-            files: without(state.files, ...castArray(action.payload)),
+            files: [],
         }),
     },
     [SELECT_BARCODE]: {

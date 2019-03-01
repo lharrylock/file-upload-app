@@ -1,11 +1,10 @@
-import { AicsGridCell } from "aics-react-labkey";
 import { first, isEmpty } from "lodash";
 import { createSelector } from "reselect";
 import { getWellDisplay } from "../../util/index";
 
 import { getUnits } from "../metadata/selectors";
 import { Unit } from "../metadata/types";
-import { State } from "../types";
+import { GridCell, State } from "../types";
 import { getUpload } from "../upload/selectors";
 import { FileTag, UploadMetadata, UploadStateBranch } from "../upload/types";
 
@@ -19,7 +18,7 @@ export const getSelectedFiles = (state: State) => state.selection.files;
 export const getAppPage = (state: State) => state.selection.page;
 export const getStagedFiles = (state: State) => state.selection.stagedFiles;
 export const getWells = (state: State) => state.selection.wells;
-export const getWellForUpload = (state: State) => state.selection.well;
+export const getWell = (state: State) => state.selection.well;
 
 // COMPOSED SELECTORS
 export const NO_UNIT = "(Unit Not Found)";
@@ -84,16 +83,16 @@ export const getFileToGridCellMap = createSelector([
     getUpload,
     getSelectedFiles,
     getWells,
-], (uploads: UploadStateBranch, selectedFiles: string[], wells: Well[][]) => {
-   return selectedFiles.reduce((accum: Map<string, AicsGridCell | undefined>, fullPath: string) => {
+], (uploads: UploadStateBranch, selectedFiles: string[], wells: Well[][]): Map<string, GridCell | undefined> => {
+   return selectedFiles.reduce((accum: Map<string, GridCell | undefined>, fullPath: string) => {
        const uploadMetadataForFile: UploadMetadata = uploads[fullPath];
-       let cell: AicsGridCell | undefined;
+       let cell: GridCell | undefined;
        if (uploadMetadataForFile) {
            const targetWellId = uploadMetadataForFile.wellId;
            wells.forEach((wellRow, row) => {
                wellRow.forEach((well, col) => {
                   if (well.wellId === targetWellId) {
-                    cell = {row, col};
+                    cell = new GridCell(row, col);
                   }
                });
            });
@@ -101,25 +100,30 @@ export const getFileToGridCellMap = createSelector([
 
        accum.set(fullPath, cell);
        return accum;
-   }, new Map<string, AicsGridCell | undefined>());
+   }, new Map<string, GridCell | undefined>());
 });
 
-export const getSelectedWellAndFileAreAssociated = createSelector([
+export const getSelectedFilesAndAssociatedWellInfo = createSelector([
     getFileToGridCellMap,
     getSelectedFiles,
-    getWellForUpload,
+    getWell,
 ], (
-    fileToGridCell: Map<string,
-    AicsGridCell | undefined>,
+    fileToGridCell: Map<string, GridCell | undefined>,
     selectedFiles: string[],
-    selectedWell: AicsGridCell
-): boolean => {
-    if (isEmpty(selectedFiles) || isEmpty(selectedWell) || selectedFiles.length > 1) {
-        return false;
-    }
+    selectedWell?: GridCell
+): Array<{fullPath: string, isAssociatedWithSelectedWell: boolean}> => {
+    return selectedFiles.map((fullPath: string) => {
+        let isAssociatedWithSelectedWell = false;
+        const associatedGridCell = fileToGridCell.get(fullPath);
+        if (selectedWell && associatedGridCell) {
+            isAssociatedWithSelectedWell = selectedWell.equals(associatedGridCell);
+        }
 
-    const metadata = fileToGridCell.get(selectedFiles[0]);
-    return !!metadata && metadata.row === selectedWell.row && metadata.col === selectedWell.col;
+        return {
+            fullPath,
+            isAssociatedWithSelectedWell,
+        };
+    });
 });
 
 export const getWellIdToWellLabelMap = createSelector([

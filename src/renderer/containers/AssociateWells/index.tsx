@@ -1,4 +1,3 @@
-import { AicsGridCell } from "aics-react-labkey";
 import * as React from "react";
 import { connect } from "react-redux";
 import { ActionCreator } from "redux";
@@ -12,12 +11,12 @@ import {
 } from "../../state";
 import { setWell } from "../../state/selection/actions";
 import {
-    getSelectedFiles,
-    getSelectedWellAndFileAreAssociated,
-    getWellForUpload,
+    getSelectedFilesAndAssociatedWellInfo,
+    getWell,
     getWellsWithUnitsAndModified
 } from "../../state/selection/selectors";
 import { SetWellAction, Well } from "../../state/selection/types";
+import { GridCell } from "../../state/types";
 import { associateFilesAndWell, undoFileWellAssociation } from "../../state/upload/actions";
 import { getWellIdToFiles } from "../../state/upload/selectors";
 import { AssociateFilesAndWellAction, UndoFileWellAssociationAction } from "../../state/upload/types";
@@ -28,12 +27,11 @@ const styles = require("./style.css");
 interface AssociateWellsProps {
     associateFilesAndWell: ActionCreator<AssociateFilesAndWellAction>;
     className?: string;
-    selectedFiles: string[];
-    selectedWell?: AicsGridCell;
+    selectedFiles: Array<{fullPath: string, isAssociatedWithSelectedWell: boolean}>;
+    selectedWell?: GridCell;
     setWell: ActionCreator<SetWellAction>;
     wells?: Well[][];
     wellIdToFiles: Map<number, string[]>;
-    selectedWellAndFileAreAssociated: boolean;
     undoAssociation: ActionCreator<UndoFileWellAssociationAction>;
 }
 
@@ -81,11 +79,12 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
     }
 
     public selectWell(row: number, col: number): void {
-        this.props.setWell({row, col});
+        this.props.setWell(new GridCell(row, col));
     }
 
     private canAssociate(): boolean {
-        return !!(this.props.selectedFiles && this.props.selectedWell) && !this.props.selectedWellAndFileAreAssociated;
+        const { selectedFiles, selectedWell } = this.props;
+        return !!selectedWell && selectedFiles.filter((file) => !file.isAssociatedWithSelectedWell).length > 0;
     }
 
     private associate(): void {
@@ -93,18 +92,20 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
 
         if (this.canAssociate() && selectedWell && wells) {
             const { selectedFiles } = this.props;
-            this.setState({selectedWell: undefined});
+            const unassociatedFiles = selectedFiles
+                .filter((file) => !file.isAssociatedWithSelectedWell)
+                .map((file) => file.fullPath);
+
             const wellId = wells[selectedWell.row][selectedWell.col].wellId;
-            this.props.associateFilesAndWell(selectedFiles, wellId, selectedWell);
+            this.props.associateFilesAndWell(unassociatedFiles, wellId, selectedWell);
         }
     }
 }
 
 function mapStateToProps(state: State) {
     return {
-        selectedFiles: getSelectedFiles(state),
-        selectedWell: getWellForUpload(state),
-        selectedWellAndFileAreAssociated: getSelectedWellAndFileAreAssociated(state),
+        selectedFiles: getSelectedFilesAndAssociatedWellInfo(state),
+        selectedWell: getWell(state),
         wellIdToFiles: getWellIdToFiles(state),
         wells: getWellsWithUnitsAndModified(state),
     };
