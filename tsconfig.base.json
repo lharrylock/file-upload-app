@@ -9,10 +9,13 @@
     "preserveConstEnums": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES5"
+    "target": "ES5",
+    "baseUrl": ".",
+    "paths": {
+      "aics-react-labkey": ["src/renderer/@types/aics-react-labkey"]
+    }
   },
   "include": [
-    "typings/**/*",
     "src/**/*"
   ]
 }

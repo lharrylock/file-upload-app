@@ -36,5 +36,8 @@
       "check-typecast",
       "check-preblock"
     ]
+  },
+  "linterOptions": {
+    "exclude": ["src/renderer/@types/**/*"]
   }
 }

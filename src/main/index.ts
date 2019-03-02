@@ -2,6 +2,8 @@ import {
     app,
     BrowserWindow,
 } from "electron";
+import * as os from "os";
+import * as path from "path";
 import * as url from "url";
 
 // Keep a global reference of the window object, if you don"t, the window will
@@ -9,6 +11,9 @@ import * as url from "url";
 let win: BrowserWindow | undefined;
 
 function createWindow() {
+    BrowserWindow.addDevToolsExtension(
+        path.join(os.homedir(), ".config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.6.0_0")
+    );
     // Create the browser window.
     win = new BrowserWindow({
         height: 750,
