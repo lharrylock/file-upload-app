@@ -135,7 +135,7 @@ class App extends React.Component<AppProps, {}> {
 function mapStateToProps(state: State) {
     return {
         alert: getAlert(state),
-        fileToTags: new Map(),
+        fileToTags: new Map(), // TODO replace with a selector once upload state branch in place
         files: state.selection.stagedFiles,
         loading: feedback.selectors.getIsLoading(state),
         page: selection.selectors.getAppPage(state),
