@@ -36,6 +36,7 @@ export const initialState = {
     files: [],
     page: AppPage.DragAndDrop,
     stagedFiles: [],
+    well: undefined,
     wells: [],
 };
 

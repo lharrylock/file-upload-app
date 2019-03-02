@@ -21,7 +21,7 @@ export interface SelectionStateBranch {
     barcode?: string;
     plateId?: number;
     wells: Well[][];
-    well: AicsGridCell;
+    well?: AicsGridCell;
     page: AppPage;
     stagedFiles: UploadFile[];
 }
