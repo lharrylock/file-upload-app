@@ -11,7 +11,6 @@ import { getAlert } from "../../state/feedback/selectors";
 import { AlertType, AppAlert, ClearAlertAction } from "../../state/feedback/types";
 import { requestMetadata } from "../../state/metadata/actions";
 import { RequestMetadataAction } from "../../state/metadata/types";
-import { getFileToTags } from "../../state/selection/selectors";
 import {
     AppPage,
     AppPageConfig,
@@ -27,6 +26,7 @@ import DragAndDropSquare from "../DragAndDropSquare";
 import EnterBarcode from "../EnterBarcode";
 
 import "../../styles/fonts.css";
+import { getFileToTags } from "./selectors";
 const styles = require("./styles.css");
 const ALERT_DURATION = 2;
 

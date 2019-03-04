@@ -6,7 +6,7 @@ import { getUnits } from "../metadata/selectors";
 import { Unit } from "../metadata/types";
 import { GridCell, State } from "../types";
 import { getUpload } from "../upload/selectors";
-import { FileTag, UploadMetadata, UploadStateBranch } from "../upload/types";
+import { UploadMetadata, UploadStateBranch } from "../upload/types";
 
 import { Solution, SolutionLot, ViabilityResult, Well } from "./types";
 
@@ -108,32 +108,4 @@ export const getWellIdToWellLabelMap = createSelector([
     });
 
     return result;
-});
-
-export const getFileToTags = createSelector([
-    getUpload,
-    getWellIdToWellLabelMap,
-], (upload: UploadStateBranch, wellIdToWellLabel: Map<number, string>):
-Map<string, FileTag[]> => {
-
-    const fullPathToTags = new Map<string, FileTag[]>();
-    for (const fullPath in upload) {
-        // Don't include JavaScript object meta properties
-        if (upload.hasOwnProperty(fullPath)) {
-            const metadata = upload[fullPath];
-            const tags: FileTag[] = [];
-
-            if (metadata.wellId && wellIdToWellLabel.has(metadata.wellId)) {
-                const wellTag: string = wellIdToWellLabel.get(metadata.wellId) || "";
-                // todo make a class
-                tags.push({
-                    color: "magenta",
-                    title: wellTag,
-                });
-            }
-
-            fullPathToTags.set(fullPath, tags);
-        }
-    }
-    return fullPathToTags;
 });
