@@ -127,13 +127,13 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
 
     private renderChildDirectories(file: UploadFile): React.ReactNode {
         if (!file.isDirectory) {
-            const { fileToTags } = this.props;
+            const {fileToTags} = this.props;
             const fileName: JSX.Element = <span className={styles.fileName}>{file.name}</span>;
             const tags: FileTag[] | undefined = fileToTags.get(file.fullPath);
             let tagEls;
             if (tags) {
                 tagEls = tags.map(
-                    (tag: {title: string, color: string}) => (
+                    (tag: { title: string, color: string }) => (
                         <Tag color={tag.color} key={tag.title}>{tag.title}</Tag>
                     ));
             }

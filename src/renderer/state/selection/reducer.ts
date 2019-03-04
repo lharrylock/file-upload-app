@@ -6,7 +6,7 @@ import { makeReducer } from "../util";
 
 import {
     ADD_STAGE_FILES,
-    DESELECT_FILE,
+    DESELECT_FILES,
     SELECT_BARCODE,
     SELECT_FILE,
     SELECT_METADATA,
@@ -38,8 +38,8 @@ export const initialState = {
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {
-    [DESELECT_FILE]: {
-        accepts: (action: AnyAction): action is DeselectFilesAction => action.type === DESELECT_FILE,
+    [DESELECT_FILES]: {
+        accepts: (action: AnyAction): action is DeselectFilesAction => action.type === DESELECT_FILES,
         perform: (state: SelectionStateBranch) => ({
             ...state,
             files: [],

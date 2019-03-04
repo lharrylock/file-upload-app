@@ -2,7 +2,7 @@ import { AicsGridCell } from "aics-react-labkey";
 
 import {
     ADD_STAGE_FILES,
-    DESELECT_FILE,
+    DESELECT_FILES,
     GET_FILES_IN_FOLDER,
     LOAD_FILES,
     OPEN_FILES,
@@ -42,7 +42,7 @@ export function selectFile(fileId: string | string[]): SelectFileAction {
 
 export function deselectFiles(): DeselectFilesAction {
     return {
-        type: DESELECT_FILE,
+        type: DESELECT_FILES,
     };
 }
 
