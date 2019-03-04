@@ -93,7 +93,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
             const { selectedFiles } = this.props;
 
             const wellId = wells[selectedWell.row][selectedWell.col].wellId;
-            this.props.associateFilesAndWell(selectedFiles, wellId, selectedWell);
+            this.props.associateFilesAndWell(selectedFiles, wellId);
         }
     }
 }

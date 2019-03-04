@@ -1,12 +1,10 @@
-import { AicsGridCell } from "aics-react-labkey";
 import { ASSOCIATE_FILES_AND_WELL, UNDO_FILE_WELL_ASSOCIATION } from "./constants";
 import { AssociateFilesAndWellAction, UndoFileWellAssociationAction } from "./types";
 
-export function associateFilesAndWell(fullPaths: string[], wellId: number, cell: AicsGridCell)
+export function associateFilesAndWell(fullPaths: string[], wellId: number)
     : AssociateFilesAndWellAction {
     return {
         payload: {
-            cell,
             fullPaths,
             wellId,
         },

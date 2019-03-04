@@ -1,5 +1,3 @@
-import { AicsGridCell } from "aics-react-labkey";
-
 export interface UploadStateBranch {
     [fullPath: string]: UploadMetadata;
 }
@@ -11,7 +9,6 @@ export interface UploadMetadata {
 
 export interface AssociateFilesAndWellAction {
     payload: {
-        cell: AicsGridCell,
         fullPaths: string[],
         wellId: number,
     };
