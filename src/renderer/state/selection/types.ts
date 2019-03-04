@@ -11,8 +11,7 @@ export interface UploadFile {
     loadFiles(): Promise<Array<Promise<UploadFile>>>;
 }
 
-export interface DeselectFileAction {
-    payload: string | string[];
+export interface DeselectFilesAction {
     type: string;
 }
 

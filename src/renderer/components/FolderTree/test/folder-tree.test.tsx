@@ -40,6 +40,8 @@ describe("<FolderTree/>", () => {
                         getFilesInFolder={getFilesInFolder}
                         isSelectable={false}
                         onCheck={ON_CHECK}
+                        selectedKeys={[]}
+                        fileToTags={new Map()}
                 />
             );
 
@@ -63,6 +65,8 @@ describe("<FolderTree/>", () => {
                     getFilesInFolder={getFilesInFolder}
                     isSelectable={false}
                     onCheck={ON_CHECK}
+                    selectedKeys={[]}
+                    fileToTags={new Map()}
                 />
             );
 
