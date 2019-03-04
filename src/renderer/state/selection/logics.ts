@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { stat, Stats } from "fs";
-import { castArray, isEmpty, uniq } from "lodash";
+import { castArray, get, isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
@@ -19,12 +19,14 @@ import { AlertType, HttpRequestType } from "../feedback/types";
 
 import {
     AicsSuccessResponse,
+    GridCell,
     HTTP_STATUS,
     ReduxLogicDependencies,
     ReduxLogicDoneCb,
     ReduxLogicNextCb,
     ReduxLogicTransformDependencies
 } from "../types";
+import { getUpload } from "../upload/selectors";
 import { batchActions, getActionFromBatch } from "../util";
 
 import {
@@ -44,8 +46,8 @@ import {
 import { UploadFileImpl } from "./models/upload-file";
 import {
     getAppPage,
-    getFileToGridCellMap,
     getStagedFiles,
+    getWells,
 } from "./selectors";
 import { AppPage, DragAndDropFileList, UploadFile, Well } from "./types";
 
@@ -168,8 +170,8 @@ const getFilesInFolderLogic = createLogic({
     type: GET_FILES_IN_FOLDER,
 });
 
-async function getWells({ action, getState, httpClient, baseMmsUrl }: ReduxLogicTransformDependencies,
-                        plateId: number): Promise<AxiosResponse<AicsSuccessResponse<Well[]>>> {
+async function getWellInfo({ action, getState, httpClient, baseMmsUrl }: ReduxLogicTransformDependencies,
+                           plateId: number): Promise<AxiosResponse<AicsSuccessResponse<Well[]>>> {
     return httpClient.get(`${baseMmsUrl}/1.0/plate/${plateId}/well/`);
 }
 
@@ -194,7 +196,7 @@ const selectBarcodeLogic = createLogic({
             while ((currentTime - startTime < API_WAIT_TIME_SECONDS) && !receivedSuccessfulResponse
             && !receivedNonGatewayError) {
                 try {
-                    const response = await getWells(deps, plateId);
+                    const response = await getWellInfo(deps, plateId);
                     const wells: Well[][] = response.data.data;
                     receivedSuccessfulResponse = true;
                     dispatch(batchActions([
@@ -261,11 +263,20 @@ const selectFileLogic = createLogic({
         const page: AppPage = getAppPage(getState());
         if (files.length === 1 && page === AppPage.AssociateWells) {
             const file: string = files[0];
-            const fileToGridCellMap = getFileToGridCellMap(getState());
-            const associatedGridCell = fileToGridCellMap.has(file) ? fileToGridCellMap.get(file) : undefined;
+            const associatedWellId: number | undefined = get(getUpload(getState()), [file, "wellId"]);
+            let gridCell: GridCell | undefined;
+            const wells = getWells(getState());
 
-            if (associatedGridCell) {
-                dispatch(setWell(associatedGridCell));
+            wells.forEach((wellRow, row) => {
+                wellRow.forEach((well, col) => {
+                    if (well.wellId === associatedWellId) {
+                        gridCell = new GridCell(row, col);
+                    }
+                });
+            });
+
+            if (gridCell) {
+                dispatch(setWell(gridCell));
             }
         }
 

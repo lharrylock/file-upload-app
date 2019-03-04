@@ -200,4 +200,8 @@ describe("Selections selectors", () => {
             }
         });
     });
+
+    describe("getWellIdToWellLabelMap", () => {
+
+    });
 });

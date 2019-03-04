@@ -73,30 +73,6 @@ export const getWellsWithUnitsAndModified = createSelector([
     }));
 });
 
-export const getFileToGridCellMap = createSelector([
-    getUpload,
-    getSelectedFiles,
-    getWells,
-], (uploads: UploadStateBranch, selectedFiles: string[], wells: Well[][]): Map<string, GridCell | undefined> => {
-   return selectedFiles.reduce((accum: Map<string, GridCell | undefined>, fullPath: string) => {
-       const uploadMetadataForFile: UploadMetadata = uploads[fullPath];
-       let cell: GridCell | undefined;
-       if (uploadMetadataForFile) {
-           const targetWellId = uploadMetadataForFile.wellId;
-           wells.forEach((wellRow, row) => {
-               wellRow.forEach((well, col) => {
-                  if (well.wellId === targetWellId) {
-                    cell = new GridCell(row, col);
-                  }
-               });
-           });
-       }
-
-       accum.set(fullPath, cell);
-       return accum;
-   }, new Map<string, GridCell | undefined>());
-});
-
 export const getWellIdToWellLabelMap = createSelector([
     getWells,
 ], (wells: Well[][]) => {
