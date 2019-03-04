@@ -1,7 +1,4 @@
-import {
-    castArray,
-    without,
-} from "lodash";
+import { castArray } from "lodash";
 import { AnyAction } from "redux";
 
 import { TypeToDescriptionMap } from "../types";
@@ -9,7 +6,7 @@ import { makeReducer } from "../util";
 
 import {
     ADD_STAGE_FILES,
-    DESELECT_FILE,
+    DESELECT_FILES,
     SELECT_BARCODE,
     SELECT_FILE,
     SELECT_METADATA,
@@ -21,7 +18,7 @@ import {
 import {
     AddStageFilesAction,
     AppPage,
-    DeselectFileAction,
+    DeselectFilesAction,
     SelectBarcodeAction,
     SelectFileAction,
     SelectionStateBranch,
@@ -36,15 +33,16 @@ export const initialState = {
     files: [],
     page: AppPage.DragAndDrop,
     stagedFiles: [],
+    well: undefined,
     wells: [],
 };
 
 const actionToConfigMap: TypeToDescriptionMap = {
-    [DESELECT_FILE]: {
-        accepts: (action: AnyAction): action is DeselectFileAction => action.type === DESELECT_FILE,
-        perform: (state: SelectionStateBranch, action: DeselectFileAction) => ({
+    [DESELECT_FILES]: {
+        accepts: (action: AnyAction): action is DeselectFilesAction => action.type === DESELECT_FILES,
+        perform: (state: SelectionStateBranch) => ({
             ...state,
-            files: without(state.files, ...castArray(action.payload)),
+            files: [],
         }),
     },
     [SELECT_BARCODE]: {

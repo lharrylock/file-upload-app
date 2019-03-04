@@ -11,8 +11,7 @@ export interface UploadFile {
     loadFiles(): Promise<Array<Promise<UploadFile>>>;
 }
 
-export interface DeselectFileAction {
-    payload: string | string[];
+export interface DeselectFilesAction {
     type: string;
 }
 
@@ -21,7 +20,7 @@ export interface SelectionStateBranch {
     barcode?: string;
     plateId?: number;
     wells: Well[][];
-    well: AicsGridCell;
+    well?: AicsGridCell;
     page: AppPage;
     stagedFiles: UploadFile[];
 }
