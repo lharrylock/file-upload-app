@@ -59,7 +59,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
                 <WellFileAssociations
                     className={styles.wellInfo}
                     well={wellInfo}
-                    wellDisplay={getWellDisplay(selectedWell)}
+                    wellLabel={getWellDisplay(selectedWell)}
                     files={files || []}
                     selectedFilesCount={selectedFiles.length}
                     associate={this.associate}

@@ -1,5 +1,4 @@
 import { Button, Card, Empty, Icon } from "antd";
-import * as classNames from "classnames";
 import { isEmpty } from "lodash";
 import * as React from "react";
 
@@ -11,7 +10,7 @@ interface WellInfoProps {
     className?: string;
     selectedFilesCount: number;
     well?: Well;
-    wellDisplay: string;
+    wellLabel: string;
     files: string[];
     associate: () => void;
     undoAssociation: (file: string) => void;
@@ -29,11 +28,11 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
     }
 
     public render() {
-        const { className, wellDisplay } = this.props;
+        const { className, wellLabel } = this.props;
 
-        const title = `Selected Well: ${wellDisplay}`;
+        const title = `Selected Well: ${wellLabel}`;
         return (
-            <Card className={classNames(styles.container, className)} title={title}>
+            <Card className={className} title={title}>
                 {this.renderBody()}
             </Card>
         );
