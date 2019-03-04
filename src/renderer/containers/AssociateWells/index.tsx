@@ -20,7 +20,7 @@ import { GridCell } from "../../state/types";
 import { associateFilesAndWell, undoFileWellAssociation } from "../../state/upload/actions";
 import { getWellIdToFiles } from "../../state/upload/selectors";
 import { AssociateFilesAndWellAction, UndoFileWellAssociationAction } from "../../state/upload/types";
-import { getWellDisplay } from "../../util/index";
+import { getWellLabel } from "../../util/index";
 
 const styles = require("./style.css");
 
@@ -47,19 +47,18 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
         const { className, selectedFiles, selectedWell, wells, wellIdToFiles } = this.props;
         const selectedWells = selectedWell ? [selectedWell] : [];
         const wellInfo = wells && selectedWell ? wells[selectedWell.row][selectedWell.col] : undefined;
-        const files = wellInfo && wellIdToFiles.has(wellInfo.wellId) ? wellIdToFiles.get(wellInfo.wellId) : [];
+        const files = wellInfo ? wellIdToFiles.get(wellInfo.wellId) : [];
 
         return (
             <FormPage
                 className={className}
                 formTitle="ASSOCIATE WELLS"
                 formPrompt="Associate files and wells by selecting them and clicking Associate"
-                saveButtonDisabled={true}
             >
                 <WellFileAssociations
                     className={styles.wellInfo}
                     well={wellInfo}
-                    wellLabel={getWellDisplay(selectedWell)}
+                    wellLabel={getWellLabel(selectedWell)}
                     files={files || []}
                     selectedFilesCount={selectedFiles.length}
                     associate={this.associate}

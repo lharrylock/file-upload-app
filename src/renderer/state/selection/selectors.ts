@@ -1,6 +1,6 @@
 import { isEmpty } from "lodash";
 import { createSelector } from "reselect";
-import { getWellDisplay } from "../../util/index";
+import { getWellLabel } from "../../util/index";
 
 import { getUnits } from "../metadata/selectors";
 import { Unit } from "../metadata/types";
@@ -103,7 +103,7 @@ export const getWellIdToWellLabelMap = createSelector([
     const result = new Map<number, string>();
     wells.forEach((wellRow: Well[], row) => {
         wellRow.forEach((well: Well, col) => {
-            result.set(well.wellId, getWellDisplay({row, col}));
+            result.set(well.wellId, getWellLabel({row, col}));
         });
     });
 
