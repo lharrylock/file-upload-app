@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Empty, Icon } from "antd";
+import { Button, Card, Empty, Icon } from "antd";
 import * as classNames from "classnames";
 import { isEmpty } from "lodash";
 import * as React from "react";
