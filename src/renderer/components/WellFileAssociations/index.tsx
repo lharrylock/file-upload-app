@@ -2,13 +2,14 @@ import { Button, Card, Empty, Icon } from "antd";
 import * as classNames from "classnames";
 import { isEmpty } from "lodash";
 import * as React from "react";
+
 import { Well } from "../../state/selection/types";
 
 const styles = require("./style.css");
 
 interface WellInfoProps {
     className?: string;
-    selectedFiles: Array<{fullPath: string, isAssociatedWithSelectedWell: boolean}>;
+    selectedFilesCount: number;
     well?: Well;
     wellDisplay: string;
     files: string[];
@@ -39,7 +40,7 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
     }
 
     private renderBody() {
-        const { associate, canAssociate, selectedFiles } = this.props;
+        const { associate, canAssociate, selectedFilesCount } = this.props;
 
         return (
             <div className={styles.cardContent}>
@@ -47,7 +48,7 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
                     {this.renderFiles()}
                 </div>
                 <div className={styles.addRow}>
-                    <div className={styles.title}>Selected File(s): {selectedFiles.length}</div>
+                    <div className={styles.title}>Selected File(s): {selectedFilesCount}</div>
                     <Button
                         type="primary"
                         disabled={!canAssociate}

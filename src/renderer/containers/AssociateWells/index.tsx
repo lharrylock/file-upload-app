@@ -11,7 +11,7 @@ import {
 } from "../../state";
 import { setWell } from "../../state/selection/actions";
 import {
-    getSelectedFilesAndAssociatedWellInfo,
+    getSelectedFiles,
     getWell,
     getWellsWithUnitsAndModified
 } from "../../state/selection/selectors";
@@ -27,7 +27,7 @@ const styles = require("./style.css");
 interface AssociateWellsProps {
     associateFilesAndWell: ActionCreator<AssociateFilesAndWellAction>;
     className?: string;
-    selectedFiles: Array<{fullPath: string, isAssociatedWithSelectedWell: boolean}>;
+    selectedFiles: string[];
     selectedWell?: GridCell;
     setWell: ActionCreator<SetWellAction>;
     wells?: Well[][];
@@ -61,7 +61,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
                     well={wellInfo}
                     wellDisplay={getWellDisplay(selectedWell)}
                     files={files || []}
-                    selectedFiles={selectedFiles}
+                    selectedFilesCount={selectedFiles.length}
                     associate={this.associate}
                     canAssociate={this.canAssociate()}
                     undoAssociation={this.props.undoAssociation}
@@ -92,19 +92,16 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
 
         if (this.canAssociate() && selectedWell && wells) {
             const { selectedFiles } = this.props;
-            const unassociatedFiles = selectedFiles
-                .filter((file) => !file.isAssociatedWithSelectedWell)
-                .map((file) => file.fullPath);
 
             const wellId = wells[selectedWell.row][selectedWell.col].wellId;
-            this.props.associateFilesAndWell(unassociatedFiles, wellId, selectedWell);
+            this.props.associateFilesAndWell(selectedFiles, wellId, selectedWell);
         }
     }
 }
 
 function mapStateToProps(state: State) {
     return {
-        selectedFiles: getSelectedFilesAndAssociatedWellInfo(state),
+        selectedFiles: getSelectedFiles(state),
         selectedWell: getWell(state),
         wellIdToFiles: getWellIdToFiles(state),
         wells: getWellsWithUnitsAndModified(state),

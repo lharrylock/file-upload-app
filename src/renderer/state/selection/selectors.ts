@@ -1,4 +1,4 @@
-import { first, isEmpty } from "lodash";
+import { isEmpty } from "lodash";
 import { createSelector } from "reselect";
 import { getWellDisplay } from "../../util/index";
 
@@ -73,12 +73,6 @@ export const getWellsWithUnitsAndModified = createSelector([
     }));
 });
 
-export const getSelectedFile = createSelector([
-    getSelectedFiles,
-], (files: string[]) => {
-    return first(files);
-});
-
 export const getFileToGridCellMap = createSelector([
     getUpload,
     getSelectedFiles,
@@ -101,29 +95,6 @@ export const getFileToGridCellMap = createSelector([
        accum.set(fullPath, cell);
        return accum;
    }, new Map<string, GridCell | undefined>());
-});
-
-export const getSelectedFilesAndAssociatedWellInfo = createSelector([
-    getFileToGridCellMap,
-    getSelectedFiles,
-    getWell,
-], (
-    fileToGridCell: Map<string, GridCell | undefined>,
-    selectedFiles: string[],
-    selectedWell?: GridCell
-): Array<{fullPath: string, isAssociatedWithSelectedWell: boolean}> => {
-    return selectedFiles.map((fullPath: string) => {
-        let isAssociatedWithSelectedWell = false;
-        const associatedGridCell = fileToGridCell.get(fullPath);
-        if (selectedWell && associatedGridCell) {
-            isAssociatedWithSelectedWell = selectedWell.equals(associatedGridCell);
-        }
-
-        return {
-            fullPath,
-            isAssociatedWithSelectedWell,
-        };
-    });
 });
 
 export const getWellIdToWellLabelMap = createSelector([
@@ -154,6 +125,7 @@ Map<string, FileTag[]> => {
 
             if (metadata.wellId && wellIdToWellLabel.has(metadata.wellId)) {
                 const wellTag: string = wellIdToWellLabel.get(metadata.wellId) || "";
+                // todo make a class
                 tags.push({
                     color: "magenta",
                     title: wellTag,
