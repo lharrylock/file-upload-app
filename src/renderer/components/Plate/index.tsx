@@ -5,9 +5,9 @@ import { Well } from "../../state/selection/types";
 
 import WellComponent from "../Well";
 
-const FINISHED_WELL_COLOR = "#9ccc84";
-const MODIFIED_WELL_COLOR = "rgb(221, 216, 241)";
-const DEFAULT_WELL_COLOR = "rgb(226, 228, 227)";
+const ASSOCIATED_WELL_COLOR = "rgb(156, 204, 132)"; // For wells that are associated with at least one file
+const MODIFIED_WELL_COLOR = "rgb(221, 216, 241)"; // For non-empty wells that have not been associated with a file
+const DEFAULT_WELL_COLOR = "rgb(226, 228, 227)"; // For empty wells
 const WELL_WIDTH = "60px";
 
 interface PlateProps {
@@ -30,8 +30,10 @@ class Plate extends React.Component<PlateProps, {}> {
     }
 
     public wellColorSelector(cellData: Well): string {
-        if ((this.props.wellIdToFiles.get(cellData.wellId) || []).length > 0) {
-            return FINISHED_WELL_COLOR;
+        // if file count is not 0 or undefined, the well is associated with at least one file
+        const associatedFiles = this.props.wellIdToFiles.get(cellData.wellId) || [];
+        if (associatedFiles.length > 0) {
+            return ASSOCIATED_WELL_COLOR;
         }
 
         return cellData.modified ? MODIFIED_WELL_COLOR : DEFAULT_WELL_COLOR;
