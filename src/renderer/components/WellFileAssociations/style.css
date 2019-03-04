@@ -1,5 +1,3 @@
-@import "../../styles/colors.css";
-
 .card-content {
   display: flex;
   flex-direction: column;
@@ -44,10 +42,6 @@
   & .delete-button {
     flex: 0 0 auto;
   }
-}
-
-.already-associated-file {
-  color: var(--disabled-text);
 }
 
 .file-icon {
