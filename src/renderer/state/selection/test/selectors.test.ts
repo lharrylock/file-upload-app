@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { mockState, mockUnits } from "../../test/mocks";
+import { mockState, mockUnits, mockWells } from "../../test/mocks";
 import { State } from "../../types";
 import { getWellIdToWellLabelMap, getWellsWithModified, getWellsWithUnitsAndModified, NO_UNIT } from "../selectors";
 import { CellPopulation, Solution, ViabilityResult, Well } from "../types";
@@ -203,20 +203,11 @@ describe("Selections selectors", () => {
 
     describe("getWellIdToWellLabelMap", () => {
         it("returns map of wellIds to their labels", () => {
-            const mockWell: Well = {
-                cellPopulations: [],
-                solutions: [],
-                viabilityResults: [],
-                wellId: 1,
-            };
             const map = getWellIdToWellLabelMap({
                 ...mockState,
                 selection: {
                     ...mockState.selection,
-                    wells: [
-                        [mockWell, {...mockWell, wellId: 2}],
-                        [{...mockWell, wellId: 3}, {...mockWell, wellId: 4}],
-                    ],
+                    wells: mockWells,
                 },
             });
             expect(map.get(1)).to.equal("A1");
