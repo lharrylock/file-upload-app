@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { stat, Stats } from "fs";
-import { castArray, get, isEmpty, uniq } from "lodash";
+import { isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
@@ -26,12 +26,10 @@ import {
     ReduxLogicNextCb,
     ReduxLogicTransformDependencies
 } from "../types";
-import { getUpload } from "../upload/selectors";
 import { batchActions, getActionFromBatch } from "../util";
 
 import {
     selectPage,
-    setWell,
     setWells,
     stageFiles,
     updateStagedFiles
@@ -41,7 +39,6 @@ import {
     LOAD_FILES,
     OPEN_FILES,
     SELECT_BARCODE,
-    SELECT_FILE,
 } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
 import {
@@ -257,38 +254,9 @@ const selectBarcodeLogic = createLogic({
     type: SELECT_BARCODE,
 });
 
-const selectFileLogic = createLogic({
-    process: ({action, getState}: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
-        const files: string[] = castArray(action.payload);
-        const page: AppPage = getAppPage(getState());
-        if (files.length === 1 && page === AppPage.AssociateWells) {
-            const file: string = files[0];
-            const associatedWellId: number | undefined = get(getUpload(getState()), [file, "wellId"]);
-            let gridCell: GridCell | undefined;
-            const wells = getWells(getState());
-
-            wells.forEach((wellRow, row) => {
-                wellRow.forEach((well, col) => {
-                    if (well.wellId === associatedWellId) {
-                        gridCell = new GridCell(row, col);
-                    }
-                });
-            });
-
-            if (gridCell) {
-                dispatch(setWell(gridCell));
-            }
-        }
-
-        done();
-    },
-    type: SELECT_FILE,
-});
-
 export default [
     loadFilesLogic,
     openFilesLogic,
     getFilesInFolderLogic,
     selectBarcodeLogic,
-    selectFileLogic,
 ];
