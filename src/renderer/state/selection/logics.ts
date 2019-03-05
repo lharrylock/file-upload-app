@@ -19,7 +19,6 @@ import { AlertType, HttpRequestType } from "../feedback/types";
 
 import {
     AicsSuccessResponse,
-    GridCell,
     HTTP_STATUS,
     ReduxLogicDependencies,
     ReduxLogicDoneCb,
@@ -44,7 +43,6 @@ import { UploadFileImpl } from "./models/upload-file";
 import {
     getAppPage,
     getStagedFiles,
-    getWells,
 } from "./selectors";
 import { AppPage, DragAndDropFileList, UploadFile, Well } from "./types";
 
@@ -167,8 +165,8 @@ const getFilesInFolderLogic = createLogic({
     type: GET_FILES_IN_FOLDER,
 });
 
-async function getWellInfo({ action, getState, httpClient, baseMmsUrl }: ReduxLogicTransformDependencies,
-                           plateId: number): Promise<AxiosResponse<AicsSuccessResponse<Well[]>>> {
+async function getWell({ action, getState, httpClient, baseMmsUrl }: ReduxLogicTransformDependencies,
+                       plateId: number): Promise<AxiosResponse<AicsSuccessResponse<Well[]>>> {
     return httpClient.get(`${baseMmsUrl}/1.0/plate/${plateId}/well/`);
 }
 
@@ -193,7 +191,7 @@ const selectBarcodeLogic = createLogic({
             while ((currentTime - startTime < API_WAIT_TIME_SECONDS) && !receivedSuccessfulResponse
             && !receivedNonGatewayError) {
                 try {
-                    const response = await getWellInfo(deps, plateId);
+                    const response = await getWell(deps, plateId);
                     const wells: Well[][] = response.data.data;
                     receivedSuccessfulResponse = true;
                     dispatch(batchActions([
