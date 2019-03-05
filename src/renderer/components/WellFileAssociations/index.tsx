@@ -21,9 +21,6 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
 
     public constructor(props: WellInfoProps) {
         super(props);
-        this.renderBody = this.renderBody.bind(this);
-        this.renderFiles = this.renderFiles.bind(this);
-        this.renderFileRow = this.renderFileRow.bind(this);
         this.undoAssociation = this.undoAssociation.bind(this);
     }
 
@@ -67,7 +64,7 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
             return <Empty description="No Files"/>;
         }
 
-        return files.map(this.renderFileRow);
+        return files.map(this.renderFileRow, this);
     }
 
     private renderFileRow(file: string) {
