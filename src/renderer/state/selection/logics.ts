@@ -18,7 +18,8 @@ import {
 import { AlertType, HttpRequestType } from "../feedback/types";
 
 import {
-    AicsSuccessResponse, HTTP_STATUS,
+    AicsSuccessResponse,
+    HTTP_STATUS,
     ReduxLogicDependencies,
     ReduxLogicDoneCb,
     ReduxLogicNextCb,
@@ -26,10 +27,23 @@ import {
 } from "../types";
 import { batchActions, getActionFromBatch } from "../util";
 
-import { selectPage, setWells, stageFiles, updateStagedFiles } from "./actions";
-import { GET_FILES_IN_FOLDER, LOAD_FILES, OPEN_FILES, SELECT_BARCODE } from "./constants";
+import {
+    selectPage,
+    setWells,
+    stageFiles,
+    updateStagedFiles
+} from "./actions";
+import {
+    GET_FILES_IN_FOLDER,
+    LOAD_FILES,
+    OPEN_FILES,
+    SELECT_BARCODE,
+} from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
-import { getAppPage, getStagedFiles } from "./selectors";
+import {
+    getAppPage,
+    getStagedFiles,
+} from "./selectors";
 import { AppPage, DragAndDropFileList, UploadFile, Well } from "./types";
 
 const mergeChildPaths = (filePaths: string[]): string[] => {

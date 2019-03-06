@@ -1,5 +1,4 @@
-import { AicsGridCell } from "aics-react-labkey";
-
+import { GridCell } from "../../containers/AssociateWells/grid-cell";
 import { MetadataStateBranch } from "../metadata/types";
 
 export interface UploadFile {
@@ -18,9 +17,10 @@ export interface DeselectFilesAction {
 export interface SelectionStateBranch {
     [key: string]: any;
     barcode?: string;
+    files: string[];
     plateId?: number;
     wells: Well[][];
-    well?: AicsGridCell;
+    well?: GridCell;
     page: AppPage;
     stagedFiles: UploadFile[];
 }
@@ -148,7 +148,7 @@ export interface SetWellsAction {
 }
 
 export interface SetWellAction {
-    payload: AicsGridCell;
+    payload: GridCell;
     type: string;
 }
 

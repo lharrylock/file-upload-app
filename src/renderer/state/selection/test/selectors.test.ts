@@ -1,8 +1,8 @@
 import { expect } from "chai";
 
-import { mockState, mockUnits } from "../../test/mocks";
+import { mockState, mockUnits, mockWells } from "../../test/mocks";
 import { State } from "../../types";
-import { getWellsWithModified, getWellsWithUnitsAndModified, NO_UNIT } from "../selectors";
+import { getWellIdToWellLabelMap, getWellsWithModified, getWellsWithUnitsAndModified, NO_UNIT } from "../selectors";
 import { CellPopulation, Solution, ViabilityResult, Well } from "../types";
 
 describe("Selections selectors", () => {
@@ -198,6 +198,22 @@ describe("Selections selectors", () => {
                 expect(well.viabilityResults[0].suspensionVolumeUnitDisplay).to.equal("unit3");
                 expect(well.viabilityResults[0].viableCellCountUnitDisplay).to.equal("unit4");
             }
+        });
+    });
+
+    describe("getWellIdToWellLabelMap", () => {
+        it("returns map of wellIds to their labels", () => {
+            const map = getWellIdToWellLabelMap({
+                ...mockState,
+                selection: {
+                    ...mockState.selection,
+                    wells: mockWells,
+                },
+            });
+            expect(map.get(1)).to.equal("A1");
+            expect(map.get(2)).to.equal("A2");
+            expect(map.get(3)).to.equal("B1");
+            expect(map.get(4)).to.equal("B2");
         });
     });
 });

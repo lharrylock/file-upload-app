@@ -1,5 +1,5 @@
 import { Unit } from "../metadata/types";
-import { AppPage } from "../selection/types";
+import { AppPage, Well } from "../selection/types";
 import { State } from "../types";
 
 export const mockState: State = {
@@ -15,6 +15,10 @@ export const mockState: State = {
         page: AppPage.DragAndDrop,
         stagedFiles: [],
         wells: [],
+        wellsForUpload: [],
+    },
+    upload: {
+
     },
 };
 
@@ -43,4 +47,16 @@ export const mockUnits: Unit[] = [
         type: "mass",
         unitsId: 4,
     },
+];
+
+export const mockWell: Well = {
+    cellPopulations: [],
+    solutions: [],
+    viabilityResults: [],
+    wellId: 1,
+};
+
+export const mockWells: Well[][] = [
+    [mockWell, {...mockWell, wellId: 2}],
+    [{...mockWell, wellId: 3}, {...mockWell, wellId: 4}],
 ];

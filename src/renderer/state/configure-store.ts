@@ -14,18 +14,21 @@ import {
     metadata,
     selection,
     State,
+    upload,
 } from "./";
 
 const reducers = {
     feedback: feedback.reducer,
     metadata: metadata.reducer,
     selection: selection.reducer,
+    upload: upload.reducer,
 };
 
 const logics = [
     ...feedback.logics,
     ...metadata.logics,
     ...selection.logics,
+    ...upload.logics,
 ];
 
 export const reduxLogicDependencies = {

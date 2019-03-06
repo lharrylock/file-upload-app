@@ -1,4 +1,4 @@
-import { AicsGridCell } from "aics-react-labkey";
+import { GridCell } from "../../containers/AssociateWells/grid-cell";
 
 import {
     ADD_STAGE_FILES,
@@ -113,7 +113,7 @@ export function setWells(wells: Well[][]): SetWellsAction {
     };
 }
 
-export function setWell(well: AicsGridCell): SetWellAction {
+export function setWell(well: GridCell): SetWellAction {
     return {
         payload: well,
         type: SET_WELL,

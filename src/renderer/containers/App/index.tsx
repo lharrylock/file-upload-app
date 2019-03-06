@@ -26,6 +26,7 @@ import DragAndDropSquare from "../DragAndDropSquare";
 import EnterBarcode from "../EnterBarcode";
 
 import "../../styles/fonts.css";
+import { getFileToTags } from "./selectors";
 const styles = require("./styles.css");
 const ALERT_DURATION = 2;
 
@@ -135,7 +136,7 @@ class App extends React.Component<AppProps, {}> {
 function mapStateToProps(state: State) {
     return {
         alert: getAlert(state),
-        fileToTags: new Map(), // TODO replace with a selector once upload state branch in place
+        fileToTags: getFileToTags(state),
         files: state.selection.stagedFiles,
         loading: feedback.selectors.getIsLoading(state),
         page: selection.selectors.getAppPage(state),

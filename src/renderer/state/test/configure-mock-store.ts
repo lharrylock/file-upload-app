@@ -12,6 +12,7 @@ import {
     metadata,
     selection,
     State,
+    upload,
 } from "../";
 
 export interface ReduxLogicDependencies {
@@ -26,11 +27,13 @@ const reducers = {
     feedback: feedback.reducer,
     metadata: metadata.reducer,
     selection: selection.reducer,
+    upload: upload.reducer,
 };
 
 const logics = [
     ...metadata.logics,
     ...selection.logics,
+    ...upload.logics,
 ];
 
 export function createMockReduxStore(initialState: State, reduxLogicDependencies: ReduxLogicDependencies) {

@@ -1,5 +1,6 @@
 import { isEmpty } from "lodash";
 import { createSelector } from "reselect";
+import { getWellLabel } from "../../util/index";
 
 import { getUnits } from "../metadata/selectors";
 import { Unit } from "../metadata/types";
@@ -15,7 +16,7 @@ export const getSelectedFiles = (state: State) => state.selection.files;
 export const getAppPage = (state: State) => state.selection.page;
 export const getStagedFiles = (state: State) => state.selection.stagedFiles;
 export const getWells = (state: State) => state.selection.wells;
-export const getWellForUpload = (state: State) => state.selection.well;
+export const getWell = (state: State) => state.selection.well;
 
 // COMPOSED SELECTORS
 export const NO_UNIT = "(Unit Not Found)";
@@ -68,4 +69,17 @@ export const getWellsWithUnitsAndModified = createSelector([
             viabilityResults,
         };
     }));
+});
+
+export const getWellIdToWellLabelMap = createSelector([
+    getWells,
+], (wells: Well[][]) => {
+    const result = new Map<number, string>();
+    wells.forEach((wellRow: Well[], row) => {
+        wellRow.forEach((well: Well, col) => {
+            result.set(well.wellId, getWellLabel({row, col}));
+        });
+    });
+
+    return result;
 });

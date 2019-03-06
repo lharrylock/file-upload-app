@@ -5,8 +5,9 @@ import { Well } from "../../state/selection/types";
 
 import WellComponent from "../Well";
 
-const MODIFIED_WELL_COLOR = "rgb(221, 216, 241)";
-const DEFAULT_WELL_COLOR = "rgb(226, 228, 227)";
+const ASSOCIATED_WELL_COLOR = "rgb(156, 204, 132)"; // For wells that are associated with at least one file
+const MODIFIED_WELL_COLOR = "rgb(221, 216, 241)"; // For non-empty wells that have not been associated with a file
+const DEFAULT_WELL_COLOR = "rgb(226, 228, 227)"; // For empty wells
 const WELL_WIDTH = "60px";
 
 interface PlateProps {
@@ -14,6 +15,7 @@ interface PlateProps {
     onWellClick: (row: number, col: number, well?: Well) => void;
     selectedWells: AicsGridCell[];
     wells: Well[][];
+    wellIdToFiles: Map<number, string[]>;
 }
 
 class Plate extends React.Component<PlateProps, {}> {
@@ -21,13 +23,20 @@ class Plate extends React.Component<PlateProps, {}> {
         return <WellComponent well={cellData}/>;
     }
 
-    public static wellColorSelector(cellData: Well): string {
-        return cellData.modified ? MODIFIED_WELL_COLOR : DEFAULT_WELL_COLOR;
-    }
-
     constructor(props: PlateProps) {
         super(props);
         this.handleWellClick = this.handleWellClick.bind(this);
+        this.wellColorSelector = this.wellColorSelector.bind(this);
+    }
+
+    public wellColorSelector(cellData: Well): string {
+        // if file count is not 0 or undefined, the well is associated with at least one file
+        const associatedFiles = this.props.wellIdToFiles.get(cellData.wellId) || [];
+        if (associatedFiles.length > 0) {
+            return ASSOCIATED_WELL_COLOR;
+        }
+
+        return cellData.modified ? MODIFIED_WELL_COLOR : DEFAULT_WELL_COLOR;
     }
 
     public handleWellClick(event: React.MouseEvent<HTMLDivElement>, row: number, col: number, data: Well): void {
@@ -53,7 +62,7 @@ class Plate extends React.Component<PlateProps, {}> {
                     cellWidth={WELL_WIDTH}
                     fontSize="14px"
                     selectedCells={selectedWells}
-                    displayBackground={Plate.wellColorSelector}
+                    displayBackground={this.wellColorSelector}
                     displayText={Plate.getWellDisplayText}
                     cells={wells}
                     onCellClick={this.handleWellClick}
