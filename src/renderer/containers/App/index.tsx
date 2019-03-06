@@ -5,12 +5,13 @@ import { connect } from "react-redux";
 import { ActionCreator } from "redux";
 
 import FolderTree from "../../components/FolderTree";
-import { feedback, selection } from "../../state";
 import { clearAlert } from "../../state/feedback/actions";
-import { getAlert } from "../../state/feedback/selectors";
+import { getAlert, getIsLoading } from "../../state/feedback/selectors";
 import { AlertType, AppAlert, ClearAlertAction } from "../../state/feedback/types";
 import { requestMetadata } from "../../state/metadata/actions";
 import { RequestMetadataAction } from "../../state/metadata/types";
+import { getFilesInFolder, selectFile } from "../../state/selection/actions";
+import { getAppPage, getSelectedFiles, getStagedFiles } from "../../state/selection/selectors";
 import {
     AppPage,
     AppPageConfig,
@@ -100,9 +101,7 @@ class App extends React.Component<AppProps, {}> {
         const {
             fileToTags,
             files,
-            getFilesInFolder,
             loading,
-            selectFile,
             selectedFiles,
             page,
         } = this.props;
@@ -119,10 +118,10 @@ class App extends React.Component<AppProps, {}> {
                    <FolderTree
                        className={styles.folderTree}
                        files={files}
-                       getFilesInFolder={getFilesInFolder}
+                       getFilesInFolder={this.props.getFilesInFolder}
                        isLoading={loading}
                        isSelectable={pageConfig.folderTreeSelectable}
-                       onCheck={selectFile}
+                       onCheck={this.props.selectFile}
                        selectedKeys={selectedFiles}
                        fileToTags={fileToTags}
                    />
@@ -137,18 +136,18 @@ function mapStateToProps(state: State) {
     return {
         alert: getAlert(state),
         fileToTags: getFileToTags(state),
-        files: state.selection.stagedFiles,
-        loading: feedback.selectors.getIsLoading(state),
-        page: selection.selectors.getAppPage(state),
-        selectedFiles: selection.selectors.getSelectedFiles(state),
+        files: getStagedFiles(state),
+        loading: getIsLoading(state),
+        page: getAppPage(state),
+        selectedFiles: getSelectedFiles(state),
     };
 }
 
 const dispatchToPropsMap = {
     clearAlert,
-    getFilesInFolder: selection.actions.getFilesInFolder,
+    getFilesInFolder,
     requestMetadata,
-    selectFile: selection.actions.selectFile,
+    selectFile,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(App);
