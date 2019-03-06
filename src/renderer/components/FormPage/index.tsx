@@ -21,7 +21,7 @@ interface FormPageProps {
 class FormPage extends React.Component<FormPageProps, {}> {
     private static defaultProps = {
         backButtonDisabled: false,
-        backButtonName: "Go Back",
+        backButtonName: "Back",
         saveButtonDisabled: false,
         saveButtonName: "Next",
         saveInProgress: false,

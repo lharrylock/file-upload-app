@@ -10,9 +10,9 @@ import { State } from "../../state";
 import { setAlert } from "../../state/feedback/actions";
 import { getRequestsInProgressContains } from "../../state/feedback/selectors";
 import { AlertType, HttpRequestType, SetAlertAction } from "../../state/feedback/types";
-import { selectBarcode } from "../../state/selection/actions";
+import { goBack, selectBarcode } from "../../state/selection/actions";
 import { getSelectedBarcode, getSelectedPlateId } from "../../state/selection/selectors";
-import { SelectBarcodeAction } from "../../state/selection/types";
+import { GoBackAction, SelectBarcodeAction } from "../../state/selection/types";
 import LabkeyQueryService, { Plate } from "../../util/labkey-query-service";
 
 const styles = require("./style.css");
@@ -20,6 +20,7 @@ const styles = require("./style.css");
 interface EnterBarcodeProps {
     className?: string;
     barcode?: string;
+    goBack: ActionCreator<GoBackAction>;
     plateId?: number;
     saveInProgress: boolean;
     selectBarcode: ActionCreator<SelectBarcodeAction>;
@@ -70,6 +71,7 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
                 saveButtonDisabled={!this.state.barcode || saveInProgress}
                 onSave={this.saveAndContinue}
                 saveInProgress={saveInProgress}
+                onBack={this.props.goBack}
             >
                 <LabKeyOptionSelector
                     required={true}
@@ -122,6 +124,7 @@ function mapStateToProps(state: State) {
 }
 
 const dispatchToPropsMap = {
+    goBack,
     selectBarcode,
     setAlert,
 };

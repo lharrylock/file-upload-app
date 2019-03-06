@@ -267,8 +267,8 @@ const goBackLogic = createLogic({
                         clearSelection("barcode"),
                         clearSelection("plateId"),
                         clearSelection("wells"),
-                        clearSelection("files"),
-                        clearSelection("well")
+                        clearSelection("well"),
+                        clearSelection("stagedFiles")
                     );
                     break;
             }
