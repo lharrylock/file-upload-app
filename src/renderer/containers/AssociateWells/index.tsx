@@ -16,11 +16,12 @@ import {
     getWellsWithUnitsAndModified
 } from "../../state/selection/selectors";
 import { SetWellAction, Well } from "../../state/selection/types";
-import { GridCell } from "../../state/types";
 import { associateFilesAndWell, undoFileWellAssociation } from "../../state/upload/actions";
 import { getWellIdToFiles } from "../../state/upload/selectors";
 import { AssociateFilesAndWellAction, UndoFileWellAssociationAction } from "../../state/upload/types";
 import { getWellLabel } from "../../util/index";
+
+import { GridCell } from "./grid-cell";
 
 const styles = require("./style.css");
 

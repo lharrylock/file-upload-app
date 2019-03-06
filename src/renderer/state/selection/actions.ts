@@ -1,4 +1,4 @@
-import { GridCell } from "../types";
+import { GridCell } from "../../containers/AssociateWells/grid-cell";
 
 import {
     ADD_STAGE_FILES,

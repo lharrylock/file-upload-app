@@ -4,9 +4,7 @@ import { getWellLabel } from "../../util/index";
 
 import { getUnits } from "../metadata/selectors";
 import { Unit } from "../metadata/types";
-import { GridCell, State } from "../types";
-import { getUpload } from "../upload/selectors";
-import { UploadMetadata, UploadStateBranch } from "../upload/types";
+import { State } from "../types";
 
 import { Solution, SolutionLot, ViabilityResult, Well } from "./types";
 

@@ -64,17 +64,3 @@ export enum HTTP_STATUS {
     INTERNAL_SERVER_ERROR = 500,
     OK = 200,
 }
-
-export class GridCell implements AicsGridCell {
-    public readonly row: number;
-    public readonly col: number;
-
-    constructor(row: number, col: number) {
-        this.row = row;
-        this.col = col;
-    }
-
-    public equals(other: GridCell): boolean {
-        return this.row === other.row && this.col === other.col;
-    }
-}

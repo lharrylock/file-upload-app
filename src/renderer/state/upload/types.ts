@@ -28,14 +28,3 @@ export interface FileTag {
     // Tag background color
     color: string;
 }
-
-// All tags representing wells should share the same color
-export class WellFileTag implements FileTag {
-    public title: string;
-    public readonly color: string;
-
-    constructor(title: string) {
-        this.title = title;
-        this.color = "magenta";
-    }
-}

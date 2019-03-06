@@ -1,5 +1,5 @@
+import { GridCell } from "../../containers/AssociateWells/grid-cell";
 import { MetadataStateBranch } from "../metadata/types";
-import { GridCell } from "../types";
 
 export interface UploadFile {
     name: string;
