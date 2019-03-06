@@ -1,7 +1,17 @@
 import { createSelector } from "reselect";
 import { getWellIdToWellLabelMap } from "../../state/selection/selectors";
 import { getUpload } from "../../state/upload/selectors";
-import { FileTag, UploadStateBranch, WellFileTag } from "../../state/upload/types";
+import { FileTag, UploadStateBranch } from "../../state/upload/types";
+
+// All tags representing wells should share the same color
+export class WellFileTag implements FileTag {
+    public title: string;
+    public readonly color: string = "magenta";
+
+    constructor(title: string) {
+        this.title = title;
+    }
+}
 
 // Result used by the FolderTree to display tags by each file with associated metadata
 export const getFileToTags = createSelector([
