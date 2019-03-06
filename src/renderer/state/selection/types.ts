@@ -10,10 +10,6 @@ export interface UploadFile {
     loadFiles(): Promise<Array<Promise<UploadFile>>>;
 }
 
-export interface DeselectFilesAction {
-    type: string;
-}
-
 export interface SelectionStateBranch {
     [key: string]: any;
     barcode?: string;
@@ -21,7 +17,7 @@ export interface SelectionStateBranch {
     plateId?: number;
     wells: Well[][];
     well?: GridCell;
-    page: AppPage;
+    page: Page;
     stagedFiles: UploadFile[];
 }
 
@@ -120,7 +116,11 @@ export interface AddStageFilesAction {
 }
 
 export interface SelectPageAction {
-    payload: AppPage;
+    payload: Page;
+    type: string;
+}
+
+export interface GoBackAction {
     type: string;
 }
 
@@ -152,6 +152,11 @@ export interface SetWellAction {
     type: string;
 }
 
+export interface ClearSelectionAction {
+    payload: keyof SelectionStateBranch;
+    type: string;
+}
+
 export interface DragAndDropFileList {
     readonly length: number;
     [index: number]: DragAndDropFile;
@@ -162,16 +167,18 @@ export interface DragAndDropFile {
     readonly path: string;
 }
 
-export enum AppPage {
-    DragAndDrop = 1,
-    EnterBarcode,
-    AssociateWells,
-    UploadJobs,
-    UploadComplete,
+export enum Page {
+    DragAndDrop = "DragAndDrop",
+    EnterBarcode = "EnterBarcode",
+    AssociateWells = "AssociateWells",
+    UploadJobs = "UploadJobs",
+    UploadComplete = "UploadComplete",
 }
 
 export interface AppPageConfig {
     container: JSX.Element;
     folderTreeVisible: boolean;
     folderTreeSelectable: boolean;
+    next?: Page;
+    previous?: Page;
 }

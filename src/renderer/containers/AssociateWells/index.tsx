@@ -9,13 +9,13 @@ import WellFileAssociations from "../../components/WellFileAssociations/index";
 import {
     State,
 } from "../../state";
-import { setWell } from "../../state/selection/actions";
+import { goBack, setWell } from "../../state/selection/actions";
 import {
     getSelectedFiles,
     getWell,
     getWellsWithUnitsAndModified
 } from "../../state/selection/selectors";
-import { SetWellAction, Well } from "../../state/selection/types";
+import { GoBackAction, SetWellAction, Well } from "../../state/selection/types";
 import { GridCell } from "../../state/types";
 import { associateFilesAndWell, undoFileWellAssociation } from "../../state/upload/actions";
 import { getWellIdToFiles } from "../../state/upload/selectors";
@@ -27,6 +27,7 @@ const styles = require("./style.css");
 interface AssociateWellsProps {
     associateFilesAndWell: ActionCreator<AssociateFilesAndWellAction>;
     className?: string;
+    goBack: ActionCreator<GoBackAction>;
     selectedFiles: string[];
     selectedWell?: GridCell;
     setWell: ActionCreator<SetWellAction>;
@@ -44,7 +45,13 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
     }
 
     public render() {
-        const { className, selectedFiles, selectedWell, wells, wellIdToFiles } = this.props;
+        const {
+            className,
+            selectedFiles,
+            selectedWell,
+            wells,
+            wellIdToFiles,
+        } = this.props;
         const selectedWells = selectedWell ? [selectedWell] : [];
         const wellInfo = wells && selectedWell ? wells[selectedWell.row][selectedWell.col] : undefined;
         const files = wellInfo ? wellIdToFiles.get(wellInfo.wellId) : [];
@@ -54,6 +61,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
                 className={className}
                 formTitle="ASSOCIATE WELLS"
                 formPrompt="Associate files and wells by selecting them and clicking Associate"
+                onBack={this.props.goBack}
             >
                 <WellFileAssociations
                     className={styles.wellInfo}
@@ -109,6 +117,7 @@ function mapStateToProps(state: State) {
 
 const dispatchToPropsMap = {
     associateFilesAndWell,
+    goBack,
     setWell,
     undoAssociation: undoFileWellAssociation,
 };

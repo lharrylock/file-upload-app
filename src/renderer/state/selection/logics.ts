@@ -2,6 +2,7 @@ import { AxiosResponse } from "axios";
 import { stat, Stats } from "fs";
 import { isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
+import { Simulate } from "react-dom/test-utils";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
 
@@ -25,26 +26,14 @@ import {
     ReduxLogicNextCb,
     ReduxLogicTransformDependencies
 } from "../types";
+import { clearUpload } from "../upload/actions";
 import { batchActions, getActionFromBatch } from "../util";
 
-import {
-    selectPage,
-    setWells,
-    stageFiles,
-    updateStagedFiles
-} from "./actions";
-import {
-    GET_FILES_IN_FOLDER,
-    LOAD_FILES,
-    OPEN_FILES,
-    SELECT_BARCODE,
-} from "./constants";
+import { clearSelection, selectPage, setWells, stageFiles, updateStagedFiles } from "./actions";
+import { GET_FILES_IN_FOLDER, GO_BACK, LOAD_FILES, OPEN_FILES, SELECT_BARCODE, } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
-import {
-    getAppPage,
-    getStagedFiles,
-} from "./selectors";
-import { AppPage, DragAndDropFileList, UploadFile, Well } from "./types";
+import { getPage, getStagedFiles, } from "./selectors";
+import { DragAndDropFileList, Page, UploadFile, Well } from "./types";
 
 const mergeChildPaths = (filePaths: string[]): string[] => {
     filePaths = uniq(filePaths);
@@ -85,9 +74,9 @@ const stageFilesAndStopLoading = (uploadFilePromises: Array<Promise<UploadFile>>
 
 const openFilesTransformLogic = ({ action, getState }: ReduxLogicDependencies, next: ReduxLogicNextCb) => {
     const actions = [action, startLoading()];
-    const page: AppPage = getAppPage(getState());
-    if (page === AppPage.DragAndDrop) {
-        actions.push(selectPage(AppPage.EnterBarcode));
+    const page: Page = getPage(getState());
+    if (page === Page.DragAndDrop) {
+        actions.push(selectPage(Page.EnterBarcode));
     }
     next(batchActions(actions));
 };
@@ -195,7 +184,7 @@ const selectBarcodeLogic = createLogic({
                     const wells: Well[][] = response.data.data;
                     receivedSuccessfulResponse = true;
                     dispatch(batchActions([
-                        selectPage(AppPage.AssociateWells),
+                        selectPage(Page.AssociateWells),
                         setWells(wells),
                         removeRequestFromInProgress(HttpRequestType.GET_WELLS),
                         action,
@@ -252,7 +241,45 @@ const selectBarcodeLogic = createLogic({
     type: SELECT_BARCODE,
 });
 
+const prevPageConfig = {
+    [Page.DragAndDrop]: undefined,
+    [Page.EnterBarcode]: Page.DragAndDrop,
+    [Page.AssociateWells]: Page.EnterBarcode,
+    [Page.UploadJobs]: Page.UploadJobs,
+    [Page.UploadComplete]: Page.UploadJobs,
+};
+const goBackLogic = createLogic({
+    transform: ({getState}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
+        const currentPage = getPage(getState());
+        const nextPage = prevPageConfig[currentPage];
+
+        if (nextPage) {
+            const actions: AnyAction[] = [
+                selectPage(nextPage),
+            ];
+
+            switch (currentPage) {
+                case Page.AssociateWells:
+                    actions.push(clearUpload());
+                    break;
+                case Page.EnterBarcode:
+                    actions.push(
+                        clearSelection("barcode"),
+                        clearSelection("plateId"),
+                        clearSelection("wells"),
+                        clearSelection("files"),
+                        clearSelection("well")
+                    );
+                    break;
+            }
+            next(batchActions(actions));
+        }
+    },
+    type: GO_BACK,
+});
+
 export default [
+    goBackLogic,
     loadFilesLogic,
     openFilesLogic,
     getFilesInFolderLogic,

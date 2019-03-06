@@ -20,6 +20,10 @@ export interface UndoFileWellAssociationAction {
     type: string;
 }
 
+export interface ClearUploadAction {
+    type: string;
+}
+
 // Represents information needed to display an Antd Tag next to a file on the FolderTree.
 // There will be a tag for each piece of metadata associated with a file.
 export interface FileTag {

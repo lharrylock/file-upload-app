@@ -1,4 +1,4 @@
-import { castArray } from "lodash";
+import { castArray, clone } from "lodash";
 import { AnyAction } from "redux";
 
 import { TypeToDescriptionMap } from "../types";
@@ -6,7 +6,7 @@ import { makeReducer } from "../util";
 
 import {
     ADD_STAGE_FILES,
-    DESELECT_FILES,
+    CLEAR_SELECTION,
     SELECT_BARCODE,
     SELECT_FILE,
     SELECT_METADATA,
@@ -17,8 +17,8 @@ import {
 } from "./constants";
 import {
     AddStageFilesAction,
-    AppPage,
-    DeselectFilesAction,
+    ClearSelectionAction,
+    Page,
     SelectBarcodeAction,
     SelectFileAction,
     SelectionStateBranch,
@@ -29,20 +29,20 @@ import {
     UpdateStagedFilesAction,
 } from "./types";
 
-export const initialState = {
+export const initialState: SelectionStateBranch = Object.freeze({
     files: [],
-    page: AppPage.DragAndDrop,
+    page: Page.DragAndDrop,
     stagedFiles: [],
     well: undefined,
     wells: [],
-};
+});
 
 const actionToConfigMap: TypeToDescriptionMap = {
-    [DESELECT_FILES]: {
-        accepts: (action: AnyAction): action is DeselectFilesAction => action.type === DESELECT_FILES,
-        perform: (state: SelectionStateBranch) => ({
+    [CLEAR_SELECTION]: {
+        accepts: (action: AnyAction): action is ClearSelectionAction => action.type === CLEAR_SELECTION,
+        perform: (state: SelectionStateBranch, action: ClearSelectionAction) => ({
             ...state,
-            files: [],
+            [action.payload]: clone(initialState[action.payload]),
         }),
     },
     [SELECT_BARCODE]: {

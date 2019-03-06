@@ -12,9 +12,9 @@ import { AlertType, AppAlert, ClearAlertAction } from "../../state/feedback/type
 import { requestMetadata } from "../../state/metadata/actions";
 import { RequestMetadataAction } from "../../state/metadata/types";
 import {
-    AppPage,
     AppPageConfig,
     GetFilesInFolderAction,
+    Page,
     SelectFileAction,
     UploadFile,
 } from "../../state/selection/types";
@@ -40,21 +40,21 @@ interface AppProps {
     requestMetadata: ActionCreator<RequestMetadataAction>;
     selectFile: ActionCreator<SelectFileAction>;
     selectedFiles: string[];
-    page: AppPage;
+    page: Page;
 }
 
-const APP_PAGE_TO_CONFIG_MAP = new Map<AppPage, AppPageConfig>([
-    [AppPage.DragAndDrop, {
+export const APP_PAGE_TO_CONFIG_MAP = new Map<Page, AppPageConfig>([
+    [Page.DragAndDrop, {
         container: <DragAndDropSquare key="dragAndDrop"/>,
         folderTreeSelectable: false,
         folderTreeVisible: false,
     }],
-    [AppPage.EnterBarcode, {
+    [Page.EnterBarcode, {
         container:  <EnterBarcode key="enterBarcode" className={styles.mainContent}/>,
         folderTreeSelectable: false,
         folderTreeVisible: true,
     }],
-    [AppPage.AssociateWells, {
+    [Page.AssociateWells, {
         container:  <AssociateWells key="associateWells" className={styles.mainContent}/>,
         folderTreeSelectable: true,
         folderTreeVisible: true,
@@ -139,7 +139,7 @@ function mapStateToProps(state: State) {
         fileToTags: getFileToTags(state),
         files: state.selection.stagedFiles,
         loading: feedback.selectors.getIsLoading(state),
-        page: selection.selectors.getAppPage(state),
+        page: selection.selectors.getPage(state),
         selectedFiles: selection.selectors.getSelectedFiles(state),
     };
 }

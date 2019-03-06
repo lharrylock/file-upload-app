@@ -2,8 +2,9 @@ import { GridCell } from "../types";
 
 import {
     ADD_STAGE_FILES,
-    DESELECT_FILES,
+    CLEAR_SELECTION,
     GET_FILES_IN_FOLDER,
+    GO_BACK,
     LOAD_FILES,
     OPEN_FILES,
     SELECT_BARCODE,
@@ -16,14 +17,15 @@ import {
 } from "./constants";
 import {
     AddStageFilesAction,
-    AppPage,
-    DeselectFilesAction,
+    ClearSelectionAction,
     DragAndDropFileList,
-    GetFilesInFolderAction,
+    GetFilesInFolderAction, GoBackAction,
     LoadFilesFromDragAndDropAction,
     LoadFilesFromOpenDialogAction,
+    Page,
     SelectBarcodeAction,
     SelectFileAction,
+    SelectionStateBranch,
     SelectMetadataAction,
     SelectPageAction,
     SetWellAction,
@@ -33,16 +35,17 @@ import {
     Well,
 } from "./types";
 
+export function clearSelection(key: keyof SelectionStateBranch): ClearSelectionAction {
+    return {
+       payload: key,
+       type: CLEAR_SELECTION,
+    };
+}
+
 export function selectFile(fileId: string | string[]): SelectFileAction {
     return {
         payload: fileId,
         type: SELECT_FILE,
-    };
-}
-
-export function deselectFiles(): DeselectFilesAction {
-    return {
-        type: DESELECT_FILES,
     };
 }
 
@@ -75,10 +78,16 @@ export function stageFiles(files: UploadFile[]): AddStageFilesAction {
     };
 }
 
-export function selectPage(page: AppPage): SelectPageAction {
+export function selectPage(page: Page): SelectPageAction {
     return {
         payload: page,
         type: SELECT_PAGE,
+    };
+}
+
+export function goBack(): GoBackAction {
+    return {
+        type: GO_BACK,
     };
 }
 

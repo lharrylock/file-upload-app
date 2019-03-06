@@ -2,8 +2,13 @@ import { AnyAction } from "redux";
 
 import { TypeToDescriptionMap } from "../types";
 import { makeReducer } from "../util";
-import { ASSOCIATE_FILES_AND_WELL, UNDO_FILE_WELL_ASSOCIATION } from "./constants";
-import { AssociateFilesAndWellAction, UndoFileWellAssociationAction, UploadStateBranch } from "./types";
+import { ASSOCIATE_FILES_AND_WELL, CLEAR_UPLOAD, UNDO_FILE_WELL_ASSOCIATION } from "./constants";
+import {
+    AssociateFilesAndWellAction,
+    ClearUploadAction,
+    UndoFileWellAssociationAction,
+    UploadStateBranch
+} from "./types";
 
 export const initialState = {
 
@@ -25,6 +30,12 @@ const actionToConfigMap: TypeToDescriptionMap = {
                 };
             }, nextState);
         },
+    },
+    [CLEAR_UPLOAD]: {
+        accepts: (action: AnyAction): action is ClearUploadAction => action.type === CLEAR_UPLOAD,
+        perform: () => ({
+            ...initialState,
+        }),
     },
     [UNDO_FILE_WELL_ASSOCIATION]: {
         accepts: (action: AnyAction): action is UndoFileWellAssociationAction =>
