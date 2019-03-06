@@ -260,14 +260,16 @@ const goBackLogic = createLogic({
 
             switch (currentPage) {
                 case Page.AssociateWells:
-                    actions.push(clearUpload());
+                    actions.push(
+                        clearUpload(),
+                        clearSelection("well")
+                    );
                     break;
                 case Page.EnterBarcode:
                     actions.push(
                         clearSelection("barcode"),
                         clearSelection("plateId"),
                         clearSelection("wells"),
-                        clearSelection("well"),
                         clearSelection("stagedFiles")
                     );
                     break;
