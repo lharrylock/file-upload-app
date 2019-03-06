@@ -1,6 +1,5 @@
 /* tslint:disable:max-classes-per-file */
 
-import * as assert from "assert";
 import { expect } from "chai";
 
 import { bindAll } from "../";
@@ -63,15 +62,15 @@ describe("General utilities", () => {
        });
 
        it("should throw error given {row: -1, col: 0}", () => {
-           assert.throws(() => getWellLabel({row: -1, col: 0}), Error);
+          expect(() => getWellLabel({row: -1, col: 0})).to.throw();
        });
 
        it("should throw error given {row: 0, col: -1}", () => {
-           assert.throws(() => getWellLabel({row: 0, col: -1}), Error);
+           expect(() => getWellLabel({row: 0, col: -1})).to.throw();
        });
 
        it("should throw error given {row: 26, col: 0}", () => {
-           assert.throws(() => getWellLabel({row: 26, col: 0}), Error);
+           expect(() => getWellLabel({row: 26, col: 0})).to.throw();
        });
 
        it("should display None given undefined well", () => {
