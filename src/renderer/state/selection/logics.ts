@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { stat, Stats } from "fs";
-import { isEmpty, uniq } from "lodash";
+import { first, isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
@@ -25,9 +25,10 @@ import {
     ReduxLogicNextCb,
     ReduxLogicTransformDependencies
 } from "../types";
-import { batchActions, getActionFromBatch } from "../util";
+import { BATCH_ACTIONS, batchActions, getActionFromBatch } from "../util";
 
 import {
+    getFilesInFolder,
     selectPage,
     setWells,
     stageFiles,
@@ -71,10 +72,16 @@ const stageFilesAndStopLoading = (uploadFilePromises: Array<Promise<UploadFile>>
                                   done: ReduxLogicDoneCb) => {
     Promise.all(uploadFilePromises)
         .then((uploadFiles: UploadFile[]) => {
-            dispatch(batchActions([
+            const actions = [
                 stageFiles(uploadFiles),
                 stopLoading(),
-            ]));
+            ];
+            uploadFiles.forEach((file: UploadFileImpl) => {
+                if (file.isDirectory) {
+                    actions.push(getFilesInFolder(file));
+                }
+            });
+            dispatch(batchActions(actions));
             done();
         })
         .catch(() => {
@@ -134,6 +141,10 @@ const openFilesLogic = createLogic({
 });
 
 const getNewStagedFiles = (files: UploadFile[], fileToUpdate: UploadFile): UploadFile[] => {
+    if (isEmpty(files)) {
+        return [fileToUpdate];
+    }
+
     return files.map((file: UploadFile) => {
         if (file.fullPath === fileToUpdate.fullPath) {
             return fileToUpdate;
@@ -146,22 +157,25 @@ const getNewStagedFiles = (files: UploadFile[], fileToUpdate: UploadFile): Uploa
     });
 };
 
+const getFilesInFolderTransform = ({ action, getState }: ReduxLogicTransformDependencies,
+                                   next: ReduxLogicNextCb) => {
+    const folder: UploadFile = action.payload;
+    folder.loadFiles()
+        .then((filePromises: Array<Promise<UploadFile>>) => {
+            Promise.all(filePromises)
+                .then((files: UploadFile[]) => {
+                    folder.files = files;
+                    const stagedFiles = [...getStagedFiles(getState())];
+                    console.log("new staged files", getNewStagedFiles(stagedFiles, folder));
+                    next(updateStagedFiles(getNewStagedFiles(stagedFiles, folder)));
+                })
+                // tslint:disable-next-line
+                .catch((reason: string) => console.log(reason));
+        });
+};
+
 const getFilesInFolderLogic = createLogic({
-    transform: ({ action, getState }: ReduxLogicTransformDependencies,
-                next: ReduxLogicNextCb) => {
-        const folder: UploadFile = action.payload;
-        folder.loadFiles()
-            .then((filePromises: Array<Promise<UploadFile>>) => {
-                Promise.all(filePromises)
-                    .then((files: UploadFile[]) => {
-                        folder.files = files;
-                        const stagedFiles = [...getStagedFiles(getState())];
-                        next(updateStagedFiles(getNewStagedFiles(stagedFiles, folder)));
-                    })
-                    // tslint:disable-next-line
-                    .catch((reason: string) => console.log(reason));
-            });
-    },
+    transform: getFilesInFolderTransform,
     type: GET_FILES_IN_FOLDER,
 });
 
@@ -252,9 +266,28 @@ const selectBarcodeLogic = createLogic({
     type: SELECT_BARCODE,
 });
 
+const batchActionsLogic = createLogic({
+    process: (deps, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
+        // todo: use process hook references similar to transform and set selectedkeys
+        dispatch(stopLoading());
+        done();
+    },
+    transform: (deps: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
+        const targetAction: AnyAction | undefined =
+            first(deps.action.payload.filter((a: AnyAction) => a.type === GET_FILES_IN_FOLDER));
+        if (targetAction) {
+            getFilesInFolderTransform({...deps, action: targetAction}, next);
+        } else {
+            next(deps.action);
+        }
+    },
+    type: BATCH_ACTIONS,
+});
+
 export default [
     loadFilesLogic,
     openFilesLogic,
     getFilesInFolderLogic,
     selectBarcodeLogic,
+    batchActionsLogic,
 ];

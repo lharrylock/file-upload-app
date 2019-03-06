@@ -90,7 +90,7 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
                     {!isLoading && <Tree.DirectoryTree
                         checkable={false}
                         multiple={true}
-                        defaultExpandAll={false}
+                        defaultExpandAll={true}
                         onSelect={this.onSelect}
                         onExpand={this.onExpand}
                         selectedKeys={selectedKeys}

@@ -29,7 +29,7 @@ export function makeReducer<S>(typeToDescriptionMap: TypeToDescriptionMap, initi
     };
 }
 
-const BATCH_ACTIONS = makeConstant("batch", "batch-actions");
+export const BATCH_ACTIONS = makeConstant("batch", "batch-actions");
 
 export function batchActions(actions: AnyAction[], type: string = BATCH_ACTIONS): BatchedAction {
     return { type, batch: true, payload: actions };
@@ -44,6 +44,7 @@ export function enableBatching<S>(reducer: Reducer<S>): Reducer<S> {
         if (actionIsBatched(action) && state) {
             return action.payload.reduce(batchingReducer, state);
         }
+        console.log(action.type)
         return reducer(state, action);
     };
 }
