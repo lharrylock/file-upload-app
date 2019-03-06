@@ -2,7 +2,6 @@ import { AxiosResponse } from "axios";
 import { stat, Stats } from "fs";
 import { isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
-import { Simulate } from "react-dom/test-utils";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
 
@@ -29,10 +28,25 @@ import {
 import { clearUpload } from "../upload/actions";
 import { batchActions, getActionFromBatch } from "../util";
 
-import { clearSelection, selectPage, setWells, stageFiles, updateStagedFiles } from "./actions";
-import { GET_FILES_IN_FOLDER, GO_BACK, LOAD_FILES, OPEN_FILES, SELECT_BARCODE, } from "./constants";
+import {
+    clearSelection,
+    selectPage,
+    setWells,
+    stageFiles,
+    updateStagedFiles,
+} from "./actions";
+import {
+    GET_FILES_IN_FOLDER,
+    GO_BACK,
+    LOAD_FILES,
+    OPEN_FILES,
+    SELECT_BARCODE,
+} from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
-import { getPage, getStagedFiles, } from "./selectors";
+import {
+    getPage,
+    getStagedFiles,
+} from "./selectors";
 import { DragAndDropFileList, Page, UploadFile, Well } from "./types";
 
 const mergeChildPaths = (filePaths: string[]): string[] => {

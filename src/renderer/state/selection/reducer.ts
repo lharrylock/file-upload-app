@@ -29,13 +29,13 @@ import {
     UpdateStagedFilesAction,
 } from "./types";
 
-export const initialState: SelectionStateBranch = Object.freeze({
+export const initialState: SelectionStateBranch = {
     files: [],
     page: Page.DragAndDrop,
     stagedFiles: [],
     well: undefined,
     wells: [],
-});
+};
 
 const actionToConfigMap: TypeToDescriptionMap = {
     [CLEAR_SELECTION]: {

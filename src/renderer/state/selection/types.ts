@@ -179,6 +179,4 @@ export interface AppPageConfig {
     container: JSX.Element;
     folderTreeVisible: boolean;
     folderTreeSelectable: boolean;
-    next?: Page;
-    previous?: Page;
 }
