@@ -11,7 +11,7 @@ import { setAlert } from "../../state/feedback/actions";
 import { getRequestsInProgressContains } from "../../state/feedback/selectors";
 import { AlertType, HttpRequestType, SetAlertAction } from "../../state/feedback/types";
 import { selectBarcode } from "../../state/selection/actions";
-import { getSelectedBarcode } from "../../state/selection/selectors";
+import { getSelectedBarcode, getSelectedPlateId } from "../../state/selection/selectors";
 import { SelectBarcodeAction } from "../../state/selection/types";
 import LabkeyQueryService, { Plate } from "../../util/labkey-query-service";
 
@@ -20,6 +20,7 @@ const styles = require("./style.css");
 interface EnterBarcodeProps {
     className?: string;
     barcode?: string;
+    plateId?: number;
     saveInProgress: boolean;
     selectBarcode: ActionCreator<SelectBarcodeAction>;
     setAlert: ActionCreator<SetAlertAction>;
@@ -51,6 +52,7 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
         super(props);
         this.state = {
             barcode: props.barcode,
+            plateId: props.plateId,
         };
         this.setBarcode = this.setBarcode.bind(this);
         this.saveAndContinue = this.saveAndContinue.bind(this);
@@ -114,6 +116,7 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
 function mapStateToProps(state: State) {
     return {
         barcode: getSelectedBarcode(state),
+        plateId: getSelectedPlateId(state),
         saveInProgress: getRequestsInProgressContains(state, HttpRequestType.GET_WELLS),
     };
 }
