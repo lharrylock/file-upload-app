@@ -21,7 +21,7 @@ export interface SelectionStateBranch {
     plateId?: number;
     wells: Well[][];
     well?: GridCell;
-    page: AppPage;
+    page: Page;
     stagedFiles: UploadFile[];
 }
 
@@ -120,7 +120,7 @@ export interface AddStageFilesAction {
 }
 
 export interface SelectPageAction {
-    payload: AppPage;
+    payload: Page;
     type: string;
 }
 
@@ -162,7 +162,7 @@ export interface DragAndDropFile {
     readonly path: string;
 }
 
-export enum AppPage {
+export enum Page {
     DragAndDrop = 1,
     EnterBarcode,
     AssociateWells,

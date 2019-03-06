@@ -21,9 +21,9 @@ interface FormPageProps {
 class FormPage extends React.Component<FormPageProps, {}> {
     private static defaultProps = {
         backButtonDisabled: false,
-        backButtonName: "Go Back",
+        backButtonName: "Back",
         saveButtonDisabled: false,
-        saveButtonName: "Save and Continue",
+        saveButtonName: "Next",
         saveInProgress: false,
     };
 
@@ -80,7 +80,7 @@ class FormPage extends React.Component<FormPageProps, {}> {
                         onClick={this.onSave}
                         disabled={saveButtonDisabled}
                     >
-                        {saveInProgress ? "Saving" : saveButtonName}
+                        {saveInProgress ? "Loading" : saveButtonName}
                         {FormPage.renderSpinner(saveInProgress)}
                     </Button> : <div/>}
                 </div>

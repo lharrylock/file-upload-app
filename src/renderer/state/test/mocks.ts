@@ -1,5 +1,5 @@
 import { Unit } from "../metadata/types";
-import { AppPage, Well } from "../selection/types";
+import { Page, Well } from "../selection/types";
 import { State } from "../types";
 
 export const mockState: State = {
@@ -12,7 +12,7 @@ export const mockState: State = {
     },
     selection: {
         files: [],
-        page: AppPage.DragAndDrop,
+        page: Page.DragAndDrop,
         stagedFiles: [],
         wells: [],
         wellsForUpload: [],

@@ -44,7 +44,7 @@ import {
     getAppPage,
     getStagedFiles,
 } from "./selectors";
-import { AppPage, DragAndDropFileList, UploadFile, Well } from "./types";
+import { DragAndDropFileList, Page, UploadFile, Well } from "./types";
 
 const mergeChildPaths = (filePaths: string[]): string[] => {
     filePaths = uniq(filePaths);
@@ -85,9 +85,9 @@ const stageFilesAndStopLoading = (uploadFilePromises: Array<Promise<UploadFile>>
 
 const openFilesTransformLogic = ({ action, getState }: ReduxLogicDependencies, next: ReduxLogicNextCb) => {
     const actions = [action, startLoading()];
-    const page: AppPage = getAppPage(getState());
-    if (page === AppPage.DragAndDrop) {
-        actions.push(selectPage(AppPage.EnterBarcode));
+    const page: Page = getAppPage(getState());
+    if (page === Page.DragAndDrop) {
+        actions.push(selectPage(Page.EnterBarcode));
     }
     next(batchActions(actions));
 };
@@ -195,7 +195,7 @@ const selectBarcodeLogic = createLogic({
                     const wells: Well[][] = response.data.data;
                     receivedSuccessfulResponse = true;
                     dispatch(batchActions([
-                        selectPage(AppPage.AssociateWells),
+                        selectPage(Page.AssociateWells),
                         setWells(wells),
                         removeRequestFromInProgress(HttpRequestType.GET_WELLS),
                         action,

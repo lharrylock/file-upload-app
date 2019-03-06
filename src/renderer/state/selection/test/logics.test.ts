@@ -19,7 +19,7 @@ import { selectBarcode } from "../actions";
 import { GENERIC_GET_WELLS_ERROR_MESSAGE, MMS_IS_DOWN_MESSAGE, MMS_MIGHT_BE_DOWN_MESSAGE } from "../logics";
 import { UploadFileImpl } from "../models/upload-file";
 import { getAppPage, getSelectedBarcode, getSelectedPlateId, getWells } from "../selectors";
-import { AppPage, DragAndDropFileList, UploadFile, Well } from "../types";
+import { DragAndDropFileList, Page, UploadFile, Well } from "../types";
 
 describe("Selection logics", () => {
     const FILE_NAME = "cells.txt";
@@ -68,14 +68,14 @@ describe("Selection logics", () => {
             const store = createReduxStore(mockState);
 
             // before
-            expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.DragAndDrop);
+            expect(selections.selectors.getAppPage(store.getState())).to.equal(Page.DragAndDrop);
 
             // apply
             store.dispatch(selections.actions.loadFilesFromDragAndDrop(fileList));
 
             // after
             store.subscribe(() => {
-                expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.EnterBarcode);
+                expect(selections.selectors.getAppPage(store.getState())).to.equal(Page.EnterBarcode);
                 done();
             });
         });
@@ -85,19 +85,19 @@ describe("Selection logics", () => {
                 ...mockState,
                 selection: {
                     ...mockState.selection,
-                    page: AppPage.EnterBarcode,
+                    page: Page.EnterBarcode,
                 },
             });
 
             // before
-            expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.EnterBarcode);
+            expect(selections.selectors.getAppPage(store.getState())).to.equal(Page.EnterBarcode);
 
             // apply
             store.dispatch(selections.actions.loadFilesFromDragAndDrop(fileList));
 
             // after
             store.subscribe(() => {
-                expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.EnterBarcode);
+                expect(selections.selectors.getAppPage(store.getState())).to.equal(Page.EnterBarcode);
                 done();
             });
         });
@@ -176,14 +176,14 @@ describe("Selection logics", () => {
             const store = createReduxStore(mockState);
 
             // before
-            expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.DragAndDrop);
+            expect(selections.selectors.getAppPage(store.getState())).to.equal(Page.DragAndDrop);
 
             // apply
             store.dispatch(selections.actions.openFilesFromDialog(filePaths));
 
             // after
             store.subscribe(() => {
-                expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.EnterBarcode);
+                expect(selections.selectors.getAppPage(store.getState())).to.equal(Page.EnterBarcode);
                 done();
             });
         });
@@ -193,19 +193,19 @@ describe("Selection logics", () => {
                 ...mockState,
                 selection: {
                     ...mockState.selection,
-                    page: AppPage.EnterBarcode,
+                    page: Page.EnterBarcode,
                 },
             });
 
             // before
-            expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.EnterBarcode);
+            expect(selections.selectors.getAppPage(store.getState())).to.equal(Page.EnterBarcode);
 
             // apply
             store.dispatch(selections.actions.openFilesFromDialog(filePaths));
 
             // after
             store.subscribe(() => {
-                expect(selections.selectors.getAppPage(store.getState())).to.equal(AppPage.EnterBarcode);
+                expect(selections.selectors.getAppPage(store.getState())).to.equal(Page.EnterBarcode);
                 done();
             });
         });
@@ -418,7 +418,7 @@ describe("Selection logics", () => {
                 store.subscribe(() => {
                     const state = store.getState();
                     expect(getWells(state)).to.not.be.empty;
-                    expect(getAppPage(state)).to.equal(AppPage.AssociateWells);
+                    expect(getAppPage(state)).to.equal(Page.AssociateWells);
                     expect(getSelectedBarcode(state)).to.equal(barcode);
                     expect(getSelectedPlateId(state)).to.equal(plateId);
                     done();
@@ -527,7 +527,7 @@ describe("Selection logics", () => {
                 if (okResponseReturned) {
                     const state = store.getState();
                     expect(getWells(state)).to.not.be.empty;
-                    expect(getAppPage(state)).to.equal(AppPage.AssociateWells);
+                    expect(getAppPage(state)).to.equal(Page.AssociateWells);
                     expect(getSelectedBarcode(state)).to.equal(barcode);
                     expect(getSelectedPlateId(state)).to.equal(plateId);
                     okResponseReturned = false; // prevent more calls to done

@@ -17,8 +17,8 @@ import {
 } from "./constants";
 import {
     AddStageFilesAction,
-    AppPage,
     DeselectFilesAction,
+    Page,
     SelectBarcodeAction,
     SelectFileAction,
     SelectionStateBranch,
@@ -31,7 +31,7 @@ import {
 
 export const initialState = {
     files: [],
-    page: AppPage.DragAndDrop,
+    page: Page.DragAndDrop,
     stagedFiles: [],
     well: undefined,
     wells: [],

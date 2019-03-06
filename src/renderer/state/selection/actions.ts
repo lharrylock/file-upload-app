@@ -16,12 +16,12 @@ import {
 } from "./constants";
 import {
     AddStageFilesAction,
-    AppPage,
     DeselectFilesAction,
     DragAndDropFileList,
     GetFilesInFolderAction,
     LoadFilesFromDragAndDropAction,
     LoadFilesFromOpenDialogAction,
+    Page,
     SelectBarcodeAction,
     SelectFileAction,
     SelectMetadataAction,
@@ -75,7 +75,7 @@ export function stageFiles(files: UploadFile[]): AddStageFilesAction {
     };
 }
 
-export function selectPage(page: AppPage): SelectPageAction {
+export function selectPage(page: Page): SelectPageAction {
     return {
         payload: page,
         type: SELECT_PAGE,
