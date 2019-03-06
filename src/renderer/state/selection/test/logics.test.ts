@@ -8,18 +8,19 @@ import { SinonStub } from "sinon";
 import selections from "../";
 
 import { feedback } from "../../";
+import { GridCell } from "../../../containers/AssociateWells/grid-cell";
 import createReduxStore, { reduxLogicDependencies } from "../../configure-store";
 import { API_WAIT_TIME_SECONDS } from "../../constants";
 import { getAlert, getRequestsInProgressContains } from "../../feedback/selectors";
 import { AlertType, AppAlert, HttpRequestType } from "../../feedback/types";
 import { createMockReduxStore } from "../../test/configure-mock-store";
-import { mockState } from "../../test/mocks";
+import { mockState, mockWell, mockWells } from "../../test/mocks";
 import { AicsSuccessResponse, HTTP_STATUS } from "../../types";
-import { selectBarcode } from "../actions";
+import { goBack, selectBarcode } from "../actions";
 import { GENERIC_GET_WELLS_ERROR_MESSAGE, MMS_IS_DOWN_MESSAGE, MMS_MIGHT_BE_DOWN_MESSAGE } from "../logics";
 import { UploadFileImpl } from "../models/upload-file";
-import { getPage, getSelectedBarcode, getSelectedPlateId, getWells } from "../selectors";
-import { Page, DragAndDropFileList, UploadFile, Well } from "../types";
+import { getPage, getSelectedBarcode, getSelectedPlateId, getStagedFiles, getWell, getWells } from "../selectors";
+import { DragAndDropFileList, Page, UploadFile, Well } from "../types";
 
 describe("Selection logics", () => {
     const FILE_NAME = "cells.txt";
@@ -535,6 +536,70 @@ describe("Selection logics", () => {
                 }
             });
             store.dispatch(selectBarcode(barcode, plateId));
+        });
+    });
+
+    describe("goBackLogic", () => {
+        it("Changes page to DragAndDrop if current page is EnterBarcode", () => {
+            const store = createReduxStore({
+                ...mockState,
+                selection: {
+                    ...mockState.selection,
+                    page: Page.EnterBarcode,
+                },
+            });
+            store.dispatch(goBack());
+            const page = getPage(store.getState());
+            expect(page).to.equal(Page.DragAndDrop);
+        });
+
+        it("Clears selected barcode, plateId, wells, and stagedFiles if current page is EnterBarcode", () => {
+            const store = createReduxStore({
+                ...mockState,
+                selection: {
+                    ...mockState.selection,
+                    barcode: "1234",
+                    page: Page.EnterBarcode,
+                    plateId: 1,
+                    stagedFiles: [new UploadFileImpl("test.txt", "/", false)],
+                    wells: mockWells,
+                },
+            });
+            store.dispatch(goBack());
+            const state = store.getState();
+            const barcode = getSelectedBarcode(state);
+            const plateId = getSelectedPlateId(state);
+            const stagedFiles = getStagedFiles(state);
+            expect(barcode).to.be.undefined;
+            expect(plateId).to.be.undefined;
+            expect(stagedFiles).to.be.empty;
+        });
+
+        it("Changes page to EnterBarcode if current page is AssociateWells", () => {
+            const store = createReduxStore({
+                ...mockState,
+                selection: {
+                    ...mockState.selection,
+                    page: Page.AssociateWells,
+                },
+            });
+            store.dispatch(goBack());
+            const page = getPage(store.getState());
+            expect(page).to.equal(Page.EnterBarcode);
+        });
+
+        it("Clears upload, and well selection if current page is AssociateWells", () => {
+            const store = createReduxStore({
+                ...mockState,
+                selection: {
+                    ...mockState.selection,
+                    page: Page.AssociateWells,
+                    well: new GridCell(1, 1),
+                },
+            });
+            store.dispatch(goBack());
+            const well = getWell(store.getState());
+            expect(well).to.be.undefined;
         });
     });
 });
