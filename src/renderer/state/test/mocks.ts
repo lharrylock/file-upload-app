@@ -1,6 +1,15 @@
 import { Unit } from "../metadata/types";
-import { Page, Well } from "../selection/types";
+import { Page, SelectionStateBranch, Well } from "../selection/types";
 import { State } from "../types";
+
+const mockSelection: SelectionStateBranch = {
+    files: [],
+    page: Page.DragAndDrop,
+    stagedFiles: [],
+    startHistoryIndex: {},
+    well: undefined,
+    wells: [],
+};
 
 export const mockState: State = {
     feedback: {
@@ -11,11 +20,13 @@ export const mockState: State = {
         units: [],
     },
     selection: {
-        files: [],
-        page: Page.DragAndDrop,
-        stagedFiles: [],
-        wells: [],
-        wellsForUpload: [],
+        _latestUnfiltered: {...mockSelection},
+        future: [],
+        group: {},
+        index: 0,
+        limit: 10,
+        past: [],
+        present: {...mockSelection},
     },
     upload: {
 

@@ -4,6 +4,8 @@ import {
     ADD_STAGE_FILES,
     DESELECT_FILES,
     GET_FILES_IN_FOLDER,
+    GO_BACK,
+    GO_FORWARD,
     LOAD_FILES,
     OPEN_FILES,
     SELECT_BARCODE,
@@ -12,6 +14,7 @@ import {
     SELECT_PAGE,
     SET_WELL,
     SET_WELLS,
+    UPDATE_PAGE_HISTORY_START_INDEX,
     UPDATE_STAGED_FILES,
 } from "./constants";
 import {
@@ -19,8 +22,10 @@ import {
     DeselectFilesAction,
     DragAndDropFileList,
     GetFilesInFolderAction,
+    GoBackAction,
     LoadFilesFromDragAndDropAction,
     LoadFilesFromOpenDialogAction,
+    NextPageAction,
     Page,
     SelectBarcodeAction,
     SelectFileAction,
@@ -28,6 +33,7 @@ import {
     SelectPageAction,
     SetWellAction,
     SetWellsAction,
+    UpdatePageHistoryMapAction,
     UpdateStagedFilesAction,
     UploadFile,
     Well,
@@ -75,9 +81,9 @@ export function stageFiles(files: UploadFile[]): AddStageFilesAction {
     };
 }
 
-export function selectPage(page: Page): SelectPageAction {
+export function selectPage(currentPage: Page, nextPage: Page): SelectPageAction {
     return {
-        payload: page,
+        payload: { currentPage, nextPage },
         type: SELECT_PAGE,
     };
 }
@@ -117,5 +123,24 @@ export function setWell(well: GridCell): SetWellAction {
     return {
         payload: well,
         type: SET_WELL,
+    };
+}
+
+export function updatePageHistoryMap(page: Page, index: number): UpdatePageHistoryMapAction {
+    return {
+        payload: { page, index },
+        type: UPDATE_PAGE_HISTORY_START_INDEX,
+    };
+}
+
+export function goBack(): GoBackAction {
+    return {
+        type: GO_BACK,
+    };
+}
+
+export function goForward(): NextPageAction {
+    return {
+        type: GO_FORWARD,
     };
 }

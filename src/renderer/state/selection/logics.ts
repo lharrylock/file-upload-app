@@ -4,6 +4,7 @@ import { isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
+import { ActionCreators } from "redux-undo";
 
 import { API_WAIT_TIME_SECONDS } from "../constants";
 
@@ -23,7 +24,7 @@ import {
     ReduxLogicDependencies,
     ReduxLogicDoneCb,
     ReduxLogicNextCb,
-    ReduxLogicTransformDependencies
+    ReduxLogicTransformDependencies, State
 } from "../types";
 import { batchActions, getActionFromBatch } from "../util";
 
@@ -31,17 +32,20 @@ import {
     selectPage,
     setWells,
     stageFiles,
+    updatePageHistoryMap,
     updateStagedFiles
 } from "./actions";
 import {
-    GET_FILES_IN_FOLDER,
+    GET_FILES_IN_FOLDER, GO_BACK, GO_FORWARD,
     LOAD_FILES,
     OPEN_FILES,
-    SELECT_BARCODE,
+    SELECT_BARCODE, SELECT_PAGE,
 } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
 import {
-    getAppPage,
+    getCurrentSelectionIndex,
+    getPage,
+    getSelectionIndexForPage,
     getStagedFiles,
 } from "./selectors";
 import { DragAndDropFileList, Page, UploadFile, Well } from "./types";
@@ -85,9 +89,9 @@ const stageFilesAndStopLoading = (uploadFilePromises: Array<Promise<UploadFile>>
 
 const openFilesTransformLogic = ({ action, getState }: ReduxLogicDependencies, next: ReduxLogicNextCb) => {
     const actions = [action, startLoading()];
-    const page: Page = getAppPage(getState());
+    const page: Page = getPage(getState());
     if (page === Page.DragAndDrop) {
-        actions.push(selectPage(Page.EnterBarcode));
+        actions.push(...getGoForwardActions(page, getState()));
     }
     next(batchActions(actions));
 };
@@ -194,12 +198,13 @@ const selectBarcodeLogic = createLogic({
                     const response = await getWells(deps, plateId);
                     const wells: Well[][] = response.data.data;
                     receivedSuccessfulResponse = true;
-                    dispatch(batchActions([
-                        selectPage(Page.AssociateWells),
+                    const actions = [
                         setWells(wells),
                         removeRequestFromInProgress(HttpRequestType.GET_WELLS),
                         action,
-                    ]));
+                    ];
+                    actions.push(...getGoForwardActions(Page.EnterBarcode, deps.getState()));
+                    dispatch(batchActions(actions));
                 } catch (e) {
                     if (e.response && e.response.status === HTTP_STATUS.BAD_GATEWAY) {
                         if (!sentRetryAlert) {
@@ -243,7 +248,7 @@ const selectBarcodeLogic = createLogic({
         }
 
     },
-    transform: ({action}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
+    transform: ({action, getState}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
         next(batchActions([
             addRequestToInProgress(HttpRequestType.GET_WELLS),
             action,
@@ -252,9 +257,99 @@ const selectBarcodeLogic = createLogic({
     type: SELECT_BARCODE,
 });
 
+const pageOrder: Page[] =
+    [Page.DragAndDrop, Page.EnterBarcode, Page.AssociateWells, Page.UploadJobs, Page.UploadComplete];
+const selectPageLogic = createLogic({
+    process: ({action, getState}: ReduxLogicDependencies, next: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
+        const { currentPage, nextPage } = action.payload;
+        const state = getState();
+
+        const nextPageOrder: number = pageOrder.indexOf(nextPage);
+        const currentPageOrder: number = pageOrder.indexOf(currentPage);
+        const currentSelectionIndex = getCurrentSelectionIndex(state);
+
+        // going back
+        if (nextPageOrder < currentPageOrder) {
+            const index = getSelectionIndexForPage(state, nextPage);
+
+            if (index > -1) {
+                next(ActionCreators.jumpToPast(getSelectionIndexForPage(state, nextPage)));
+            }
+
+        // going forward
+        } else if (nextPageOrder > currentPageOrder) {
+            // save current index
+            next(updatePageHistoryMap(getPage(state), currentSelectionIndex));
+        }
+
+        done();
+    },
+    type: SELECT_PAGE,
+});
+
+const goBackLogic = createLogic({
+    transform: ({getState, action}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb, reject: () => void) => {
+        const state = getState();
+        const currentPage = getPage(state);
+        const nextPage = getNextPage(currentPage, -1);
+
+        if (nextPage) {
+            next(selectPage(currentPage, nextPage));
+        } else {
+            reject();
+        }
+    },
+    type: GO_BACK,
+});
+
+const goForwardLogic = createLogic({
+    transform: ({action, getState}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb, reject: () => void) => {
+        const currentPage = getPage(getState());
+        const nextPage = getNextPage(currentPage, 1);
+
+        if (nextPage) {
+            next(selectPage(currentPage, nextPage));
+        } else {
+           reject();
+        }
+    },
+    type: GO_FORWARD,
+});
+
+// todo docs + lodash way that is simpler
+const getNextPage = (currentPage: Page, direction: number) => {
+    const currentPageIndex = pageOrder.indexOf(currentPage);
+    if (currentPageIndex > -1) {
+        const nextPageIndex = currentPageIndex + direction;
+        if (nextPageIndex > -1 && nextPageIndex < pageOrder.length) {
+            return pageOrder[nextPageIndex];
+        }
+    }
+
+    return null;
+};
+
+// For batching only. Returns new actions
+const getGoForwardActions = (lastPage: Page, state: State): AnyAction[] => {
+    const actions = [];
+
+    const currentSelectionIndex = getCurrentSelectionIndex(state);
+    actions.push(updatePageHistoryMap(lastPage, currentSelectionIndex));
+
+    const nextPage = getNextPage(lastPage, 1);
+    if (nextPage) {
+        actions.push(selectPage(lastPage, nextPage));
+    }
+
+    return actions;
+};
+
 export default [
+    goBackLogic,
+    goForwardLogic,
     loadFilesLogic,
     openFilesLogic,
     getFilesInFolderLogic,
     selectBarcodeLogic,
+    selectPageLogic,
 ];

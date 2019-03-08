@@ -1,7 +1,7 @@
-import { AicsGridCell } from "aics-react-labkey";
 import { AxiosPromise, AxiosRequestConfig } from "axios";
 import { AnyAction } from "redux";
 import { CreateLogic } from "redux-logic/definitions/logic";
+import { StateWithHistory } from "redux-undo";
 
 import { FeedbackStateBranch } from "./feedback/types";
 import { MetadataStateBranch } from "./metadata/types";
@@ -19,6 +19,14 @@ export interface BatchedAction {
     type: string;
     batch: boolean;
     payload: AnyAction[];
+}
+
+export interface UndoAction {
+    type: string;
+}
+
+export interface RedoAction {
+    type: string;
 }
 
 export interface ReduxLogicExtraDependencies {
@@ -39,7 +47,7 @@ export type ReduxLogicDoneCb = () => void;
 export interface State {
     feedback: FeedbackStateBranch;
     metadata: MetadataStateBranch;
-    selection: SelectionStateBranch;
+    selection: StateWithHistory<SelectionStateBranch>;
     upload: UploadStateBranch;
 }
 
