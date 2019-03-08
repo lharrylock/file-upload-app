@@ -29,12 +29,6 @@ export interface RedoAction {
     type: string;
 }
 
-export interface UndoableStateBranch {
-    startHistoryIndex: {
-        [page: string]: number,
-    };
-}
-
 export interface ReduxLogicExtraDependencies {
     baseMmsUrl: string;
     httpClient: {
@@ -54,7 +48,7 @@ export interface State {
     feedback: FeedbackStateBranch;
     metadata: MetadataStateBranch;
     selection: StateWithHistory<SelectionStateBranch>;
-    upload: UploadStateBranch;
+    upload: StateWithHistory<UploadStateBranch>;
 }
 
 export interface TypeToDescriptionMap {

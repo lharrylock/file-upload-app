@@ -1,4 +1,8 @@
 import { AnyAction } from "redux";
+import undoable, {
+    excludeAction,
+    UndoableOptions,
+} from "redux-undo";
 
 import { TypeToDescriptionMap } from "../types";
 import { makeReducer } from "../util";
@@ -39,4 +43,9 @@ const actionToConfigMap: TypeToDescriptionMap = {
     },
 };
 
-export default makeReducer<UploadStateBranch>(actionToConfigMap, initialState);
+const upload = makeReducer<UploadStateBranch>(actionToConfigMap, initialState);
+
+const options: UndoableOptions = {
+    limit: 100,
+};
+export default undoable(upload, options);

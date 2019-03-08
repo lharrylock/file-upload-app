@@ -2,9 +2,6 @@ import { castArray } from "lodash";
 import { AnyAction } from "redux";
 import undoable, {
     excludeAction,
-    groupByActionTypes,
-    GroupByFunction,
-    StateWithHistory,
     UndoableOptions,
 } from "redux-undo";
 
@@ -19,7 +16,7 @@ import {
     SELECT_METADATA,
     SELECT_PAGE,
     SET_WELL,
-    SET_WELLS, UPDATE_PAGE_HISTORY_START_INDEX,
+    SET_WELLS,
     UPDATE_STAGED_FILES,
 } from "./constants";
 import {
@@ -32,7 +29,7 @@ import {
     SelectMetadataAction,
     SelectPageAction,
     SetWellAction,
-    SetWellsAction, UpdatePageHistoryMapAction,
+    SetWellsAction,
     UpdateStagedFilesAction,
 } from "./types";
 
@@ -118,26 +115,12 @@ const actionToConfigMap: TypeToDescriptionMap = {
             well: action.payload,
         }),
     },
-    [UPDATE_PAGE_HISTORY_START_INDEX]: {
-        accepts: (action: AnyAction): action is UpdatePageHistoryMapAction =>
-            action.type === UPDATE_PAGE_HISTORY_START_INDEX,
-        perform: (state: SelectionStateBranch, action: UpdatePageHistoryMapAction) => ({
-            ...state,
-            startHistoryIndex: {
-                ...state.startHistoryIndex,
-                [action.payload.page]: action.payload.index,
-            },
-        }),
-    },
 };
 
 const selection = makeReducer<SelectionStateBranch>(actionToConfigMap, initialState);
 
 const options: UndoableOptions = {
-    filter: excludeAction([
-            SELECT_PAGE,
-            UPDATE_PAGE_HISTORY_START_INDEX,
-    ]),
+    filter: excludeAction( SELECT_PAGE),
     limit: 100,
 };
 export default undoable(selection, options);

@@ -6,7 +6,6 @@ const mockSelection: SelectionStateBranch = {
     files: [],
     page: Page.DragAndDrop,
     stagedFiles: [],
-    startHistoryIndex: {},
     well: undefined,
     wells: [],
 };
@@ -17,6 +16,10 @@ export const mockState: State = {
         requestsInProgress: [],
     },
     metadata: {
+        history: {
+            selection: {},
+            upload: {},
+        },
         units: [],
     },
     selection: {
@@ -29,7 +32,13 @@ export const mockState: State = {
         present: {...mockSelection},
     },
     upload: {
-
+        _latestUnfiltered: {},
+        future: [],
+        group: {},
+        index: 0,
+        limit: 10,
+        past: [],
+        present: {},
     },
 };
 

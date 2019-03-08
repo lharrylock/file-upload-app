@@ -1,6 +1,15 @@
+import { Page } from "../selection/types";
+
 export interface MetadataStateBranch {
-    [key: string]: any;
     units: Unit[];
+    history: {
+        selection: PageToIndexMap;
+        upload: PageToIndexMap;
+    };
+}
+
+export interface PageToIndexMap {
+    [page: string]: number;
 }
 
 export interface ReceiveMetadataAction {
@@ -9,6 +18,15 @@ export interface ReceiveMetadataAction {
 }
 
 export interface RequestMetadataAction {
+    type: string;
+}
+
+export interface UpdatePageHistoryMapAction {
+    payload: {
+        branch: "selection" | "upload";
+        page: Page;
+        index: number;
+    };
     type: string;
 }
 

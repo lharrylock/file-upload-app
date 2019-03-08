@@ -10,7 +10,6 @@ import {
     OPEN_FILES,
     SELECT_BARCODE,
     SELECT_FILE,
-    SELECT_METADATA,
     SELECT_PAGE,
     SET_WELL,
     SET_WELLS,
@@ -29,7 +28,6 @@ import {
     Page,
     SelectBarcodeAction,
     SelectFileAction,
-    SelectMetadataAction,
     SelectPageAction,
     SetWellAction,
     SetWellsAction,
@@ -49,14 +47,6 @@ export function selectFile(fileId: string | string[]): SelectFileAction {
 export function deselectFiles(): DeselectFilesAction {
     return {
         type: DESELECT_FILES,
-    };
-}
-
-export function selectMetadata(key: string, payload: string | number): SelectMetadataAction  {
-    return {
-        key,
-        payload,
-        type: SELECT_METADATA,
     };
 }
 
@@ -123,13 +113,6 @@ export function setWell(well: GridCell): SetWellAction {
     return {
         payload: well,
         type: SET_WELL,
-    };
-}
-
-export function updatePageHistoryMap(page: Page, index: number): UpdatePageHistoryMapAction {
-    return {
-        payload: { page, index },
-        type: UPDATE_PAGE_HISTORY_START_INDEX,
     };
 }
 

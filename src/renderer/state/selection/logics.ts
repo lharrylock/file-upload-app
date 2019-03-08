@@ -17,6 +17,8 @@ import {
     stopLoading
 } from "../feedback/actions";
 import { AlertType, HttpRequestType } from "../feedback/types";
+import { updatePageHistoryMap } from "../metadata/actions";
+import { getSelectionHistoryMap } from "../metadata/selectors";
 
 import {
     AicsSuccessResponse,
@@ -32,7 +34,6 @@ import {
     selectPage,
     setWells,
     stageFiles,
-    updatePageHistoryMap,
     updateStagedFiles
 } from "./actions";
 import {
@@ -45,7 +46,6 @@ import { UploadFileImpl } from "./models/upload-file";
 import {
     getCurrentSelectionIndex,
     getPage,
-    getSelectionIndexForPage,
     getStagedFiles,
 } from "./selectors";
 import { DragAndDropFileList, Page, UploadFile, Well } from "./types";
@@ -270,16 +270,17 @@ const selectPageLogic = createLogic({
 
         // going back
         if (nextPageOrder < currentPageOrder) {
-            const index = getSelectionIndexForPage(state, nextPage);
+            const selectionHistory = getSelectionHistoryMap(state);
+            const index = getSelectionHistoryMap(state)[nextPage];
 
             if (index > -1) {
-                next(ActionCreators.jumpToPast(getSelectionIndexForPage(state, nextPage)));
+                next(ActionCreators.jumpToPast(index));
             }
 
         // going forward
         } else if (nextPageOrder > currentPageOrder) {
             // save current index
-            next(updatePageHistoryMap(getPage(state), currentSelectionIndex));
+            next(updatePageHistoryMap("selection", getPage(state), currentSelectionIndex));
         }
 
         done();
@@ -334,7 +335,7 @@ const getGoForwardActions = (lastPage: Page, state: State): AnyAction[] => {
     const actions = [];
 
     const currentSelectionIndex = getCurrentSelectionIndex(state);
-    actions.push(updatePageHistoryMap(lastPage, currentSelectionIndex));
+    actions.push(updatePageHistoryMap("selection", lastPage, currentSelectionIndex));
 
     const nextPage = getNextPage(lastPage, 1);
     if (nextPage) {
