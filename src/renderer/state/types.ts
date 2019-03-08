@@ -29,6 +29,12 @@ export interface RedoAction {
     type: string;
 }
 
+export interface UndoableStateBranch {
+    startHistoryIndex: {
+        [page: string]: number,
+    };
+}
+
 export interface ReduxLogicExtraDependencies {
     baseMmsUrl: string;
     httpClient: {

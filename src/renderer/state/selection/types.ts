@@ -1,5 +1,6 @@
 import { GridCell } from "../../containers/AssociateWells/grid-cell";
 import { MetadataStateBranch } from "../metadata/types";
+import { UndoableStateBranch } from "../types";
 
 export interface UploadFile {
     name: string;
@@ -14,7 +15,7 @@ export interface DeselectFilesAction {
     type: string;
 }
 
-export interface SelectionStateBranch {
+export interface SelectionStateBranch extends UndoableStateBranch {
     barcode?: string;
     files: string[];
     plateId?: number;
@@ -22,9 +23,6 @@ export interface SelectionStateBranch {
     well?: GridCell;
     page: Page;
     stagedFiles: UploadFile[];
-    startHistoryIndex: {
-        [page: string]: number,
-    };
 }
 
 export interface SelectFileAction {
