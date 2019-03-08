@@ -6,6 +6,7 @@ import {
     GET_FILES_IN_FOLDER,
     GO_BACK,
     GO_FORWARD,
+    JUMP_TO_PAST_SELECTION,
     LOAD_FILES,
     OPEN_FILES,
     SELECT_BARCODE,
@@ -13,7 +14,6 @@ import {
     SELECT_PAGE,
     SET_WELL,
     SET_WELLS,
-    UPDATE_PAGE_HISTORY_START_INDEX,
     UPDATE_STAGED_FILES,
 } from "./constants";
 import {
@@ -22,6 +22,7 @@ import {
     DragAndDropFileList,
     GetFilesInFolderAction,
     GoBackAction,
+    JumpToPastSelectionAction,
     LoadFilesFromDragAndDropAction,
     LoadFilesFromOpenDialogAction,
     NextPageAction,
@@ -31,7 +32,6 @@ import {
     SelectPageAction,
     SetWellAction,
     SetWellsAction,
-    UpdatePageHistoryMapAction,
     UpdateStagedFilesAction,
     UploadFile,
     Well,
@@ -125,5 +125,12 @@ export function goBack(): GoBackAction {
 export function goForward(): NextPageAction {
     return {
         type: GO_FORWARD,
+    };
+}
+
+export function jumpToPastSelection(index: number): JumpToPastSelectionAction {
+    return {
+        index,
+        type: JUMP_TO_PAST_SELECTION,
     };
 }

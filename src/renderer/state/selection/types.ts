@@ -185,3 +185,8 @@ export interface GoBackAction {
 export interface NextPageAction {
     type: string;
 }
+
+export interface JumpToPastSelectionAction {
+    index: number;
+    type: string;
+}

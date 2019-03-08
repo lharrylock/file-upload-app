@@ -1,5 +1,5 @@
-import { ASSOCIATE_FILES_AND_WELL, UNDO_FILE_WELL_ASSOCIATION } from "./constants";
-import { AssociateFilesAndWellAction, UndoFileWellAssociationAction } from "./types";
+import { ASSOCIATE_FILES_AND_WELL, JUMP_TO_PAST_UPLOAD, UNDO_FILE_WELL_ASSOCIATION } from "./constants";
+import { AssociateFilesAndWellAction, JumpToPastUploadAction, UndoFileWellAssociationAction } from "./types";
 
 export function associateFilesAndWell(fullPaths: string[], wellId: number)
     : AssociateFilesAndWellAction {
@@ -16,5 +16,12 @@ export function undoFileWellAssociation(fullPath: string): UndoFileWellAssociati
     return {
         payload: fullPath,
         type: UNDO_FILE_WELL_ASSOCIATION,
+    };
+}
+
+export function jumpToPastUpload(index: number): JumpToPastUploadAction {
+    return {
+        index,
+        type: JUMP_TO_PAST_UPLOAD,
     };
 }

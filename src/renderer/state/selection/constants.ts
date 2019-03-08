@@ -16,3 +16,4 @@ export const SET_WELLS = makeConstant(BRANCH_NAME, "set-wells");
 export const SET_WELL = makeConstant(BRANCH_NAME, "set-well");
 export const GO_BACK = makeConstant(BRANCH_NAME, "go-back");
 export const GO_FORWARD = makeConstant(BRANCH_NAME, "go-forward");
+export const JUMP_TO_PAST_SELECTION = makeConstant(BRANCH_NAME, "jump-to-past");

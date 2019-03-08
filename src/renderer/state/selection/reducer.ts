@@ -5,7 +5,7 @@ import undoable, {
     UndoableOptions,
 } from "redux-undo";
 
-import { State as AppState, TypeToDescriptionMap } from "../types";
+import { TypeToDescriptionMap } from "../types";
 import { makeReducer } from "../util";
 
 import {
@@ -15,6 +15,7 @@ import {
     SELECT_FILE,
     SELECT_METADATA,
     SELECT_PAGE,
+    JUMP_TO_PAST_SELECTION,
     SET_WELL,
     SET_WELLS,
     UPDATE_STAGED_FILES,
@@ -121,6 +122,7 @@ const selection = makeReducer<SelectionStateBranch>(actionToConfigMap, initialSt
 
 const options: UndoableOptions = {
     filter: excludeAction( SELECT_PAGE),
+    jumpToPastType: JUMP_TO_PAST_SELECTION,
     limit: 100,
 };
 export default undoable(selection, options);

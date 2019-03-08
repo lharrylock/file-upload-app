@@ -31,6 +31,7 @@ import {
 import { batchActions, getActionFromBatch } from "../util";
 
 import {
+    jumpToPastSelection,
     selectPage,
     setWells,
     stageFiles,
@@ -270,11 +271,10 @@ const selectPageLogic = createLogic({
 
         // going back
         if (nextPageOrder < currentPageOrder) {
-            const selectionHistory = getSelectionHistoryMap(state);
             const index = getSelectionHistoryMap(state)[nextPage];
 
             if (index > -1) {
-                next(ActionCreators.jumpToPast(index));
+                next(jumpToPastSelection(index));
             }
 
         // going forward
