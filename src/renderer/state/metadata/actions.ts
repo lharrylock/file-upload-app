@@ -32,10 +32,17 @@ export function requestMetadata(): RequestMetadataAction {
     };
 }
 
-export function updatePageHistoryMap(branch: "selection" | "upload", page: Page, index: number):
+export function updatePageHistoryMap(page: string, selectionIndex: number, uploadIndex: number):
     UpdatePageHistoryMapAction {
     return {
-        payload: { branch, page, index },
+        payload: {
+            selection: {
+                [page]: selectionIndex,
+            },
+            upload: {
+                [page]: uploadIndex,
+            },
+        },
         type: UPDATE_PAGE_HISTORY_START_INDEX,
     };
 }

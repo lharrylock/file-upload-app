@@ -23,9 +23,12 @@ export interface RequestMetadataAction {
 
 export interface UpdatePageHistoryMapAction {
     payload: {
-        branch: "selection" | "upload";
-        page: Page;
-        index: number;
+        selection: {
+            [page: string]: number,
+        },
+        upload: {
+            [page: string]: number,
+        },
     };
     type: string;
 }

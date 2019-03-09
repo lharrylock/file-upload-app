@@ -18,7 +18,7 @@ import {
 } from "../feedback/actions";
 import { AlertType, HttpRequestType } from "../feedback/types";
 import { updatePageHistoryMap } from "../metadata/actions";
-import { getSelectionHistoryMap } from "../metadata/selectors";
+import { getSelectionHistoryMap, getUploadHistoryMap } from "../metadata/selectors";
 
 import {
     AicsSuccessResponse,
@@ -28,6 +28,8 @@ import {
     ReduxLogicNextCb,
     ReduxLogicTransformDependencies, State
 } from "../types";
+import { jumpToPastUpload } from "../upload/actions";
+import { getCurrentUploadIndex } from "../upload/selectors";
 import { batchActions, getActionFromBatch } from "../util";
 
 import {
@@ -38,7 +40,9 @@ import {
     updateStagedFiles
 } from "./actions";
 import {
-    GET_FILES_IN_FOLDER, GO_BACK, GO_FORWARD,
+    GET_FILES_IN_FOLDER,
+    GO_BACK,
+    GO_FORWARD,
     LOAD_FILES,
     OPEN_FILES,
     SELECT_BARCODE, SELECT_PAGE,
@@ -267,20 +271,27 @@ const selectPageLogic = createLogic({
 
         const nextPageOrder: number = pageOrder.indexOf(nextPage);
         const currentPageOrder: number = pageOrder.indexOf(currentPage);
-        const currentSelectionIndex = getCurrentSelectionIndex(state);
 
         // going back
         if (nextPageOrder < currentPageOrder) {
-            const index = getSelectionHistoryMap(state)[nextPage];
+            const selectionIndex = getSelectionHistoryMap(state)[nextPage];
+            const uploadIndex = getUploadHistoryMap(state)[nextPage];
 
-            if (index > -1) {
-                next(jumpToPastSelection(index));
+            if (selectionIndex > -1) {
+                next(jumpToPastSelection(selectionIndex));
+            }
+
+            if (uploadIndex > -1) {
+                next(jumpToPastUpload(uploadIndex));
             }
 
         // going forward
         } else if (nextPageOrder > currentPageOrder) {
+            const selectionIndex = getCurrentSelectionIndex(state);
+            const uploadIndex = getCurrentUploadIndex(state);
+
             // save current index
-            next(updatePageHistoryMap("selection", getPage(state), currentSelectionIndex));
+            next(updatePageHistoryMap(getPage(state), selectionIndex, uploadIndex));
         }
 
         done();
@@ -335,7 +346,8 @@ const getGoForwardActions = (lastPage: Page, state: State): AnyAction[] => {
     const actions = [];
 
     const currentSelectionIndex = getCurrentSelectionIndex(state);
-    actions.push(updatePageHistoryMap("selection", lastPage, currentSelectionIndex));
+    const currentUploadIndex = getCurrentUploadIndex(state);
+    actions.push(updatePageHistoryMap(lastPage, currentSelectionIndex, currentUploadIndex));
 
     const nextPage = getNextPage(lastPage, 1);
     if (nextPage) {

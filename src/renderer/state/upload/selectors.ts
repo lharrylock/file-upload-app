@@ -5,6 +5,7 @@ import { State } from "../types";
 import { UploadStateBranch } from "./types";
 
 export const getUpload = (state: State) => state.upload.present;
+export const getCurrentUploadIndex = (state: State) => state.upload.index;
 
 export const getWellIdToFiles = createSelector([getUpload], (upload: UploadStateBranch) => {
     const wellIdToFilesMap = new Map<number, string[]>();

@@ -29,10 +29,13 @@ const actionToConfigMap: TypeToDescriptionMap = {
         perform: (state: MetadataStateBranch, action: UpdatePageHistoryMapAction) => ({
             ...state,
             history: {
-                ...state.history,
-                [action.payload.branch]: {
-                    ...state.history[action.payload.branch],
-                    [action.payload.page]: action.payload.index,
+                selection: {
+                    ...state.history.selection,
+                    ...action.payload.selection,
+                },
+                upload: {
+                    ...state.history.upload,
+                    ...action.payload.upload,
                 },
             },
         }),
