@@ -3,11 +3,10 @@ import undoable, {
     excludeAction,
     UndoableOptions,
 } from "redux-undo";
-import { JUMP_TO_PAST_SELECTION } from "../selection/constants";
 
 import { TypeToDescriptionMap } from "../types";
 import { makeReducer } from "../util";
-import { ASSOCIATE_FILES_AND_WELL, UNDO_FILE_WELL_ASSOCIATION, JUMP_TO_PAST_UPLOAD } from "./constants";
+import { ASSOCIATE_FILES_AND_WELL, JUMP_TO_PAST_UPLOAD, JUMP_TO_UPLOAD, UNDO_FILE_WELL_ASSOCIATION } from "./constants";
 import { AssociateFilesAndWellAction, UndoFileWellAssociationAction, UploadStateBranch } from "./types";
 
 export const initialState = {
@@ -48,6 +47,7 @@ const upload = makeReducer<UploadStateBranch>(actionToConfigMap, initialState);
 
 const options: UndoableOptions = {
     jumpToPastType: JUMP_TO_PAST_UPLOAD,
+    jumpType: JUMP_TO_UPLOAD,
     limit: 100,
 };
 export default undoable(upload, options);

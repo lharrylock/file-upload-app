@@ -1,3 +1,4 @@
+import { Button } from "antd";
 import * as React from "react";
 import { connect } from "react-redux";
 import { ActionCreator } from "redux";
@@ -16,9 +17,13 @@ import {
     getWellsWithUnitsAndModified
 } from "../../state/selection/selectors";
 import { GoBackAction, SetWellAction, Well } from "../../state/selection/types";
-import { associateFilesAndWell, undoFileWellAssociation } from "../../state/upload/actions";
-import { getWellIdToFiles } from "../../state/upload/selectors";
-import { AssociateFilesAndWellAction, UndoFileWellAssociationAction } from "../../state/upload/types";
+import { associateFilesAndWell, jumpToUpload, undoFileWellAssociation } from "../../state/upload/actions";
+import { getCanRedoUpload, getCanUndoUpload, getWellIdToFiles } from "../../state/upload/selectors";
+import {
+    AssociateFilesAndWellAction,
+    JumpToUploadAction,
+    UndoFileWellAssociationAction,
+} from "../../state/upload/types";
 import { getWellLabel } from "../../util/index";
 
 import { GridCell } from "./grid-cell";
@@ -27,6 +32,8 @@ const styles = require("./style.css");
 
 interface AssociateWellsProps {
     associateFilesAndWell: ActionCreator<AssociateFilesAndWellAction>;
+    canRedo: boolean;
+    canUndo: boolean;
     className?: string;
     goBack: ActionCreator<GoBackAction>;
     selectedFiles: string[];
@@ -34,6 +41,7 @@ interface AssociateWellsProps {
     setWell: ActionCreator<SetWellAction>;
     wells?: Well[][];
     wellIdToFiles: Map<number, string[]>;
+    jumpToUpload: ActionCreator<JumpToUploadAction>;
     undoAssociation: ActionCreator<UndoFileWellAssociationAction>;
 }
 
@@ -43,10 +51,12 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
         this.associate = this.associate.bind(this);
         this.selectWell = this.selectWell.bind(this);
         this.canAssociate = this.canAssociate.bind(this);
+        this.undo = this.undo.bind(this);
+        this.redo = this.redo.bind(this);
     }
 
     public render() {
-        const { className, selectedFiles, selectedWell, wells, wellIdToFiles } = this.props;
+        const { className, canRedo, canUndo, selectedFiles, selectedWell, wells, wellIdToFiles } = this.props;
         const selectedWells = selectedWell ? [selectedWell] : [];
         const wellInfo = wells && selectedWell ? wells[selectedWell.row][selectedWell.col] : undefined;
         const files = wellInfo ? wellIdToFiles.get(wellInfo.wellId) : [];
@@ -67,6 +77,10 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
                     associate={this.associate}
                     canAssociate={this.canAssociate()}
                     undoAssociation={this.props.undoAssociation}
+                    undoLastAssociation={this.undo}
+                    redo={this.redo}
+                    canRedo={canRedo}
+                    canUndoLastAssociation={canUndo}
                 />
                 {wells ? (
                         <Plate
@@ -99,10 +113,20 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
             this.props.associateFilesAndWell(selectedFiles, wellId);
         }
     }
+
+    private undo(): void {
+        this.props.jumpToUpload(-1);
+    }
+
+    private redo(): void {
+        this.props.jumpToUpload(1);
+    }
 }
 
 function mapStateToProps(state: State) {
     return {
+        canRedo: getCanRedoUpload(state),
+        canUndo: getCanUndoUpload(state),
         selectedFiles: getSelectedFiles(state),
         selectedWell: getWell(state),
         wellIdToFiles: getWellIdToFiles(state),
@@ -113,6 +137,7 @@ function mapStateToProps(state: State) {
 const dispatchToPropsMap = {
     associateFilesAndWell,
     goBack,
+    jumpToUpload,
     setWell,
     undoAssociation: undoFileWellAssociation,
 };

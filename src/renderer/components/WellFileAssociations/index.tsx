@@ -14,7 +14,11 @@ interface WellInfoProps {
     files: string[];
     associate: () => void;
     undoAssociation: (file: string) => void;
+    undoLastAssociation: () => void;
+    redo: () => void;
     canAssociate: boolean;
+    canUndoLastAssociation: boolean;
+    canRedo: boolean;
 }
 
 class WellFileAssociations extends React.Component<WellInfoProps, {}> {
@@ -25,9 +29,35 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
     }
 
     public render() {
-        const { className, wellLabel } = this.props;
+        const {
+            canRedo,
+            canUndoLastAssociation,
+            className,
+            redo,
+            undoLastAssociation,
+            wellLabel,
+        } = this.props;
 
-        const title = `Selected Well: ${wellLabel}`;
+        const title = (
+            <div className={styles.titleRow}>
+                <div className={styles.title}>Selected Well: {wellLabel}</div>
+
+                <div className={styles.titleButtons}>
+                    <Button
+                        onClick={undoLastAssociation}
+                        disabled={!canUndoLastAssociation}
+                    >
+                        Undo
+                    </Button>
+                    <Button
+                        onClick={redo}
+                        disabled={!canRedo}
+                    >
+                        Redo
+                    </Button>
+                </div>
+            </div>
+        );
         return (
             <Card className={className} title={title}>
                 {this.renderBody()}

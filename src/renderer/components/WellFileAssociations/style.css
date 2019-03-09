@@ -3,6 +3,18 @@
   flex-direction: column;
 }
 
+.title-row {
+  display: flex;
+
+  & .title {
+    flex: 1;
+  }
+
+  & .title-buttons {
+    flex: 0 0 auto;
+  }
+}
+
 .files {
   flex: 0 0 150px;
   margin: 1em 0;
