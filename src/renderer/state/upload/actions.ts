@@ -1,6 +1,13 @@
-import { ASSOCIATE_FILES_AND_WELL, JUMP_TO_PAST_UPLOAD, JUMP_TO_UPLOAD, UNDO_FILE_WELL_ASSOCIATION } from "./constants";
+import {
+    ASSOCIATE_FILES_AND_WELL,
+    CLEAR_UPLOAD_HISTORY,
+    JUMP_TO_PAST_UPLOAD,
+    JUMP_TO_UPLOAD,
+    UNDO_FILE_WELL_ASSOCIATION
+} from "./constants";
 import {
     AssociateFilesAndWellAction,
+    ClearUploadHistoryAction,
     JumpToPastUploadAction,
     JumpToUploadAction,
     UndoFileWellAssociationAction
@@ -35,5 +42,11 @@ export function jumpToUpload(index: number): JumpToUploadAction {
     return {
         index,
         type: JUMP_TO_UPLOAD,
+    };
+}
+
+export function clearUploadHistory(): ClearUploadHistoryAction {
+    return {
+        type: CLEAR_UPLOAD_HISTORY,
     };
 }

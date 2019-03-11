@@ -28,11 +28,12 @@ import {
     ReduxLogicNextCb,
     ReduxLogicTransformDependencies, State
 } from "../types";
-import { jumpToPastUpload } from "../upload/actions";
+import { clearUploadHistory, jumpToPastUpload } from "../upload/actions";
 import { getCurrentUploadIndex } from "../upload/selectors";
 import { batchActions, getActionFromBatch } from "../util";
 
 import {
+    clearSelectionHistory,
     jumpToPastSelection,
     selectPage,
     setWells,
@@ -281,8 +282,16 @@ const selectPageLogic = createLogic({
                 next(jumpToPastSelection(selectionIndex));
             }
 
+            if (selectionIndex === 0) {
+                next(clearSelectionHistory());
+            }
+
             if (uploadIndex > -1) {
                 next(jumpToPastUpload(uploadIndex));
+            }
+
+            if (uploadIndex === 0) {
+                next(clearUploadHistory());
             }
 
         // going forward

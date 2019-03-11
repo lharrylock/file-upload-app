@@ -2,6 +2,7 @@ import { GridCell } from "../../containers/AssociateWells/grid-cell";
 
 import {
     ADD_STAGE_FILES,
+    CLEAR_SELECTION_HISTORY,
     DESELECT_FILES,
     GET_FILES_IN_FOLDER,
     GO_BACK,
@@ -18,6 +19,7 @@ import {
 } from "./constants";
 import {
     AddStageFilesAction,
+    ClearSelectionHistoryAction,
     DeselectFilesAction,
     DragAndDropFileList,
     GetFilesInFolderAction,
@@ -132,5 +134,11 @@ export function jumpToPastSelection(index: number): JumpToPastSelectionAction {
     return {
         index,
         type: JUMP_TO_PAST_SELECTION,
+    };
+}
+
+export function clearSelectionHistory(): ClearSelectionHistoryAction {
+    return {
+        type: CLEAR_SELECTION_HISTORY,
     };
 }

@@ -190,3 +190,7 @@ export interface JumpToPastSelectionAction {
     index: number;
     type: string;
 }
+
+export interface ClearSelectionHistoryAction {
+    type: string;
+}
