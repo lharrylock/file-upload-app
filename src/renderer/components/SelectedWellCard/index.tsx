@@ -21,7 +21,7 @@ interface WellInfoProps {
     canRedo: boolean;
 }
 
-class WellFileAssociations extends React.Component<WellInfoProps, {}> {
+class SelectedWellCard extends React.Component<WellInfoProps, {}> {
 
     public constructor(props: WellInfoProps) {
         super(props);
@@ -115,4 +115,4 @@ class WellFileAssociations extends React.Component<WellInfoProps, {}> {
     }
 }
 
-export default WellFileAssociations;
+export default SelectedWellCard;
