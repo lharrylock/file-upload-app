@@ -1,8 +1,9 @@
-import { Button, Card } from "antd";
+import { Button, Card, Tabs } from "antd";
 import * as React from "react";
 
 import { Well } from "../../state/selection/types";
 import WellFileAssociations from "./WellFileAssociations/index";
+import WellInfo from "./WellInfo/index";
 
 const styles = require("./style.css");
 
@@ -59,13 +60,20 @@ class SelectedWellCard extends React.Component<WellInfoProps, {}> {
         );
         return (
             <Card className={className} title={title}>
-                <WellFileAssociations
-                    associate={associate}
-                    canAssociate={canAssociate}
-                    files={files}
-                    selectedFilesCount={selectedFilesCount}
-                    undoAssociation={undoAssociation}
-                />
+                <Tabs type="card">
+                <Tabs.TabPane tab="Associated Files" key="associations">
+                    <WellFileAssociations
+                        associate={associate}
+                        canAssociate={canAssociate}
+                        files={files}
+                        selectedFilesCount={selectedFilesCount}
+                        undoAssociation={undoAssociation}
+                    />
+                </Tabs.TabPane>
+                    <Tabs.TabPane tab="Well Info" key="info">
+                        <WellInfo/>
+                    </Tabs.TabPane>
+                </Tabs>
             </Card>
         );
     }
