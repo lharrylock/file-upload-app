@@ -1,4 +1,3 @@
-import { Button } from "antd";
 import * as React from "react";
 import { connect } from "react-redux";
 import { ActionCreator } from "redux";
