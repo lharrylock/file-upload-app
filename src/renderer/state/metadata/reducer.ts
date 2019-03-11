@@ -3,7 +3,7 @@ import { AnyAction } from "redux";
 import { TypeToDescriptionMap } from "../types";
 import { makeReducer } from "../util";
 
-import { RECEIVE_METADATA, UPDATE_PAGE_HISTORY_START_INDEX } from "./constants";
+import { RECEIVE_METADATA, UPDATE_PAGE_HISTORY } from "./constants";
 import {
     MetadataStateBranch,
     ReceiveMetadataAction,
@@ -23,9 +23,9 @@ const actionToConfigMap: TypeToDescriptionMap = {
         accepts: (action: AnyAction): action is ReceiveMetadataAction => action.type === RECEIVE_METADATA,
         perform: (state: MetadataStateBranch, action: ReceiveMetadataAction) => ({ ...state, ...action.payload }),
     },
-    [UPDATE_PAGE_HISTORY_START_INDEX]: {
+    [UPDATE_PAGE_HISTORY]: {
         accepts: (action: AnyAction): action is UpdatePageHistoryMapAction =>
-            action.type === UPDATE_PAGE_HISTORY_START_INDEX,
+            action.type === UPDATE_PAGE_HISTORY,
         perform: (state: MetadataStateBranch, action: UpdatePageHistoryMapAction) => ({
             ...state,
             history: {

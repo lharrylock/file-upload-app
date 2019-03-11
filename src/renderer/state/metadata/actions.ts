@@ -1,7 +1,7 @@
 import {
     RECEIVE_METADATA,
     REQUEST_METADATA,
-    UPDATE_PAGE_HISTORY_START_INDEX,
+    UPDATE_PAGE_HISTORY,
 } from "./constants";
 import { initialState } from "./reducer";
 import {
@@ -24,7 +24,7 @@ export function requestMetadata(): RequestMetadataAction {
     };
 }
 
-export function updatePageHistoryMap(page: string, selectionIndex: number, uploadIndex: number):
+export function updatePageHistory(page: string, selectionIndex: number, uploadIndex: number):
     UpdatePageHistoryMapAction {
     return {
         payload: {
@@ -35,6 +35,6 @@ export function updatePageHistoryMap(page: string, selectionIndex: number, uploa
                 [page]: uploadIndex,
             },
         },
-        type: UPDATE_PAGE_HISTORY_START_INDEX,
+        type: UPDATE_PAGE_HISTORY,
     };
 }
