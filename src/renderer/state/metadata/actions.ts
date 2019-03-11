@@ -1,23 +1,15 @@
-import { Page } from "../selection/types";
 import {
     RECEIVE_METADATA,
     REQUEST_METADATA,
     UPDATE_PAGE_HISTORY_START_INDEX,
 } from "./constants";
+import { initialState } from "./reducer";
 import {
     MetadataStateBranch,
     ReceiveMetadataAction,
-    RequestMetadataAction, UpdatePageHistoryMapAction,
+    RequestMetadataAction,
+    UpdatePageHistoryMapAction,
 } from "./types";
-
-// todo this is copied from the reducer...
-const initialState = {
-    history: {
-        selection: {},
-        upload: {},
-    },
-    units: [],
-};
 
 export function receiveMetadata(payload: MetadataStateBranch = initialState): ReceiveMetadataAction {
     return {
