@@ -41,7 +41,6 @@ interface AppProps {
     requestMetadata: ActionCreator<RequestMetadataAction>;
     selectFile: ActionCreator<SelectFileAction>;
     selectedFiles: string[];
-    selectionIndex: number;
     page: Page;
 }
 
@@ -106,7 +105,6 @@ class App extends React.Component<AppProps, {}> {
             loading,
             selectFile,
             selectedFiles,
-            selectionIndex,
             page,
         } = this.props;
 
@@ -130,7 +128,6 @@ class App extends React.Component<AppProps, {}> {
                        fileToTags={fileToTags}
                    />
                 }
-                {selectionIndex}
                 {pageConfig.container}
             </div>
         );
@@ -145,7 +142,6 @@ function mapStateToProps(state: State) {
         loading: getIsLoading(state),
         page: getPage(state),
         selectedFiles: getSelectedFiles(state),
-        selectionIndex: getCurrentSelectionIndex(state),
     };
 }
 
