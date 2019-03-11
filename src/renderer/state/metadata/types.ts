@@ -1,5 +1,3 @@
-import { Page } from "../selection/types";
-
 export interface MetadataStateBranch {
     units: Unit[];
     history: {
