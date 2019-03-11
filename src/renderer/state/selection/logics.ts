@@ -256,7 +256,7 @@ const selectBarcodeLogic = createLogic({
         }
 
     },
-    transform: ({action, getState}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
+    transform: ({action}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
         next(batchActions([
             addRequestToInProgress(HttpRequestType.GET_WELLS),
             action,
@@ -265,8 +265,13 @@ const selectBarcodeLogic = createLogic({
     type: SELECT_BARCODE,
 });
 
-const pageOrder: Page[] =
-    [Page.DragAndDrop, Page.EnterBarcode, Page.AssociateWells, Page.UploadJobs, Page.UploadComplete];
+const pageOrder: Page[] = [
+    Page.DragAndDrop,
+    Page.EnterBarcode,
+    Page.AssociateWells,
+    Page.UploadJobs,
+    Page.UploadComplete,
+];
 const selectPageLogic = createLogic({
     process: ({action, getState}: ReduxLogicDependencies, next: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
         const { currentPage, nextPage } = action.payload;
@@ -275,7 +280,7 @@ const selectPageLogic = createLogic({
         const nextPageOrder: number = pageOrder.indexOf(nextPage);
         const currentPageOrder: number = pageOrder.indexOf(currentPage);
 
-        // going back
+        // going back - rewind selections and uploads to the state they were at when user was on previous page
         if (nextPageOrder < currentPageOrder) {
             const selectionIndex = getSelectionHistory(state)[nextPage];
             const uploadIndex = getUploadHistory(state)[nextPage];
@@ -296,12 +301,10 @@ const selectPageLogic = createLogic({
                 next(clearUploadHistory());
             }
 
-        // going forward
+        // going forward - store current selection/upload indexes so we can rewind to this state if user goes back
         } else if (nextPageOrder > currentPageOrder) {
             const selectionIndex = getCurrentSelectionIndex(state);
             const uploadIndex = getCurrentUploadIndex(state);
-
-            // save current index
             next(updatePageHistory(getPage(state), selectionIndex, uploadIndex));
         }
 
@@ -339,11 +342,17 @@ const goForwardLogic = createLogic({
     type: GO_FORWARD,
 });
 
-// todo docs + lodash way that is simpler
-const getNextPage = (currentPage: Page, direction: number) => {
+/***
+ * Helper function for getting a page relative to a given page. Returns null if direction is out of bounds or
+ * if current page is not recognized.
+ * @param currentPage page to start at
+ * @param direction number of steps forward or back (negative) from currentPage
+ */
+const getNextPage = (currentPage: Page, direction: number): Page | null => {
     const currentPageIndex = pageOrder.indexOf(currentPage);
     if (currentPageIndex > -1) {
         const nextPageIndex = currentPageIndex + direction;
+
         if (nextPageIndex > -1 && nextPageIndex < pageOrder.length) {
             return pageOrder[nextPageIndex];
         }
