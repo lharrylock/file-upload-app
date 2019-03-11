@@ -26,7 +26,8 @@ import {
     ReduxLogicDependencies,
     ReduxLogicDoneCb,
     ReduxLogicNextCb,
-    ReduxLogicTransformDependencies, State
+    ReduxLogicTransformDependencies,
+    State
 } from "../types";
 import { clearUploadHistory, jumpToPastUpload } from "../upload/actions";
 import { getCurrentUploadIndex } from "../upload/selectors";
@@ -46,7 +47,8 @@ import {
     GO_FORWARD,
     LOAD_FILES,
     OPEN_FILES,
-    SELECT_BARCODE, SELECT_PAGE,
+    SELECT_BARCODE,
+    SELECT_PAGE,
 } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
 import {
