@@ -21,14 +21,6 @@ export interface BatchedAction {
     payload: AnyAction[];
 }
 
-export interface UndoAction {
-    type: string;
-}
-
-export interface RedoAction {
-    type: string;
-}
-
 export interface ReduxLogicExtraDependencies {
     baseMmsUrl: string;
     httpClient: {
