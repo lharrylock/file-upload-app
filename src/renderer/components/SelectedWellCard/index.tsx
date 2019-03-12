@@ -35,6 +35,7 @@ class SelectedWellCard extends React.Component<WellInfoProps, {}> {
             selectedFilesCount,
             undoAssociation,
             undoLastAssociation,
+            well,
             wellLabel,
         } = this.props;
 
@@ -71,7 +72,7 @@ class SelectedWellCard extends React.Component<WellInfoProps, {}> {
                     />
                 </Tabs.TabPane>
                     <Tabs.TabPane tab="Well Info" key="info">
-                        <WellInfo/>
+                        <WellInfo well={well}/>
                     </Tabs.TabPane>
                 </Tabs>
             </Card>

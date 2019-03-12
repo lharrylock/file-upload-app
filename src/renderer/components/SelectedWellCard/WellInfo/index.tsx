@@ -1,8 +1,19 @@
+import { Empty } from "antd";
 import * as classNames from "classnames";
+import { isEmpty } from "lodash";
 import * as React from "react";
+import { Well } from "../../../state/selection/types";
+
+import CellPopulationsPopoverContent from "../../WellPopover/CellPopulationsPopoverContent/index";
+import SolutionsPopoverContent from "../../WellPopover/SolutionsPopoverContent/index";
+import ViabilityResultsPopoverContent from "../../WellPopover/ViabilityResultsPopoverContent/index";
+
+const styles = require("./style.css");
+export const NULL_TEXT = "None";
 
 interface WellInfoProps {
     className?: string;
+    well?: Well;
 }
 
 class WellInfo extends React.Component<WellInfoProps, []> {
@@ -13,12 +24,22 @@ class WellInfo extends React.Component<WellInfoProps, []> {
     public render() {
         const {
             className,
+            well,
         } = this.props;
-        const {} = this.state;
+
+        if (!well) {
+            return <Empty/>;
+        }
+
+        const { cellPopulations, solutions, viabilityResults } = well;
 
         return (
-            <div className={classNames(className)}>
-                Hello from WellInfo
+            <div className={classNames(styles.container, className)}>
+                <CellPopulationsPopoverContent cellPopulations={cellPopulations}/>
+                {!isEmpty(solutions) && <hr/>}
+                <SolutionsPopoverContent solutions={solutions}/>
+                {!isEmpty(viabilityResults) && <hr/>}
+                <ViabilityResultsPopoverContent viabilityResults={viabilityResults}/>
             </div>
         );
     }
