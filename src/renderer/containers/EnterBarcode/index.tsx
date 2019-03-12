@@ -5,6 +5,7 @@ import { debounce } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
 import { ActionCreator } from "redux";
+import { OPEN_CREATE_PLATE_STANDALONE, PLATE_CREATED } from "../../../shared/constants";
 
 import FormPage from "../../components/FormPage";
 import { State } from "../../state";
@@ -120,8 +121,8 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
 
     private openCreatePlateModal(): void {
         // todo make this a constant
-        ipcRenderer.send("OPEN_CREATE_PLATE");
-        ipcRenderer.on("PLATE-CREATED", (event: any, arg: any) => {
+        ipcRenderer.send(OPEN_CREATE_PLATE_STANDALONE);
+        ipcRenderer.on(PLATE_CREATED, (event: any, arg: any) => {
             // tslint:disable-next-line
             console.log(arg);
         });

@@ -6,6 +6,7 @@ import {
 import * as os from "os";
 import * as path from "path";
 import * as url from "url";
+import { OPEN_CREATE_PLATE_STANDALONE, PLATE_CREATED } from "../shared/constants";
 
 // Keep a global reference of the window object, if you don"t, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -68,7 +69,7 @@ app.on("activate", () => {
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
 
-ipcMain.on("OPEN_CREATE_PLATE", (event: any) => {
+ipcMain.on(OPEN_CREATE_PLATE_STANDALONE, (event: any) => {
     const child: BrowserWindow = new BrowserWindow({
         modal: true,
         parent: win,
@@ -90,7 +91,7 @@ ipcMain.on("OPEN_CREATE_PLATE", (event: any) => {
         if (next.indexOf("plateStandalone.view") === -1) {
             e.preventDefault();
             // todo use constants
-            event.sender.send("PLATE-CREATED", "lisa_test");
+            event.sender.send(PLATE_CREATED, "lisa_test");
             child.close();
             // send message to renderer about created plateid/barcode
         }
