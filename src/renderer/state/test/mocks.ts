@@ -1,6 +1,28 @@
+import { StateWithHistory } from "redux-undo";
+
 import { Unit } from "../metadata/types";
-import { Page, Well } from "../selection/types";
+import { Page, SelectionStateBranch, Well } from "../selection/types";
 import { State } from "../types";
+
+export const getMockStateWithHistory = <T>(state: T): StateWithHistory<T> => {
+    return {
+        _latestUnfiltered: {...state},
+        future: [],
+        group: {},
+        index: 0,
+        limit: 10,
+        past: [],
+        present: {...state},
+    };
+};
+
+export const mockSelection: SelectionStateBranch = {
+    files: [],
+    page: Page.DragAndDrop,
+    stagedFiles: [],
+    well: undefined,
+    wells: [],
+};
 
 export const mockState: State = {
     feedback: {
@@ -8,18 +30,14 @@ export const mockState: State = {
         requestsInProgress: [],
     },
     metadata: {
+        history: {
+            selection: {},
+            upload: {},
+        },
         units: [],
     },
-    selection: {
-        files: [],
-        page: Page.DragAndDrop,
-        stagedFiles: [],
-        wells: [],
-        wellsForUpload: [],
-    },
-    upload: {
-
-    },
+    selection: getMockStateWithHistory(mockSelection),
+    upload: getMockStateWithHistory({}),
 };
 
 export const mockUnits: Unit[] = [

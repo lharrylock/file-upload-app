@@ -1,10 +1,13 @@
-import { uniq } from "lodash";
+import { isEmpty, uniq } from "lodash";
 import { createSelector } from "reselect";
 
 import { State } from "../types";
 import { UploadStateBranch } from "./types";
 
-export const getUpload = (state: State) => state.upload;
+export const getUpload = (state: State) => state.upload.present;
+export const getCurrentUploadIndex = (state: State) => state.upload.index;
+export const getUploadPast = (state: State) => state.upload.past;
+export const getUploadFuture = (state: State) => state.upload.future;
 
 export const getWellIdToFiles = createSelector([getUpload], (upload: UploadStateBranch) => {
     const wellIdToFilesMap = new Map<number, string[]>();
@@ -23,4 +26,12 @@ export const getWellIdToFiles = createSelector([getUpload], (upload: UploadState
     }
 
     return wellIdToFilesMap;
+});
+
+export const getCanRedoUpload = createSelector([getUploadFuture], (future: UploadStateBranch[]) => {
+    return !isEmpty(future);
+});
+
+export const getCanUndoUpload = createSelector([getUploadPast], (past: UploadStateBranch[]) => {
+    return !isEmpty(past);
 });

@@ -15,7 +15,6 @@ export interface DeselectFilesAction {
 }
 
 export interface SelectionStateBranch {
-    [key: string]: any;
     barcode?: string;
     files: string[];
     plateId?: number;
@@ -120,7 +119,10 @@ export interface AddStageFilesAction {
 }
 
 export interface SelectPageAction {
-    payload: Page;
+    payload: {
+        currentPage: Page;
+        nextPage: Page;
+    };
     type: string;
 }
 
@@ -163,15 +165,32 @@ export interface DragAndDropFile {
 }
 
 export enum Page {
-    DragAndDrop = 1,
-    EnterBarcode,
-    AssociateWells,
-    UploadJobs,
-    UploadComplete,
+    DragAndDrop = "DragAndDrop",
+    EnterBarcode = "EnterBarcode",
+    AssociateWells = "AssociateWells",
+    UploadJobs = "UploadJobs",
+    UploadComplete = "UploadComplete",
 }
 
 export interface AppPageConfig {
     container: JSX.Element;
     folderTreeVisible: boolean;
     folderTreeSelectable: boolean;
+}
+
+export interface GoBackAction {
+    type: string;
+}
+
+export interface NextPageAction {
+    type: string;
+}
+
+export interface JumpToPastSelectionAction {
+    index: number;
+    type: string;
+}
+
+export interface ClearSelectionHistoryAction {
+    type: string;
 }

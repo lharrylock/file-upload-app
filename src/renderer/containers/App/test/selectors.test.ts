@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { get } from "lodash";
 
-import { mockState, mockWells } from "../../../state/test/mocks";
+import { getMockStateWithHistory, mockSelection, mockState, mockWells } from "../../../state/test/mocks";
 import { getFileToTags } from "../selectors";
 
 describe("App selectors", () => {
@@ -11,14 +11,14 @@ describe("App selectors", () => {
             const filePath2 = "filepath2";
             const map = getFileToTags({
                 ...mockState,
-                selection: {
-                    ...mockState.selection,
+                selection: getMockStateWithHistory({
+                    ...mockSelection,
                     wells: mockWells,
-                },
-                upload: {
+                }),
+                upload: getMockStateWithHistory({
                     [filePath1]: { wellId: 1},
                     [filePath2]: { wellId: 4},
-                },
+                }),
             });
 
             const file1Tags = map.get(filePath1) || [];

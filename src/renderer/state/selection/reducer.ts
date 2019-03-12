@@ -1,5 +1,9 @@
 import { castArray } from "lodash";
 import { AnyAction } from "redux";
+import undoable, {
+    excludeAction,
+    UndoableOptions,
+} from "redux-undo";
 
 import { TypeToDescriptionMap } from "../types";
 import { makeReducer } from "../util";
@@ -11,6 +15,7 @@ import {
     SELECT_FILE,
     SELECT_METADATA,
     SELECT_PAGE,
+    JUMP_TO_PAST_SELECTION,
     SET_WELL,
     SET_WELLS,
     UPDATE_STAGED_FILES,
@@ -33,6 +38,9 @@ export const initialState = {
     files: [],
     page: Page.DragAndDrop,
     stagedFiles: [],
+    startHistoryIndex: {
+        [Page.DragAndDrop]: 0,
+    },
     well: undefined,
     wells: [],
 };
@@ -70,7 +78,7 @@ const actionToConfigMap: TypeToDescriptionMap = {
         accepts: (action: AnyAction): action is SelectPageAction => action.type === SELECT_PAGE,
         perform: (state: SelectionStateBranch, action: SelectPageAction) => ({
             ...state,
-            page: action.payload,
+            page: action.payload.nextPage,
         }),
     },
     [SET_WELLS]: {
@@ -110,4 +118,11 @@ const actionToConfigMap: TypeToDescriptionMap = {
     },
 };
 
-export default makeReducer<SelectionStateBranch>(actionToConfigMap, initialState);
+const selection = makeReducer<SelectionStateBranch>(actionToConfigMap, initialState);
+
+const options: UndoableOptions = {
+    filter: excludeAction( SELECT_PAGE),
+    jumpToPastType: JUMP_TO_PAST_SELECTION,
+    limit: 100,
+};
+export default undoable(selection, options);

@@ -51,6 +51,7 @@
     "postcss-preset-env": "^6.5.0",
     "react-hot-loader": "4.7.1",
     "react-redux": "5.1.1",
+    "redux-undo": "^1.0.0-beta9-9-7",
     "sinon": "6.3.5",
     "style-loader": "0.21.0",
     "ts-import-plugin": "1.5.5",

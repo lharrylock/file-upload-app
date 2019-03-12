@@ -1,6 +1,15 @@
 export interface MetadataStateBranch {
-    [key: string]: any;
     units: Unit[];
+    // Gets updated every time app changes pages.
+    // Stores last redux-undo index per page for each state branch (that we want to be able to undo)
+    history: {
+        selection: PageToIndexMap;
+        upload: PageToIndexMap;
+    };
+}
+
+export interface PageToIndexMap {
+    [page: string]: number;
 }
 
 export interface ReceiveMetadataAction {
@@ -9,6 +18,18 @@ export interface ReceiveMetadataAction {
 }
 
 export interface RequestMetadataAction {
+    type: string;
+}
+
+export interface UpdatePageHistoryMapAction {
+    payload: {
+        selection: {
+            [page: string]: number,
+        },
+        upload: {
+            [page: string]: number,
+        },
+    };
     type: string;
 }
 

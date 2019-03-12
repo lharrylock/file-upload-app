@@ -4,6 +4,7 @@ import { isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
+import { ActionCreators } from "redux-undo";
 
 import { API_WAIT_TIME_SECONDS } from "../constants";
 
@@ -16,6 +17,8 @@ import {
     stopLoading
 } from "../feedback/actions";
 import { AlertType, HttpRequestType } from "../feedback/types";
+import { updatePageHistory } from "../metadata/actions";
+import { getSelectionHistory, getUploadHistory } from "../metadata/selectors";
 
 import {
     AicsSuccessResponse,
@@ -23,11 +26,16 @@ import {
     ReduxLogicDependencies,
     ReduxLogicDoneCb,
     ReduxLogicNextCb,
-    ReduxLogicTransformDependencies
+    ReduxLogicTransformDependencies,
+    State
 } from "../types";
+import { clearUploadHistory, jumpToPastUpload } from "../upload/actions";
+import { getCurrentUploadIndex } from "../upload/selectors";
 import { batchActions, getActionFromBatch } from "../util";
 
 import {
+    clearSelectionHistory,
+    jumpToPastSelection,
     selectPage,
     setWells,
     stageFiles,
@@ -35,13 +43,17 @@ import {
 } from "./actions";
 import {
     GET_FILES_IN_FOLDER,
+    GO_BACK,
+    GO_FORWARD,
     LOAD_FILES,
     OPEN_FILES,
     SELECT_BARCODE,
+    SELECT_PAGE,
 } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
 import {
-    getAppPage,
+    getCurrentSelectionIndex,
+    getPage,
     getStagedFiles,
 } from "./selectors";
 import { DragAndDropFileList, Page, UploadFile, Well } from "./types";
@@ -85,9 +97,9 @@ const stageFilesAndStopLoading = (uploadFilePromises: Array<Promise<UploadFile>>
 
 const openFilesTransformLogic = ({ action, getState }: ReduxLogicDependencies, next: ReduxLogicNextCb) => {
     const actions = [action, startLoading()];
-    const page: Page = getAppPage(getState());
+    const page: Page = getPage(getState());
     if (page === Page.DragAndDrop) {
-        actions.push(selectPage(Page.EnterBarcode));
+        actions.push(...getGoForwardActions(page, getState()));
     }
     next(batchActions(actions));
 };
@@ -194,12 +206,13 @@ const selectBarcodeLogic = createLogic({
                     const response = await getWells(deps, plateId);
                     const wells: Well[][] = response.data.data;
                     receivedSuccessfulResponse = true;
-                    dispatch(batchActions([
-                        selectPage(Page.AssociateWells),
+                    const actions = [
                         setWells(wells),
                         removeRequestFromInProgress(HttpRequestType.GET_WELLS),
                         action,
-                    ]));
+                    ];
+                    actions.push(...getGoForwardActions(Page.EnterBarcode, deps.getState()));
+                    dispatch(batchActions(actions));
                 } catch (e) {
                     if (e.response && e.response.status === HTTP_STATUS.BAD_GATEWAY) {
                         if (!sentRetryAlert) {
@@ -252,9 +265,129 @@ const selectBarcodeLogic = createLogic({
     type: SELECT_BARCODE,
 });
 
+const pageOrder: Page[] = [
+    Page.DragAndDrop,
+    Page.EnterBarcode,
+    Page.AssociateWells,
+    Page.UploadJobs,
+    Page.UploadComplete,
+];
+const selectPageLogic = createLogic({
+    process: ({action, getState}: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
+        const { currentPage, nextPage } = action.payload;
+        const state = getState();
+
+        const nextPageOrder: number = pageOrder.indexOf(nextPage);
+        const currentPageOrder: number = pageOrder.indexOf(currentPage);
+
+        // going back - rewind selections and uploads to the state they were at when user was on previous page
+        if (nextPageOrder < currentPageOrder) {
+            const selectionIndex = getSelectionHistory(state)[nextPage];
+            const uploadIndex = getUploadHistory(state)[nextPage];
+            const actions = [];
+
+            if (selectionIndex > -1) {
+                actions.push(jumpToPastSelection(selectionIndex));
+            }
+
+            if (selectionIndex === 0) {
+                actions.push(clearSelectionHistory());
+            }
+
+            if (uploadIndex > -1) {
+                actions.push(jumpToPastUpload(uploadIndex));
+            }
+
+            if (uploadIndex === 0) {
+                actions.push(clearUploadHistory());
+            }
+
+            if (!isEmpty(actions)) {
+                dispatch(batchActions(actions));
+            }
+
+        // going forward - store current selection/upload indexes so we can rewind to this state if user goes back
+        } else if (nextPageOrder > currentPageOrder) {
+            const selectionIndex = getCurrentSelectionIndex(state);
+            const uploadIndex = getCurrentUploadIndex(state);
+            dispatch(updatePageHistory(getPage(state), selectionIndex, uploadIndex));
+        }
+
+        done();
+    },
+    type: SELECT_PAGE,
+});
+
+const goBackLogic = createLogic({
+    transform: ({getState, action}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb, reject: () => void) => {
+        const state = getState();
+        const currentPage = getPage(state);
+        const nextPage = getNextPage(currentPage, -1);
+
+        if (nextPage) {
+            next(selectPage(currentPage, nextPage));
+        } else {
+            reject();
+        }
+    },
+    type: GO_BACK,
+});
+
+const goForwardLogic = createLogic({
+    transform: ({action, getState}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb, reject: () => void) => {
+        const currentPage = getPage(getState());
+        const nextPage = getNextPage(currentPage, 1);
+
+        if (nextPage) {
+            next(selectPage(currentPage, nextPage));
+        } else {
+           reject();
+        }
+    },
+    type: GO_FORWARD,
+});
+
+/***
+ * Helper function for getting a page relative to a given page. Returns null if direction is out of bounds or
+ * if current page is not recognized.
+ * @param currentPage page to start at
+ * @param direction number of steps forward or back (negative) from currentPage
+ */
+const getNextPage = (currentPage: Page, direction: number): Page | null => {
+    const currentPageIndex = pageOrder.indexOf(currentPage);
+    if (currentPageIndex > -1) {
+        const nextPageIndex = currentPageIndex + direction;
+
+        if (nextPageIndex > -1 && nextPageIndex < pageOrder.length) {
+            return pageOrder[nextPageIndex];
+        }
+    }
+
+    return null;
+};
+
+// For batching only. Returns new actions
+const getGoForwardActions = (lastPage: Page, state: State): AnyAction[] => {
+    const actions = [];
+
+    const currentSelectionIndex = getCurrentSelectionIndex(state);
+    const currentUploadIndex = getCurrentUploadIndex(state);
+    actions.push(updatePageHistory(lastPage, currentSelectionIndex, currentUploadIndex));
+
+    const nextPage = getNextPage(lastPage, 1);
+    if (nextPage) {
+        actions.push(selectPage(lastPage, nextPage));
+    }
+
+    return actions;
+};
+
 export default [
+    goBackLogic,
+    goForwardLogic,
     loadFilesLogic,
     openFilesLogic,
     getFilesInFolderLogic,
     selectBarcodeLogic,
+    selectPageLogic,
 ];

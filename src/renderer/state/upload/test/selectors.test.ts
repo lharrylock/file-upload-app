@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { difference } from "lodash";
 
-import { mockState } from "../../test/mocks";
+import { getMockStateWithHistory, mockState } from "../../test/mocks";
 import { getWellIdToFiles } from "../selectors";
 
 describe("Upload selectors", () => {
@@ -9,7 +9,7 @@ describe("Upload selectors", () => {
         it("returns an empty map given no uploads", () => {
            const map = getWellIdToFiles({
                ...mockState,
-               upload: {},
+               upload: getMockStateWithHistory({}),
            });
 
            expect(map.size).to.equal(0);
@@ -20,12 +20,12 @@ describe("Upload selectors", () => {
             const wellId2 = 5;
             const map = getWellIdToFiles({
                 ...mockState,
-                upload: {
+                upload: getMockStateWithHistory({
                     "/path1": {wellId},
                     "/path2": {wellId},
                     "/path3": {wellId},
                     "/path4": {wellId: wellId2},
-                },
+                }),
             });
 
             expect(map.size).to.equal(2);

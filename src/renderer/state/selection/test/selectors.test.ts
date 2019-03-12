@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { mockState, mockUnits, mockWells } from "../../test/mocks";
+import { getMockStateWithHistory, mockSelection, mockState, mockUnits, mockWells } from "../../test/mocks";
 import { State } from "../../types";
 import { getWellIdToWellLabelMap, getWellsWithModified, getWellsWithUnitsAndModified, NO_UNIT } from "../selectors";
 import { CellPopulation, Solution, ViabilityResult, Well } from "../types";
@@ -62,7 +62,10 @@ describe("Selections selectors", () => {
             },
             selection: {
                 ...mockState.selection,
-                wells: [[mockWell]],
+                present: {
+                    ...mockState.selection.present,
+                    wells: [[mockWell]],
+                },
             },
         };
     });
@@ -76,8 +79,8 @@ describe("Selections selectors", () => {
         it("sets modified as true on wells with cellPopulations", () => {
             const result: Well[][] = getWellsWithModified({
                 ...mockState,
-                selection: {
-                    ...mockState.selection,
+                selection: getMockStateWithHistory({
+                    ...mockSelection,
                     wells: [
                         [
                             {
@@ -86,7 +89,7 @@ describe("Selections selectors", () => {
                             },
                         ],
                     ],
-                },
+                }),
             });
 
             expectOneWell(result);
@@ -97,8 +100,8 @@ describe("Selections selectors", () => {
         it("sets modified as true on wells with solutions", () => {
             const result: Well[][] = getWellsWithModified({
                 ...mockState,
-                selection: {
-                    ...mockState.selection,
+                selection: getMockStateWithHistory({
+                    ...mockSelection,
                     wells: [
                         [
                             {
@@ -107,7 +110,7 @@ describe("Selections selectors", () => {
                             },
                         ],
                     ],
-                },
+                }),
             });
 
             expectOneWell(result);
@@ -118,8 +121,8 @@ describe("Selections selectors", () => {
         it("sets modified as true on wells with viabilityResults", () => {
             const result: Well[][] = getWellsWithModified({
                 ...mockState,
-                selection: {
-                    ...mockState.selection,
+                selection: getMockStateWithHistory({
+                    ...mockSelection,
                     wells: [
                         [
                             {
@@ -128,7 +131,7 @@ describe("Selections selectors", () => {
                             },
                         ],
                     ],
-                },
+                }),
             });
 
             expectOneWell(result);
@@ -140,10 +143,10 @@ describe("Selections selectors", () => {
         it ("sets modified as false on wells without modifications", () => {
             const result: Well[][] = getWellsWithModified({
                 ...mockState,
-                selection: {
-                    ...mockState.selection,
+                selection: getMockStateWithHistory({
+                    ...mockSelection,
                     wells: [[mockEmptyWell]],
-                },
+                }),
             });
 
             expectOneWell(result);
@@ -158,6 +161,7 @@ describe("Selections selectors", () => {
             const result = getWellsWithUnitsAndModified({
                 ...mockStateWithNonEmptyWell,
                 metadata: {
+                    ...mockState.metadata,
                     units: [],
                 },
             });
@@ -179,10 +183,10 @@ describe("Selections selectors", () => {
                     ...mockState.metadata,
                     units: mockUnits,
                 },
-                selection: {
-                    ...mockState.selection,
+                selection: getMockStateWithHistory({
+                    ...mockSelection,
                     wells: [],
-                },
+                }),
             });
             expect(result).to.be.empty;
         });
@@ -205,10 +209,10 @@ describe("Selections selectors", () => {
         it("returns map of wellIds to their labels", () => {
             const map = getWellIdToWellLabelMap({
                 ...mockState,
-                selection: {
-                    ...mockState.selection,
+                selection: getMockStateWithHistory({
+                    ...mockSelection,
                     wells: mockWells,
-                },
+                }),
             });
             expect(map.get(1)).to.equal("A1");
             expect(map.get(2)).to.equal("A2");

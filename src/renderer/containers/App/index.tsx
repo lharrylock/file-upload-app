@@ -7,10 +7,11 @@ import { ActionCreator } from "redux";
 import FolderTree from "../../components/FolderTree";
 import { feedback, selection } from "../../state";
 import { clearAlert } from "../../state/feedback/actions";
-import { getAlert } from "../../state/feedback/selectors";
+import { getAlert, getIsLoading } from "../../state/feedback/selectors";
 import { AlertType, AppAlert, ClearAlertAction } from "../../state/feedback/types";
 import { requestMetadata } from "../../state/metadata/actions";
 import { RequestMetadataAction } from "../../state/metadata/types";
+import { getCurrentSelectionIndex, getPage, getSelectedFiles, getStagedFiles } from "../../state/selection/selectors";
 import {
     AppPageConfig,
     GetFilesInFolderAction,
@@ -137,10 +138,10 @@ function mapStateToProps(state: State) {
     return {
         alert: getAlert(state),
         fileToTags: getFileToTags(state),
-        files: state.selection.stagedFiles,
-        loading: feedback.selectors.getIsLoading(state),
-        page: selection.selectors.getAppPage(state),
-        selectedFiles: selection.selectors.getSelectedFiles(state),
+        files: getStagedFiles(state),
+        loading: getIsLoading(state),
+        page: getPage(state),
+        selectedFiles: getSelectedFiles(state),
     };
 }
 

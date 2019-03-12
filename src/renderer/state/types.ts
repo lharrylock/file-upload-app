@@ -1,7 +1,7 @@
-import { AicsGridCell } from "aics-react-labkey";
 import { AxiosPromise, AxiosRequestConfig } from "axios";
 import { AnyAction } from "redux";
 import { CreateLogic } from "redux-logic/definitions/logic";
+import { StateWithHistory } from "redux-undo";
 
 import { FeedbackStateBranch } from "./feedback/types";
 import { MetadataStateBranch } from "./metadata/types";
@@ -39,8 +39,8 @@ export type ReduxLogicDoneCb = () => void;
 export interface State {
     feedback: FeedbackStateBranch;
     metadata: MetadataStateBranch;
-    selection: SelectionStateBranch;
-    upload: UploadStateBranch;
+    selection: StateWithHistory<SelectionStateBranch>;
+    upload: StateWithHistory<UploadStateBranch>;
 }
 
 export interface TypeToDescriptionMap {
