@@ -1,11 +1,11 @@
 import { Divider } from "antd";
-import * as classNames from "classnames";
 import { FunctionComponent } from "react";
 import * as React from "react";
+
 import { ViabilityResult } from "../../../../state/selection/types";
 
-import { NULL_TEXT } from "../index";
-import KeyValueDisplay from "../KeyValueDisplay/index";
+import { NULL_TEXT } from "..";
+import KeyValueDisplay from "../KeyValueDisplay";
 
 const styles = require("../style.css");
 
@@ -26,7 +26,7 @@ const ViabilityResults: FunctionComponent<ViabilityResultsProps> =
     }
 
     return (
-        <div className={classNames(styles.container, className)}>
+        <div className={className}>
             {
                 viabilityResults.map((result, i) => {
                     const {
@@ -39,7 +39,7 @@ const ViabilityResults: FunctionComponent<ViabilityResultsProps> =
 
                     return (
                         <React.Fragment key={i}>
-                            <Divider dashed={true} className={styles.divider}>Viability Result {i + 1}</Divider>
+                            <Divider dashed={true} className={styles.subDivider}>Viability Result {i + 1}</Divider>
                             <div className={styles.group}>
                                 <KeyValueDisplay keyName="Viability" value={viability || NULL_TEXT}/>
                                 <KeyValueDisplay

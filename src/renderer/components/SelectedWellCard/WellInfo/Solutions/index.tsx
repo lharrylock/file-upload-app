@@ -1,5 +1,6 @@
 import { Divider } from "antd";
 import * as React from "react";
+
 import { Solution } from "../../../../state/selection/types";
 
 import { NULL_TEXT } from "../index";
@@ -52,7 +53,7 @@ const Solutions: React.FunctionComponent<SolutionsProps> = (props) => {
 
                 return (
                     <React.Fragment key={i}>
-                        <Divider dashed={true} className={styles.divider}>Solution {i + 1}</Divider>
+                        <Divider dashed={true} className={styles.subDivider}>Solution {i + 1}</Divider>
                         <div className={styles.group}>
                             <KeyValueDisplay keyName="Solution" value={solutionName || NULL_TEXT}/>
                             {concentrationLine}

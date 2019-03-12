@@ -1,12 +1,12 @@
 .container {
     overflow-y: auto;
+}
 
-    &.empty {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
+.empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .group {
@@ -16,6 +16,6 @@
     width: 100%;
 }
 
-.divider:global(.ant-divider-horizontal.ant-divider-with-text) {
+.sub-divider:global(.ant-divider-horizontal.ant-divider-with-text) {
     color: #c8cbd1;
 }

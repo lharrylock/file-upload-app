@@ -1,9 +1,9 @@
 import { Divider } from "antd";
-import * as classNames from "classnames";
 import * as React from "react";
+
 import { CellPopulation } from "../../../../state/selection/types";
 
-import { NULL_TEXT } from "../index";
+import { NULL_TEXT } from "..";
 import KeyValueDisplay from "../KeyValueDisplay";
 
 const styles = require("../style.css");
@@ -24,7 +24,7 @@ const CellPopulations: React.FunctionComponent<CellPopulationsProps> = (props) =
     }
 
     return (
-        <div className={classNames(styles.container, className)}>
+        <div className={className}>
             {
                 cellPopulations.map((entry: CellPopulation, i) => {
                     const {
@@ -63,7 +63,7 @@ const CellPopulations: React.FunctionComponent<CellPopulationsProps> = (props) =
                     }
                     return (
                         <React.Fragment key={i}>
-                            <Divider dashed={true} className={styles.divider}>Cell Population {i + 1}</Divider>
+                            <Divider dashed={true} className={styles.subDivider}>Cell Population {i + 1}</Divider>
                             <div className={styles.group}>
                                 {populationText}
                                 <KeyValueDisplay keyName="Seeding Density" value={entry.seedingDensity || NULL_TEXT}/>

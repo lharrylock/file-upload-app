@@ -2,6 +2,7 @@ import { Divider, Empty } from "antd";
 import * as classNames from "classnames";
 import { isEmpty } from "lodash";
 import * as React from "react";
+
 import { Well } from "../../../state/selection/types";
 
 import CellPopulations from "./CellPopulations";
