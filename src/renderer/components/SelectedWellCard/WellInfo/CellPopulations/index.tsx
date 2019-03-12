@@ -63,10 +63,11 @@ const CellPopulations: React.FunctionComponent<CellPopulationsProps> = (props) =
                     }
                     return (
                         <React.Fragment key={i}>
-                            {i !== 0 && <Divider />}
-                            <div className={styles.label}>{`Cell Population ${i + 1}`}</div>
-                            {populationText}
-                            <KeyValueDisplay keyName="Seeding Density" value={entry.seedingDensity || NULL_TEXT}/>
+                            <Divider dashed={true} className={styles.divider}>Cell Population {i + 1}</Divider>
+                            <div className={styles.group}>
+                                {populationText}
+                                <KeyValueDisplay keyName="Seeding Density" value={entry.seedingDensity || NULL_TEXT}/>
+                            </div>
                         </React.Fragment>
                     );
                 })

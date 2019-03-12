@@ -1,3 +1,4 @@
+import { Divider } from "antd";
 import * as classNames from "classnames";
 import { FunctionComponent } from "react";
 import * as React from "react";
@@ -38,20 +39,22 @@ const ViabilityResults: FunctionComponent<ViabilityResultsProps> =
 
                     return (
                         <React.Fragment key={i}>
-                            <div className={styles.label}>Viability Result</div>
-                            <KeyValueDisplay keyName="Viability" value={viability || NULL_TEXT}/>
-                            <KeyValueDisplay
-                                keyName="Viable Cell Count"
-                                value={`${viableCellCountPerUnit || NULL_TEXT}/${viableCellCountUnitDisplay}`}
-                            />
-                            <KeyValueDisplay
-                                keyName="Viable Cell Count"
-                                value={`${viableCellCountPerUnit || NULL_TEXT}/${viableCellCountUnitDisplay}`}
-                            />
-                            <KeyValueDisplay
-                                keyName="Suspension Volume"
-                                value={`${suspensionVolume || NULL_TEXT} ${suspensionVolumeUnitDisplay}`}
-                            />
+                            <Divider dashed={true} className={styles.divider}>Viability Result {i + 1}</Divider>
+                            <div className={styles.group}>
+                                <KeyValueDisplay keyName="Viability" value={viability || NULL_TEXT}/>
+                                <KeyValueDisplay
+                                    keyName="Viable Cell Count"
+                                    value={`${viableCellCountPerUnit || NULL_TEXT}/${viableCellCountUnitDisplay}`}
+                                />
+                                <KeyValueDisplay
+                                    keyName="Viable Cell Count"
+                                    value={`${viableCellCountPerUnit || NULL_TEXT}/${viableCellCountUnitDisplay}`}
+                                />
+                                <KeyValueDisplay
+                                    keyName="Suspension Volume"
+                                    value={`${suspensionVolume || NULL_TEXT} ${suspensionVolumeUnitDisplay}`}
+                                />
+                            </div>
                         </React.Fragment>
                     );
                 })

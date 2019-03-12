@@ -9,6 +9,13 @@
     }
 }
 
-.label {
-    font-weight: 700;
+.group {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0.5em 0;
+    width: 100%;
+}
+
+.divider:global(.ant-divider-horizontal.ant-divider-with-text) {
+    color: #c8cbd1;
 }
