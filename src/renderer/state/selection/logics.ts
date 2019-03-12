@@ -273,7 +273,7 @@ const pageOrder: Page[] = [
     Page.UploadComplete,
 ];
 const selectPageLogic = createLogic({
-    process: ({action, getState}: ReduxLogicDependencies, next: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
+    process: ({action, getState}: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
         const { currentPage, nextPage } = action.payload;
         const state = getState();
 
@@ -284,28 +284,33 @@ const selectPageLogic = createLogic({
         if (nextPageOrder < currentPageOrder) {
             const selectionIndex = getSelectionHistory(state)[nextPage];
             const uploadIndex = getUploadHistory(state)[nextPage];
+            const actions = [];
 
             if (selectionIndex > -1) {
-                next(jumpToPastSelection(selectionIndex));
+                actions.push(jumpToPastSelection(selectionIndex));
             }
 
             if (selectionIndex === 0) {
-                next(clearSelectionHistory());
+                actions.push(clearSelectionHistory());
             }
 
             if (uploadIndex > -1) {
-                next(jumpToPastUpload(uploadIndex));
+                actions.push(jumpToPastUpload(uploadIndex));
             }
 
             if (uploadIndex === 0) {
-                next(clearUploadHistory());
+                actions.push(clearUploadHistory());
+            }
+
+            if (!isEmpty(actions)) {
+                dispatch(batchActions(actions));
             }
 
         // going forward - store current selection/upload indexes so we can rewind to this state if user goes back
         } else if (nextPageOrder > currentPageOrder) {
             const selectionIndex = getCurrentSelectionIndex(state);
             const uploadIndex = getCurrentUploadIndex(state);
-            next(updatePageHistory(getPage(state), selectionIndex, uploadIndex));
+            dispatch(updatePageHistory(getPage(state), selectionIndex, uploadIndex));
         }
 
         done();
