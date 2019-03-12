@@ -120,7 +120,6 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
     }
 
     private openCreatePlateModal(): void {
-        // todo make this a constant
         ipcRenderer.send(OPEN_CREATE_PLATE_STANDALONE);
         ipcRenderer.on(PLATE_CREATED, (event: any, arg: any) => {
             // tslint:disable-next-line
