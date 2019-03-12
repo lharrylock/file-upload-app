@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios";
+import { remote } from "electron";
 import { stat, Stats } from "fs";
 import { isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
@@ -325,7 +326,20 @@ const goBackLogic = createLogic({
         const nextPage = getNextPage(currentPage, -1);
 
         if (nextPage) {
-            next(selectPage(currentPage, nextPage));
+            remote.dialog.showMessageBox({
+                buttons: ["Cancel", "Yes"],
+                cancelId: 0,
+                defaultId: 1,
+                message: "Changes will be lost if you go back. Are you sure?",
+                title: "Warning",
+                type: "warning",
+            }, (response: number) => {
+                if (response === 1) {
+                    next(selectPage(currentPage, nextPage));
+                } else {
+                   reject();
+                }
+            });
         } else {
             reject();
         }
