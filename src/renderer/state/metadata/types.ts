@@ -13,7 +13,7 @@ export interface PageToIndexMap {
 }
 
 export interface ReceiveMetadataAction {
-    payload: MetadataStateBranch;
+    payload: Partial<MetadataStateBranch>;
     type: string;
 }
 

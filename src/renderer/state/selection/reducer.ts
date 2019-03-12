@@ -11,11 +11,11 @@ import { makeReducer } from "../util";
 import {
     ADD_STAGE_FILES,
     DESELECT_FILES,
+    JUMP_TO_PAST_SELECTION,
     SELECT_BARCODE,
     SELECT_FILE,
     SELECT_METADATA,
     SELECT_PAGE,
-    JUMP_TO_PAST_SELECTION,
     SET_WELL,
     SET_WELLS,
     UPDATE_STAGED_FILES,

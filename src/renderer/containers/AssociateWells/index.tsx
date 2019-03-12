@@ -4,7 +4,7 @@ import { ActionCreator } from "redux";
 
 import FormPage from "../../components/FormPage";
 import Plate from "../../components/Plate/index";
-import WellFileAssociations from "../../components/WellFileAssociations/index";
+import SelectedWellCard from "../../components/SelectedWellCard/index";
 
 import {
     State,
@@ -67,7 +67,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
                 formPrompt="Associate files and wells by selecting them and clicking Associate"
                 onBack={this.props.goBack}
             >
-                <WellFileAssociations
+                <SelectedWellCard
                     className={styles.wellInfo}
                     well={wellInfo}
                     wellLabel={getWellLabel(selectedWell)}

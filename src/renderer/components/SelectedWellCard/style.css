@@ -1,0 +1,15 @@
+.title-row {
+  display: flex;
+
+  & .title {
+    flex: 1;
+  }
+
+  & .title-buttons {
+    flex: 0 0 auto;
+  }
+}
+
+.tab-pane {
+  height: 250px;
+}
