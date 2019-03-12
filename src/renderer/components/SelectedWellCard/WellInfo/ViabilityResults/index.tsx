@@ -11,7 +11,7 @@ const styles = require("../style.css");
 
 export interface ViabilityResultsProps {
     className?: string;
-    viabilityResults?: ViabilityResult[];
+    viabilityResults: ViabilityResult[];
 }
 
 const ViabilityResults: FunctionComponent<ViabilityResultsProps> =
@@ -20,10 +20,6 @@ const ViabilityResults: FunctionComponent<ViabilityResultsProps> =
         className,
         viabilityResults,
     } = props;
-
-    if (!viabilityResults || viabilityResults.length === 0) {
-        return null;
-    }
 
     return (
         <div className={className}>

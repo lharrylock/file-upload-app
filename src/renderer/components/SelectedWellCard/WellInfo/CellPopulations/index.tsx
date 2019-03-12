@@ -10,7 +10,7 @@ const styles = require("../style.css");
 
 export interface CellPopulationsProps {
     className?: string;
-    cellPopulations?: CellPopulation[];
+    cellPopulations: CellPopulation[];
 }
 
 const CellPopulations: React.FunctionComponent<CellPopulationsProps> = (props) => {
@@ -18,10 +18,6 @@ const CellPopulations: React.FunctionComponent<CellPopulationsProps> = (props) =
         className,
         cellPopulations,
     } = props;
-
-    if (!cellPopulations || cellPopulations.length === 0) {
-        return null;
-    }
 
     return (
         <div className={className}>

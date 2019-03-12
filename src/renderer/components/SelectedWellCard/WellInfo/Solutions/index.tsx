@@ -10,7 +10,7 @@ const styles = require("../style.css");
 
 export interface SolutionsProps {
     className?: string;
-    solutions?: Solution[];
+    solutions: Solution[];
 }
 
 const Solutions: React.FunctionComponent<SolutionsProps> = (props) => {
@@ -18,10 +18,6 @@ const Solutions: React.FunctionComponent<SolutionsProps> = (props) => {
         className,
         solutions,
     } = props;
-
-    if (!solutions || solutions.length === 0) {
-        return null;
-    }
 
     return (
         <div className={className}>
