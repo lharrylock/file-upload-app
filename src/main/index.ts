@@ -1,6 +1,7 @@
 import {
     app,
     BrowserWindow,
+    ipcMain,
 } from "electron";
 import * as os from "os";
 import * as path from "path";
@@ -66,3 +67,32 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.on("OPEN_CREATE_PLATE", (event: any) => {
+    const child: BrowserWindow = new BrowserWindow({
+        modal: true,
+        parent: win,
+        show: false,
+        webPreferences: {
+            nodeIntegration: false,
+        },
+    });
+    const host = "localhost:8080"; // "stg-aics.corp.alleninstitute.org";
+    const modalUrl = `http://${host}/labkey/aics_microscopy/AICS/plateStandalone.view`;
+    child.loadURL(modalUrl);
+    // todo: use env variable for host
+    child.once("ready-to-show", () => {
+        child.show();
+    });
+    child.webContents.on("will-navigate", (e: Event, next: string) => {
+        // tslint:disable-next-line
+        console.log("will navigate", next);
+        if (next.indexOf("plateStandalone.view") === -1) {
+            e.preventDefault();
+            // todo use constants
+            event.sender.send("PLATE-CREATED", "lisa_test");
+            child.close();
+            // send message to renderer about created plateid/barcode
+        }
+    });
+});

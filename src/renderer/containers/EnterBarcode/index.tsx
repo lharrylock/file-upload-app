@@ -1,5 +1,6 @@
 import { LabkeyOption, LabKeyOptionSelector } from "aics-react-labkey";
 import { AxiosError } from "axios";
+import { ipcRenderer } from "electron";
 import { debounce } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -58,6 +59,7 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
         this.setBarcode = this.setBarcode.bind(this);
         this.saveAndContinue = this.saveAndContinue.bind(this);
         this.setAlert = debounce(this.setAlert.bind(this), 2000);
+        this.openCreatePlateModal = this.openCreatePlateModal.bind(this);
     }
 
     public render() {
@@ -84,7 +86,9 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
                     loadOptions={createGetBarcodesAsyncFunction(this.setAlert)}
                     placeholder="barcode"
                 />
-                <a href="#" className={styles.createBarcodeLink}>I don't have a barcode</a>
+                <a href="#" className={styles.createBarcodeLink} onClick={this.openCreatePlateModal}>
+                    I don't have a barcode
+                </a>
             </FormPage>
         );
     }
@@ -112,6 +116,15 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
         if (this.state.barcode && this.state.plateId) {
             this.props.selectBarcode(this.state.barcode, this.state.plateId);
         }
+    }
+
+    private openCreatePlateModal(): void {
+        // todo make this a constant
+        ipcRenderer.send("OPEN_CREATE_PLATE");
+        ipcRenderer.on("PLATE-CREATED", (event: any, arg: any) => {
+            // tslint:disable-next-line
+            console.log(arg);
+        });
     }
 }
 

@@ -11,7 +11,7 @@ import { getAlert, getIsLoading } from "../../state/feedback/selectors";
 import { AlertType, AppAlert, ClearAlertAction } from "../../state/feedback/types";
 import { requestMetadata } from "../../state/metadata/actions";
 import { RequestMetadataAction } from "../../state/metadata/types";
-import { getCurrentSelectionIndex, getPage, getSelectedFiles, getStagedFiles } from "../../state/selection/selectors";
+import { getPage, getSelectedFiles, getStagedFiles } from "../../state/selection/selectors";
 import {
     AppPageConfig,
     GetFilesInFolderAction,
