@@ -1,8 +1,8 @@
 import * as classNames from "classnames";
 import { FunctionComponent } from "react";
 import * as React from "react";
+import { ViabilityResult } from "../../../../state/selection/types";
 
-import { ViabilityResult } from "../../../state/selection/types";
 import { NULL_TEXT } from "../index";
 import KeyValueDisplay from "../KeyValueDisplay/index";
 

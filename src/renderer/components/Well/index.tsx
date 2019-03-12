@@ -1,10 +1,8 @@
-import { Popover } from "antd";
 import * as classNames from "classnames";
 import { first } from "lodash";
 import * as React from "react";
 
 import { CellPopulation, Well } from "../../state/selection/types";
-import WellPopover from "../WellPopover/index";
 
 const styles = require("./style.css");
 
@@ -22,23 +20,12 @@ class WellComponent extends React.Component<WellProps, {}> {
     public render() {
         const {
             className,
-            well,
         } = this.props;
 
-        const wellContent = (
+        return (
             <div className={classNames(styles.container, className)}>
                 {this.getWellText()}
             </div>
-        );
-
-        if (!well.modified)  {
-            return wellContent;
-        }
-
-        return (
-            <Popover content={<WellPopover well={well}/>} title="Entered Well Information">
-                {wellContent}
-            </Popover>
         );
     }
 

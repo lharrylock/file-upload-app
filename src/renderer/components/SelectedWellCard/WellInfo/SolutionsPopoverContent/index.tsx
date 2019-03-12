@@ -1,7 +1,7 @@
 import * as classNames from "classnames";
 import * as React from "react";
+import { Solution } from "../../../../state/selection/types";
 
-import { Solution } from "../../../state/selection/types";
 import { NULL_TEXT } from "../index";
 import KeyValueDisplay from "../KeyValueDisplay/index";
 

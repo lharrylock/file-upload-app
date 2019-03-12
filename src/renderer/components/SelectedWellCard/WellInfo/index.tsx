@@ -3,10 +3,9 @@ import * as classNames from "classnames";
 import { isEmpty } from "lodash";
 import * as React from "react";
 import { Well } from "../../../state/selection/types";
-
-import CellPopulationsPopoverContent from "../../WellPopover/CellPopulationsPopoverContent/index";
-import SolutionsPopoverContent from "../../WellPopover/SolutionsPopoverContent/index";
-import ViabilityResultsPopoverContent from "../../WellPopover/ViabilityResultsPopoverContent/index";
+import CellPopulationsPopoverContent from "./CellPopulationsPopoverContent/index";
+import SolutionsPopoverContent from "./SolutionsPopoverContent/index";
+import ViabilityResultsPopoverContent from "./ViabilityResultsPopoverContent/index";
 
 const styles = require("./style.css");
 export const NULL_TEXT = "None";
