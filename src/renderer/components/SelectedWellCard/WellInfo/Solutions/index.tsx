@@ -7,12 +7,12 @@ import KeyValueDisplay from "../KeyValueDisplay/index";
 
 const styles = require("../style.css");
 
-export interface SolutionsPopoverContentProps {
+export interface SolutionsProps {
     className?: string;
     solutions?: Solution[];
 }
 
-const SolutionsPopoverContent: React.FunctionComponent<SolutionsPopoverContentProps> = (props) => {
+const Solutions: React.FunctionComponent<SolutionsProps> = (props) => {
     const {
         className,
         solutions,
@@ -68,4 +68,4 @@ const SolutionsPopoverContent: React.FunctionComponent<SolutionsPopoverContentPr
     );
 };
 
-export default SolutionsPopoverContent;
+export default Solutions;

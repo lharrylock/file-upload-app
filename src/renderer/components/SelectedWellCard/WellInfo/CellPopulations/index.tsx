@@ -7,12 +7,12 @@ import KeyValueDisplay from "../KeyValueDisplay";
 
 const styles = require("../style.css");
 
-export interface CellPopulationsPopoverContentProps {
+export interface CellPopulationsProps {
     className?: string;
     cellPopulations?: CellPopulation[];
 }
 
-const CellPopulationsPopoverContent: React.FunctionComponent<CellPopulationsPopoverContentProps> = (props) => {
+const CellPopulations: React.FunctionComponent<CellPopulationsProps> = (props) => {
     const {
         className,
         cellPopulations,
@@ -74,4 +74,4 @@ const CellPopulationsPopoverContent: React.FunctionComponent<CellPopulationsPopo
     );
 };
 
-export default CellPopulationsPopoverContent;
+export default CellPopulations;

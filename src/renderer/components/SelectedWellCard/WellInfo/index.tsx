@@ -3,9 +3,10 @@ import * as classNames from "classnames";
 import { isEmpty } from "lodash";
 import * as React from "react";
 import { Well } from "../../../state/selection/types";
-import CellPopulationsPopoverContent from "./CellPopulationsPopoverContent/index";
-import SolutionsPopoverContent from "./SolutionsPopoverContent/index";
-import ViabilityResultsPopoverContent from "./ViabilityResultsPopoverContent/index";
+
+import CellPopulations from "./CellPopulations";
+import Solutions from "./Solutions";
+import ViabilityResults from "./ViabilityResults";
 
 const styles = require("./style.css");
 export const NULL_TEXT = "None";
@@ -34,11 +35,11 @@ class WellInfo extends React.Component<WellInfoProps, []> {
 
         return (
             <div className={classNames(styles.container, className)}>
-                <CellPopulationsPopoverContent cellPopulations={cellPopulations}/>
+                <CellPopulations cellPopulations={cellPopulations}/>
                 {!isEmpty(solutions) && <hr/>}
-                <SolutionsPopoverContent solutions={solutions}/>
+                <Solutions solutions={solutions}/>
                 {!isEmpty(viabilityResults) && <hr/>}
-                <ViabilityResultsPopoverContent viabilityResults={viabilityResults}/>
+                <ViabilityResults viabilityResults={viabilityResults}/>
             </div>
         );
     }

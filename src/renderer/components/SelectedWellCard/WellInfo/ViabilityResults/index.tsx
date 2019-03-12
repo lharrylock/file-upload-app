@@ -8,13 +8,13 @@ import KeyValueDisplay from "../KeyValueDisplay/index";
 
 const styles = require("../style.css");
 
-export interface ViabilityResultsPopoverContentProps {
+export interface ViabilityResultsProps {
     className?: string;
     viabilityResults?: ViabilityResult[];
 }
 
-const ViabilityResultsPopoverContent: FunctionComponent<ViabilityResultsPopoverContentProps> =
-    (props: ViabilityResultsPopoverContentProps) => {
+const ViabilityResults: FunctionComponent<ViabilityResultsProps> =
+    (props: ViabilityResultsProps) => {
     const {
         className,
         viabilityResults,
@@ -60,4 +60,4 @@ const ViabilityResultsPopoverContent: FunctionComponent<ViabilityResultsPopoverC
     );
 };
 
-export default ViabilityResultsPopoverContent;
+export default ViabilityResults;
