@@ -1,4 +1,4 @@
-import { Empty } from "antd";
+import { Divider, Empty } from "antd";
 import * as classNames from "classnames";
 import { isEmpty } from "lodash";
 import * as React from "react";
@@ -28,7 +28,11 @@ class WellInfo extends React.Component<WellInfoProps, []> {
         } = this.props;
 
         if (!well) {
-            return <Empty/>;
+            return (
+                <div className={classNames(styles.container, styles.empty, className)}>
+                    <Empty/>
+                </div>
+            );
         }
 
         const { cellPopulations, solutions, viabilityResults } = well;
@@ -36,9 +40,9 @@ class WellInfo extends React.Component<WellInfoProps, []> {
         return (
             <div className={classNames(styles.container, className)}>
                 <CellPopulations cellPopulations={cellPopulations}/>
-                {!isEmpty(solutions) && <hr/>}
+                {!isEmpty(solutions) && <Divider />}
                 <Solutions solutions={solutions}/>
-                {!isEmpty(viabilityResults) && <hr/>}
+                {!isEmpty(viabilityResults) && <Divider />}
                 <ViabilityResults viabilityResults={viabilityResults}/>
             </div>
         );

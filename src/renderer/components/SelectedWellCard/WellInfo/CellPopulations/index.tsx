@@ -1,3 +1,4 @@
+import { Divider } from "antd";
 import * as classNames from "classnames";
 import * as React from "react";
 import { CellPopulation } from "../../../../state/selection/types";
@@ -62,7 +63,7 @@ const CellPopulations: React.FunctionComponent<CellPopulationsProps> = (props) =
                     }
                     return (
                         <React.Fragment key={i}>
-                            {i !== 0 && <hr />}
+                            {i !== 0 && <Divider />}
                             <div className={styles.label}>{`Cell Population ${i + 1}`}</div>
                             {populationText}
                             <KeyValueDisplay keyName="Seeding Density" value={entry.seedingDensity || NULL_TEXT}/>

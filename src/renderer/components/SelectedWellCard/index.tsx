@@ -1,4 +1,5 @@
 import { Button, Card, Tabs } from "antd";
+import * as classNames from "classnames";
 import * as React from "react";
 
 import { Well } from "../../state/selection/types";
@@ -60,19 +61,20 @@ class SelectedWellCard extends React.Component<WellInfoProps, {}> {
             </div>
         );
         return (
-            <Card className={className} title={title}>
+            <Card className={classNames(className, styles.container)} title={title}>
                 <Tabs type="card">
-                <Tabs.TabPane tab="Associated Files" key="associations">
-                    <WellFileAssociations
-                        associate={associate}
-                        canAssociate={canAssociate}
-                        files={files}
-                        selectedFilesCount={selectedFilesCount}
-                        undoAssociation={undoAssociation}
-                    />
-                </Tabs.TabPane>
-                    <Tabs.TabPane tab="Well Info" key="info">
-                        <WellInfo well={well}/>
+                    <Tabs.TabPane tab="Associated Files" key="associations">
+                        <WellFileAssociations
+                            className={styles.tabPane}
+                            associate={associate}
+                            canAssociate={canAssociate}
+                            files={files}
+                            selectedFilesCount={selectedFilesCount}
+                            undoAssociation={undoAssociation}
+                        />
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="Well Info" key="info" className={styles.tabPane}>
+                        <WellInfo className={styles.tabPane} well={well}/>
                     </Tabs.TabPane>
                 </Tabs>
             </Card>

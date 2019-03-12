@@ -1,10 +1,12 @@
 import { Button, Empty, Icon } from "antd";
+import * as classNames from "classnames";
 import { isEmpty } from "lodash";
 import * as React from "react";
 
 const styles = require("./style.css");
 
 interface WellFileAssociationsProps {
+    className?: string;
     associate: () => void;
     canAssociate: boolean;
     files: string[];
@@ -19,10 +21,10 @@ class WellFileAssociations extends React.Component<WellFileAssociationsProps, {}
     }
 
     public render() {
-        const { associate, canAssociate, selectedFilesCount } = this.props;
+        const { associate, canAssociate, className, selectedFilesCount } = this.props;
 
         return (
-            <div className={styles.cardContent}>
+            <div className={classNames(styles.cardContent, className)}>
                 <div className={styles.files}>
                     {this.renderFiles()}
                 </div>
