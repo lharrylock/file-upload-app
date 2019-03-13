@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 
 import { APP_ID } from "./constants";
 import App from "./containers/App";
-import { createReduxStore } from "./state";
+import createReduxStore from "./state/configure-store";
 
 const appContainer = document.getElementById(APP_ID);
 render(

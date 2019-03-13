@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { expect } from "chai";
 import { isEmpty } from "lodash";
 import { dirname, resolve } from "path";
@@ -9,11 +9,10 @@ import { SinonStub } from "sinon";
 import selections from "../";
 
 import { feedback } from "../../";
-import createReduxStore, { reduxLogicDependencies } from "../../configure-store";
 import { API_WAIT_TIME_SECONDS } from "../../constants";
 import { getAlert, getRequestsInProgressContains } from "../../feedback/selectors";
 import { AlertType, AppAlert, HttpRequestType } from "../../feedback/types";
-import { createMockReduxStore } from "../../test/configure-mock-store";
+import { createMockReduxStore, mockReduxLogicDeps } from "../../test/configure-mock-store";
 import { getMockStateWithHistory, mockSelection, mockState } from "../../test/mocks";
 import { AicsSuccessResponse, HTTP_STATUS } from "../../types";
 import { selectBarcode } from "../actions";
@@ -66,7 +65,7 @@ describe("Selection logics", () => {
         });
 
         it("Goes to EnterBarcode page if on DragAndDrop page", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(selections.selectors.getPage(store.getState())).to.equal(Page.DragAndDrop);
@@ -86,7 +85,7 @@ describe("Selection logics", () => {
                 ...mockSelection,
                 page: Page.EnterBarcode,
             });
-            const store = createReduxStore({
+            const store = createMockReduxStore({
                 ...mockState,
                 selection,
             });
@@ -105,7 +104,7 @@ describe("Selection logics", () => {
         });
 
         it("stages all files loaded", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(selections.selectors.getStagedFiles(store.getState()).length).to.equal(0);
@@ -124,7 +123,7 @@ describe("Selection logics", () => {
         });
 
         it ("should stop loading on success", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
@@ -140,7 +139,7 @@ describe("Selection logics", () => {
         });
 
         it ("should stop loading on error", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
@@ -175,7 +174,7 @@ describe("Selection logics", () => {
         });
 
         it("Goes to EnterBarcode page if on DragAndDrop page", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(selections.selectors.getPage(store.getState())).to.equal(Page.DragAndDrop);
@@ -195,7 +194,7 @@ describe("Selection logics", () => {
                 ...mockSelection,
                 page: Page.EnterBarcode,
             });
-            const store = createReduxStore({
+            const store = createMockReduxStore({
                 ...mockState,
                 selection,
             });
@@ -214,7 +213,7 @@ describe("Selection logics", () => {
         });
 
         it("Stages all files opened", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(selections.selectors.getStagedFiles(store.getState()).length).to.equal(0);
@@ -233,7 +232,7 @@ describe("Selection logics", () => {
         });
 
         it("Removes child files or directories", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(selections.selectors.getStagedFiles(store.getState()).length).to.equal(0);
@@ -258,7 +257,7 @@ describe("Selection logics", () => {
         });
 
         it ("should stop loading on success", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
@@ -274,7 +273,7 @@ describe("Selection logics", () => {
         });
 
         it ("should stop loading on error", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
@@ -302,7 +301,7 @@ describe("Selection logics", () => {
                 ...mockSelection,
                 stagedFiles,
             });
-            const store = createReduxStore({
+            const store = createMockReduxStore({
                 ...mockState,
                 selection,
             });
@@ -344,11 +343,10 @@ describe("Selection logics", () => {
         let mockOkResponse: AxiosResponse<AicsSuccessResponse<Well[][]>>;
         let mockBadGatewayResponse: AxiosError;
         const createMockReduxLogicDeps = (getStub: SinonStub) => ({
-            ...reduxLogicDependencies,
+            ...mockReduxLogicDeps,
             httpClient: {
-                ...axios,
+                ...mockReduxLogicDeps.httpClient,
                 get: getStub,
-                post: sinon.stub(),
             },
         });
 

@@ -3,8 +3,6 @@ export { default as feedback } from "./feedback";
 export { default as selection } from "./selection";
 export { default as upload } from "./upload";
 
-export { default as createReduxStore } from "./configure-store";
-
 export { enableBatching } from "./util";
 
 export { State } from "./types";

@@ -1,5 +1,4 @@
 import { AxiosResponse } from "axios";
-import { remote } from "electron";
 import { stat, Stats } from "fs";
 import { isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
@@ -320,13 +319,14 @@ const selectPageLogic = createLogic({
 });
 
 const goBackLogic = createLogic({
-    transform: ({getState, action}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb, reject: () => void) => {
+    transform: ({getState, action, dialog}: ReduxLogicTransformDependencies,
+                next: ReduxLogicNextCb, reject: () => void) => {
         const state = getState();
         const currentPage = getPage(state);
         const nextPage = getNextPage(currentPage, -1);
 
         if (nextPage) {
-            remote.dialog.showMessageBox({
+            dialog.showMessageBox({
                 buttons: ["Cancel", "Yes"],
                 cancelId: 0,
                 defaultId: 1,
