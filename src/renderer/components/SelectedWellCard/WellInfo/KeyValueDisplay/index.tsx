@@ -1,7 +1,8 @@
+import { Statistic } from "antd";
 import * as classNames from "classnames";
 import * as React from "react";
 
-const styles = require("../style.css");
+const styles = require("./style.css");
 
 export interface KeyValueDisplayProps {
     className?: string;
@@ -18,7 +19,7 @@ const KeyValueDisplay: React.FunctionComponent<KeyValueDisplayProps> = (props) =
 
     return (
         <div className={classNames(styles.container, className)}>
-            <span className={styles.label}>{keyName}:&nbsp;</span>{value}
+           <Statistic title={keyName} value={value}/>
         </div>
     );
 };

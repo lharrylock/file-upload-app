@@ -11,7 +11,7 @@ import {
     UpdatePageHistoryMapAction,
 } from "./types";
 
-export function receiveMetadata(payload: MetadataStateBranch = initialState): ReceiveMetadataAction {
+export function receiveMetadata(payload: Partial<MetadataStateBranch> = initialState): ReceiveMetadataAction {
     return {
         payload,
         type: RECEIVE_METADATA,

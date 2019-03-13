@@ -1,29 +1,26 @@
-import * as classNames from "classnames";
+import { Divider } from "antd";
 import * as React from "react";
 
-import { Solution } from "../../../state/selection/types";
+import { Solution } from "../../../../state/selection/types";
+
 import { NULL_TEXT } from "../index";
-import KeyValueDisplay from "../KeyValueDisplay/index";
+import KeyValueDisplay from "../KeyValueDisplay";
 
 const styles = require("../style.css");
 
-export interface SolutionsPopoverContentProps {
+export interface SolutionsProps {
     className?: string;
-    solutions?: Solution[];
+    solutions: Solution[];
 }
 
-const SolutionsPopoverContent: React.FunctionComponent<SolutionsPopoverContentProps> = (props) => {
+const Solutions: React.FunctionComponent<SolutionsProps> = (props) => {
     const {
         className,
         solutions,
     } = props;
 
-    if (!solutions || solutions.length === 0) {
-        return null;
-    }
-
     return (
-        <div className={classNames(styles.container, className)}>
+        <div className={className}>
             {solutions.map(({solutionLot, volume, volumeUnitDisplay}: Solution, i) => {
                 const {
                     concentration,
@@ -38,29 +35,26 @@ const SolutionsPopoverContent: React.FunctionComponent<SolutionsPopoverContentPr
                 if (concentration && concentrationUnitsDisplay) {
                     const concentrationDisplay = `${concentration} ${concentrationUnitsDisplay}`;
                     concentrationLine = (
-                        <React.Fragment>
-                            <KeyValueDisplay keyName="Concentration" value={concentrationDisplay}/>
-                        </React.Fragment>
+                        <KeyValueDisplay keyName="Concentration" value={concentrationDisplay}/>
                     );
                 // Due to a DB constraint, dilution factor part and total always both have values, or are both null
                 } else if (dilutionFactorPart && dilutionFactorTotal) {
                     concentrationLine = (
-                        <React.Fragment>
-                            <KeyValueDisplay
-                                keyName="Dilution Factor"
-                                value={`${dilutionFactorPart}:${dilutionFactorTotal}`}
-                            />
-                        </React.Fragment>
+                        <KeyValueDisplay
+                            keyName="Dilution Factor"
+                            value={`${dilutionFactorPart}:${dilutionFactorTotal}`}
+                        />
                     );
                 }
 
                 return (
                     <React.Fragment key={i}>
-                        {i !== 0 && <hr />}
-                        <div className={styles.label}>{`Solution ${i + 1}`}</div>
-                        <KeyValueDisplay keyName="Solution" value={solutionName || NULL_TEXT}/>
-                        {concentrationLine}
-                        <KeyValueDisplay keyName="Volume" value={`${volume || NULL_TEXT} ${volumeUnitDisplay}`}/>
+                        <Divider dashed={true} className={styles.subDivider}>Solution {i + 1}</Divider>
+                        <div className={styles.group}>
+                            <KeyValueDisplay keyName="Solution" value={solutionName || NULL_TEXT}/>
+                            {concentrationLine}
+                            <KeyValueDisplay keyName="Volume" value={`${volume || NULL_TEXT} ${volumeUnitDisplay}`}/>
+                        </div>
                     </React.Fragment>
                 );
             })}
@@ -68,4 +62,4 @@ const SolutionsPopoverContent: React.FunctionComponent<SolutionsPopoverContentPr
     );
 };
 
-export default SolutionsPopoverContent;
+export default Solutions;

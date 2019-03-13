@@ -1,29 +1,26 @@
-import * as classNames from "classnames";
+import { Divider } from "antd";
 import * as React from "react";
 
-import { CellPopulation } from "../../../state/selection/types";
-import { NULL_TEXT } from "../index";
+import { CellPopulation } from "../../../../state/selection/types";
+
+import { NULL_TEXT } from "..";
 import KeyValueDisplay from "../KeyValueDisplay";
 
 const styles = require("../style.css");
 
-export interface CellPopulationsPopoverContentProps {
+export interface CellPopulationsProps {
     className?: string;
-    cellPopulations?: CellPopulation[];
+    cellPopulations: CellPopulation[];
 }
 
-const CellPopulationsPopoverContent: React.FunctionComponent<CellPopulationsPopoverContentProps> = (props) => {
+const CellPopulations: React.FunctionComponent<CellPopulationsProps> = (props) => {
     const {
         className,
         cellPopulations,
     } = props;
 
-    if (!cellPopulations || cellPopulations.length === 0) {
-        return null;
-    }
-
     return (
-        <div className={classNames(styles.container, className)}>
+        <div className={className}>
             {
                 cellPopulations.map((entry: CellPopulation, i) => {
                     const {
@@ -62,10 +59,11 @@ const CellPopulationsPopoverContent: React.FunctionComponent<CellPopulationsPopo
                     }
                     return (
                         <React.Fragment key={i}>
-                            {i !== 0 && <hr />}
-                            <div className={styles.label}>{`Cell Population ${i + 1}`}</div>
-                            {populationText}
-                            <KeyValueDisplay keyName="Seeding Density" value={entry.seedingDensity || NULL_TEXT}/>
+                            <Divider dashed={true} className={styles.subDivider}>Cell Population {i + 1}</Divider>
+                            <div className={styles.group}>
+                                {populationText}
+                                <KeyValueDisplay keyName="Seeding Density" value={entry.seedingDensity || NULL_TEXT}/>
+                            </div>
                         </React.Fragment>
                     );
                 })
@@ -74,4 +72,4 @@ const CellPopulationsPopoverContent: React.FunctionComponent<CellPopulationsPopo
     );
 };
 
-export default CellPopulationsPopoverContent;
+export default CellPopulations;
