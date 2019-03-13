@@ -319,13 +319,27 @@ const selectPageLogic = createLogic({
 });
 
 const goBackLogic = createLogic({
-    transform: ({getState, action}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb, reject: () => void) => {
+    transform: ({getState, action, dialog}: ReduxLogicTransformDependencies,
+                next: ReduxLogicNextCb, reject: () => void) => {
         const state = getState();
         const currentPage = getPage(state);
         const nextPage = getNextPage(currentPage, -1);
 
         if (nextPage) {
-            next(selectPage(currentPage, nextPage));
+            dialog.showMessageBox({
+                buttons: ["Cancel", "Yes"],
+                cancelId: 0,
+                defaultId: 1,
+                message: "Changes will be lost if you go back. Are you sure?",
+                title: "Warning",
+                type: "warning",
+            }, (response: number) => {
+                if (response === 1) {
+                    next(selectPage(currentPage, nextPage));
+                } else {
+                   reject();
+                }
+            });
         } else {
             reject();
         }
