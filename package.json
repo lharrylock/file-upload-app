@@ -1,7 +1,7 @@
 {
-  "name": "electron-webpack-quick-start",
-  "version": "0.0.0",
-  "license": "MIT",
+  "name": "file-upload-app",
+  "version": "1.0.0",
+
   "scripts": {
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
@@ -9,6 +9,17 @@
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
     "test": "TS_NODE_PROJECT=tsconfig.commonjs.json NODE_ENV=production mocha --opts mocha.opts src/**/test/*.{ts,tsx}"
   },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@stash.corp.alleninstitute.org:7999/aicssw/file-upload-app.git"
+  },
+  "keywords": [
+    "electron",
+    "react",
+    "aics"
+  ],
+  "author": "Lisa Harrylock",
+  "license": "ISC",
   "dependencies": {
     "@ant-design/icons": "~1.1.0",
     "aics-react-labkey": "^4.1.0",
@@ -64,6 +75,5 @@
     "tslint-react": "^3.6.0",
     "typescript": "^3.3.3333",
     "webpack": "4.28.4"
-  },
-  "main": "index.js"
+  }
 }
