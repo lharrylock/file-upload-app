@@ -4,7 +4,6 @@ import { isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
-import { ActionCreators } from "redux-undo";
 
 import { API_WAIT_TIME_SECONDS } from "../constants";
 

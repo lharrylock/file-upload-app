@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { CellPopulation, Well } from "../../state/selection/types";
 
-const styles = require("./style.css");
+const styles = require("./style.pcss");
 
 interface WellProps {
     className?: string;

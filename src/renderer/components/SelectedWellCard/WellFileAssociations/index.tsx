@@ -3,7 +3,7 @@ import * as classNames from "classnames";
 import { isEmpty } from "lodash";
 import * as React from "react";
 
-const styles = require("./style.css");
+const styles = require("./style.pcss");
 
 interface WellFileAssociationsProps {
     className?: string;

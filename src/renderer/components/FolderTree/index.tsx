@@ -9,7 +9,7 @@ import {
 } from "../../state/selection/types";
 import { FileTag } from "../../state/upload/types";
 
-const styles = require("./style.css");
+const styles = require("./style.pcss");
 
 interface FolderTreeProps {
     className?: string;

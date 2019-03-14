@@ -1,6 +1,5 @@
 import { AnyAction } from "redux";
 import undoable, {
-    excludeAction,
     UndoableOptions,
 } from "redux-undo";
 

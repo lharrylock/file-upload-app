@@ -6,7 +6,7 @@ import { CellPopulation } from "../../../../state/selection/types";
 import { NULL_TEXT } from "..";
 import KeyValueDisplay from "../KeyValueDisplay";
 
-const styles = require("../style.css");
+const styles = require("../style.pcss");
 
 export interface CellPopulationsProps {
     className?: string;

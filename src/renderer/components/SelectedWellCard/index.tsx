@@ -5,7 +5,7 @@ import { Well } from "../../state/selection/types";
 import WellFileAssociations from "./WellFileAssociations/index";
 import WellInfo from "./WellInfo/index";
 
-const styles = require("./style.css");
+const styles = require("./style.pcss");
 
 interface WellInfoProps {
     className?: string;

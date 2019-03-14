@@ -88,7 +88,7 @@ To apply these CSS classes, in `index.tsx`:
 ```
 import * as React from "react";
 
-const styles = require("./style.css");
+const styles = require("./style.pcss");
 
 const button = (props) => {
     return (

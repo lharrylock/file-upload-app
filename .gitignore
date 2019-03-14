@@ -1,11 +1,6 @@
 .DS_Store
-.idea/
-node_modules/
 dist/
-npm-debug.log
-.gradle/
-build/
-*.iml
-.project
-.settings/
-.gradle/
+node_modules/
+thumbs.db
+.idea/
+yarn-error.log

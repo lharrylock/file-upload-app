@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { ActionCreator } from "redux";
 
 import FormPage from "../../components/FormPage";
-import { State } from "../../state";
+import { State } from "../../state/types";
 import { setAlert } from "../../state/feedback/actions";
 import { getRequestsInProgressContains } from "../../state/feedback/selectors";
 import { AlertType, HttpRequestType, SetAlertAction } from "../../state/feedback/types";
@@ -15,7 +15,7 @@ import { getSelectedBarcode, getSelectedPlateId } from "../../state/selection/se
 import { GoBackAction, SelectBarcodeAction } from "../../state/selection/types";
 import LabkeyQueryService, { Plate } from "../../util/labkey-query-service";
 
-const styles = require("./style.css");
+const styles = require("./style.pcss");
 
 interface EnterBarcodeProps {
     className?: string;

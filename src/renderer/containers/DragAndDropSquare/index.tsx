@@ -18,7 +18,7 @@ import {
     LoadFilesFromOpenDialogAction,
 } from "../../state/selection/types";
 
-const styles = require("./style.css");
+const styles = require("./style.pcss");
 
 interface DragAndDropSquareProps {
     className?: string;

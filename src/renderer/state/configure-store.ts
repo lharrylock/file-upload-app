@@ -14,9 +14,9 @@ import {
     feedback,
     metadata,
     selection,
-    State,
     upload,
 } from "./";
+import { State } from "./types";
 
 const reducers = {
     feedback: feedback.reducer,
