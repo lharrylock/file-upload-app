@@ -34,7 +34,7 @@ pipeline {
                 not { expression { return params.PROMOTE_ARTIFACT }}
             }
             steps {
-                sh "./gradlew -i test"
+                sh "./gradlew -i npmInstall test"
             }
         }
         stage ("build and push branch") {
@@ -44,7 +44,7 @@ pipeline {
             steps {
                 echo "This is not a master build or a promote build"
                 sh "${PYTHON} ${VENV_BIN}/manage_version -t maven -s prepare"
-                sh './gradlew -i npmInstall snapshotPublish'
+                sh './gradlew -i snapshotPublish'
             }
         }
         stage ("promote") {
