@@ -43,7 +43,7 @@ pipeline {
             }
             steps {
                 echo "This is not a master build or a promote build"
-                sh "${PYTHON} ${VENV_BIN}/manage_version -t maven -s prepare"
+                sh "${PYTHON} ${VENV_BIN}/manage_version -t gradle-minor-ahead -s prepare"
                 sh './gradlew -i snapshotPublish'
             }
         }
@@ -53,7 +53,7 @@ pipeline {
             }
             steps {
                 echo "Promoting artifacts"
-                sh "${PYTHON} ${VENV_BIN}/promote_artifact -t maven -g ${params.GIT_TAG}"
+                sh "${PYTHON} ${VENV_BIN}/promote_artifact -t gradle-minor-ahead -g ${params.GIT_TAG}"
             }
         }
     }
