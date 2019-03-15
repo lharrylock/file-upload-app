@@ -34,7 +34,7 @@ pipeline {
                 not { expression { return params.PROMOTE_ARTIFACT }}
             }
             steps {
-                sh "./gradlew -i npmInstall test"
+                sh "./gradlew -i yarn test"
             }
         }
         stage ("build and push branch") {

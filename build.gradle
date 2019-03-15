@@ -37,9 +37,6 @@ project.version = "0.1.x"
 project.group = "org.alleninstitute.aics"
 
 ext {
-    env = System.getenv("DEPLOYMENT_ENV") ?: "dev"
-    npmBin = "${projectDir}/node_modules/.bin"
-
     // Repo settings
     artifactoryBaseUrl = "https://artifactory.corp.alleninstitute.org/artifactory"
 
@@ -54,38 +51,34 @@ wrapper {
     setDistributionType(DistributionType.BIN)
 }
 
-task lint(type: NodeTask) {
-    script =  file("${npmBin}/tslint")
+task lint(type: YarnTask) {
     FileTree tsFiles = fileTree(dir: "src", includes: ["**/*.ts", "**/*.tsx"])
-    args = ["-c", "tslint.json"] + tsFiles.asList()
+    args = ["tslint", "-c", "tslint.json"] + tsFiles.asList()
 }
 
-task test(type: NodeTask) {
+task test(type: YarnTask) {
     environment = [TS_NODE_PROJECT: "tsconfig.commonjs.json", NODE_ENV: "production"]
-    script = file("${npmBin}/mocha")
-    args = ["--opts", "mocha.opts", "src/**/test/*.{ts,tsx}"]
+    args = ["mocha", "--opts", "mocha.opts", "src/**/test/*.{ts,tsx}"]
 }
 
-task dev(type: NodeTask) {
+task dev(type: YarnTask) {
     environment = [
             NODE_ENV: "development",
     ]
-
-    script = file("${npmBin}/electron-webpack")
-    args = ["dev"]
+    args = ["electron-webpack", "dev"]
 }
 
 ///////////////////////////
 // Build and publish
 //////////////////////////
 
-task compile(type: NodeTask) {
-    script = file("${npmBin}/electron-webpack")
+task compile(type: YarnTask) {
+    args = ["electron-webpack"]
 }
 
-task bundle(type: NodeTask) {
+task bundle(type: YarnTask) {
     dependsOn compile
-    script = file("${npmBin}/electron-builder")
+    args = ["electron-builder"]
 }
 
 /// Publishing
