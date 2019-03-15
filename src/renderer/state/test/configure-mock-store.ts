@@ -12,9 +12,9 @@ import {
     feedback,
     metadata,
     selection,
-    State,
     upload,
 } from "../";
+import { State } from "../types";
 
 export interface ReduxLogicDependencies {
     baseMmsUrl: string;

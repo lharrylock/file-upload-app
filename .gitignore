@@ -4,8 +4,7 @@ node_modules/
 dist/
 npm-debug.log
 .gradle/
-build/
 *.iml
 .project
 .settings/
-.gradle/
+yarn-error.log

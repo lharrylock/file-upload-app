@@ -9,7 +9,7 @@ import CellPopulations from "./CellPopulations";
 import Solutions from "./Solutions";
 import ViabilityResults from "./ViabilityResults";
 
-const styles = require("./style.css");
+const styles = require("./style.pcss");
 export const NULL_TEXT = "None";
 
 interface WellInfoProps {

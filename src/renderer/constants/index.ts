@@ -1,6 +1,6 @@
 import { isEmpty } from "lodash";
 
-export const APP_ID = "file-upload-app";
+export const APP_ID = "app";
 
 const {
     LABKEY_PROTOCOL = "http",

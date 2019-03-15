@@ -5,13 +5,13 @@ import { connect } from "react-redux";
 import { ActionCreator } from "redux";
 
 import FolderTree from "../../components/FolderTree";
-import { feedback, selection } from "../../state";
+import { selection } from "../../state";
 import { clearAlert } from "../../state/feedback/actions";
 import { getAlert, getIsLoading } from "../../state/feedback/selectors";
 import { AlertType, AppAlert, ClearAlertAction } from "../../state/feedback/types";
 import { requestMetadata } from "../../state/metadata/actions";
 import { RequestMetadataAction } from "../../state/metadata/types";
-import { getCurrentSelectionIndex, getPage, getSelectedFiles, getStagedFiles } from "../../state/selection/selectors";
+import { getPage, getSelectedFiles, getStagedFiles } from "../../state/selection/selectors";
 import {
     AppPageConfig,
     GetFilesInFolderAction,
@@ -26,9 +26,8 @@ import AssociateWells from "../AssociateWells";
 import DragAndDropSquare from "../DragAndDropSquare";
 import EnterBarcode from "../EnterBarcode";
 
-import "../../styles/fonts.css";
 import { getFileToTags } from "./selectors";
-const styles = require("./styles.css");
+const styles = require("./styles.pcss");
 const ALERT_DURATION = 2;
 
 interface AppProps {

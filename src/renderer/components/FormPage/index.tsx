@@ -2,7 +2,7 @@ import { Button, Icon, Spin } from "antd";
 import * as classNames from "classnames";
 import * as React from "react";
 
-const styles = require("./style.css");
+const styles = require("./style.pcss");
 
 interface FormPageProps {
     backButtonDisabled?: boolean;
@@ -19,7 +19,7 @@ interface FormPageProps {
 }
 
 class FormPage extends React.Component<FormPageProps, {}> {
-    private static defaultProps = {
+    public static defaultProps = {
         backButtonDisabled: false,
         backButtonName: "Back",
         saveButtonDisabled: false,

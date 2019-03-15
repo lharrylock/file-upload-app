@@ -6,9 +6,6 @@ import FormPage from "../../components/FormPage";
 import Plate from "../../components/Plate/index";
 import SelectedWellCard from "../../components/SelectedWellCard/index";
 
-import {
-    State,
-} from "../../state";
 import { goBack, setWell } from "../../state/selection/actions";
 import {
     getSelectedFiles,
@@ -16,6 +13,7 @@ import {
     getWellsWithUnitsAndModified
 } from "../../state/selection/selectors";
 import { GoBackAction, SetWellAction, Well } from "../../state/selection/types";
+import { State } from "../../state/types";
 import { associateFilesAndWell, jumpToUpload, undoFileWellAssociation } from "../../state/upload/actions";
 import { getCanRedoUpload, getCanUndoUpload, getWellIdToFiles } from "../../state/upload/selectors";
 import {
@@ -23,11 +21,11 @@ import {
     JumpToUploadAction,
     UndoFileWellAssociationAction,
 } from "../../state/upload/types";
-import { getWellLabel } from "../../util/index";
+import { getWellLabel } from "../../util";
 
 import { GridCell } from "./grid-cell";
 
-const styles = require("./style.css");
+const styles = require("./style.pcss");
 
 interface AssociateWellsProps {
     associateFilesAndWell: ActionCreator<AssociateFilesAndWellAction>;

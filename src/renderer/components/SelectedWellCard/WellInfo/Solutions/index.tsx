@@ -6,7 +6,7 @@ import { Solution } from "../../../../state/selection/types";
 import { NULL_TEXT } from "../index";
 import KeyValueDisplay from "../KeyValueDisplay";
 
-const styles = require("../style.css");
+const styles = require("../style.pcss");
 
 export interface SolutionsProps {
     className?: string;
