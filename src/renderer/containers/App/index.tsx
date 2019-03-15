@@ -21,10 +21,11 @@ import {
 } from "../../state/selection/types";
 import { State } from "../../state/types";
 import { FileTag } from "../../state/upload/types";
-import AssociateWells from "../AssociateWells";
 
+import AssociateWells from "../AssociateWells";
 import DragAndDropSquare from "../DragAndDropSquare";
 import EnterBarcode from "../EnterBarcode";
+import UploadJobs from "../UploadJobs";
 
 import { getFileToTags } from "./selectors";
 const styles = require("./styles.pcss");
@@ -57,6 +58,11 @@ const APP_PAGE_TO_CONFIG_MAP = new Map<Page, AppPageConfig>([
     [Page.AssociateWells, {
         container:  <AssociateWells key="associateWells" className={styles.mainContent}/>,
         folderTreeSelectable: true,
+        folderTreeVisible: true,
+    }],
+    [Page.UploadJobs, {
+        container: <UploadJobs key="uploadSummary" className={styles.mainContent}/>,
+        folderTreeSelectable: false,
         folderTreeVisible: true,
     }],
 ]);

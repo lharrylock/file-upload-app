@@ -6,13 +6,13 @@ import FormPage from "../../components/FormPage";
 import Plate from "../../components/Plate/index";
 import SelectedWellCard from "../../components/SelectedWellCard/index";
 
-import { goBack, setWell } from "../../state/selection/actions";
+import { goBack, goForward, setWell } from "../../state/selection/actions";
 import {
     getSelectedFiles,
     getWell,
     getWellsWithUnitsAndModified
 } from "../../state/selection/selectors";
-import { GoBackAction, SetWellAction, Well } from "../../state/selection/types";
+import { GoBackAction, NextPageAction, SetWellAction, Well } from "../../state/selection/types";
 import { State } from "../../state/types";
 import { associateFilesAndWell, jumpToUpload, undoFileWellAssociation } from "../../state/upload/actions";
 import { getCanRedoUpload, getCanUndoUpload, getWellIdToFiles } from "../../state/upload/selectors";
@@ -33,6 +33,7 @@ interface AssociateWellsProps {
     canUndo: boolean;
     className?: string;
     goBack: ActionCreator<GoBackAction>;
+    goForward: ActionCreator<NextPageAction>;
     selectedFiles: string[];
     selectedWell?: GridCell;
     setWell: ActionCreator<SetWellAction>;
@@ -64,6 +65,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
                 formTitle="ASSOCIATE WELLS"
                 formPrompt="Associate files and wells by selecting them and clicking Associate"
                 onBack={this.props.goBack}
+                onSave={this.props.goForward}
             >
                 <SelectedWellCard
                     className={styles.wellInfo}
@@ -134,6 +136,7 @@ function mapStateToProps(state: State) {
 const dispatchToPropsMap = {
     associateFilesAndWell,
     goBack,
+    goForward,
     jumpToUpload,
     setWell,
     undoAssociation: undoFileWellAssociation,
