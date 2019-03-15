@@ -58,9 +58,9 @@ pipeline {
         }
     }
     post {
-        always {
+//        always {
 //            this.notifyBB(currentBuild.result)
-        }
+//        }
         cleanup {
             sh './gradlew -i  artifactClean'
         }
