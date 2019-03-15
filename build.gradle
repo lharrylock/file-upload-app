@@ -62,9 +62,7 @@ task test(type: YarnTask) {
 }
 
 task dev(type: YarnTask) {
-    environment = [
-            NODE_ENV: "development",
-    ]
+    environment = [NODE_ENV: "development"]
     args = ["electron-webpack", "dev"]
 }
 
@@ -78,6 +76,11 @@ task compile(type: YarnTask) {
 
 task bundle(type: YarnTask) {
     dependsOn compile
+    environment = [
+            LIMS_PROTOCOL: "http",
+            LIMS_HOST: "aics.corp.alleninstitute.org",
+            NODE_ENV: "production",
+    ]
     args = ["electron-builder"]
 }
 
