@@ -29,12 +29,20 @@ pipeline {
                 git url: "${env.GIT_URL}", branch: "${env.BRANCH_NAME}", credentialsId:"9b2bb39a-1b3e-40cd-b1fd-fee01ebef965"
             }
         }
+        stage ("lint") {
+            when {
+                not { expression { return params.PROMOTE_ARTIFACT }}
+            }
+            steps {
+                sh "./gradlew -i yarn lint"
+            }
+        }
         stage ("test") {
             when {
                 not { expression { return params.PROMOTE_ARTIFACT }}
             }
             steps {
-                sh "./gradlew -i yarn test"
+                sh "./gradlew -i test"
             }
         }
         stage ("build and push branch") {
