@@ -13,6 +13,7 @@ buildscript {
     }
     dependencies {
         classpath("org.hibernate.build.gradle:gradle-maven-publish-auth:2.0.1")
+        classpath("org.alleninstitute.aics:gradle-plugins:1.0.23")
     }
 }
 
@@ -23,6 +24,7 @@ plugins {
 
 apply plugin: "maven-publish"
 apply plugin: "maven-publish-auth"
+apply plugin: "org.alleninstitute.git-info"
 
 node {
     version = "10.15.3"
@@ -42,10 +44,8 @@ ext {
     artifactoryBaseUrl = "https://artifactory.corp.alleninstitute.org/artifactory"
 
     // TGZ Publishing
-    distParentDir = file("$projectDir/dist")
-    artifactVersion = project.version
-    // todo get branch name and use in artifactVersion if not master
-//    artifactVersion = dockerPublish.branchName != "master" ? "${dockerPublish.branchName.tokenize("/").join("-")}" : project.version
+    rawArtifact = file("$projectDir/dist/file-upload-app 1.0.0.AppImage")
+    artifactVersion = gitInfo.branch != "master" ? "${gitInfo.branch.tokenize("/").join("-")}" : project.version
     artifactName = "${project.name}-${ext.artifactVersion}.tgz"
 }
 
@@ -92,7 +92,7 @@ task bundle(type: NodeTask) {
 task packageForPublish(type: Tar) {
     dependsOn bundle
 
-    from distParentDir
+    from rawArtifact
     destinationDir file("${projectDir}")
     archiveName "$artifactName"
     compression Compression.GZIP
