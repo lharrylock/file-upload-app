@@ -122,12 +122,14 @@ task bundleForDev(type: Exec) {
 /// Publishing
 
 task copyLinuxArtifact(type:Copy) {
-    from file("$projectDir/dist/$linuxArtifact")
+    dependsOn bundleForProduction
+    from "$projectDir/dist/$linuxArtifact"
     into projectDir
 }
 
 task copyWindowsArtifact(type:Copy) {
-    from file("$projectDir/dist/$windowsArtifact")
+    dependsOn bundleForProduction
+    from "$projectDir/dist/$windowsArtifact"
     into projectDir
 }
 
