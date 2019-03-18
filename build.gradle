@@ -45,7 +45,6 @@ ext {
     windowsArtifact = "file-upload-app Setup 1.0.0.exe"
 
     artifactVersion = gitInfo.branch != "master" ? "${gitInfo.branch.tokenize("/").join("-")}" : project.version
-    artifactName = "${project.name}-${ext.artifactVersion}"
 }
 
 wrapper {
