@@ -10,7 +10,7 @@ pipeline {
     }
     agent {
         node {
-            label "docker"
+            label "electron"
         }
     }
     environment {
