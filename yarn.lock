@@ -698,7 +698,7 @@
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@sinonjs/text-encoding/-/text-encoding-0.7.1.tgz#8da5c6530915653f3a1f38fd5f101d8c3f8079c5"
   integrity sha1-jaXGUwkVZT86Hzj9XxAdjD+AecU=
 
-"@types/chai@^4.1.7":
+"@types/chai@4.1.7":
   version "4.1.7"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@types/chai/-/chai-4.1.7.tgz#1b8e33b61a8c09cbe1f85133071baa0dbf9fa71a"
   integrity sha1-G44zthqMCcvh+FEzBxuqDb+fpxo=
@@ -710,12 +710,12 @@
   dependencies:
     "@types/node" "*"
 
-"@types/classnames@^2.2.7":
+"@types/classnames@2.2.7":
   version "2.2.7"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@types/classnames/-/classnames-2.2.7.tgz#fb68cc9be8487e6ea5b13700e759bfbab7e0fefd"
   integrity sha1-+2jMm+hIfm6lsTcA51m/urfg/v0=
 
-"@types/enzyme@^3.9.0":
+"@types/enzyme@3.9.0":
   version "3.9.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@types/enzyme/-/enzyme-3.9.0.tgz#a81c91e2dfd2d70e67f013f2c0e5efed6df05489"
   integrity sha1-qByR4t/S1w5n8BPywOXv7W3wVIk=
@@ -730,7 +730,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/jsdom@^12.2.3":
+"@types/jsdom@12.2.3":
   version "12.2.3"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@types/jsdom/-/jsdom-12.2.3.tgz#e5f037579d1bde5b6e52b9b74cbcb924eca9a4c6"
   integrity sha1-5fA3V50b3ltuUrm3TLy5JOyppMY=
@@ -739,17 +739,17 @@
     "@types/tough-cookie" "*"
     parse5 "^4.0.0"
 
-"@types/lodash@^4.14.123":
+"@types/lodash@4.14.123":
   version "4.14.123"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@types/lodash/-/lodash-4.14.123.tgz#39be5d211478c8dd3bdae98ee75bb7efe4abfe4d"
   integrity sha1-Ob5dIRR4yN072umO51u37+Sr/k0=
 
-"@types/mocha@^5.2.6":
+"@types/mocha@5.2.6":
   version "5.2.6"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@types/mocha/-/mocha-5.2.6.tgz#b8622d50557dd155e9f2f634b7d68fd38de5e94b"
   integrity sha1-uGItUFV90VXp8vY0t9aP043l6Us=
 
-"@types/node@*", "@types/node@^11.11.3":
+"@types/node@*", "@types/node@11.11.3":
   version "11.11.3"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@types/node/-/node-11.11.3.tgz#7c6b0f8eaf16ae530795de2ad1b85d34bf2f5c58"
   integrity sha1-fGsPjq8WrlMHld4q0bhdNL8vXFg=
@@ -769,14 +769,14 @@
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@types/q/-/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"
   integrity sha1-aQoUdbhPKohP0HzXl8APXzE1bqg=
 
-"@types/react-dom@^16.8.2":
+"@types/react-dom@16.8.2":
   version "16.8.2"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@types/react-dom/-/react-dom-16.8.2.tgz#9bd7d33f908b243ff0692846ef36c81d4941ad12"
   integrity sha1-m9fTP5CLJD/waShG7zbIHUlBrRI=
   dependencies:
     "@types/react" "*"
 
-"@types/react-redux@^7.0.3":
+"@types/react-redux@7.0.3":
   version "7.0.3"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@types/react-redux/-/react-redux-7.0.3.tgz#b8dc3faa954b7f28e4b0209bcf9209b45251ed6b"
   integrity sha1-uNw/qpVLfyjksCCbz5IJtFJR7Ws=
@@ -792,7 +792,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.8.8":
+"@types/react@*", "@types/react@16.8.8":
   version "16.8.8"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@types/react/-/react-16.8.8.tgz#4b60a469fd2469f7aa6eaa0f8cfbc51f6d76e662"
   integrity sha1-S2Ckaf0kafeqbqoPjPvFH2125mI=
@@ -800,7 +800,7 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/sinon@^7.0.10":
+"@types/sinon@7.0.10":
   version "7.0.10"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@types/sinon/-/sinon-7.0.10.tgz#1f921f0c347b19f754e61dbc671c088df73fe1ff"
   integrity sha1-H5IfDDR7GfdU5h28ZxwIjfc/4f8=
@@ -1023,7 +1023,7 @@ add-dom-event-listener@^1.1.0:
   dependencies:
     object-assign "4.x"
 
-aics-react-labkey@^4.1.0:
+aics-react-labkey@4.1.0:
   version "4.1.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/aics-react-labkey/-/aics-react-labkey-4.1.0.tgz#45fe92570848c677c7dfb2235a963bb0d5d284a4"
   integrity sha1-Rf6SVwhIxnfH37IjWpY7sNXShKQ=
@@ -1111,7 +1111,7 @@ ant-design-palettes@^1.1.3:
   dependencies:
     tinycolor2 "^1.4.1"
 
-antd@^3.15.0:
+antd@3.15.0:
   version "3.15.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/antd/-/antd-3.15.0.tgz#af187ce62902edf261d7251fc9105407527fad9d"
   integrity sha1-rxh85ikC7fJh1yUfyRBUB1J/rZ0=
@@ -1462,7 +1462,7 @@ aws4@^1.8.0:
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/aws4/-/aws4-1.8.0.tgz#f0e003d9ca9e7f59c7a508945d7b2ef9a04a542f"
   integrity sha1-8OAD2cqef1nHpQiUXXsu+aBKVC8=
 
-axios@^0.18.0:
+axios@0.18.0:
   version "0.18.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/axios/-/axios-0.18.0.tgz#32d53e4851efdc0a11993b6cd000789d70c05102"
   integrity sha1-MtU+SFHv3AoRmTts0AB4nXDAUQI=
@@ -1956,7 +1956,7 @@ caseless@~0.12.0:
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-chai@^4.2.0:
+chai@4.2.0:
   version "4.2.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/chai/-/chai-4.2.0.tgz#760aa72cf20e3795e84b12877ce0e83737aa29e5"
   integrity sha1-dgqnLPION5XoSxKHfODoNzeqKeU=
@@ -2076,7 +2076,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@2.x, classnames@^2.2.0, classnames@^2.2.1, classnames@^2.2.3, classnames@^2.2.4, classnames@^2.2.5, classnames@^2.2.6, classnames@~2.2.6:
+classnames@2.2.6, classnames@2.x, classnames@^2.2.0, classnames@^2.2.1, classnames@^2.2.3, classnames@^2.2.4, classnames@^2.2.5, classnames@^2.2.6, classnames@~2.2.6:
   version "2.2.6"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
   integrity sha1-Q5Nb/90pHzJtrQogUwmzjQD2UM4=
@@ -2357,15 +2357,15 @@ copy-to-clipboard@^3.0.8:
   dependencies:
     toggle-selection "^1.0.3"
 
+core-js@2.6.5, core-js@^2.4.0, core-js@^2.5.7:
+  version "2.6.5"
+  resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/core-js/-/core-js-2.6.5.tgz#44bc8d249e7fb2ff5d00e0341a7ffb94fbf67895"
+  integrity sha1-RLyNJJ5/sv9dAOA0Gn/7lPv2eJU=
+
 core-js@^1.0.0:
   version "1.2.7"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
   integrity sha1-ZSKUwUZR2yj6k70tX/KYOk8IxjY=
-
-core-js@^2.4.0, core-js@^2.5.7, core-js@^2.6.5:
-  version "2.6.5"
-  resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/core-js/-/core-js-2.6.5.tgz#44bc8d249e7fb2ff5d00e0341a7ffb94fbf67895"
-  integrity sha1-RLyNJJ5/sv9dAOA0Gn/7lPv2eJU=
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -2528,7 +2528,7 @@ css-hot-loader@^1.4.3:
     lodash "^4.17.5"
     normalize-url "^1.9.1"
 
-css-loader@^2.1.0, css-loader@^2.1.1:
+css-loader@2.1.1, css-loader@^2.1.0:
   version "2.1.1"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/css-loader/-/css-loader-2.1.1.tgz#d8254f72e412bb2238bb44dd674ffbef497333ea"
   integrity sha1-2CVPcuQSuyI4u0TdZ0/770lzM+o=
@@ -3172,7 +3172,7 @@ electron-webpack-js@~2.3.1:
     babel-loader "^8.0.5"
     babel-plugin-component "^1.1.1"
 
-electron-webpack-ts@^3.1.1:
+electron-webpack-ts@3.1.1:
   version "3.1.1"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/electron-webpack-ts/-/electron-webpack-ts-3.1.1.tgz#da21cc43a535fd9cb3c5a603bbca6c7c51cdb0f1"
   integrity sha1-2iHMQ6U1/ZyzxaYDu8psfFHNsPE=
@@ -3180,7 +3180,7 @@ electron-webpack-ts@^3.1.1:
     fork-ts-checker-webpack-plugin "^0.5.2"
     ts-loader "^5.3.3"
 
-electron-webpack@^2.6.2:
+electron-webpack@2.6.2:
   version "2.6.2"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/electron-webpack/-/electron-webpack-2.6.2.tgz#6727944eef2a6dc8e483e34e5da756903c501965"
   integrity sha1-ZyeUTu8qbcjkg+NOXadWkDxQGWU=
@@ -3285,7 +3285,7 @@ env-paths@^1.0.0:
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/env-paths/-/env-paths-1.0.0.tgz#4168133b42bb05c38a35b1ae4397c8298ab369e0"
   integrity sha1-QWgTO0K7BcOKNbGuQ5fIKYqzaeA=
 
-enzyme-adapter-react-16@^1.11.2:
+enzyme-adapter-react-16@1.11.2:
   version "1.11.2"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.11.2.tgz#8efeafb27e96873a5492fdef3f423693182eb9d4"
   integrity sha1-jv6vsn6WhzpUkv3vP0I2kxguudQ=
@@ -3309,7 +3309,7 @@ enzyme-adapter-utils@^1.10.1:
     prop-types "^15.7.2"
     semver "^5.6.0"
 
-enzyme@^3.9.0:
+enzyme@3.9.0:
   version "3.9.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/enzyme/-/enzyme-3.9.0.tgz#2b491f06ca966eb56b6510068c7894a7e0be3909"
   integrity sha1-K0kfBsqWbrVrZRAGjHiUp+C+OQk=
@@ -4894,12 +4894,12 @@ jsbn@~0.1.0:
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
   integrity sha1-peZUwuWi3rXyAdls77yoDA7y9RM=
 
-jsdom-global@^3.0.2:
+jsdom-global@3.0.2:
   version "3.0.2"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/jsdom-global/-/jsdom-global-3.0.2.tgz#6bd299c13b0c4626b2da2c0393cd4385d606acb9"
   integrity sha1-a9KZwTsMRiay2iwDk81DhdYGrLk=
 
-jsdom@^14.0.0:
+jsdom@14.0.0:
   version "14.0.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/jsdom/-/jsdom-14.0.0.tgz#c7f1441ebcc57902d08d5fb2f6ba2baf746da7c6"
   integrity sha1-x/FEHrzFeQLQjV+y9rorr3Rtp8Y=
@@ -5067,7 +5067,7 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
-less-loader@^4.1.0:
+less-loader@4.1.0:
   version "4.1.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/less-loader/-/less-loader-4.1.0.tgz#2c1352c5b09a4f84101490274fd51674de41363e"
   integrity sha1-LBNSxbCaT4QQFJAnT9UWdN5BNj4=
@@ -5076,7 +5076,7 @@ less-loader@^4.1.0:
     loader-utils "^1.1.0"
     pify "^3.0.0"
 
-less@^3.9.0:
+less@3.9.0:
   version "3.9.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/less/-/less-3.9.0.tgz#b7511c43f37cf57dc87dffd9883ec121289b1474"
   integrity sha1-t1EcQ/N89X3Iff/ZiD7BISibFHQ=
@@ -5232,7 +5232,7 @@ lodash.uniq@^4.5.0:
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-lodash@^4.15.0, lodash@^4.16.5, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0:
+lodash@4.17.11, lodash@^4.15.0, lodash@^4.16.5, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0:
   version "4.17.11"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha1-s56mIp72B+zYniyN8SU2iRysm40=
@@ -5561,7 +5561,7 @@ mkdirp@0.5.1, mkdirp@0.5.x, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkdirp@
   dependencies:
     minimist "0.0.8"
 
-mocha@^6.0.2:
+mocha@6.0.2:
   version "6.0.2"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/mocha/-/mocha-6.0.2.tgz#cdc1a6fdf66472c079b5605bac59d29807702d2c"
   integrity sha1-zcGm/fZkcsB5tWBbrFnSmAdwLSw=
@@ -5590,7 +5590,7 @@ mocha@^6.0.2:
     yargs-parser "11.1.1"
     yargs-unparser "1.5.0"
 
-mock-css-modules@^1.0.0:
+mock-css-modules@1.0.0:
   version "1.0.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/mock-css-modules/-/mock-css-modules-1.0.0.tgz#8a5c7366cb62a0ef36e5e6db2ab3affd0fac36bd"
   integrity sha1-ilxzZstioO825ebbKrOv/Q+sNr0=
@@ -6588,7 +6588,7 @@ postcss-image-set-function@^3.0.1:
     postcss "^7.0.2"
     postcss-values-parser "^2.0.0"
 
-postcss-import@^12.0.1:
+postcss-import@12.0.1:
   version "12.0.1"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/postcss-import/-/postcss-import-12.0.1.tgz#cf8c7ab0b5ccab5649024536e565f841928b7153"
   integrity sha1-z4x6sLXMq1ZJAkU25WX4QZKLcVM=
@@ -6623,7 +6623,7 @@ postcss-load-config@^2.0.0:
     cosmiconfig "^4.0.0"
     import-cwd "^2.0.0"
 
-postcss-loader@^3.0.0:
+postcss-loader@3.0.0:
   version "3.0.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/postcss-loader/-/postcss-loader-3.0.0.tgz#6b97943e47c72d845fa9e03f273773d4e8dd6c2d"
   integrity sha1-a5eUPkfHLYRfqeA/Jzdz1OjdbC0=
@@ -6802,7 +6802,7 @@ postcss-place@^4.0.1:
     postcss "^7.0.2"
     postcss-values-parser "^2.0.0"
 
-postcss-preset-env@^6.6.0:
+postcss-preset-env@6.6.0:
   version "6.6.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/postcss-preset-env/-/postcss-preset-env-6.6.0.tgz#642e7d962e2bdc2e355db117c1eb63952690ed5b"
   integrity sha1-ZC59li4r3C41XbEXwetjlSaQ7Vs=
@@ -7705,7 +7705,7 @@ react-bootstrap@^0.32.1:
     uncontrollable "^5.0.0"
     warning "^3.0.0"
 
-react-dom@^16.8.4:
+react-dom@16.8.4:
   version "16.8.4"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/react-dom/-/react-dom-16.8.4.tgz#1061a8e01a2b3b0c8160037441c3bf00a0e3bc48"
   integrity sha1-EGGo4BorOwyBYAN0QcO/AKDjvEg=
@@ -7768,7 +7768,7 @@ react-prop-types@^0.4.0:
   dependencies:
     warning "^3.0.0"
 
-react-redux@^6.0.1:
+react-redux@6.0.1:
   version "6.0.1"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/react-redux/-/react-redux-6.0.1.tgz#0d423e2c1cb10ada87293d47e7de7c329623ba4d"
   integrity sha1-DUI+LByxCtqHKT1H5958MpYjuk0=
@@ -7821,7 +7821,7 @@ react-transition-group@^2.0.0, react-transition-group@^2.2.0:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-react@^16.8.4:
+react@16.8.4:
   version "16.8.4"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/react/-/react-16.8.4.tgz#fdf7bd9ae53f03a9c4cd1a371432c206be1c4768"
   integrity sha1-/fe9muU/A6nEzRo3FDLCBr4cR2g=
@@ -7965,7 +7965,7 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
-redux-logic@^2.1.1:
+redux-logic@2.1.1:
   version "2.1.1"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/redux-logic/-/redux-logic-2.1.1.tgz#a6094941584d252bc90a19815329677fb4710c0b"
   integrity sha1-pglJQVhNJSvJChmBUylnf7RxDAs=
@@ -7980,7 +7980,7 @@ redux-undo@1.0.0-beta9-9-7:
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/redux-undo/-/redux-undo-1.0.0-beta9-9-7.tgz#fe3baa1b271423d7ddbbfc3a82c71b029a2db8ba"
   integrity sha1-/juqGycUI9fdu/w6gscbApotuLo=
 
-redux@^4.0.0, redux@^4.0.1:
+redux@4.0.1, redux@^4.0.0:
   version "4.0.1"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/redux/-/redux-4.0.1.tgz#436cae6cc40fbe4727689d7c8fae44808f1bfef5"
   integrity sha1-Q2yubMQPvkcnaJ18j65EgI8b/vU=
@@ -8169,7 +8169,7 @@ requires-port@^1.0.0:
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
 
-reselect@^4.0.0:
+reselect@4.0.0:
   version "4.0.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/reselect/-/reselect-4.0.0.tgz#f2529830e5d3d0e021408b246a206ef4ea4437f7"
   integrity sha1-8lKYMOXT0OAhQIskaiBu9OpEN/c=
@@ -8477,7 +8477,7 @@ single-line-log@^1.1.2:
   dependencies:
     string-width "^1.0.1"
 
-sinon@^7.2.7:
+sinon@7.2.7:
   version "7.2.7"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/sinon/-/sinon-7.2.7.tgz#ee90f83ce87d9a6bac42cf32a3103d8c8b1bfb68"
   integrity sha1-7pD4POh9mmusQs8yoxA9jIsb+2g=
@@ -8563,7 +8563,7 @@ source-map-resolve@^0.5.0:
     source-map-url "^0.4.0"
     urix "^0.1.0"
 
-source-map-support@^0.5.10, source-map-support@^0.5.6, source-map-support@^0.5.9, source-map-support@~0.5.10:
+source-map-support@0.5.11, source-map-support@^0.5.10, source-map-support@^0.5.6, source-map-support@^0.5.9, source-map-support@~0.5.10:
   version "0.5.11"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/source-map-support/-/source-map-support-0.5.11.tgz#efac2ce0800355d026326a0ca23e162aeac9a4e2"
   integrity sha1-76ws4IADVdAmMmoMoj4WKurJpOI=
@@ -8832,7 +8832,7 @@ strip-json-comments@2.0.1, strip-json-comments@~2.0.1:
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
   integrity sha1-PFMZQukIwml8DsNEhYwobHygpgo=
 
-style-loader@^0.23.1:
+style-loader@0.23.1, style-loader@^0.23.1:
   version "0.23.1"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/style-loader/-/style-loader-0.23.1.tgz#cb9154606f3e771ab6c4ab637026a1049174d925"
   integrity sha1-y5FUYG8+dxq2xKtjcCahBJF02SU=
@@ -9108,7 +9108,7 @@ truncate-utf8-bytes@^1.0.0:
   dependencies:
     utf8-byte-length "^1.0.1"
 
-ts-import-plugin@^1.5.5:
+ts-import-plugin@1.5.5:
   version "1.5.5"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/ts-import-plugin/-/ts-import-plugin-1.5.5.tgz#3c57b6f8e42486404f4124146dd44090d98a740c"
   integrity sha1-PFe2+OQkhkBPQSQUbdRAkNmKdAw=
@@ -9126,7 +9126,7 @@ ts-loader@^5.3.3:
     micromatch "^3.1.4"
     semver "^5.0.1"
 
-ts-node@^8.0.3:
+ts-node@8.0.3:
   version "8.0.3"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/ts-node/-/ts-node-8.0.3.tgz#aa60b836a24dafd8bf21b54766841a232fdbc641"
   integrity sha1-qmC4NqJNr9i/IbVHZoQaIy/bxkE=
@@ -9142,21 +9142,21 @@ tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.2:
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/tslib/-/tslib-1.9.3.tgz#d7e4dd79245d85428c4d7e4822a79917954ca286"
   integrity sha1-1+TdeSRdhUKMTX5IIqeZF5VMooY=
 
-tslint-no-unused-expression-chai@^0.1.4:
+tslint-no-unused-expression-chai@0.1.4:
   version "0.1.4"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/tslint-no-unused-expression-chai/-/tslint-no-unused-expression-chai-0.1.4.tgz#f4a2c9dd3306088f44eb7574cf470082b09ade49"
   integrity sha1-9KLJ3TMGCI9E63V0z0cAgrCa3kk=
   dependencies:
     tsutils "^3.0.0"
 
-tslint-react@^3.6.0:
+tslint-react@3.6.0:
   version "3.6.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/tslint-react/-/tslint-react-3.6.0.tgz#7f462c95c4a0afaae82507f06517ff02942196a1"
   integrity sha1-f0YslcSgr6roJQfwZRf/ApQhlqE=
   dependencies:
     tsutils "^2.13.1"
 
-tslint@^5.14.0:
+tslint@5.14.0:
   version "5.14.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/tslint/-/tslint-5.14.0.tgz#be62637135ac244fc9b37ed6ea5252c9eba1616e"
   integrity sha1-vmJjcTWsJE/Js37W6lJSyeuhYW4=
@@ -9231,7 +9231,7 @@ typedarray@^0.0.6:
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.3.3333:
+typescript@3.3.3333:
   version "3.3.3333"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/typescript/-/typescript-3.3.3333.tgz#171b2c5af66c59e9431199117a3bcadc66fdcfd6"
   integrity sha1-FxssWvZsWelDEZkRejvK3Gb9z9Y=

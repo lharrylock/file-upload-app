@@ -5,8 +5,10 @@
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
     "dist": "yarn compile && electron-builder",
+    "dist-all": "yarn compile && electron-builder -wl",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
-    "test": "TS_NODE_PROJECT=tsconfig.commonjs.json NODE_ENV=production mocha --opts mocha.opts src/**/test/*.{ts,tsx}"
+    "test": "TS_NODE_PROJECT=tsconfig.commonjs.json NODE_ENV=production mocha --opts mocha.opts src/**/test/*.{ts,tsx}",
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
