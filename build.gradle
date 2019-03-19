@@ -75,53 +75,53 @@ task compile(type: YarnTask) {
     args = ["electron-webpack"]
 }
 
-task bundle {
-    println env
-    dependsOn yarn
-
-    def env = env.toLowerCase() ?: "production"
-    def host = "aics.corp.alleninstitute.org"
-    def port = "80"
-
-    if (env == "development" || env == "dev") {
-        host = "localhost"
-        port = "8080"
-        env = "development"
-    } else if (env == "staging" || env == "stage") {
-        host = "stg-aics.corp.alleninstitute.org"
-        env = "production" // this is used to set NODE_ENV and we want our environment
-        // to be as close to production as possible without modifying production data
-    }
-
-    def args = [
-            "docker", "run", "--rm",
-            "--env", "ELECTRON_CACHE=/root/.cache/electron",
-            "--env", "ELECTRON_BUILDER_CACHE=/root/.cache/electron-builder",
-            "--env", "LIMS_PROTOCOL=http",
-            "--env", "LIMS_HOST=$host",
-            "--env", "LIMS_PORT=$port",
-            "--env", "NODE_ENV=$env",
-            "-v", "${projectDir}:/project",
-            "-v", "${projectDir}/node_modules:/project/node_modules",
-            "electronuserland/builder:wine",
-            "/bin/bash", "-c", "yarn dist-all"
-    ]
-
-    exec {
-        commandLine args
+task foo {
+    doLast {
+        def env
+        if (!env) {
+            env = "production"
+        }
+        println env
     }
 }
+
+def createBundleTask(nodeEnv, host, port, taskPrefix) {
+    return tasks.create("${taskPrefix}Bundle") {
+        dependsOn yarn
+        def args = [
+                "docker", "run", "--rm",
+                "--env", "ELECTRON_CACHE=/root/.cache/electron",
+                "--env", "ELECTRON_BUILDER_CACHE=/root/.cache/electron-builder",
+                "--env", "LIMS_PROTOCOL=http",
+                "--env", "LIMS_HOST=$host",
+                "--env", "LIMS_PORT=$port",
+                "--env", "NODE_ENV=$nodeEnv",
+                "-v", "${projectDir}:/project",
+                "-v", "${projectDir}/node_modules:/project/node_modules",
+                "electronuserland/builder:wine",
+                "/bin/bash", "-c", "yarn dist-all"
+        ]
+
+        exec {
+            commandLine args
+        }
+    }
+}
+
+createBundleTask("development", "localhost", "8080", "dev")
+createBundleTask("production", "stg-aics.corp.alleninstitute.org", "80", "stage")
+createBundleTask("production", "aics.corp.alleninstitute.org", "80", "prod")
 
 /// Publishing
 
 task copyLinuxArtifact(type:Copy) {
-    dependsOn bundle
+    dependsOn prodBundle
     from "$projectDir/dist/$linuxArtifact"
     into projectDir
 }
 
 task copyWindowsArtifact(type:Copy) {
-    dependsOn bundle
+    dependsOn prodBundle
     from "$projectDir/dist/$windowsArtifact"
     into projectDir
 }
