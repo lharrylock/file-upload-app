@@ -75,59 +75,53 @@ task compile(type: YarnTask) {
     args = ["electron-webpack"]
 }
 
-task bundleForProduction(type: Exec) {
+task bundle {
+    println env
     dependsOn yarn
-    commandLine "docker", "run", "--rm",
-                "--env", "ELECTRON_CACHE=/root/.cache/electron",
-                "--env", "ELECTRON_BUILDER_CACHE=/root/.cache/electron-builder",
-                "--env", "LIMS_PROTOCOL=http",
-                "--env", "LIMS_HOST=aics.corp.alleninstitute.org",
-                "--env", "NODE_ENV=production",
-                "-v", "${projectDir}:/project",
-                "-v", "${projectDir}/node_modules:/project/node_modules",
-                "electronuserland/builder:wine",
-                "/bin/bash", "-c", "yarn dist-all"
-}
 
-task bundleForStaging(type: Exec) {
-    dependsOn npmInstall
-    commandLine "docker", "run", "--rm",
+    def env = env.toLowerCase() ?: "production"
+    def host = "aics.corp.alleninstitute.org"
+    def port = "80"
+
+    if (env == "development" || env == "dev") {
+        host = "localhost"
+        port = "8080"
+        env = "development"
+    } else if (env == "staging" || env == "stage") {
+        host = "stg-aics.corp.alleninstitute.org"
+        env = "production" // this is used to set NODE_ENV and we want our environment
+        // to be as close to production as possible without modifying production data
+    }
+
+    def args = [
+            "docker", "run", "--rm",
             "--env", "ELECTRON_CACHE=/root/.cache/electron",
             "--env", "ELECTRON_BUILDER_CACHE=/root/.cache/electron-builder",
             "--env", "LIMS_PROTOCOL=http",
-            "--env", "LIMS_HOST=stg-aics.corp.alleninstitute.org",
-            "--env", "NODE_ENV=production",
+            "--env", "LIMS_HOST=$host",
+            "--env", "LIMS_PORT=$port",
+            "--env", "NODE_ENV=$env",
             "-v", "${projectDir}:/project",
             "-v", "${projectDir}/node_modules:/project/node_modules",
             "electronuserland/builder:wine",
             "/bin/bash", "-c", "yarn dist-all"
-}
+    ]
 
-task bundleForDev(type: Exec) {
-    dependsOn npmInstall
-    commandLine "docker", "run", "--rm",
-            "--env", "ELECTRON_CACHE=/root/.cache/electron",
-            "--env", "ELECTRON_BUILDER_CACHE=/root/.cache/electron-builder",
-            "--env", "LIMS_PROTOCOL=http",
-            "--env", "LIMS_HOST=localhost",
-            "--env", "LIMS_PORT=80",
-            "--env", "NODE_ENV=development",
-            "-v", "${projectDir}:/project",
-            "-v", "${projectDir}/node_modules:/project/node_modules",
-            "electronuserland/builder:wine",
-            "/bin/bash", "-c", "yarn dist-all"
+    exec {
+        commandLine args
+    }
 }
 
 /// Publishing
 
 task copyLinuxArtifact(type:Copy) {
-    dependsOn bundleForProduction
+    dependsOn bundle
     from "$projectDir/dist/$linuxArtifact"
     into projectDir
 }
 
 task copyWindowsArtifact(type:Copy) {
-    dependsOn bundleForProduction
+    dependsOn bundle
     from "$projectDir/dist/$windowsArtifact"
     into projectDir
 }
@@ -151,12 +145,12 @@ task snapshotPublish {
 publishing {
     publications {
         mvnModule(MavenPublication) {
-            artifact("file-upload-app 1.0.0.AppImage") {
+            artifact(linuxArtifact) {
                 classifier "file-upload-app 1.0.0"
                 extension "AppImage"
                 version artifactVersion
             }
-            artifact("file-upload-app Setup 1.0.0.exe") {
+            artifact(windowsArtifact) {
                 classifier "file-upload-app Setup 1.0.0"
                 extension "exe"
                 version artifactVersion

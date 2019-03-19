@@ -1,31 +1,46 @@
-# Template Electron React App
+# File Upload App
 
-Template for creating desktop application using electron and react.
+Desktop client application to the File Storage Service. Uploads files to the network
+and saves metadata about the files. 
 
-## Setup
+## Development
 
-create a new repository in bit bucket
-```commandline
-git clone <ssh:....>
-git remote add template ssh://git@stash.corp.alleninstitute.org:7999/aicssw/template-electron-react.gitgit fetch template
-git merge template/master
+NOTE:
+We're using `electron-builder` to package the app into OS-specific distributables.
+This npm package strongly recommends using yarn for dependency management. If you don't have
+yarn already, set it up by following these instructions:
+
+https://yarnpkg.com/en/docs/install#debian-stable
+
+Then clone the repo, install the dependencies, and run the dev server:
+
+```bash
+git clone ssh://git@aicsbitbucket.corp.alleninstitute.org:7999/sw/file-upload-app.git
+cd file-upload-app
+yarn
+./gradlew dev
 ```
 
+## Packaging
 
-./gradlew runElectron
+Use the `bundle` gradle task to package the app for both Windows and Linux. This task can also target
+different environments. By default, the `bundle` task builds for the production environment,
+meaning that it will connect to aics.corp.alleninstitute.org for LabKey and FSS.
 
-If on Linux: apt-get install libgconf-2-4
+If you'd like to create a staging build (stg-aics.corp.alleninstitute.org), set the `env` argument to `staging`:
 
+```bash
+./gradlew bundle -Penv staging
+``` 
 
-## Note
+Likewise to create a dev build (localhost:8080), set `env` to `development`:
 
-This is still a work in progress but can be forked off of to get going. 
-Some additional items planned:
+```bash
+./gradlew bundle -Penv development
+```
 
-* set up Jenkinsfile and build
-* improve dev experience (add HMR)
-* fix tests
-* add webpack stats
-* more main process examples
-* setup and test packaging app into executable
-* more webpack chunks splitting?
+We accomplish packaging for both Windows and Linux thanks to the docker image provided by `electron-builder`: electronuserland/builder:wine
+which provides the dependencies needed.
+
+Packaging the app for MacOS has not been implemented yet as it requires MacOS to be built.
+
