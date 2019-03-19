@@ -86,25 +86,23 @@ task foo {
 }
 
 def createBundleTask(nodeEnv, host, port, taskPrefix) {
-    return tasks.create("${taskPrefix}Bundle") {
-        dependsOn yarn
-        def args = [
-                "docker", "run", "--rm",
-                "--env", "ELECTRON_CACHE=/root/.cache/electron",
-                "--env", "ELECTRON_BUILDER_CACHE=/root/.cache/electron-builder",
-                "--env", "LIMS_PROTOCOL=http",
-                "--env", "LIMS_HOST=$host",
-                "--env", "LIMS_PORT=$port",
-                "--env", "NODE_ENV=$nodeEnv",
-                "-v", "${projectDir}:/project",
-                "-v", "${projectDir}/node_modules:/project/node_modules",
-                "electronuserland/builder:wine",
-                "/bin/bash", "-c", "yarn dist-all"
-        ]
+    def args = [
+            "docker", "run", "--rm",
+            "--env", "ELECTRON_CACHE=/root/.cache/electron",
+            "--env", "ELECTRON_BUILDER_CACHE=/root/.cache/electron-builder",
+            "--env", "LIMS_PROTOCOL=http",
+            "--env", "LIMS_HOST=$host",
+            "--env", "LIMS_PORT=$port",
+            "--env", "NODE_ENV=$nodeEnv",
+            "-v", "${projectDir}:/project",
+            "-v", "${projectDir}/node_modules:/project/node_modules",
+            "electronuserland/builder:wine",
+            "/bin/bash", "-c", "yarn dist"
+    ]
 
-        exec {
-            commandLine args
-        }
+    return tasks.create("${taskPrefix}Bundle", Exec) {
+        dependsOn compile
+        commandLine args
     }
 }
 
