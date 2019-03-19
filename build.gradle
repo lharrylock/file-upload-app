@@ -95,7 +95,7 @@ def createBundleTask(nodeEnv, host, port, taskPrefix) {
             "-v", "${projectDir}:/project",
             "-v", "${projectDir}/node_modules:/project/node_modules",
             "electronuserland/builder:wine",
-            "/bin/bash", "-c", "yarn dist"
+            "/bin/bash", "-c", "yarn dist-all"
     ]
 
     return tasks.create("${taskPrefix}Bundle", Exec) {
