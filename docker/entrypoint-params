@@ -1,3 +1,0 @@
-SERVICE_USER_NAME=lisah
-SERVICE_GROUP_NAME=domain
-OWNED_DIRECTORIES=(/project/dist)
