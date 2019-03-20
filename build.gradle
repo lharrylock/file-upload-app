@@ -45,6 +45,8 @@ ext {
     windowsArtifact = "file-upload-app Setup 1.0.0.exe"
 
     artifactVersion = gitInfo.branch != "master" ? "${gitInfo.branch.tokenize("/").join("-")}" : project.version
+    dockerImageName = "electron-app-builder:latest"
+    dockerContext = "docker/"
 }
 
 wrapper {
@@ -75,31 +77,27 @@ task compile(type: YarnTask) {
     args = ["electron-webpack"]
 }
 
-task filepermission(type: Delete) {
-    delete "dist"
+task dockerBuild(type: Exec) {
+    commandLine "docker", "build", "-t", dockerImageName, dockerContext
 }
 
 def createBundleTask(nodeEnv, host, port, taskPrefix) {
-    def username = System.properties['user.name']
-    def uid = ["id", "-u", username].execute().text.trim()
-    def gid = ["id", "-g", username].execute().text.trim()
     def args = [
             "docker", "run", "--rm",
-            "--env", "ELECTRON_CACHE=/tmp/.cache/electron",
-            "--env", "ELECTRON_BUILDER_CACHE=/tmp/.cache/electron-builder",
+            "--env", "ELECTRON_CACHE=/root/.cache/electron",
+            "--env", "ELECTRON_BUILDER_CACHE=/root/.cache/electron-builder",
             "--env", "LIMS_PROTOCOL=http",
             "--env", "LIMS_HOST=$host",
             "--env", "LIMS_PORT=$port",
             "--env", "NODE_ENV=$nodeEnv",
-            "--user", "$uid:$gid",
             "-v", "${projectDir}:/project",
             "-v", "${projectDir}/node_modules:/project/node_modules",
-            "electronuserland/builder:wine",
+            dockerImageName,
             "/bin/bash", "-c", "yarn dist-all"
     ]
 
     return tasks.create("${taskPrefix}Bundle", Exec) {
-        dependsOn compile
+        dependsOn compile, dockerBuild
         commandLine args
     }
 }
