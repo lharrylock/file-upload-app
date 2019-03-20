@@ -1,6 +1,7 @@
 FROM docker-virtual.artifactory.corp.alleninstitute.org/electronuserland/builder:wine
 
-RUN /usr/sbin/groupadd -g 10513 domain &&     /usr/sbin/useradd -g domain -m -N -s /bin/bash -u 1257 lisah
+RUN /usr/sbin/groupadd -g 10513 domain && \
+    /usr/sbin/useradd -g domain -m -N -s /bin/bash -u 1257 lisah
 
 COPY generic-entrypoint.sh /usr/local/bin
 COPY entrypoint-params /usr/local/bin

@@ -77,7 +77,21 @@ task compile(type: YarnTask) {
     args = ["electron-webpack"]
 }
 
+task createDockerScripts(type: Copy) {
+    from "docker-templates"
+    into "${projectDir}/${dockerContext}"
+    rename { file -> file - ".gradle_template"}
+    expand([
+            USERNAME: "lisah",
+            GROUPNAME: "domain",
+            UID: 1257,
+            GID: 10513
+    ])
+    outputs.upToDateWhen { false }
+}
+
 task dockerBuild(type: Exec) {
+    dependsOn createDockerScripts
     commandLine "docker", "build", "-t", dockerImageName, dockerContext
 }
 
