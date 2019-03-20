@@ -78,14 +78,19 @@ task compile(type: YarnTask) {
 }
 
 task createDockerScripts(type: Copy) {
+    def username = System.properties['user.name']
+    def groupname = System.properties['group.name']
+    def uid = ["id", "-u", username].execute().text.trim()
+    def gid = ["id", "-g", username].execute().text.trim()
+
     from "docker-templates"
     into "${projectDir}/${dockerContext}"
     rename { file -> file - ".gradle_template"}
     expand([
-            USERNAME: "lisah",
-            GROUPNAME: "domain",
-            UID: 1257,
-            GID: 10513
+            USERNAME: username,
+            GROUPNAME: groupname,
+            UID: uid,
+            GID: gid
     ])
     outputs.upToDateWhen { false }
 }
