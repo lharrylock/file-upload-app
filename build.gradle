@@ -77,38 +77,23 @@ task compile(type: YarnTask) {
     args = ["electron-webpack"]
 }
 
-task createDockerScripts(type: Copy) {
-    def username = System.properties['user.name']
-    def groupname = System.properties['group.name']
-    def uid = ["id", "-u", username].execute().text.trim()
-    def gid = ["id", "-g", username].execute().text.trim()
-
-    from "docker-templates"
-    into "${projectDir}/${dockerContext}"
-    rename { file -> file - ".gradle_template"}
-    expand([
-            USERNAME: username,
-            GROUPNAME: groupname,
-            UID: uid,
-            GID: gid
-    ])
-    outputs.upToDateWhen { false }
-}
-
 task dockerBuild(type: Exec) {
-    dependsOn createDockerScripts
     commandLine "docker", "build", "-t", dockerImageName, dockerContext
 }
 
 def createBundleTask(nodeEnv, host, port, taskPrefix) {
+    def username = System.properties['user.name']
+    def uid = ["id", "-u", username].execute().text.trim()
+    def gid = ["id", "-g", username].execute().text.trim()
     def args = [
             "docker", "run", "--rm",
-            "--env", "ELECTRON_CACHE=/root/.cache/electron",
-            "--env", "ELECTRON_BUILDER_CACHE=/root/.cache/electron-builder",
             "--env", "LIMS_PROTOCOL=http",
             "--env", "LIMS_HOST=$host",
             "--env", "LIMS_PORT=$port",
             "--env", "NODE_ENV=$nodeEnv",
+            "--env", "USER=${username}",
+            "--env", "UID=${uid}",
+            "--env", "GID=${gid}",
             "-v", "${projectDir}:/project",
             "-v", "${projectDir}/node_modules:/project/node_modules",
             dockerImageName,
