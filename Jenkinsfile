@@ -53,6 +53,7 @@ pipeline {
                 echo "This is not a master build or a promote build"
                 sh "${PYTHON} ${VENV_BIN}/manage_version -t gradle-minor-ahead -s prepare"
                 sh './gradlew -i snapshotPublish'
+                sh "${VENV_BIN}/manage_version -t gradle-minor-ahead -s tag"
             }
         }
         stage ("promote") {
