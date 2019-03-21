@@ -8,5 +8,4 @@ npm-debug.log
 .project
 .settings/
 yarn-error.log
-docker/
 build/

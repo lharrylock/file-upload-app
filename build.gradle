@@ -40,13 +40,10 @@ ext {
     // Repo settings
     artifactoryBaseUrl = "https://artifactory.corp.alleninstitute.org/artifactory"
 
-    // TGZ Publishing
     linuxArtifact = "file-upload-app 1.0.0.AppImage"
     windowsArtifact = "file-upload-app Setup 1.0.0.exe"
 
     artifactVersion = gitInfo.branch != "master" ? "${gitInfo.branch.tokenize("/").join("-")}" : project.version
-    dockerImageName = "electron-app-builder:latest"
-    dockerContext = "docker/"
 }
 
 wrapper {
@@ -77,10 +74,6 @@ task compile(type: YarnTask) {
     args = ["electron-webpack"]
 }
 
-task dockerBuild(type: Exec) {
-    commandLine "docker", "build", "-t", dockerImageName, dockerContext
-}
-
 def createBundleTask(nodeEnv, host, port, taskPrefix) {
     def username = System.properties['user.name']
     def uid = ["id", "-u", username].execute().text.trim()
@@ -96,12 +89,12 @@ def createBundleTask(nodeEnv, host, port, taskPrefix) {
             "--env", "GID=${gid}",
             "-v", "${projectDir}:/project",
             "-v", "${projectDir}/node_modules:/project/node_modules",
-            dockerImageName,
+            "electron-builder:feature-DT-93-create-repo", // todo update version
             "/bin/bash", "-c", "yarn dist-all"
     ]
 
     return tasks.create("${taskPrefix}Bundle", Exec) {
-        dependsOn compile, dockerBuild
+        dependsOn compile
         commandLine args
     }
 }
