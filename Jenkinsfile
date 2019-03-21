@@ -58,7 +58,7 @@ pipeline {
         stage ("tag - master branch only") {
             when {
                 not { expression { return params.PROMOTE_ARTIFACT }}
-                branch { branch "master" }
+                branch "master"
             }
             steps {
                 echo "Tagging artifact"
