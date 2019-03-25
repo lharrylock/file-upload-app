@@ -9,12 +9,6 @@ export interface UploadMetadata {
     wellLabel: string;
 }
 
-export interface UploadTableRow {
-    barcode: string;
-    file: string;
-    wellLabel: string;
-}
-
 export interface AssociateFilesAndWellAction {
     payload: {
         barcode: string,

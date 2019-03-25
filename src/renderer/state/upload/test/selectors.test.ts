@@ -16,15 +16,18 @@ describe("Upload selectors", () => {
         });
 
         it("aggregates all files associated with a well given multiple files", () => {
+            const barcode = "test_barcode";
             const wellId = 2;
+            const wellLabel = "A1";
             const wellId2 = 5;
+            const wellLabel2 = "A5";
             const map = getWellIdToFiles({
                 ...mockState,
                 upload: getMockStateWithHistory({
-                    "/path1": {wellId},
-                    "/path2": {wellId},
-                    "/path3": {wellId},
-                    "/path4": {wellId: wellId2},
+                    "/path1": {barcode, wellId, wellLabel},
+                    "/path2": {barcode, wellId, wellLabel},
+                    "/path3": {barcode, wellId, wellLabel},
+                    "/path4": {barcode, wellId: wellId2, wellLabel: wellLabel2},
                 }),
             });
 
