@@ -89,8 +89,7 @@ def createBundleTask(nodeEnv, host, port, taskPrefix) {
             "--env", "GID=${gid}",
             "-v", "${projectDir}:/project",
             "-v", "${projectDir}/node_modules:/project/node_modules",
-            // todo update this once docker-virtual contains an image for electron-builder
-            "docker-staging-local.artifactory.corp.alleninstitute.org/electron-builder:feature-DT-93-create-repo",
+            "docker-virtual.artifactory.corp.alleninstitute.org/electron-builder:1.0.0-1.1.0",
             "/bin/bash", "-c", "yarn dist-all"
     ]
 
