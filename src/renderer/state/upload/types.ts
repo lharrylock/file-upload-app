@@ -9,8 +9,10 @@ export interface UploadMetadata {
 
 export interface AssociateFilesAndWellAction {
     payload: {
+        barcode: string,
         fullPaths: string[],
         wellId: number,
+        wellLabel: string,
     };
     type: string;
 }

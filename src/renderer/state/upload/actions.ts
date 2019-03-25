@@ -13,12 +13,14 @@ import {
     UndoFileWellAssociationAction
 } from "./types";
 
-export function associateFilesAndWell(fullPaths: string[], wellId: number)
+export function associateFilesAndWell(fullPaths: string[], wellId: number, wellLabel: string, barcode: string)
     : AssociateFilesAndWellAction {
     return {
         payload: {
+            barcode,
             fullPaths,
             wellId,
+            wellLabel,
         },
         type: ASSOCIATE_FILES_AND_WELL,
     };
