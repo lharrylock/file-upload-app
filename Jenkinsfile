@@ -10,7 +10,7 @@ pipeline {
     }
     agent {
         node {
-            label "docker"
+            label "electron"
         }
     }
     environment {
@@ -53,6 +53,16 @@ pipeline {
                 echo "This is not a master build or a promote build"
                 sh "${PYTHON} ${VENV_BIN}/manage_version -t gradle-minor-ahead -s prepare"
                 sh './gradlew -i snapshotPublish'
+            }
+        }
+        stage ("tag - master branch only") {
+            when {
+                not { expression { return params.PROMOTE_ARTIFACT }}
+                branch "master"
+            }
+            steps {
+                echo "Tagging artifact"
+                sh "${VENV_BIN}/manage_version -t gradle-minor-ahead -s tag"
             }
         }
         stage ("promote") {
