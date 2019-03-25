@@ -12,6 +12,7 @@ export interface UploadMetadata {
 export interface UploadTableRow {
     barcode: string;
     file: string;
+    key: string;
     wellLabel: string;
 }
 
