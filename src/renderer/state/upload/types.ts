@@ -4,7 +4,15 @@ export interface UploadStateBranch {
 
 // Metadata associated with a file
 export interface UploadMetadata {
+    barcode: string;
     wellId: number;
+    wellLabel: string;
+}
+
+export interface UploadTableRow {
+    barcode: string;
+    file: string;
+    wellLabel: string;
 }
 
 export interface AssociateFilesAndWellAction {
@@ -33,6 +41,10 @@ export interface JumpToUploadAction {
 }
 
 export interface ClearUploadHistoryAction {
+    type: string;
+}
+
+export interface UploadAction {
     type: string;
 }
 
