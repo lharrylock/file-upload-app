@@ -4,13 +4,17 @@ export interface UploadStateBranch {
 
 // Metadata associated with a file
 export interface UploadMetadata {
+    barcode: string;
     wellId: number;
+    wellLabel: string;
 }
 
 export interface AssociateFilesAndWellAction {
     payload: {
+        barcode: string,
         fullPaths: string[],
         wellId: number,
+        wellLabel: string,
     };
     type: string;
 }

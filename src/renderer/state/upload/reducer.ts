@@ -25,11 +25,14 @@ const actionToConfigMap: TypeToDescriptionMap = {
             const nextState = {...state};
 
             return action.payload.fullPaths.reduce((accum: UploadStateBranch, fullPath: string) => {
+                const { barcode, wellId, wellLabel } = action.payload;
                 return {
                     ...accum,
                     [fullPath]: {
                         ...accum[fullPath],
-                        wellId: action.payload.wellId,
+                        barcode,
+                        wellId,
+                        wellLabel,
                     },
                 };
             }, nextState);
