@@ -1,9 +1,14 @@
 import { expect } from "chai";
 
 import { AppEvent } from "../../../state/feedback/types";
-import { getStatusMessage, SECONDS_IN_A_DAY, SECONDS_IN_A_MINUTE, SECONDS_IN_AN_HOUR } from "../";
 
-const MILLISECONDS_PER_SECOND = 1000;
+import {
+    getStatusMessage,
+    MILLISECONDS_PER_SECOND,
+    SECONDS_IN_A_DAY,
+    SECONDS_IN_A_MINUTE,
+    SECONDS_IN_AN_HOUR
+} from "../";
 
 describe("getStatusMessage", () => {
     const message = "Something happened";
