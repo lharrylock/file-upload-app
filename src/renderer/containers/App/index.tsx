@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { ActionCreator } from "redux";
 
 import FolderTree from "../../components/FolderTree";
+import StatusBar from "../../components/StatusBar";
 import { selection } from "../../state";
 import { clearAlert } from "../../state/feedback/actions";
 import { getAlert, getIsLoading } from "../../state/feedback/selectors";
@@ -115,19 +116,22 @@ class App extends React.Component<AppProps, {}> {
 
         return (
             <div className={styles.container}>
-                {pageConfig.folderTreeVisible &&
-                   <FolderTree
-                       className={styles.folderTree}
-                       files={files}
-                       getFilesInFolder={getFilesInFolder}
-                       isLoading={loading}
-                       isSelectable={pageConfig.folderTreeSelectable}
-                       onCheck={selectFile}
-                       selectedKeys={selectedFiles}
-                       fileToTags={fileToTags}
-                   />
-                }
-                {pageConfig.container}
+                <div className={styles.mainContentContainer}>
+                    {pageConfig.folderTreeVisible &&
+                       <FolderTree
+                           className={styles.folderTree}
+                           files={files}
+                           getFilesInFolder={getFilesInFolder}
+                           isLoading={loading}
+                           isSelectable={pageConfig.folderTreeSelectable}
+                           onCheck={selectFile}
+                           selectedKeys={selectedFiles}
+                           fileToTags={fileToTags}
+                       />
+                    }
+                    {pageConfig.container}
+                </div>
+                <StatusBar className={styles.statusBar}/>
             </div>
         );
     }
