@@ -4,16 +4,15 @@ import { HOST } from "../../constants";
 import { AppEvent } from "../../state/feedback/types";
 
 const styles = require("./style.pcss");
-const SECONDS_IN_A_MINUTE = 60;
-const SECONDS_IN_AN_HOUR = 60 * SECONDS_IN_A_MINUTE;
-const SECONDS_IN_A_DAY = SECONDS_IN_AN_HOUR * 24;
+export const SECONDS_IN_A_MINUTE = 60;
+export const SECONDS_IN_AN_HOUR = 60 * SECONDS_IN_A_MINUTE;
+export const SECONDS_IN_A_DAY = SECONDS_IN_AN_HOUR * 24;
 
 export const getStatusMessage = (event?: AppEvent) => {
     if (!event) {
         return "";
     }
 
-    let message = event.message;
     let time = "";
     const now = new Date();
     const secondsElapsed = (now.getTime() - event.date.getTime()) / 1000;
@@ -29,10 +28,10 @@ export const getStatusMessage = (event?: AppEvent) => {
         time = `(today ${hour}:${minutes} ${ampm}`;
     } else {
         // clear out message because the event happened over a day ago
-        message = "";
+        return "";
     }
 
-    return `${message} ${time}`;
+    return `${event.message} ${time}`;
 };
 
 export interface StatusBarProps {
