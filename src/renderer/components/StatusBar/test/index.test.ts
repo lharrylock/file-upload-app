@@ -1,7 +1,5 @@
 import { expect } from "chai";
 
-import { AppEvent } from "../../../state/feedback/types";
-
 import {
     getStatusMessage,
     MILLISECONDS_PER_SECOND,
@@ -9,6 +7,8 @@ import {
     SECONDS_IN_A_MINUTE,
     SECONDS_IN_AN_HOUR
 } from "../";
+
+import { AlertType, AppEvent } from "../../../state/feedback/types";
 
 describe("getStatusMessage", () => {
     const message = "Something happened";
@@ -18,6 +18,7 @@ describe("getStatusMessage", () => {
         event = {
             date: new Date(),
             message,
+            type: AlertType.ERROR,
         };
     });
 

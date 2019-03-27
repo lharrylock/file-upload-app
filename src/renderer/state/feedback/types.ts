@@ -23,6 +23,7 @@ export interface AppAlert {
 export interface AppEvent {
     message: string;
     date: Date;
+    type: AlertType;
 }
 
 export enum AlertType {
