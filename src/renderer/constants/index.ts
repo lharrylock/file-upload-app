@@ -9,7 +9,7 @@ const {
     NODE_ENV,
 } = process.env;
 
-const HOST = NODE_ENV === "production" ? LIMS_HOST : `${LIMS_HOST}:${LIMS_PORT}`;
+export const HOST = NODE_ENV === "production" ? LIMS_HOST : `${LIMS_HOST}:${LIMS_PORT}`;
 
 export const LABKEY_URL = `${LIMS_PROTOCOL}://${HOST}/labkey`;
 export const LABKEY_SELECT_ROWS_URL = (schema: string, table: string, additionalQueries: string[] = []) => {
