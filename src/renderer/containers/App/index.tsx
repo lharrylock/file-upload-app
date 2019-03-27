@@ -8,8 +8,8 @@ import FolderTree from "../../components/FolderTree";
 import StatusBar from "../../components/StatusBar";
 import { selection } from "../../state";
 import { clearAlert } from "../../state/feedback/actions";
-import { getAlert, getIsLoading } from "../../state/feedback/selectors";
-import { AlertType, AppAlert, ClearAlertAction } from "../../state/feedback/types";
+import { getAlert, getIsLoading, getRecentEvent } from "../../state/feedback/selectors";
+import { AlertType, AppAlert, AppEvent, ClearAlertAction } from "../../state/feedback/types";
 import { requestMetadata } from "../../state/metadata/actions";
 import { RequestMetadataAction } from "../../state/metadata/types";
 import { getPage, getSelectedFiles, getStagedFiles } from "../../state/selection/selectors";
@@ -38,6 +38,7 @@ interface AppProps {
     files: UploadFile[];
     getFilesInFolder: ActionCreator<GetFilesInFolderAction>;
     loading: boolean;
+    recentEvent?: AppEvent;
     requestMetadata: ActionCreator<RequestMetadataAction>;
     selectFile: ActionCreator<SelectFileAction>;
     selectedFiles: string[];
@@ -103,6 +104,7 @@ class App extends React.Component<AppProps, {}> {
             files,
             getFilesInFolder,
             loading,
+            recentEvent,
             selectFile,
             selectedFiles,
             page,
@@ -131,7 +133,7 @@ class App extends React.Component<AppProps, {}> {
                     }
                     {pageConfig.container}
                 </div>
-                <StatusBar className={styles.statusBar}/>
+                <StatusBar className={styles.statusBar} event={recentEvent}/>
             </div>
         );
     }
@@ -144,6 +146,7 @@ function mapStateToProps(state: State) {
         files: getStagedFiles(state),
         loading: getIsLoading(state),
         page: getPage(state),
+        recentEvent: getRecentEvent(state),
         selectedFiles: getSelectedFiles(state),
     };
 }

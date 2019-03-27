@@ -1,5 +1,6 @@
 export interface FeedbackStateBranch {
     alert?: AppAlert;
+    events: AppEvent[];
     isLoading: boolean;
     requestsInProgress: HttpRequestType[];
 }
@@ -17,6 +18,11 @@ export interface AppAlert {
     message?: string;
     statusCode?: number;
     type: AlertType;
+}
+
+export interface AppEvent {
+    message: string;
+    date: Date;
 }
 
 export enum AlertType {
@@ -47,4 +53,13 @@ export interface AddRequestInProgressAction {
 export interface RemoveRequestInProgressAction {
     type: string;
     payload: HttpRequestType;
+}
+
+export interface AddEventAction {
+    type: string;
+    payload: {
+        date: Date;
+        message: string;
+        type: AlertType;
+    };
 }

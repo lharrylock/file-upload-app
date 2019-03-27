@@ -26,6 +26,7 @@ export const mockSelection: SelectionStateBranch = {
 
 export const mockState: State = {
     feedback: {
+        events: [],
         isLoading: false,
         requestsInProgress: [],
     },
