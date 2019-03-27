@@ -9,7 +9,7 @@ export const SECONDS_IN_AN_HOUR = 60 * SECONDS_IN_A_MINUTE;
 export const SECONDS_IN_A_DAY = SECONDS_IN_AN_HOUR * 24;
 export const MILLISECONDS_PER_SECOND = 1000;
 
-export const getStatusMessage = (event?: AppEvent) => {
+const getStatusMessage = (event?: AppEvent) => {
     if (!event) {
         return "";
     }
@@ -52,7 +52,7 @@ const StatusBar: React.FunctionComponent<StatusBarProps> = (props) => {
 
     return (
         <div className={classNames(styles.container, className)}>
-            <div className={styles.status}>{getStatusMessage(event)}</div>
+            <div className={classNames(styles.status, "status")}>{getStatusMessage(event)}</div>
             <div className={styles.host}>LIMS Host: {HOST}</div>
         </div>
     );
