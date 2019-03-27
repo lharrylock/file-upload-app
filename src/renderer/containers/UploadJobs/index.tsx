@@ -22,8 +22,12 @@ interface Props {
     uploads: UploadTableRow[];
 }
 
-class UploadJobs extends React.Component<Props, {}> {
-    private columns: any[] = [
+interface UploadJobsState {
+    selectedRowKeys: string[];
+}
+
+class UploadJobs extends React.Component<Props, UploadJobsState> {
+    private columns: any[] = [ // todo type
         {
             dataIndex: "barcode",
             key: "barcode",
@@ -45,9 +49,18 @@ class UploadJobs extends React.Component<Props, {}> {
             title: "Action",
         }];
 
+    private get rowSelection(): any {
+        return {
+            onChange: this.onSelectChange,
+            selectedRowKeys: this.state.selectedRowKeys,
+        };
+    }
+
     constructor(props: Props) {
         super(props);
-        this.state = {};
+        this.state = {
+            selectedRowKeys: [],
+        };
     }
 
     public render() {
@@ -64,7 +77,7 @@ class UploadJobs extends React.Component<Props, {}> {
                 saveButtonName="Upload"
                 onBack={this.props.goBack}
             >
-                <Table columns={this.columns} dataSource={uploads}/>
+                <Table columns={this.columns} dataSource={uploads} rowSelection={this.rowSelection}/>
             </FormPage>
         );
     }
@@ -77,6 +90,10 @@ class UploadJobs extends React.Component<Props, {}> {
         return () => {
             this.props.deleteUpload([upload.file]);
         };
+    }
+
+    private onSelectChange = (selectedRowKeys: string[]) => {
+        this.setState({selectedRowKeys});
     }
 }
 
