@@ -43,7 +43,8 @@ export interface ClearAlertAction {
 }
 
 export enum HttpRequestType {
-    GET_WELLS = 1,
+    GET_WELLS = "GET_WELLS",
+    START_UPLOAD = "START_UPLOAD",
 }
 
 export interface AddRequestInProgressAction {

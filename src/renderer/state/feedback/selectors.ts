@@ -1,4 +1,4 @@
-import { includes, last } from "lodash";
+import { difference, includes, isEmpty, last } from "lodash";
 import { createSelector } from "reselect";
 
 import { State } from "../types";
@@ -19,3 +19,9 @@ export const getEvents = (state: State) => state.feedback.events;
 export const getRecentEvent = createSelector([
     getEvents,
 ], (events: AppEvent[]) => last(events));
+
+export const getUploadInProgress = createSelector([
+    getRequestsInProgress,
+], (requestsInProgress: HttpRequestType[]) => {
+    return !isEmpty(difference([], requestsInProgress));
+});

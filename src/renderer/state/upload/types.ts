@@ -57,7 +57,7 @@ export interface DeleteUploadsAction {
     type: string;
 }
 
-export interface UploadAction {
+export interface InitiateUploadAction {
     type: string;
 }
 
