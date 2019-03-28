@@ -52,7 +52,7 @@ const StatusBar: React.FunctionComponent<StatusBarProps> = (props) => {
 
     return (
         <div className={classNames(styles.container, className)}>
-            <div className={classNames(styles.status, "status")}>{getStatusMessage(event)}</div>
+            <div className={styles.status}>{getStatusMessage(event)}</div>
             <div className={styles.host}>LIMS Host: {HOST}</div>
         </div>
     );
