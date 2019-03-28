@@ -10,9 +10,16 @@ export interface UploadMetadata {
 }
 
 export interface UploadTableRow {
+    // plate barcode associated with well and file
     barcode: string;
+
+    // fullpath of file
     file: string;
+
+    // also fullpath of file - used by ant.d Table to identify rows
     key: string;
+
+    // human readable identifier of well, such as "A1"
     wellLabel: string;
 }
 

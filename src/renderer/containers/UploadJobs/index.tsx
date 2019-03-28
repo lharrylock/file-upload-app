@@ -1,5 +1,6 @@
-import { Table } from "antd";
+import { Button, Table } from "antd";
 import { ColumnProps } from "antd/lib/table";
+import { isEmpty } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
 import { ActionCreator } from "redux";
@@ -12,19 +13,18 @@ import { deleteUpload } from "../../state/upload/actions";
 import { getUploadSummaryRows } from "../../state/upload/selectors";
 import { DeleteUploadsAction, UploadTableRow } from "../../state/upload/types";
 
-// const styles = require("./style.pcss");
+const styles = require("./style.pcss");
 
 interface Props {
     className?: string;
     deleteUpload: ActionCreator<DeleteUploadsAction>;
     goBack: ActionCreator<GoBackAction>;
-    // upload: ActionCreator<UploadAction>;
-    uploadInProgress: boolean;
     uploads: UploadTableRow[];
 }
 
 interface UploadJobsState {
-    selectedRowKeys: string[];
+    // array of fullpaths
+    selectedFiles: string[];
 }
 
 class UploadJobs extends React.Component<Props, UploadJobsState> {
@@ -50,57 +50,58 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
             title: "Action",
         }];
 
-    private get rowSelection(): any {
+    private get rowSelection(): any { // todo
         return {
             onChange: this.onSelectChange,
-            selectedRowKeys: this.state.selectedRowKeys,
+            selectedFiles: this.state.selectedFiles,
         };
     }
 
     constructor(props: Props) {
         super(props);
         this.state = {
-            selectedRowKeys: [],
+            selectedFiles: [],
         };
     }
 
     public render() {
-        const {className, uploadInProgress, uploads} = this.props;
+        const {className, uploads} = this.props;
+        const {selectedFiles} = this.state;
 
         return (
             <FormPage
                 className={className}
                 formTitle="UPLOAD JOBS"
                 formPrompt="Review files below and click Upload to complete process."
-                saveButtonDisabled={uploadInProgress}
-                onSave={this.upload}
-                saveInProgress={uploadInProgress}
-                saveButtonName="Upload"
                 onBack={this.props.goBack}
             >
+                <Button className={styles.deleteButton} onClick={this.removeUploads} disabled={isEmpty(selectedFiles)}>
+                    Delete Selected
+                </Button>
                 <Table columns={this.columns} dataSource={uploads} rowSelection={this.rowSelection}/>
             </FormPage>
         );
     }
 
-    private upload = (): void => {
-        // this.props.upload();
-    }
-
     private removeUpload = (upload: UploadTableRow) => {
         return () => {
+            this.setState({selectedFiles: []});
             this.props.deleteUpload([upload.file]);
         };
     }
 
-    private onSelectChange = (selectedRowKeys: string[]) => {
-        this.setState({selectedRowKeys});
+    private removeUploads = () => {
+        this.setState({selectedFiles: []});
+        this.props.deleteUpload(this.state.selectedFiles);
+    }
+
+    private onSelectChange = (selectedFiles: string[]) => {
+        this.setState({selectedFiles});
     }
 }
 
 function mapStateToProps(state: State) {
     return {
-        uploadInProgress: false, // todo
         uploads: getUploadSummaryRows(state),
     };
 }
