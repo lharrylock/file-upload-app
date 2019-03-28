@@ -2,7 +2,7 @@ export interface FeedbackStateBranch {
     alert?: AppAlert;
     events: AppEvent[];
     isLoading: boolean;
-    requestsInProgress: HttpRequestType[];
+    requestsInProgress: AsyncRequestType[];
 }
 
 export interface StartLoadingAction {
@@ -42,19 +42,21 @@ export interface ClearAlertAction {
     type: string;
 }
 
-export enum HttpRequestType {
+export enum AsyncRequestType {
     GET_WELLS = "GET_WELLS",
     START_UPLOAD = "START_UPLOAD",
+    COPY_FILES = "COPY_FILES",
+    UPLOAD_METADATA = "UPLOAD_METADATA",
 }
 
 export interface AddRequestInProgressAction {
     type: string;
-    payload: HttpRequestType;
+    payload: AsyncRequestType;
 }
 
 export interface RemoveRequestInProgressAction {
     type: string;
-    payload: HttpRequestType;
+    payload: AsyncRequestType;
 }
 
 export interface AddEventAction {

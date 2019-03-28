@@ -15,7 +15,7 @@ import {
     startLoading,
     stopLoading
 } from "../feedback/actions";
-import { AlertType, HttpRequestType } from "../feedback/types";
+import { AlertType, AsyncRequestType } from "../feedback/types";
 import { updatePageHistory } from "../metadata/actions";
 import { getSelectionHistory, getUploadHistory } from "../metadata/selectors";
 
@@ -207,7 +207,7 @@ const selectBarcodeLogic = createLogic({
                     receivedSuccessfulResponse = true;
                     const actions = [
                         setWells(wells),
-                        removeRequestFromInProgress(HttpRequestType.GET_WELLS),
+                        removeRequestFromInProgress(AsyncRequestType.GET_WELLS),
                         action,
                     ];
                     actions.push(...getGoForwardActions(Page.EnterBarcode, deps.getState()));
@@ -243,7 +243,7 @@ const selectBarcodeLogic = createLogic({
                     GENERIC_GET_WELLS_ERROR_MESSAGE(action.payload.barcode);
                 dispatch(batchActions([
                     action,
-                    removeRequestFromInProgress(HttpRequestType.GET_WELLS),
+                    removeRequestFromInProgress(AsyncRequestType.GET_WELLS),
                     setAlert({
                         message,
                         type: AlertType.ERROR,
@@ -257,7 +257,7 @@ const selectBarcodeLogic = createLogic({
     },
     transform: ({action}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
         next(batchActions([
-            addRequestToInProgress(HttpRequestType.GET_WELLS),
+            addRequestToInProgress(AsyncRequestType.GET_WELLS),
             action,
         ]));
     },

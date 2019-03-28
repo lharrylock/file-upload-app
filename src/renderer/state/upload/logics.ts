@@ -1,10 +1,10 @@
 import { createLogic } from "redux-logic";
 import { getWellLabel } from "../../util";
-import { addEvent, addRequestToInProgress } from "../feedback/actions";
-import { AlertType, HttpRequestType } from "../feedback/types";
+import { addEvent, addRequestToInProgress, removeRequestFromInProgress } from "../feedback/actions";
+import { AlertType, AsyncRequestType } from "../feedback/types";
 import { deselectFiles } from "../selection/actions";
 import { getSelectedBarcode, getWell } from "../selection/selectors";
-import { ReduxLogicNextCb, ReduxLogicTransformDependencies } from "../types";
+import { ReduxLogicDependencies, ReduxLogicDoneCb, ReduxLogicNextCb, ReduxLogicTransformDependencies } from "../types";
 import { batchActions } from "../util";
 import { ASSOCIATE_FILES_AND_WELL, INITIATE_UPLOAD } from "./constants";
 
@@ -25,10 +25,20 @@ const associateFileAndWellLogic = createLogic({
 });
 
 const initiateUploadLogic = createLogic({
+    process: ({getState}: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
+        setTimeout(() => {
+            dispatch(batchActions([
+                removeRequestFromInProgress(AsyncRequestType.START_UPLOAD),
+                addEvent("Upload Finished", AlertType.SUCCESS, new Date()),
+            ]));
+
+            done();
+        }, 3000);
+    },
     transform: ({action}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
         next(batchActions([
             addEvent("Starting upload", AlertType.INFO, new Date()),
-            addRequestToInProgress(HttpRequestType.START_UPLOAD),
+            addRequestToInProgress(AsyncRequestType.START_UPLOAD),
             action,
         ]));
     },

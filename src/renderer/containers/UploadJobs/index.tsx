@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { ActionCreator } from "redux";
 
 import FormPage from "../../components/FormPage";
+import { getUploadInProgress } from "../../state/feedback/selectors";
 import { goBack } from "../../state/selection/actions";
 import { GoBackAction } from "../../state/selection/types";
 import { State } from "../../state/types";
@@ -172,7 +173,7 @@ function mapStateToProps(state: State) {
     return {
         canRedo: getCanRedoUpload(state),
         canUndo: getCanUndoUpload(state),
-        uploadInProgress: false, // todo
+        uploadInProgress: getUploadInProgress(state),
         uploads: getUploadSummaryRows(state),
     };
 }
