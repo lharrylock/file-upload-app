@@ -9,16 +9,19 @@ import { goBack } from "../../state/selection/actions";
 import { GoBackAction } from "../../state/selection/types";
 
 import { State } from "../../state/types";
-import { deleteUpload } from "../../state/upload/actions";
-import { getUploadSummaryRows } from "../../state/upload/selectors";
-import { DeleteUploadsAction, UploadTableRow } from "../../state/upload/types";
+import { deleteUpload, jumpToUpload } from "../../state/upload/actions";
+import { getCanRedoUpload, getCanUndoUpload, getUploadSummaryRows } from "../../state/upload/selectors";
+import { DeleteUploadsAction, JumpToUploadAction, UploadTableRow } from "../../state/upload/types";
 
 const styles = require("./style.pcss");
 
 interface Props {
+    canRedo: boolean;
+    canUndo: boolean;
     className?: string;
     deleteUpload: ActionCreator<DeleteUploadsAction>;
     goBack: ActionCreator<GoBackAction>;
+    jumpToUpload: ActionCreator<JumpToUploadAction>;
     uploads: UploadTableRow[];
 }
 
@@ -65,8 +68,10 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
     }
 
     public render() {
-        const {className, uploads} = this.props;
-        const {selectedFiles} = this.state;
+        const {
+            className,
+            uploads,
+        } = this.props;
 
         return (
             <FormPage
@@ -75,11 +80,31 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
                 formPrompt="Review files below and click Upload to complete process."
                 onBack={this.props.goBack}
             >
-                <Button className={styles.deleteButton} onClick={this.removeUploads} disabled={isEmpty(selectedFiles)}>
-                    Delete Selected
-                </Button>
+                {this.renderButtons()}
                 <Table columns={this.columns} dataSource={uploads} rowSelection={this.rowSelection}/>
             </FormPage>
+        );
+    }
+
+    private renderButtons = () => {
+        const {
+            canRedo,
+            canUndo,
+        } = this.props;
+        const {selectedFiles} = this.state;
+
+        return (
+            <div className={styles.buttonRow}>
+                <div className={styles.deleteButton}>
+                    <Button onClick={this.removeUploads} disabled={isEmpty(selectedFiles)}>
+                        Delete Selected
+                    </Button>
+                </div>
+                <div className={styles.undoRedoButtons}>
+                    <Button className={styles.undoButton} onClick={this.undo} disabled={!canUndo}>Undo</Button>
+                    <Button className={styles.redoButton} onClick={this.redo} disabled={!canRedo}>Redo</Button>
+                </div>
+            </div>
         );
     }
 
@@ -90,18 +115,28 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
         };
     }
 
-    private removeUploads = () => {
+    private removeUploads = (): void => {
         this.setState({selectedFiles: []});
         this.props.deleteUpload(this.state.selectedFiles);
     }
 
-    private onSelectChange = (selectedFiles: string[]) => {
+    private onSelectChange = (selectedFiles: string[]): void => {
         this.setState({selectedFiles});
+    }
+
+    private undo = (): void => {
+        this.props.jumpToUpload(-1);
+    }
+
+    private redo = (): void => {
+        this.props.jumpToUpload(1);
     }
 }
 
 function mapStateToProps(state: State) {
     return {
+        canRedo: getCanRedoUpload(state),
+        canUndo: getCanUndoUpload(state),
         uploads: getUploadSummaryRows(state),
     };
 }
@@ -109,6 +144,7 @@ function mapStateToProps(state: State) {
 const dispatchToPropsMap = {
     deleteUpload,
     goBack,
+    jumpToUpload,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(UploadJobs);
