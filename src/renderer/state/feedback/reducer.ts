@@ -6,6 +6,7 @@ import {
 import { makeReducer } from "../util";
 
 import {
+    ADD_EVENT,
     ADD_REQUEST_IN_PROGRESS,
     CLEAR_ALERT,
     REMOVE_REQUEST_IN_PROGRESS,
@@ -14,6 +15,7 @@ import {
     STOP_LOADING,
 } from "./constants";
 import {
+    AddEventAction,
     AddRequestInProgressAction,
     ClearAlertAction,
     FeedbackStateBranch,
@@ -24,6 +26,7 @@ import {
 } from "./types";
 
 export const initialState: FeedbackStateBranch = {
+    events: [],
     isLoading: false,
     requestsInProgress: [],
 };
@@ -81,6 +84,15 @@ const actionToConfigMap: TypeToDescriptionMap = {
             return {
                 ...state,
                 requestsInProgress,
+            };
+        },
+    },
+    [ADD_EVENT]: {
+        accepts: (action: AnyAction): action is AddEventAction => action.type === ADD_EVENT,
+        perform: (state: FeedbackStateBranch, action: AddEventAction) => {
+            return {
+                ...state,
+                events: [...state.events, action.payload],
             };
         },
     },
