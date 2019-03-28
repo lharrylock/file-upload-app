@@ -62,8 +62,18 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
 
     private get rowSelection() {
         return {
+            hideDefaultSelections: true,
             onChange: this.onSelectChange,
             selectedRowKeys: this.state.selectedFiles,
+            selections: [
+                {
+                    key: "all-data",
+                    onSelect: () => this.setState({
+                        selectedFiles: this.props.uploads.map((u) => u.file),
+                    }),
+                    text: "Select all pages",
+                },
+            ],
         };
     }
 
