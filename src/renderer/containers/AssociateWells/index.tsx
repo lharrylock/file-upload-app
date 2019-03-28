@@ -66,6 +66,7 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
                 formPrompt="Associate files and wells by selecting them and clicking Associate"
                 onBack={this.props.goBack}
                 onSave={this.props.goForward}
+                saveButtonDisabled={!this.canContinue()}
             >
                 <SelectedWellCard
                     className={styles.wellInfo}
@@ -119,6 +120,10 @@ class AssociateWells extends React.Component<AssociateWellsProps, {}> {
 
     private redo(): void {
         this.props.jumpToUpload(1);
+    }
+
+    private canContinue = (): boolean => {
+        return this.props.wellIdToFiles.size > 0;
     }
 }
 
