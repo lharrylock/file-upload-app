@@ -39,15 +39,6 @@ describe("<StatusBar/>", () => {
         expect(result).to.equal(`${message} (moments ago)`);
     });
 
-    it("returns (moments ago) if date is 20 seconds ago", () => {
-        event = {
-            ...event,
-            date: new Date(Date.now() - 20 * MILLISECONDS_PER_SECOND),
-        };
-        const result = getStatusText();
-        expect(result).to.equal(`${message} (moments ago)`);
-    });
-
     it("returns (3 minutes ago) if date is around 3 minutes ago", () => {
         event = {
             ...event,
