@@ -12,6 +12,7 @@ import { State } from "../../state/types";
 import { deleteUpload, jumpToUpload } from "../../state/upload/actions";
 import { getCanRedoUpload, getCanUndoUpload, getUploadSummaryRows } from "../../state/upload/selectors";
 import { DeleteUploadsAction, JumpToUploadAction, UploadTableRow } from "../../state/upload/types";
+import { compareStrings } from "../../util";
 
 const styles = require("./style.pcss");
 
@@ -35,16 +36,22 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
         {
             dataIndex: "barcode",
             key: "barcode",
+            sortDirections: ["ascend", "descend"],
+            sorter: (a, b) => compareStrings(a.barcode, b.barcode),
             title: "Barcode",
         },
         {
             dataIndex: "file",
             key: "file",
+            sortDirections: ["ascend", "descend"],
+            sorter: (a, b) => compareStrings(a.file, b.file),
             title: "File",
         },
         {
             dataIndex: "wellLabel",
             key: "wellLabel",
+            sortDirections: ["ascend", "descend"],
+            sorter: (a, b) => compareStrings(a.wellLabel, b.wellLabel),
             title: "Well",
         },
         {

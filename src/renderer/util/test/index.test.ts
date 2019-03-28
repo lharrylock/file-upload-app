@@ -2,7 +2,7 @@
 
 import { expect } from "chai";
 
-import { bindAll } from "../";
+import { bindAll, compareStrings } from "../";
 import { getWellLabel } from "../index";
 
 describe("General utilities", () => {
@@ -83,5 +83,22 @@ describe("General utilities", () => {
            const wellLabel = getWellLabel(undefined, NONE);
            expect(wellLabel).to.equal(NONE);
        });
+    });
+
+    describe("compareStrings", () => {
+        it("should return 0 if strings are equal", () => {
+            const result = compareStrings("foo", "foo");
+            expect(result).to.equal(0);
+        });
+
+        it("should return 1 if a is alphabetically before b", () => {
+            const result = compareStrings("bar", "foo");
+            expect(result).to.equal(1);
+        });
+
+        it("should return -1 if a is alphabetically after b", () => {
+            const result = compareStrings("foo", "bar");
+            expect(result).to.equal(-1);
+        });
     });
 });
