@@ -1,4 +1,5 @@
 import {
+    ADD_EVENT,
     ADD_REQUEST_IN_PROGRESS,
     CLEAR_ALERT,
     REMOVE_REQUEST_IN_PROGRESS,
@@ -8,7 +9,9 @@ import {
 } from "./constants";
 
 import {
+    AddEventAction,
     AddRequestInProgressAction,
+    AlertType,
     AppAlert,
     ClearAlertAction, HttpRequestType, RemoveRequestInProgressAction, SetAlertAction,
     StartLoadingAction,
@@ -50,5 +53,16 @@ export function removeRequestFromInProgress(payload: HttpRequestType): RemoveReq
     return {
         payload,
         type: REMOVE_REQUEST_IN_PROGRESS,
+    };
+}
+
+export function addEvent(message: string, type: AlertType, date: Date): AddEventAction {
+    return {
+        payload: {
+            date,
+            message,
+            type,
+        },
+        type: ADD_EVENT,
     };
 }
