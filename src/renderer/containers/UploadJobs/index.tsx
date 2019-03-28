@@ -4,10 +4,10 @@ import { isEmpty } from "lodash";
 import * as React from "react";
 import { connect } from "react-redux";
 import { ActionCreator } from "redux";
+
 import FormPage from "../../components/FormPage";
 import { goBack } from "../../state/selection/actions";
 import { GoBackAction } from "../../state/selection/types";
-
 import { State } from "../../state/types";
 import { deleteUpload, jumpToUpload } from "../../state/upload/actions";
 import { getCanRedoUpload, getCanUndoUpload, getUploadSummaryRows } from "../../state/upload/selectors";
@@ -60,7 +60,7 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
             title: "Action",
         }];
 
-    private get rowSelection(): any { // todo
+    private get rowSelection() {
         return {
             onChange: this.onSelectChange,
             selectedFiles: this.state.selectedFiles,
@@ -127,8 +127,10 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
         this.props.deleteUpload(this.state.selectedFiles);
     }
 
-    private onSelectChange = (selectedFiles: string[]): void => {
-        this.setState({selectedFiles});
+    private onSelectChange = (selectedFiles: string[] | number[]): void => {
+        // keys are always defined on the rows as a string so we can safely cast this:
+        const files = selectedFiles as string[];
+        this.setState({selectedFiles: files});
     }
 
     private undo = (): void => {
