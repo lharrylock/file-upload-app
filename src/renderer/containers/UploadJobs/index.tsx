@@ -63,7 +63,7 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
     private get rowSelection() {
         return {
             onChange: this.onSelectChange,
-            selectedFiles: this.state.selectedFiles,
+            selectedRowKeys: this.state.selectedFiles,
         };
     }
 
