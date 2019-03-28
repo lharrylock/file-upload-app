@@ -1,4 +1,5 @@
 import { Table } from "antd";
+import { ColumnProps } from "antd/lib/table";
 import * as React from "react";
 import { connect } from "react-redux";
 import { ActionCreator } from "redux";
@@ -27,7 +28,7 @@ interface UploadJobsState {
 }
 
 class UploadJobs extends React.Component<Props, UploadJobsState> {
-    private columns: any[] = [ // todo type
+    private columns: Array<ColumnProps<UploadTableRow>> = [
         {
             dataIndex: "barcode",
             key: "barcode",
