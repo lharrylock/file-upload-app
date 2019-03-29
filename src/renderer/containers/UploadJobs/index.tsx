@@ -9,9 +9,9 @@ import FormPage from "../../components/FormPage";
 import { goBack } from "../../state/selection/actions";
 import { GoBackAction } from "../../state/selection/types";
 import { State } from "../../state/types";
-import { deleteUpload, jumpToUpload } from "../../state/upload/actions";
+import { jumpToUpload, removeUploads } from "../../state/upload/actions";
 import { getCanRedoUpload, getCanUndoUpload, getUploadSummaryRows } from "../../state/upload/selectors";
-import { DeleteUploadsAction, JumpToUploadAction, UploadTableRow } from "../../state/upload/types";
+import { JumpToUploadAction, RemoveUploadsAction, UploadTableRow } from "../../state/upload/types";
 import { alphaOrderComparator } from "../../util";
 
 const styles = require("./style.pcss");
@@ -20,7 +20,7 @@ interface Props {
     canRedo: boolean;
     canUndo: boolean;
     className?: string;
-    deleteUpload: ActionCreator<DeleteUploadsAction>;
+    removeUploads: ActionCreator<RemoveUploadsAction>;
     goBack: ActionCreator<GoBackAction>;
     jumpToUpload: ActionCreator<JumpToUploadAction>;
     uploads: UploadTableRow[];
@@ -56,7 +56,7 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
         },
         {
             key: "action",
-            render: (text: string, record: UploadTableRow) => (<a onClick={this.removeUpload(record)}>Delete</a>),
+            render: (text: string, record: UploadTableRow) => (<a onClick={this.removeUpload(record)}>Remove</a>),
             title: "Action",
         }];
 
@@ -114,7 +114,7 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
             <div className={styles.buttonRow}>
                 <div className={styles.deleteButton}>
                     <Button onClick={this.removeUploads} disabled={isEmpty(selectedFiles)}>
-                        Delete Selected
+                        Remove Selected
                     </Button>
                 </div>
                 <div className={styles.undoRedoButtons}>
@@ -128,13 +128,13 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
     private removeUpload = (upload: UploadTableRow) => {
         return () => {
             this.setState({selectedFiles: []});
-            this.props.deleteUpload([upload.file]);
+            this.props.removeUploads([upload.file]);
         };
     }
 
     private removeUploads = (): void => {
         this.setState({selectedFiles: []});
-        this.props.deleteUpload(this.state.selectedFiles);
+        this.props.removeUploads(this.state.selectedFiles);
     }
 
     private onSelectChange = (selectedFiles: string[] | number[]): void => {
@@ -161,9 +161,9 @@ function mapStateToProps(state: State) {
 }
 
 const dispatchToPropsMap = {
-    deleteUpload,
     goBack,
     jumpToUpload,
+    removeUploads,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(UploadJobs);

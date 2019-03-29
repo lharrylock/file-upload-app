@@ -52,7 +52,7 @@ export interface ClearUploadHistoryAction {
     type: string;
 }
 
-export interface DeleteUploadsAction {
+export interface RemoveUploadsAction {
     payload: string[]; // fullpaths to remove from upload state branch
     type: string;
 }

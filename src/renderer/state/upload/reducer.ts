@@ -16,7 +16,7 @@ import {
 } from "./constants";
 import {
     AssociateFilesAndWellAction,
-    DeleteUploadsAction,
+    RemoveUploadsAction,
     UndoFileWellAssociationAction,
     UploadStateBranch
 } from "./types";
@@ -57,8 +57,8 @@ const actionToConfigMap: TypeToDescriptionMap = {
         }),
     },
     [DELETE_UPLOAD]: {
-        accepts: (action: AnyAction): action is DeleteUploadsAction => action.type === DELETE_UPLOAD,
-        perform: (state: UploadStateBranch, action: DeleteUploadsAction) => omit(state, action.payload),
+        accepts: (action: AnyAction): action is RemoveUploadsAction => action.type === DELETE_UPLOAD,
+        perform: (state: UploadStateBranch, action: RemoveUploadsAction) => omit(state, action.payload),
     },
 };
 
