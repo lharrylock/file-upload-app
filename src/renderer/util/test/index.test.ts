@@ -2,7 +2,7 @@
 
 import { expect } from "chai";
 
-import { bindAll, alphaOrderComparator } from "../";
+import { alphaOrderComparator, bindAll } from "../";
 import { getWellLabel } from "../index";
 
 describe("General utilities", () => {
