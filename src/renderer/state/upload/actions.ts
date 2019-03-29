@@ -10,9 +10,10 @@ import {
 import {
     AssociateFilesAndWellAction,
     ClearUploadHistoryAction,
-    DeleteUploadsAction, InitiateUploadAction,
+    InitiateUploadAction,
     JumpToPastUploadAction,
     JumpToUploadAction,
+    RemoveUploadsAction,
     UndoFileWellAssociationAction
 } from "./types";
 
@@ -56,7 +57,7 @@ export function clearUploadHistory(): ClearUploadHistoryAction {
     };
 }
 
-export function deleteUpload(fullPaths: string[]): DeleteUploadsAction {
+export function removeUploads(fullPaths: string[]): RemoveUploadsAction {
     return {
         payload: fullPaths,
         type: DELETE_UPLOAD,

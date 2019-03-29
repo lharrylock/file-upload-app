@@ -10,15 +10,15 @@ import { getUploadInProgress } from "../../state/feedback/selectors";
 import { goBack } from "../../state/selection/actions";
 import { GoBackAction } from "../../state/selection/types";
 import { State } from "../../state/types";
-import { deleteUpload, initiateUpload, jumpToUpload } from "../../state/upload/actions";
+import { initiateUpload, jumpToUpload, removeUploads } from "../../state/upload/actions";
 import { getCanRedoUpload, getCanUndoUpload, getUploadSummaryRows } from "../../state/upload/selectors";
 import {
-    DeleteUploadsAction,
     InitiateUploadAction,
     JumpToUploadAction,
+    RemoveUploadsAction,
     UploadTableRow,
 } from "../../state/upload/types";
-import { compareStrings } from "../../util";
+import { alphaOrderComparator } from "../../util";
 
 const styles = require("./style.pcss");
 
@@ -26,7 +26,7 @@ interface Props {
     canRedo: boolean;
     canUndo: boolean;
     className?: string;
-    deleteUpload: ActionCreator<DeleteUploadsAction>;
+    removeUploads: ActionCreator<RemoveUploadsAction>;
     goBack: ActionCreator<GoBackAction>;
     initiateUpload: ActionCreator<InitiateUploadAction>;
     uploadInProgress: boolean;
@@ -45,26 +45,26 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
             dataIndex: "barcode",
             key: "barcode",
             sortDirections: ["ascend", "descend"],
-            sorter: (a, b) => compareStrings(a.barcode, b.barcode),
+            sorter: (a, b) => alphaOrderComparator(a.barcode, b.barcode),
             title: "Barcode",
         },
         {
             dataIndex: "file",
             key: "file",
             sortDirections: ["ascend", "descend"],
-            sorter: (a, b) => compareStrings(a.file, b.file),
+            sorter: (a, b) => alphaOrderComparator(a.file, b.file),
             title: "File",
         },
         {
             dataIndex: "wellLabel",
             key: "wellLabel",
             sortDirections: ["ascend", "descend"],
-            sorter: (a, b) => compareStrings(a.wellLabel, b.wellLabel),
+            sorter: (a, b) => alphaOrderComparator(a.wellLabel, b.wellLabel),
             title: "Well",
         },
         {
             key: "action",
-            render: (text: string, record: UploadTableRow) => (<a onClick={this.removeUpload(record)}>Delete</a>),
+            render: (text: string, record: UploadTableRow) => (<a onClick={this.removeUpload(record)}>Remove</a>),
             title: "Action",
         }];
 
@@ -127,7 +127,7 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
             <div className={styles.buttonRow}>
                 <div className={styles.deleteButton}>
                     <Button onClick={this.removeUploads} disabled={isEmpty(selectedFiles)}>
-                        Delete Selected
+                        Remove Selected
                     </Button>
                 </div>
                 <div className={styles.undoRedoButtons}>
@@ -145,13 +145,13 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
     private removeUpload = (upload: UploadTableRow) => {
         return () => {
             this.setState({selectedFiles: []});
-            this.props.deleteUpload([upload.file]);
+            this.props.removeUploads([upload.file]);
         };
     }
 
     private removeUploads = (): void => {
         this.setState({selectedFiles: []});
-        this.props.deleteUpload(this.state.selectedFiles);
+        this.props.removeUploads(this.state.selectedFiles);
     }
 
     private onSelectChange = (selectedFiles: string[] | number[]): void => {
@@ -179,10 +179,10 @@ function mapStateToProps(state: State) {
 }
 
 const dispatchToPropsMap = {
-    deleteUpload,
     goBack,
     initiateUpload,
     jumpToUpload,
+    removeUploads,
 };
 
 export default connect(mapStateToProps, dispatchToPropsMap)(UploadJobs);
