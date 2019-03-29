@@ -1,6 +1,7 @@
 import {
     ASSOCIATE_FILES_AND_WELL,
     CLEAR_UPLOAD_HISTORY,
+    DELETE_UPLOAD,
     JUMP_TO_PAST_UPLOAD,
     JUMP_TO_UPLOAD,
     UNDO_FILE_WELL_ASSOCIATION
@@ -10,6 +11,7 @@ import {
     ClearUploadHistoryAction,
     JumpToPastUploadAction,
     JumpToUploadAction,
+    RemoveUploadsAction,
     UndoFileWellAssociationAction
 } from "./types";
 
@@ -50,5 +52,12 @@ export function jumpToUpload(index: number): JumpToUploadAction {
 export function clearUploadHistory(): ClearUploadHistoryAction {
     return {
         type: CLEAR_UPLOAD_HISTORY,
+    };
+}
+
+export function removeUploads(fullPaths: string[]): RemoveUploadsAction {
+    return {
+        payload: fullPaths,
+        type: DELETE_UPLOAD,
     };
 }

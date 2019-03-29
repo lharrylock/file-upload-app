@@ -9,6 +9,20 @@ export interface UploadMetadata {
     wellLabel: string;
 }
 
+export interface UploadTableRow {
+    // plate barcode associated with well and file
+    barcode: string;
+
+    // fullpath of file
+    file: string;
+
+    // also fullpath of file - used by ant.d Table to identify rows
+    key: string;
+
+    // human readable identifier of well, such as "A1"
+    wellLabel: string;
+}
+
 export interface AssociateFilesAndWellAction {
     payload: {
         barcode: string,
@@ -35,6 +49,15 @@ export interface JumpToUploadAction {
 }
 
 export interface ClearUploadHistoryAction {
+    type: string;
+}
+
+export interface RemoveUploadsAction {
+    payload: string[]; // fullpaths to remove from upload state branch
+    type: string;
+}
+
+export interface UploadAction {
     type: string;
 }
 
