@@ -20,7 +20,6 @@ import { updatePageHistory } from "../metadata/actions";
 import { getSelectionHistory, getUploadHistory } from "../metadata/selectors";
 
 import {
-    AicsSuccessResponse,
     HTTP_STATUS,
     ReduxLogicDependencies,
     ReduxLogicDoneCb,
@@ -177,7 +176,7 @@ const getFilesInFolderLogic = createLogic({
 });
 
 async function getWells({ action, getState, httpClient, baseMmsUrl }: ReduxLogicTransformDependencies,
-                        plateId: number): Promise<AxiosResponse<AicsSuccessResponse<Well[]>>> {
+                        plateId: number): Promise<AxiosResponse> {
     return httpClient.get(`${baseMmsUrl}/1.0/plate/${plateId}/well/`);
 }
 

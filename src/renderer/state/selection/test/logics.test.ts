@@ -14,7 +14,7 @@ import { getAlert, getRequestsInProgressContains } from "../../feedback/selector
 import { AlertType, AppAlert, AsyncRequestType } from "../../feedback/types";
 import { createMockReduxStore, mockReduxLogicDeps } from "../../test/configure-mock-store";
 import { getMockStateWithHistory, mockSelection, mockState } from "../../test/mocks";
-import { AicsSuccessResponse, HTTP_STATUS } from "../../types";
+import { HTTP_STATUS } from "../../types";
 import { selectBarcode } from "../actions";
 import { GENERIC_GET_WELLS_ERROR_MESSAGE, MMS_IS_DOWN_MESSAGE, MMS_MIGHT_BE_DOWN_MESSAGE } from "../logics";
 import { UploadFileImpl } from "../models/upload-file";
@@ -340,7 +340,7 @@ describe("Selection logics", () => {
     describe("selectBarcodeLogic", () => {
         const barcode = "1234";
         const plateId = 1;
-        let mockOkResponse: AxiosResponse<AicsSuccessResponse<Well[][]>>;
+        let mockOkResponse: AxiosResponse;
         let mockBadGatewayResponse: AxiosError;
         const createMockReduxLogicDeps = (getStub: SinonStub) => ({
             ...mockReduxLogicDeps,

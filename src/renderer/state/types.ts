@@ -25,8 +25,8 @@ export interface BatchedAction {
 export interface ReduxLogicExtraDependencies {
     baseMmsUrl: string;
     httpClient: {
-        get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>;
-        post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
+        get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise;
+        post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise;
     };
     ctx?: any;
     dialog: {

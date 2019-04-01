@@ -1,6 +1,6 @@
 import * as classNames from "classnames";
 import * as React from "react";
-import { HOST } from "../../constants";
+import { BASE_URL } from "../../constants";
 import { AppEvent } from "../../state/feedback/types";
 
 const styles = require("./style.pcss");
@@ -53,7 +53,7 @@ const StatusBar: React.FunctionComponent<StatusBarProps> = (props) => {
     return (
         <div className={classNames(styles.container, className)}>
             <div className={styles.status}>{getStatusMessage(event)}</div>
-            <div className={styles.host}>LIMS Host: {HOST}</div>
+            <div className={styles.host}>LIMS Host: {BASE_URL}</div>
         </div>
     );
 };
