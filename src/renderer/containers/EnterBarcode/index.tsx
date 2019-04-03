@@ -8,7 +8,7 @@ import { ActionCreator } from "redux";
 import FormPage from "../../components/FormPage";
 import { setAlert } from "../../state/feedback/actions";
 import { getRequestsInProgressContains } from "../../state/feedback/selectors";
-import { AlertType, AsyncRequestType, SetAlertAction } from "../../state/feedback/types";
+import { AlertType, AsyncRequest, SetAlertAction } from "../../state/feedback/types";
 import { goBack, selectBarcode } from "../../state/selection/actions";
 import { getSelectedBarcode, getSelectedPlateId } from "../../state/selection/selectors";
 import { GoBackAction, SelectBarcodeAction } from "../../state/selection/types";
@@ -119,7 +119,7 @@ function mapStateToProps(state: State) {
     return {
         barcode: getSelectedBarcode(state),
         plateId: getSelectedPlateId(state),
-        saveInProgress: getRequestsInProgressContains(state, AsyncRequestType.GET_WELLS),
+        saveInProgress: getRequestsInProgressContains(state, AsyncRequest.GET_WELLS),
     };
 }
 

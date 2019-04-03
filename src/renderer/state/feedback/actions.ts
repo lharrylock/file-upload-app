@@ -13,7 +13,7 @@ import {
     AddRequestInProgressAction,
     AlertType,
     AppAlert,
-    AsyncRequestType,
+    AsyncRequest,
     ClearAlertAction,
     RemoveRequestInProgressAction,
     SetAlertAction,
@@ -45,14 +45,14 @@ export function stopLoading(): StopLoadingAction {
     };
 }
 
-export function addRequestToInProgress(payload: AsyncRequestType): AddRequestInProgressAction {
+export function addRequestToInProgress(payload: AsyncRequest): AddRequestInProgressAction {
     return {
         payload,
         type: ADD_REQUEST_IN_PROGRESS,
     };
 }
 
-export function removeRequestFromInProgress(payload: AsyncRequestType): RemoveRequestInProgressAction {
+export function removeRequestFromInProgress(payload: AsyncRequest): RemoveRequestInProgressAction {
     return {
         payload,
         type: REMOVE_REQUEST_IN_PROGRESS,

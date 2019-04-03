@@ -11,7 +11,7 @@ import selections from "../";
 import { feedback } from "../../";
 import { API_WAIT_TIME_SECONDS } from "../../constants";
 import { getAlert, getRequestsInProgressContains } from "../../feedback/selectors";
-import { AlertType, AppAlert, AsyncRequestType } from "../../feedback/types";
+import { AlertType, AppAlert, AsyncRequest } from "../../feedback/types";
 import { createMockReduxStore, mockReduxLogicDeps } from "../../test/configure-mock-store";
 import { getMockStateWithHistory, mockSelection, mockState } from "../../test/mocks";
 import { HTTP_STATUS } from "../../types";
@@ -340,7 +340,7 @@ describe("Selection logics", () => {
     describe("selectBarcodeLogic", () => {
         const barcode = "1234";
         const plateId = 1;
-        let mockOkResponse: AxiosResponse;
+        let mockOkResponse: AxiosResponse<AicsSuccessResponse<Well[][]>>;
         let mockBadGatewayResponse: AxiosError;
         const createMockReduxLogicDeps = (getStub: SinonStub) => ({
             ...mockReduxLogicDeps,
@@ -385,14 +385,14 @@ describe("Selection logics", () => {
         it("Adds GET wells request to requests in progress", (done) => {
             const getStub = sinon.stub().resolves(mockOkResponse);
             const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
-            expect(getRequestsInProgressContains(store.getState(), AsyncRequestType.GET_WELLS)).to.be.false;
+            expect(getRequestsInProgressContains(store.getState(), AsyncRequest.GET_WELLS)).to.be.false;
             let storeUpdates = 0;
             store.subscribe(() => {
                 storeUpdates++;
 
                 if (storeUpdates === 1) {
                     const state = store.getState();
-                    expect(getRequestsInProgressContains(state, AsyncRequestType.GET_WELLS)).to.be.true;
+                    expect(getRequestsInProgressContains(state, AsyncRequest.GET_WELLS)).to.be.true;
                     done();
                 }
             });
@@ -403,7 +403,7 @@ describe("Selection logics", () => {
         it ("removes GET wells from requests in progress if GET wells is OK", (done) => {
             const getStub = sinon.stub().callsFake(() => {
                 store.subscribe(() => {
-                    expect(getRequestsInProgressContains(store.getState(), AsyncRequestType.GET_WELLS)).to.be.false;
+                    expect(getRequestsInProgressContains(store.getState(), AsyncRequest.GET_WELLS)).to.be.false;
                     done();
                 });
                 return Promise.resolve(mockOkResponse);
@@ -438,7 +438,7 @@ describe("Selection logics", () => {
             const getStub = sinon.stub().callsFake(() => {
                 store.subscribe(() => {
                     const state = store.getState();
-                    expect(getRequestsInProgressContains(state, AsyncRequestType.GET_WELLS)).to.be.false;
+                    expect(getRequestsInProgressContains(state, AsyncRequest.GET_WELLS)).to.be.false;
                     expect(getStub.callCount).to.equal(1);
 
                     const alert = getAlert(state);

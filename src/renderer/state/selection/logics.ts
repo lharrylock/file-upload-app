@@ -15,11 +15,12 @@ import {
     startLoading,
     stopLoading
 } from "../feedback/actions";
-import { AlertType, AsyncRequestType } from "../feedback/types";
+import { AlertType, AsyncRequest } from "../feedback/types";
 import { updatePageHistory } from "../metadata/actions";
 import { getSelectionHistory, getUploadHistory } from "../metadata/selectors";
 
 import {
+    AicsSuccessResponse,
     HTTP_STATUS,
     ReduxLogicDependencies,
     ReduxLogicDoneCb,
@@ -176,7 +177,7 @@ const getFilesInFolderLogic = createLogic({
 });
 
 async function getWells({ action, getState, httpClient, baseMmsUrl }: ReduxLogicTransformDependencies,
-                        plateId: number): Promise<AxiosResponse> {
+                        plateId: number): Promise<AxiosResponse<AicsSuccessResponse<Well[]>>> {
     return httpClient.get(`${baseMmsUrl}/1.0/plate/${plateId}/well/`);
 }
 
@@ -206,7 +207,7 @@ const selectBarcodeLogic = createLogic({
                     receivedSuccessfulResponse = true;
                     const actions = [
                         setWells(wells),
-                        removeRequestFromInProgress(AsyncRequestType.GET_WELLS),
+                        removeRequestFromInProgress(AsyncRequest.GET_WELLS),
                         action,
                     ];
                     actions.push(...getGoForwardActions(Page.EnterBarcode, deps.getState()));
@@ -242,7 +243,7 @@ const selectBarcodeLogic = createLogic({
                     GENERIC_GET_WELLS_ERROR_MESSAGE(action.payload.barcode);
                 dispatch(batchActions([
                     action,
-                    removeRequestFromInProgress(AsyncRequestType.GET_WELLS),
+                    removeRequestFromInProgress(AsyncRequest.GET_WELLS),
                     setAlert({
                         message,
                         type: AlertType.ERROR,
@@ -256,7 +257,7 @@ const selectBarcodeLogic = createLogic({
     },
     transform: ({action}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
         next(batchActions([
-            addRequestToInProgress(AsyncRequestType.GET_WELLS),
+            addRequestToInProgress(AsyncRequest.GET_WELLS),
             action,
         ]));
     },
