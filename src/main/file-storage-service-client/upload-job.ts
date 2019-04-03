@@ -1,7 +1,8 @@
 import crypto from "crypto";
-import fs from "fs-extra";
+import fs from "fs";
 import { values } from "lodash";
 import path from "path";
+import { promisify } from "util";
 
 import { FSSConnection } from "./FSSConnection";
 import { JobStatus } from "./job-status";
@@ -9,9 +10,11 @@ import {
     AicsSuccessResponse,
     FSSRequestFile,
     FSSResponseFile,
-    StartUploadResponse,
+    StartUploadResponse, UploadMetadata,
     UploadMetadataResponse
 } from "./types";
+
+const copyFile = promisify(fs.copyFile);
 
 export class UploadJob {
     public resultFiles: FSSResponseFile[] = [];
@@ -31,11 +34,13 @@ export class UploadJob {
                 .catch((err) => {
                     // tslint:disable-next-line
                     console.error("start upload failed", err); // todo handle this
+                    throw new Error("Start upload failed");
                 }) as AicsSuccessResponse<StartUploadResponse>;
         const jsonData: StartUploadResponse[] = response.data;
         const { jobId, uploadDirectory } = jsonData[0];
         this.jobId = jobId;
         this.uploadDirectory = uploadDirectory;
+        console.log(`Start Upload Success. JobId: ${jobId}. UploadDir: ${uploadDirectory}`);
     }
 
     /***
@@ -43,9 +48,8 @@ export class UploadJob {
      *
      * Return the number of files copied
      */
-    public async copy(sourceFile: string, metadata: any): Promise<number> { // todo type for metadata
+    public async copy(sourceFile: string, metadata: UploadMetadata): Promise<number> {
         // consistent between OS's
-        console.log(sourceFile);
         const basename = path.posix.basename(sourceFile);
 
         // check that we have not already processed this file
@@ -53,31 +57,29 @@ export class UploadJob {
             throw new Error(`File ${basename} already exists in this upload set!`);
         }
 
-        // check that uploadDirectory/jobId exists
-
-        const md5Hash = await this.copyWithChecksum(sourceFile);
-        metadata = {
-            ...metadata,
-            file: {
-                ...metadata.file,
-                fileName: basename,
-                originalPath: sourceFile,
-            },
-        };
-
-        const { fileType } = metadata.file;
+        const { fileType } = metadata;
         if (!fileType) {
             throw new Error(`Metadata for file ${sourceFile} must have fileType defined`);
         }
 
-        this.sourceFiles[basename] = {
+        const md5Hash = await this.copyWithChecksum(sourceFile, basename);
+        this.sourceFiles[sourceFile] = { // todo using sourcefile instead of basename unlike python code
             fileName: basename,
             fileType,
             md5hex: md5Hash,
-            metadata,
+            metadata: {
+                ...metadata,
+                file: {
+                    ...metadata.file,
+                    fileName: basename,
+                    originalPath: sourceFile,
+                },
+            },
         };
 
-        return 1; // todo: is this necessary?
+        console.log("in copy", this.sourceFiles);
+
+        return 1; // todo: is this necessary
     }
 
     public async copyComplete(): Promise<JobStatus> {
@@ -85,25 +87,24 @@ export class UploadJob {
             files: values(this.sourceFiles),
             jobId: this.jobId,
         };
+        console.log("copyComplete", values(this.sourceFiles));
         const jsonData: AicsSuccessResponse<UploadMetadataResponse> =
             await this.fss.post("1.0/file/uploadComplete", request);
+        console.log("Upload Complete");
         this.resultFiles = jsonData.data[0].files;
         return new JobStatus(this.fss, this.jobId);
     }
 
-    private async copyWithChecksum(sourceFile: string): Promise<string> {
+    private async copyWithChecksum(sourceFile: string, basename: string): Promise<string> {
         // source: https://blog.abelotech.com/posts/calculate-checksum-hash-nodejs-javascript/
         const hash = crypto.createHash("md5");
         let result = "";
         const stream = fs.createReadStream(sourceFile);
-        stream.on("data", (data: string) => hash.update(data, "utf8"));
+        stream.on("data", async (data: string) => {
+            hash.update(data, "utf8");
+        } );
         stream.on("end", () => result = hash.digest("hex"));
-        await fs.copyFile(sourceFile, this.uploadDirectory)
-            .catch((err) => {
-                if (err) {
-                    throw err;
-                }
-            });
+        await copyFile(sourceFile, `${this.uploadDirectory}/${basename}`);
         return result;
     }
 }

@@ -30,6 +30,7 @@ export class JobStatus {
         const timeout = new Date();
         timeout.setSeconds(timeout.getSeconds() + timeoutSeconds);
         while (!this.isComplete(status) && (new Date()) < timeout) {
+            console.log("Waiting for job to be complete");
             setTimeout(() => status = this.getStatus(), interval);
         }
         return status;

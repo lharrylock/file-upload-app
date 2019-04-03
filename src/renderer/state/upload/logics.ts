@@ -11,7 +11,7 @@ import { getSelectedBarcode, getWell } from "../selection/selectors";
 import { ReduxLogicDependencies, ReduxLogicDoneCb, ReduxLogicNextCb, ReduxLogicTransformDependencies } from "../types";
 import { batchActions } from "../util";
 import { ASSOCIATE_FILES_AND_WELL, INITIATE_UPLOAD } from "./constants";
-import { getUpload } from "./selectors";
+import { getUploadPayload } from "./selectors";
 
 const associateFileAndWellLogic = createLogic({
     transform: ({action, getState}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
@@ -31,8 +31,10 @@ const associateFileAndWellLogic = createLogic({
 
 const initiateUploadLogic = createLogic({
     process: ({getState}: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
-        ipcRenderer.send(START_UPLOAD, getUpload(getState()));
+        ipcRenderer.send(START_UPLOAD, getUploadPayload(getState()));
         ipcRenderer.on(UPLOAD_FINISHED, (event: Event, result: UploadResponse) => {
+            console.log("event", event);
+            console.log("result", result);
             // tslint:disable-next-line
             dispatch(batchActions([
                 removeRequestFromInProgress(AsyncRequestType.START_UPLOAD),
@@ -42,10 +44,11 @@ const initiateUploadLogic = createLogic({
             done();
         });
         ipcRenderer.on(UPLOAD_FAILED, (event: Event, error: any) => {
+            console.log(error);
             dispatch(batchActions([
                 removeRequestFromInProgress(AsyncRequestType.START_UPLOAD),
                 setAlert({
-                    message: "Upload Failed" + error,
+                    message: "Upload Failed" + error.message,
                     type: AlertType.ERROR,
                 }),
             ]));

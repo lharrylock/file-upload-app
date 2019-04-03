@@ -72,8 +72,7 @@ app.on("ready", () => {
 const startUpload = async (event: Event, uploads: Uploads) => {
     // tslint:disable-next-line
     console.log("received start upload request from renderer");
-    const username = "lisah"; // todo;
-    const uploadClient = new FileStoreServiceClient(LIMS_HOST, LIMS_PORT, username);
+    const uploadClient = new FileStoreServiceClient(LIMS_HOST, LIMS_PORT);
     try {
         const result = await uploadClient.uploadFiles(uploads);
         event.sender.send(UPLOAD_FINISHED, result);

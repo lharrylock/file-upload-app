@@ -1,5 +1,6 @@
 import { isEmpty, map, uniq } from "lodash";
 import { createSelector } from "reselect";
+import { Uploads } from "../../../main/file-storage-service-client/types";
 
 import { State } from "../types";
 import { UploadMetadata, UploadStateBranch, UploadTableRow } from "./types";
@@ -44,3 +45,20 @@ export const getUploadSummaryRows = createSelector([getUpload], (uploads: Upload
         wellLabel,
     }))
 );
+
+export const getUploadPayload = createSelector([getUpload], (uploads: UploadStateBranch): Uploads => {
+    let result = {};
+    map(uploads, ({wellId}: UploadMetadata, fullPath: string) => {
+        result = {
+            ...result,
+            [fullPath]: {
+                fileType: "text", // todo
+                microscopy: {
+                    wellId,
+                },
+            },
+        };
+    });
+
+    return result;
+});

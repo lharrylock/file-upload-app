@@ -3,7 +3,7 @@ export interface UploadStateBranch {
 }
 
 // Metadata associated with a file
-export interface UploadMetadata {
+export interface UploadMetadata { // todo change name?
     barcode: string;
     wellId: number;
     wellLabel: string;

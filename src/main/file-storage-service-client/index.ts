@@ -1,9 +1,10 @@
 import { map } from "lodash";
+import os from "os";
 
 import { FSSConnection } from "./FSSConnection";
 import {
     FSSResponseFile,
-    UploadClient,
+    UploadClient, UploadMetadata,
     UploadResponse,
     Uploads
 } from "./types";
@@ -14,9 +15,14 @@ export default class FileStoreServiceClient implements UploadClient {
     private readonly fss: FSSConnection;
     private uploader: Uploader;
 
-    constructor(host: string, port: string = "80", user: string) { // todo figure out how to get user
+    constructor(host: string, port: string = "80", user?: string) {
         if (!host) {
             throw new Error("Host must be defined");
+        }
+
+        if (!user) {
+            user = os.userInfo().username;
+            console.log(user);
         }
 
         this.fss = new FSSConnection(host, port, user);
@@ -24,12 +30,14 @@ export default class FileStoreServiceClient implements UploadClient {
     }
 
     public async uploadFiles(metadata: Uploads): Promise<UploadResponse> {
+        console.log(metadata);
         this.uploader.checkDuplicates(metadata);
 
         const uploadJob: UploadJob = await this.uploader.startUpload();
-        map(metadata, async (file: string, fileMetadata: any) => {
-            await uploadJob.copy(file, fileMetadata);
-        });
+
+        await Promise.all(map(metadata, async (fileMetadata: UploadMetadata, file: string) =>
+            uploadJob.copy(file, fileMetadata)
+        ));
 
         const uploadStatus = await uploadJob.copyComplete();
         await uploadStatus.waitForSuccess();

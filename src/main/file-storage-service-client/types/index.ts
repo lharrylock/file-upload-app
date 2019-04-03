@@ -43,14 +43,20 @@ export interface UploadMetadataRequest {
 
 export interface UploadMetadata {
     fileName: string;
-    fileType: string;
     md5hex: string;
     fileId: string;
     readPath: string;
+    fileType: string;
+    file?: File;
     thumbnails?: Thumbnail;
     cell?: Cell;
     microscopy?: Microscopy;
     contentProcessing?: ContentProcessing;
+}
+
+export interface File {
+    originalPath: string;
+    fileName: string;
 }
 
 export interface Thumbnail {
