@@ -1,4 +1,6 @@
-import { map } from "lodash";
+import Logger from "js-logger";
+import { ILogLevel } from "js-logger/src/types";
+import { map, values } from "lodash";
 import os from "os";
 
 import { FSSConnection } from "./FSSConnection";
@@ -15,29 +17,32 @@ export default class FileStoreServiceClient implements UploadClient {
     private readonly fss: FSSConnection;
     private uploader: Uploader;
 
-    constructor(host: string, port: string = "80", user?: string) {
+    constructor(host: string, port: string = "80", logLevel: ILogLevel = Logger.WARN, user?: string) {
         if (!host) {
             throw new Error("Host must be defined");
         }
 
         if (!user) {
             user = os.userInfo().username;
-            console.log(user);
         }
 
         this.fss = new FSSConnection(host, port, user);
         this.uploader = new Uploader(this.fss);
+        Logger.useDefaults();
+        Logger.setLevel(logLevel);
     }
 
     public async uploadFiles(metadata: Uploads): Promise<UploadResponse> {
-        console.log(metadata);
+        Logger.info("Received uploadFiles request", metadata);
         this.uploader.checkDuplicates(metadata);
 
         const uploadJob: UploadJob = await this.uploader.startUpload();
 
+        Logger.time(`Copying ${values(metadata).length} files`);
         await Promise.all(map(metadata, async (fileMetadata: UploadMetadata, file: string) =>
             uploadJob.copy(file, fileMetadata)
         ));
+        Logger.time(`Copying ${values(metadata).length} files`);
 
         const uploadStatus = await uploadJob.copyComplete();
         await uploadStatus.waitForSuccess();

@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import fs from "fs";
+import Logger from "js-logger";
 import { values } from "lodash";
 import path from "path";
 import { promisify } from "util";
@@ -29,18 +30,22 @@ export class UploadJob {
     }
 
     public async startUpload(): Promise<void> {
+        const startUploadURL = "1.0/file/upload";
+
+        Logger.time(startUploadURL);
         const response: AicsSuccessResponse<StartUploadResponse> = await
-            this.fss.post("1.0/file/upload", null)
+            this.fss.post(startUploadURL, null)
                 .catch((err) => {
-                    // tslint:disable-next-line
-                    console.error("start upload failed", err); // todo handle this
+                    Logger.error("start upload failed", err); // todo handle this
                     throw new Error("Start upload failed");
                 }) as AicsSuccessResponse<StartUploadResponse>;
+        Logger.timeEnd(startUploadURL);
+
         const jsonData: StartUploadResponse[] = response.data;
         const { jobId, uploadDirectory } = jsonData[0];
         this.jobId = jobId;
         this.uploadDirectory = uploadDirectory;
-        console.log(`Start Upload Success. JobId: ${jobId}. UploadDir: ${uploadDirectory}`);
+        Logger.info(`Start Upload Success. JobId: ${jobId}. UploadDir: ${uploadDirectory}`);
     }
 
     /***
@@ -48,7 +53,7 @@ export class UploadJob {
      *
      * Return the number of files copied
      */
-    public async copy(sourceFile: string, metadata: UploadMetadata): Promise<number> {
+    public async copy(sourceFile: string, metadata: UploadMetadata): Promise<void> {
         // consistent between OS's
         const basename = path.posix.basename(sourceFile);
 
@@ -76,21 +81,20 @@ export class UploadJob {
                 },
             },
         };
-
-        console.log("in copy", this.sourceFiles);
-
-        return 1; // todo: is this necessary
     }
 
     public async copyComplete(): Promise<JobStatus> {
+        const copyCompleteURL = "1.0/file/uploadComplete";
         const request = {
             files: values(this.sourceFiles),
             jobId: this.jobId,
         };
-        console.log("copyComplete", values(this.sourceFiles));
+        Logger.debug(`Sending request to fss at ${copyCompleteURL} with payload:`, values(this.sourceFiles));
+        Logger.time(copyCompleteURL);
         const jsonData: AicsSuccessResponse<UploadMetadataResponse> =
-            await this.fss.post("1.0/file/uploadComplete", request);
-        console.log("Upload Complete");
+            await this.fss.post(copyCompleteURL, request);
+        Logger.timeEnd(copyCompleteURL);
+        Logger.info(`Received successful response from ${copyCompleteURL}:`, jsonData);
         this.resultFiles = jsonData.data[0].files;
         return new JobStatus(this.fss, this.jobId);
     }

@@ -28,6 +28,7 @@
     "axios-case-converter": "^0.3.0",
     "core-js": "2.6.5",
     "crypto": "^1.0.1",
+    "js-logger": "^1.6.0",
     "jsdom": "14.0.0",
     "jsdom-global": "3.0.2",
     "lodash": "4.17.11",

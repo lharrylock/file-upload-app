@@ -1,12 +1,16 @@
 import { app, BrowserWindow, Event, ipcMain } from "electron";
+import Logger from "js-logger";
 import * as path from "path";
 import { format as formatUrl } from "url";
+
 import { LIMS_HOST, LIMS_PORT, UPLOAD_FAILED } from "../shared/constants";
 import { START_UPLOAD, UPLOAD_FINISHED } from "../shared/constants";
 import FileStoreServiceClient from "./file-storage-service-client";
 import { Uploads } from "./file-storage-service-client/types";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
+Logger.useDefaults();
+Logger.setLevel(isDevelopment ? Logger.DEBUG : Logger.ERROR);
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow: BrowserWindow | undefined;
@@ -70,9 +74,8 @@ app.on("ready", () => {
 });
 
 const startUpload = async (event: Event, uploads: Uploads) => {
-    // tslint:disable-next-line
-    console.log("received start upload request from renderer");
-    const uploadClient = new FileStoreServiceClient(LIMS_HOST, LIMS_PORT);
+    Logger.debug("received start upload request from renderer");
+    const uploadClient = new FileStoreServiceClient(LIMS_HOST, LIMS_PORT, Logger.DEBUG);
     try {
         const result = await uploadClient.uploadFiles(uploads);
         event.sender.send(UPLOAD_FINISHED, result);

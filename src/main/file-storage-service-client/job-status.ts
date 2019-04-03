@@ -1,3 +1,5 @@
+import Logger from "js-logger";
+
 import { FSSConnection } from "./FSSConnection";
 
 const DEFAULT_TIMEOUT = 30 * 60; // 30 minutes
@@ -30,7 +32,7 @@ export class JobStatus {
         const timeout = new Date();
         timeout.setSeconds(timeout.getSeconds() + timeoutSeconds);
         while (!this.isComplete(status) && (new Date()) < timeout) {
-            console.log("Waiting for job to be complete");
+            Logger.debug("Waiting for job to be complete");
             setTimeout(() => status = this.getStatus(), interval);
         }
         return status;
