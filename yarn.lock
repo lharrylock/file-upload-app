@@ -12,6 +12,11 @@
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/7zip/-/7zip-0.0.6.tgz#9cafb171af82329490353b4816f03347aa150a30"
   integrity sha1-nK+xca+CMpSQNTtIFvAzR6oVCjA=
 
+"@aics/aicsfiles@^0.0.1":
+  version "0.0.1"
+  resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@aics/aicsfiles/-/aicsfiles-0.0.1.tgz#0b258f9296e231049196f060a33c08f4c85f82ed"
+  integrity sha1-CyWPkpbiMQSRlvBgozwI9Mhfgu0=
+
 "@ant-design/icons-react@~1.1.2":
   version "1.1.2"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@ant-design/icons-react/-/icons-react-1.1.2.tgz#df25c4560864f8a3b687b305c3238daff048ed72"
