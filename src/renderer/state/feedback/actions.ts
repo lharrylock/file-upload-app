@@ -13,7 +13,10 @@ import {
     AddRequestInProgressAction,
     AlertType,
     AppAlert,
-    ClearAlertAction, HttpRequestType, RemoveRequestInProgressAction, SetAlertAction,
+    AsyncRequest,
+    ClearAlertAction,
+    RemoveRequestInProgressAction,
+    SetAlertAction,
     StartLoadingAction,
     StopLoadingAction,
 } from "./types";
@@ -42,14 +45,14 @@ export function stopLoading(): StopLoadingAction {
     };
 }
 
-export function addRequestToInProgress(payload: HttpRequestType): AddRequestInProgressAction {
+export function addRequestToInProgress(payload: AsyncRequest): AddRequestInProgressAction {
     return {
         payload,
         type: ADD_REQUEST_IN_PROGRESS,
     };
 }
 
-export function removeRequestFromInProgress(payload: HttpRequestType): RemoveRequestInProgressAction {
+export function removeRequestFromInProgress(payload: AsyncRequest): RemoveRequestInProgressAction {
     return {
         payload,
         type: REMOVE_REQUEST_IN_PROGRESS,
