@@ -22,11 +22,11 @@ export const getRecentEvent = createSelector([
 
 export const getUploadInProgress = createSelector([
     getRequestsInProgress,
-], (requestsInProgress: AsyncRequestType[]) => {
+], (requestsInProgress: AsyncRequest[]) => {
     const uploadRequests = [
-        AsyncRequestType.START_UPLOAD,
-        AsyncRequestType.COPY_FILES,
-        AsyncRequestType.UPLOAD_METADATA,
+        AsyncRequest.START_UPLOAD,
+        AsyncRequest.COPY_FILES,
+        AsyncRequest.UPLOAD_METADATA,
     ];
     return difference(uploadRequests, requestsInProgress).length < uploadRequests.length; // todo better way?
 });
