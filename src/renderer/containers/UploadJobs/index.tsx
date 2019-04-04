@@ -6,12 +6,18 @@ import { connect } from "react-redux";
 import { ActionCreator } from "redux";
 
 import FormPage from "../../components/FormPage";
+import { getUploadInProgress } from "../../state/feedback/selectors";
 import { goBack } from "../../state/selection/actions";
 import { GoBackAction } from "../../state/selection/types";
 import { State } from "../../state/types";
-import { jumpToUpload, removeUploads } from "../../state/upload/actions";
+import { initiateUpload, jumpToUpload, removeUploads } from "../../state/upload/actions";
 import { getCanRedoUpload, getCanUndoUpload, getUploadSummaryRows } from "../../state/upload/selectors";
-import { JumpToUploadAction, RemoveUploadsAction, UploadTableRow } from "../../state/upload/types";
+import {
+    InitiateUploadAction,
+    JumpToUploadAction,
+    RemoveUploadsAction,
+    UploadTableRow
+} from "../../state/upload/types";
 import { alphaOrderComparator } from "../../util";
 
 const styles = require("./style.pcss");
@@ -22,6 +28,8 @@ interface Props {
     className?: string;
     removeUploads: ActionCreator<RemoveUploadsAction>;
     goBack: ActionCreator<GoBackAction>;
+    initiateUpload: ActionCreator<InitiateUploadAction>;
+    uploadInProgress: boolean;
     jumpToUpload: ActionCreator<JumpToUploadAction>;
     uploads: UploadTableRow[];
 }
@@ -87,6 +95,7 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
     public render() {
         const {
             className,
+            uploadInProgress,
             uploads,
         } = this.props;
 
@@ -95,6 +104,10 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
                 className={className}
                 formTitle="UPLOAD JOBS"
                 formPrompt="Review files below and click Upload to complete process."
+                saveButtonDisabled={uploadInProgress}
+                onSave={this.upload}
+                saveInProgress={uploadInProgress}
+                saveButtonName="Upload"
                 onBack={this.props.goBack}
             >
                 {this.renderButtons()}
@@ -123,6 +136,10 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
                 </div>
             </div>
         );
+    }
+
+    private upload = (): void => {
+        this.props.initiateUpload();
     }
 
     private removeUpload = (upload: UploadTableRow) => {
@@ -156,12 +173,14 @@ function mapStateToProps(state: State) {
     return {
         canRedo: getCanRedoUpload(state),
         canUndo: getCanUndoUpload(state),
+        uploadInProgress: getUploadInProgress(state),
         uploads: getUploadSummaryRows(state),
     };
 }
 
 const dispatchToPropsMap = {
     goBack,
+    initiateUpload,
     jumpToUpload,
     removeUploads,
 };

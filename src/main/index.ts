@@ -1,6 +1,11 @@
-import { app, BrowserWindow } from "electron";
+import { FileManagementService } from "@aics/aicsfiles";
+import { Uploads } from "@aics/aicsfiles/type-declarations/types";
+import { app, BrowserWindow, Event, ipcMain } from "electron";
+import Logger from "js-logger";
 import * as path from "path";
 import { format as formatUrl } from "url";
+
+import { LIMS_HOST, LIMS_PORT, START_UPLOAD, UPLOAD_FAILED, UPLOAD_FINISHED } from "../shared/constants";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -64,3 +69,16 @@ app.on("activate", () => {
 app.on("ready", () => {
     mainWindow = createMainWindow();
 });
+
+const startUpload = async (event: Event, uploads: Uploads) => {
+    Logger.debug("received start upload request from renderer");
+    const uploadClient = new FileManagementService(LIMS_HOST, LIMS_PORT, Logger.DEBUG);
+    try {
+        const result = await uploadClient.uploadFiles(uploads);
+        event.sender.send(UPLOAD_FINISHED, result);
+    } catch (e) {
+        event.sender.send(UPLOAD_FAILED, e);
+    }
+};
+
+ipcMain.on(START_UPLOAD, startUpload);
