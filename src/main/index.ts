@@ -1,4 +1,4 @@
-import { FileManagementService } from "@aics/aicsfiles";
+import { FileManagementSystem } from "@aics/aicsfiles";
 import { Uploads } from "@aics/aicsfiles/type-declarations/types";
 import { app, BrowserWindow, Event, ipcMain } from "electron";
 import Logger from "js-logger";
@@ -72,7 +72,7 @@ app.on("ready", () => {
 
 const startUpload = async (event: Event, uploads: Uploads) => {
     Logger.debug("received start upload request from renderer");
-    const uploadClient = new FileManagementService(LIMS_HOST, LIMS_PORT, Logger.DEBUG);
+    const uploadClient = new FileManagementSystem(LIMS_HOST, LIMS_PORT, "debug");
     try {
         const result = await uploadClient.uploadFiles(uploads);
         event.sender.send(UPLOAD_FINISHED, result);
