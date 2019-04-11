@@ -1,9 +1,10 @@
 import { AxiosResponse } from "axios";
-import { stat, Stats } from "fs";
+import { stat as fsStat, Stats } from "fs";
 import { isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
+import { promisify } from "util";
 
 import { API_WAIT_TIME_SECONDS } from "../constants";
 
@@ -57,6 +58,8 @@ import {
 } from "./selectors";
 import { DragAndDropFileList, Page, UploadFile, Well } from "./types";
 
+const stat = promisify(fsStat);
+
 const mergeChildPaths = (filePaths: string[]): string[] => {
     filePaths = uniq(filePaths);
 
@@ -66,17 +69,14 @@ const mergeChildPaths = (filePaths: string[]): string[] => {
     });
 };
 
-const getUploadFilePromise = (name: string, path: string): Promise<UploadFile> => (
-    new Promise((resolve, reject) => {
-        stat(resolvePath(path, name), (err: NodeJS.ErrnoException, stats: Stats) => {
-            if (err || !stats) {
-                return reject(err);
-            }
+const getUploadFilePromise = async (name: string, path: string): Promise<UploadFile> => {
+    const stats: Stats = await stat(resolvePath(path, name));
+    const isDirectory = stats.isDirectory();
+    if (isDirectory) {
 
-            return resolve(new UploadFileImpl(name, path, stats.isDirectory()));
-        });
-    })
-);
+    }
+    return new UploadFileImpl(name, path, isDirectory)
+};
 
 const stageFilesAndStopLoading = (uploadFilePromises: Array<Promise<UploadFile>>, dispatch: ReduxLogicNextCb,
                                   done: ReduxLogicDoneCb) => {
