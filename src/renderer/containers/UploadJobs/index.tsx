@@ -7,8 +7,8 @@ import { ActionCreator } from "redux";
 
 import FormPage from "../../components/FormPage";
 import { getUploadInProgress } from "../../state/feedback/selectors";
-import { goBack } from "../../state/selection/actions";
-import { GoBackAction } from "../../state/selection/types";
+import { goBack, goForward } from "../../state/selection/actions";
+import { GoBackAction, NextPageAction } from "../../state/selection/types";
 import { State } from "../../state/types";
 import { initiateUpload, jumpToUpload, removeUploads } from "../../state/upload/actions";
 import { getCanRedoUpload, getCanUndoUpload, getUploadSummaryRows } from "../../state/upload/selectors";
@@ -28,6 +28,7 @@ interface Props {
     className?: string;
     removeUploads: ActionCreator<RemoveUploadsAction>;
     goBack: ActionCreator<GoBackAction>;
+    goForward: ActionCreator<NextPageAction>;
     initiateUpload: ActionCreator<InitiateUploadAction>;
     uploadInProgress: boolean;
     jumpToUpload: ActionCreator<JumpToUploadAction>;
@@ -140,6 +141,7 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
 
     private upload = (): void => {
         this.props.initiateUpload();
+        this.props.goForward();
     }
 
     private removeUpload = (upload: UploadTableRow) => {
@@ -180,6 +182,7 @@ function mapStateToProps(state: State) {
 
 const dispatchToPropsMap = {
     goBack,
+    goForward,
     initiateUpload,
     jumpToUpload,
     removeUploads,

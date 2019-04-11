@@ -269,7 +269,7 @@ const pageOrder: Page[] = [
     Page.EnterBarcode,
     Page.AssociateWells,
     Page.UploadJobs,
-    Page.UploadComplete,
+    Page.UploadSummary,
 ];
 const selectPageLogic = createLogic({
     process: ({action, getState}: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
