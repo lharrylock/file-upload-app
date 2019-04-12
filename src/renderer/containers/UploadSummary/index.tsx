@@ -8,6 +8,7 @@ import FormPage from "../../components/FormPage";
 import { selectPage } from "../../state/selection/actions";
 import { Page, SelectPageAction } from "../../state/selection/types";
 import { State } from "../../state/types";
+import { UploadSummaryTableRow } from "../../state/upload/types";
 
 interface Props {
     className?: string;
@@ -15,7 +16,7 @@ interface Props {
 }
 
 class UploadSummary extends React.Component<Props, {}> {
-    private columns: Array<ColumnProps<any>> = [
+    private columns: Array<ColumnProps<UploadSummaryTableRow>> = [
         {
             dataIndex: "id",
             key: "jobId",

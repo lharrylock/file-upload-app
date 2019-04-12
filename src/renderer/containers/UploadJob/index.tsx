@@ -15,7 +15,7 @@ import {
     InitiateUploadAction,
     JumpToUploadAction,
     RemoveUploadsAction,
-    UploadTableRow
+    UploadJobTableRow
 } from "../../state/upload/types";
 import { alphaOrderComparator } from "../../util";
 
@@ -30,7 +30,7 @@ interface Props {
     goForward: ActionCreator<NextPageAction>;
     initiateUpload: ActionCreator<InitiateUploadAction>;
     jumpToUpload: ActionCreator<JumpToUploadAction>;
-    uploads: UploadTableRow[];
+    uploads: UploadJobTableRow[];
 }
 
 interface UploadJobState {
@@ -39,7 +39,7 @@ interface UploadJobState {
 }
 
 class UploadJob extends React.Component<Props, UploadJobState> {
-    private columns: Array<ColumnProps<UploadTableRow>> = [
+    private columns: Array<ColumnProps<UploadJobTableRow>> = [
         {
             dataIndex: "barcode",
             key: "barcode",
@@ -63,7 +63,7 @@ class UploadJob extends React.Component<Props, UploadJobState> {
         },
         {
             key: "action",
-            render: (text: string, record: UploadTableRow) => (<a onClick={this.removeUpload(record)}>Remove</a>),
+            render: (text: string, record: UploadJobTableRow) => (<a onClick={this.removeUpload(record)}>Remove</a>),
             title: "Action",
         }];
 
@@ -139,7 +139,7 @@ class UploadJob extends React.Component<Props, UploadJobState> {
         this.props.goForward();
     }
 
-    private removeUpload = (upload: UploadTableRow) => {
+    private removeUpload = (upload: UploadJobTableRow) => {
         return () => {
             this.setState({selectedFiles: []});
             this.props.removeUploads([upload.file]);

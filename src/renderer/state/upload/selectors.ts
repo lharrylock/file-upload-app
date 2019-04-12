@@ -3,7 +3,7 @@ import { isEmpty, map, uniq } from "lodash";
 import { createSelector } from "reselect";
 
 import { State } from "../types";
-import { UploadMetadata, UploadStateBranch, UploadTableRow } from "./types";
+import { UploadJobTableRow, UploadMetadata, UploadStateBranch } from "./types";
 
 export const getUpload = (state: State) => state.upload.present;
 export const getCurrentUploadIndex = (state: State) => state.upload.index;
@@ -37,7 +37,7 @@ export const getCanUndoUpload = createSelector([getUploadPast], (past: UploadSta
     return !isEmpty(past);
 });
 
-export const getUploadSummaryRows = createSelector([getUpload], (uploads: UploadStateBranch): UploadTableRow[] =>
+export const getUploadSummaryRows = createSelector([getUpload], (uploads: UploadStateBranch): UploadJobTableRow[] =>
     map(uploads, ({ barcode, wellLabel}: UploadMetadata, fullPath: string) => ({
         barcode,
         file: fullPath,
