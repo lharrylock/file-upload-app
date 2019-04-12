@@ -53,7 +53,7 @@ export const getUploadPayload = createSelector([getUpload], (uploads: UploadStat
             ...result,
             [fullPath]: {
                 file: {
-                    fileType: "text", // todo
+                    fileType: "text", // todo: lisah 4/12/19 FMS-466 Determine fileType from file name
                 },
                 microscopy: {
                     wellId,
