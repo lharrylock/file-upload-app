@@ -45,13 +45,11 @@ const initiateUploadLogic = createLogic({
 
             done();
         });
-        ipcRenderer.on(UPLOAD_FAILED, (event: Event, error: any) => {
-            // tslint:disable-next-line
-            console.log(error);
+        ipcRenderer.on(UPLOAD_FAILED, (event: Event, error: string) => {
             dispatch(batchActions([
                 removeRequestFromInProgress(AsyncRequest.START_UPLOAD),
                 setAlert({
-                    message: "Upload Failed" + error.message,
+                    message: `Upload Failed: ${error}`,
                     type: AlertType.ERROR,
                 }),
             ]));

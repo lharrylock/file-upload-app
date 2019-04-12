@@ -12,10 +12,10 @@
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/7zip/-/7zip-0.0.6.tgz#9cafb171af82329490353b4816f03347aa150a30"
   integrity sha1-nK+xca+CMpSQNTtIFvAzR6oVCjA=
 
-"@aics/aicsfiles@^0.0.11":
-  version "0.0.11"
-  resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@aics/aicsfiles/-/aicsfiles-0.0.11.tgz#b3aaef8727aff59690d425b09b08e0aee7bd0840"
-  integrity sha1-s6rvhyev9ZaQ1CWwmwjgrue9CEA=
+"@aics/aicsfiles@^0.0.13":
+  version "0.0.13"
+  resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@aics/aicsfiles/-/aicsfiles-0.0.13.tgz#0119953667af1805e4bd9daa1fd0dabc4a94bc13"
+  integrity sha1-ARmVNmevGAXkvZ2qH9DavEqUvBM=
   dependencies:
     "@babel/polyfill" "^7.4.3"
     axios "^0.16.1"

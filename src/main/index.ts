@@ -77,7 +77,8 @@ const startUpload = async (event: Event, uploads: Uploads) => {
         const result = await uploadClient.uploadFiles(uploads);
         event.sender.send(UPLOAD_FINISHED, result);
     } catch (e) {
-        event.sender.send(UPLOAD_FAILED, e);
+        Logger.error(e.message);
+        event.sender.send(UPLOAD_FAILED, e.message);
     }
 };
 
