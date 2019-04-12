@@ -88,6 +88,9 @@ const stageFilesAndStopLoading = async (uploadFilePromises: Array<Promise<Upload
         done();
 
     } catch (e) {
+        // tslint:disable-next-line
+        console.log(e);
+
         dispatch(batchActions([
             stopLoading(),
             setAlert({
