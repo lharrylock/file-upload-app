@@ -1,5 +1,6 @@
 import { UploadResponse } from "@aics/aicsfiles/type-declarations/types";
 import { ipcRenderer } from "electron";
+import Logger from "js-logger";
 import { createLogic } from "redux-logic";
 
 import { START_UPLOAD, UPLOAD_FAILED, UPLOAD_FINISHED } from "../../../shared/constants";
@@ -33,11 +34,7 @@ const initiateUploadLogic = createLogic({
     process: ({getState}: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
         ipcRenderer.send(START_UPLOAD, getUploadPayload(getState()));
         ipcRenderer.on(UPLOAD_FINISHED, (event: Event, result: UploadResponse) => {
-            // tslint:disable-next-line
-            console.log("event", event);
-            // tslint:disable-next-line
-            console.log("result", result);
-            // tslint:disable-next-line
+            Logger.debug("Upload Completed Successfully", result);
             dispatch(batchActions([
                 removeRequestFromInProgress(AsyncRequest.START_UPLOAD),
                 addEvent("Upload Finished", AlertType.SUCCESS, new Date()),

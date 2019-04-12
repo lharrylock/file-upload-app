@@ -1,14 +1,16 @@
 import {
     ASSOCIATE_FILES_AND_WELL,
     CLEAR_UPLOAD_HISTORY,
-    DELETE_UPLOAD, INITIATE_UPLOAD,
+    DELETE_UPLOAD,
+    INITIATE_UPLOAD,
     JUMP_TO_PAST_UPLOAD,
     JUMP_TO_UPLOAD,
     UNDO_FILE_WELL_ASSOCIATION
 } from "./constants";
 import {
     AssociateFilesAndWellAction,
-    ClearUploadHistoryAction, InitiateUploadAction,
+    ClearUploadHistoryAction,
+    InitiateUploadAction,
     JumpToPastUploadAction,
     JumpToUploadAction,
     RemoveUploadsAction,
