@@ -1,12 +1,12 @@
-import {AxiosResponse} from "axios";
-import {stat as fsStat, Stats} from "fs";
-import {isEmpty, uniq} from "lodash";
-import {basename, dirname, resolve as resolvePath} from "path";
-import {AnyAction} from "redux";
-import {createLogic} from "redux-logic";
-import {promisify} from "util";
+import { AxiosResponse } from "axios";
+import { stat as fsStat, Stats } from "fs";
+import { isEmpty, uniq } from "lodash";
+import { basename, dirname, resolve as resolvePath } from "path";
+import { AnyAction } from "redux";
+import { createLogic } from "redux-logic";
+import { promisify } from "util";
 
-import {API_WAIT_TIME_SECONDS} from "../constants";
+import { API_WAIT_TIME_SECONDS } from "../constants";
 
 import {
     addRequestToInProgress,
@@ -16,9 +16,9 @@ import {
     startLoading,
     stopLoading
 } from "../feedback/actions";
-import {AlertType, AsyncRequest} from "../feedback/types";
-import {updatePageHistory} from "../metadata/actions";
-import {getSelectionHistory, getUploadHistory} from "../metadata/selectors";
+import { AlertType, AsyncRequest } from "../feedback/types";
+import { updatePageHistory } from "../metadata/actions";
+import { getSelectionHistory, getUploadHistory } from "../metadata/selectors";
 
 import {
     AicsSuccessResponse,
@@ -29,13 +29,13 @@ import {
     ReduxLogicTransformDependencies,
     State
 } from "../types";
-import {clearUploadHistory, jumpToPastUpload} from "../upload/actions";
-import {getCurrentUploadIndex} from "../upload/selectors";
-import {batchActions, getActionFromBatch} from "../util";
+import { clearUploadHistory, jumpToPastUpload } from "../upload/actions";
+import { getCurrentUploadIndex } from "../upload/selectors";
+import { batchActions, getActionFromBatch } from "../util";
 
 import {
     clearSelectionHistory,
-    jumpToPastSelection, selectFile,
+    jumpToPastSelection,
     selectPage,
     setWells,
     stageFiles,
@@ -50,10 +50,9 @@ import {
     SELECT_BARCODE,
     SELECT_PAGE,
 } from "./constants";
-import {UploadFileImpl} from "./models/upload-file";
-import {getCurrentSelectionIndex, getPage, getStagedFiles,} from "./selectors";
-import {DragAndDropFileList, Page, UploadFile, Well} from "./types";
-import FolderTree from "../../components/FolderTree";
+import { UploadFileImpl } from "./models/upload-file";
+import { getCurrentSelectionIndex, getPage, getStagedFiles } from "./selectors";
+import { DragAndDropFileList, Page, UploadFile, Well } from "./types";
 
 const stat = promisify(fsStat);
 
@@ -79,13 +78,12 @@ const getUploadFilePromise = async (name: string, path: string): Promise<UploadF
 };
 
 const stageFilesAndStopLoading = async (uploadFilePromises: Array<Promise<UploadFile>>, dispatch: ReduxLogicNextCb,
-                                  done: ReduxLogicDoneCb) => {
+                                        done: ReduxLogicDoneCb) => {
     try {
         const uploadFiles = await Promise.all(uploadFilePromises);
         dispatch(batchActions([
             stopLoading(),
             stageFiles(uploadFiles),
-            selectFile(uploadFiles.map((file) => FolderTree.getFolderKey(file.fullPath))),
         ]));
         done();
 
@@ -95,7 +93,7 @@ const stageFilesAndStopLoading = async (uploadFilePromises: Array<Promise<Upload
             setAlert({
                 message: "Encountered error while resolving files",
                 type: AlertType.ERROR,
-            })
+            }),
         ]));
         done();
     }
@@ -166,7 +164,7 @@ const getNewStagedFiles = (files: UploadFile[], fileToUpdate: UploadFile): Uploa
 
 const getFilesInFolderLogic = createLogic({
     transform: async ({ action, getState }: ReduxLogicTransformDependencies,
-                next: ReduxLogicNextCb) => {
+                      next: ReduxLogicNextCb) => {
         const folder: UploadFile = action.payload;
         try {
             folder.files = await Promise.all(await folder.loadFiles());
