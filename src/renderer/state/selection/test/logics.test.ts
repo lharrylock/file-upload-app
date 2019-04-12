@@ -42,6 +42,7 @@ describe("Selection logics", () => {
         expect(folder.name).to.equal(FOLDER_NAME);
         expect(folder.path).to.equal(resolve(__dirname, TEST_FILES_DIR));
         expect(folder.fullPath).to.equal(FOLDER_FULL_PATH);
+        expect(folder.files.length).to.equal(2);
     };
 
     describe("loadFilesLogic", () => {
