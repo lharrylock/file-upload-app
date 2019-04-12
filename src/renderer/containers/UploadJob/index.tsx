@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 import { ActionCreator } from "redux";
 
 import FormPage from "../../components/FormPage";
-import { getUploadInProgress } from "../../state/feedback/selectors";
 import { goBack, goForward } from "../../state/selection/actions";
 import { GoBackAction, NextPageAction } from "../../state/selection/types";
 import { State } from "../../state/types";
@@ -30,7 +29,6 @@ interface Props {
     goBack: ActionCreator<GoBackAction>;
     goForward: ActionCreator<NextPageAction>;
     initiateUpload: ActionCreator<InitiateUploadAction>;
-    uploadInProgress: boolean;
     jumpToUpload: ActionCreator<JumpToUploadAction>;
     uploads: UploadTableRow[];
 }
@@ -96,7 +94,6 @@ class UploadJob extends React.Component<Props, UploadJobState> {
     public render() {
         const {
             className,
-            uploadInProgress,
             uploads,
         } = this.props;
 
@@ -105,9 +102,7 @@ class UploadJob extends React.Component<Props, UploadJobState> {
                 className={className}
                 formTitle="UPLOAD JOB"
                 formPrompt="Review files below and click Upload to submit a job."
-                saveButtonDisabled={uploadInProgress}
                 onSave={this.upload}
-                saveInProgress={uploadInProgress}
                 saveButtonName="Upload"
                 onBack={this.props.goBack}
             >
@@ -175,7 +170,6 @@ function mapStateToProps(state: State) {
     return {
         canRedo: getCanRedoUpload(state),
         canUndo: getCanUndoUpload(state),
-        uploadInProgress: getUploadInProgress(state),
         uploads: getUploadSummaryRows(state),
     };
 }

@@ -1,4 +1,4 @@
-import { difference, includes, last } from "lodash";
+import { includes, last } from "lodash";
 import { createSelector } from "reselect";
 
 import { State } from "../types";
@@ -19,14 +19,3 @@ export const getEvents = (state: State) => state.feedback.events;
 export const getRecentEvent = createSelector([
     getEvents,
 ], (events: AppEvent[]) => last(events));
-
-export const getUploadInProgress = createSelector([
-    getRequestsInProgress,
-], (requestsInProgress: AsyncRequest[]) => {
-    const uploadRequests = [
-        AsyncRequest.START_UPLOAD,
-        AsyncRequest.COPY_FILES,
-        AsyncRequest.UPLOAD_METADATA,
-    ];
-    return difference(uploadRequests, requestsInProgress).length < uploadRequests.length; // todo better way?
-});
