@@ -26,7 +26,7 @@ import { FileTag } from "../../state/upload/types";
 import AssociateWells from "../AssociateWells";
 import DragAndDropSquare from "../DragAndDropSquare";
 import EnterBarcode from "../EnterBarcode";
-import UploadJobs from "../UploadJobs";
+import UploadJobs from "../UploadJob";
 import UploadSummary from "../UploadSummary";
 
 import { getFileToTags } from "./selectors";

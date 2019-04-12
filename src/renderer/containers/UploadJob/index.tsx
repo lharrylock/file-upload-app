@@ -35,12 +35,12 @@ interface Props {
     uploads: UploadTableRow[];
 }
 
-interface UploadJobsState {
+interface UploadJobState {
     // array of fullpaths
     selectedFiles: string[];
 }
 
-class UploadJobs extends React.Component<Props, UploadJobsState> {
+class UploadJob extends React.Component<Props, UploadJobState> {
     private columns: Array<ColumnProps<UploadTableRow>> = [
         {
             dataIndex: "barcode",
@@ -103,8 +103,8 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
         return (
             <FormPage
                 className={className}
-                formTitle="UPLOAD JOBS"
-                formPrompt="Review files below and click Upload to complete process."
+                formTitle="UPLOAD JOB"
+                formPrompt="Review files below and click Upload to submit a job."
                 saveButtonDisabled={uploadInProgress}
                 onSave={this.upload}
                 saveInProgress={uploadInProgress}
@@ -188,4 +188,4 @@ const dispatchToPropsMap = {
     removeUploads,
 };
 
-export default connect(mapStateToProps, dispatchToPropsMap)(UploadJobs);
+export default connect(mapStateToProps, dispatchToPropsMap)(UploadJob);
