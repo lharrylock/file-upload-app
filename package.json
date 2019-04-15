@@ -22,10 +22,13 @@
   "author": "Lisa Harrylock",
   "license": "ISC",
   "dependencies": {
+    "@aics/aicsfiles": "^0.0.13",
     "@ant-design/icons": "~1.1.0",
     "aics-react-labkey": "4.1.0",
     "antd": "3.15.0",
+    "axios": "0.18.0",
     "core-js": "2.6.5",
+    "js-logger": "1.6.0",
     "jsdom": "14.0.0",
     "jsdom-global": "3.0.2",
     "lodash": "4.17.11",
@@ -39,6 +42,7 @@
     "ts-node": "8.0.3"
   },
   "devDependencies": {
+    "@types/axios": "0.14.0",
     "@types/chai": "4.1.7",
     "@types/classnames": "2.2.7",
     "@types/enzyme": "3.9.0",
@@ -50,7 +54,6 @@
     "@types/react-dom": "16.8.2",
     "@types/react-redux": "7.0.3",
     "@types/sinon": "7.0.10",
-    "axios": "0.18.0",
     "chai": "4.2.0",
     "classnames": "2.2.6",
     "css-loader": "2.1.1",

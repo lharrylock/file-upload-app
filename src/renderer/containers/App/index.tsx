@@ -26,7 +26,8 @@ import { FileTag } from "../../state/upload/types";
 import AssociateWells from "../AssociateWells";
 import DragAndDropSquare from "../DragAndDropSquare";
 import EnterBarcode from "../EnterBarcode";
-import UploadJobs from "../UploadJobs";
+import UploadJobs from "../UploadJob";
+import UploadSummary from "../UploadSummary";
 
 import { getFileToTags } from "./selectors";
 const styles = require("./styles.pcss");
@@ -63,9 +64,14 @@ const APP_PAGE_TO_CONFIG_MAP = new Map<Page, AppPageConfig>([
         folderTreeVisible: true,
     }],
     [Page.UploadJobs, {
-        container: <UploadJobs key="uploadSummary" className={styles.mainContent}/>,
+        container: <UploadJobs key="uploadJobs" className={styles.mainContent}/>,
         folderTreeSelectable: false,
         folderTreeVisible: true,
+    }],
+    [Page.UploadSummary, {
+        container: <UploadSummary key="uploadSummary" className={styles.mainContent}/>,
+        folderTreeSelectable: false,
+        folderTreeVisible: false,
     }],
 ]);
 

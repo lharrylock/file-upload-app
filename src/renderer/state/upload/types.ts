@@ -9,7 +9,7 @@ export interface UploadMetadata {
     wellLabel: string;
 }
 
-export interface UploadTableRow {
+export interface UploadJobTableRow {
     // plate barcode associated with well and file
     barcode: string;
 
@@ -21,6 +21,13 @@ export interface UploadTableRow {
 
     // human readable identifier of well, such as "A1"
     wellLabel: string;
+}
+
+export interface UploadSummaryTableRow {
+    jobId: string;
+    status: string;
+    created: Date;
+    key: string;
 }
 
 export interface AssociateFilesAndWellAction {
@@ -57,7 +64,7 @@ export interface RemoveUploadsAction {
     type: string;
 }
 
-export interface UploadAction {
+export interface InitiateUploadAction {
     type: string;
 }
 

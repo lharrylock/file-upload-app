@@ -169,7 +169,7 @@ export enum Page {
     EnterBarcode = "EnterBarcode",
     AssociateWells = "AssociateWells",
     UploadJobs = "UploadJobs",
-    UploadComplete = "UploadComplete",
+    UploadSummary = "UploadSummary",
 }
 
 export interface AppPageConfig {

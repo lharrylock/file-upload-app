@@ -2,6 +2,7 @@ import {
     ASSOCIATE_FILES_AND_WELL,
     CLEAR_UPLOAD_HISTORY,
     DELETE_UPLOAD,
+    INITIATE_UPLOAD,
     JUMP_TO_PAST_UPLOAD,
     JUMP_TO_UPLOAD,
     UNDO_FILE_WELL_ASSOCIATION
@@ -9,6 +10,7 @@ import {
 import {
     AssociateFilesAndWellAction,
     ClearUploadHistoryAction,
+    InitiateUploadAction,
     JumpToPastUploadAction,
     JumpToUploadAction,
     RemoveUploadsAction,
@@ -59,5 +61,11 @@ export function removeUploads(fullPaths: string[]): RemoveUploadsAction {
     return {
         payload: fullPaths,
         type: DELETE_UPLOAD,
+    };
+}
+
+export function initiateUpload(): InitiateUploadAction {
+    return {
+        type: INITIATE_UPLOAD,
     };
 }

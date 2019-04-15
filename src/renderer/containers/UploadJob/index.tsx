@@ -6,12 +6,17 @@ import { connect } from "react-redux";
 import { ActionCreator } from "redux";
 
 import FormPage from "../../components/FormPage";
-import { goBack } from "../../state/selection/actions";
-import { GoBackAction } from "../../state/selection/types";
+import { goBack, goForward } from "../../state/selection/actions";
+import { GoBackAction, NextPageAction } from "../../state/selection/types";
 import { State } from "../../state/types";
-import { jumpToUpload, removeUploads } from "../../state/upload/actions";
+import { initiateUpload, jumpToUpload, removeUploads } from "../../state/upload/actions";
 import { getCanRedoUpload, getCanUndoUpload, getUploadSummaryRows } from "../../state/upload/selectors";
-import { JumpToUploadAction, RemoveUploadsAction, UploadTableRow } from "../../state/upload/types";
+import {
+    InitiateUploadAction,
+    JumpToUploadAction,
+    RemoveUploadsAction,
+    UploadJobTableRow
+} from "../../state/upload/types";
 import { alphaOrderComparator } from "../../util";
 
 const styles = require("./style.pcss");
@@ -22,17 +27,19 @@ interface Props {
     className?: string;
     removeUploads: ActionCreator<RemoveUploadsAction>;
     goBack: ActionCreator<GoBackAction>;
+    goForward: ActionCreator<NextPageAction>;
+    initiateUpload: ActionCreator<InitiateUploadAction>;
     jumpToUpload: ActionCreator<JumpToUploadAction>;
-    uploads: UploadTableRow[];
+    uploads: UploadJobTableRow[];
 }
 
-interface UploadJobsState {
+interface UploadJobState {
     // array of fullpaths
     selectedFiles: string[];
 }
 
-class UploadJobs extends React.Component<Props, UploadJobsState> {
-    private columns: Array<ColumnProps<UploadTableRow>> = [
+class UploadJob extends React.Component<Props, UploadJobState> {
+    private columns: Array<ColumnProps<UploadJobTableRow>> = [
         {
             dataIndex: "barcode",
             key: "barcode",
@@ -56,7 +63,7 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
         },
         {
             key: "action",
-            render: (text: string, record: UploadTableRow) => (<a onClick={this.removeUpload(record)}>Remove</a>),
+            render: (text: string, record: UploadJobTableRow) => (<a onClick={this.removeUpload(record)}>Remove</a>),
             title: "Action",
         }];
 
@@ -93,8 +100,10 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
         return (
             <FormPage
                 className={className}
-                formTitle="UPLOAD JOBS"
-                formPrompt="Review files below and click Upload to complete process."
+                formTitle="UPLOAD JOB"
+                formPrompt="Review files below and click Upload to submit a job."
+                onSave={this.upload}
+                saveButtonName="Upload"
                 onBack={this.props.goBack}
             >
                 {this.renderButtons()}
@@ -125,7 +134,12 @@ class UploadJobs extends React.Component<Props, UploadJobsState> {
         );
     }
 
-    private removeUpload = (upload: UploadTableRow) => {
+    private upload = (): void => {
+        this.props.initiateUpload();
+        this.props.goForward();
+    }
+
+    private removeUpload = (upload: UploadJobTableRow) => {
         return () => {
             this.setState({selectedFiles: []});
             this.props.removeUploads([upload.file]);
@@ -162,8 +176,10 @@ function mapStateToProps(state: State) {
 
 const dispatchToPropsMap = {
     goBack,
+    goForward,
+    initiateUpload,
     jumpToUpload,
     removeUploads,
 };
 
-export default connect(mapStateToProps, dispatchToPropsMap)(UploadJobs);
+export default connect(mapStateToProps, dispatchToPropsMap)(UploadJob);
