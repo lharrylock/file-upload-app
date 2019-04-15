@@ -108,8 +108,6 @@ ipcMain.on(OPEN_CREATE_PLATE_STANDALONE, (event: any) => {
         child.show();
     });
     child.webContents.on("will-navigate", (e: Event, next: string) => {
-        // tslint:disable-next-line
-        console.log("will navigate", next);
         if (next.indexOf("plateStandalone.view") === -1) {
             e.preventDefault();
             // todo once redirect URL on CreatePlateStandalone includes barcode and plateId, parse these values
