@@ -2,7 +2,8 @@ import { expect } from "chai";
 import { difference } from "lodash";
 
 import { getMockStateWithHistory, mockState } from "../../test/mocks";
-import { getWellIdToFiles } from "../selectors";
+import { State } from "../../types";
+import { FileType, getUploadPayload, getWellIdToFiles } from "../selectors";
 
 describe("Upload selectors", () => {
     describe("getWellIdToFiles", () => {
@@ -46,6 +47,119 @@ describe("Upload selectors", () => {
             if (filesForWell2) {
                 expect(difference(filesForWell2, ["/path4"]).length).to.equal(0);
             }
+        });
+    });
+
+    describe("getUploadPayload", () => {
+        it("Adds correct file type and moves wellId to microscopy section", () => {
+            const state: State = {
+                ...mockState,
+                upload: getMockStateWithHistory({
+                    "/path/to.dot/image.tiff": {
+                        barcode: "452",
+                        plateId: 4,
+                        wellId: 6,
+                        wellLabel: "A1",
+                    },
+                    "/path/to/image.czi": {
+                        barcode: "567",
+                        plateId: 4,
+                        wellId: 1,
+                        wellLabel: "A1",
+                    },
+                    "/path/to/image.ome.tiff": {
+                        barcode: "123",
+                        plateId: 2,
+                        wellId: 2,
+                        wellLabel: "A1",
+                    },
+                    "/path/to/image.png": {
+                        barcode: "345",
+                        plateId: 5,
+                        wellId: 3,
+                        wellLabel: "A1",
+                    },
+                    "/path/to/image.tiff": {
+                        barcode: "234",
+                        plateId: 3,
+                        wellId: 4,
+                        wellLabel: "A1",
+                    },
+                    "/path/to/no-extension": {
+                        barcode: "888",
+                        plateId: 7,
+                        wellId: 7,
+                        wellLabel: "A1",
+                    },
+                    "/path/to/not-image.txt": {
+                        barcode: "456",
+                        plateId: 7,
+                        wellId: 5,
+                        wellLabel: "A1",
+                    },
+                }),
+            };
+            const expected = {
+                "/path/to.dot/image.tiff": {
+                    file: {
+                        fileType: FileType.IMAGE,
+                    },
+                    microscopy: {
+                        wellId: 6,
+                    },
+                },
+                "/path/to/image.czi": {
+                    file: {
+                        fileType: FileType.IMAGE,
+                    },
+                    microscopy: {
+                        wellId: 1,
+                    },
+                },
+                "/path/to/image.ome.tiff": {
+                    file: {
+                        fileType: FileType.IMAGE,
+                    },
+                    microscopy: {
+                        wellId: 2,
+                    },
+                },
+                "/path/to/image.png": {
+                    file: {
+                        fileType: FileType.IMAGE,
+                    },
+                    microscopy: {
+                        wellId: 3,
+                    },
+                },
+                "/path/to/image.tiff": {
+                    file: {
+                        fileType: FileType.IMAGE,
+                    },
+                    microscopy: {
+                        wellId: 4,
+                    },
+                },
+                "/path/to/no-extension": {
+                    file: {
+                        fileType: FileType.OTHER,
+                    },
+                    microscopy: {
+                        wellId: 7,
+                    },
+                },
+                "/path/to/not-image.txt": {
+                    file: {
+                        fileType: FileType.OTHER,
+                    },
+                    microscopy: {
+                        wellId: 5,
+                    },
+                },
+            };
+
+            const payload = getUploadPayload(state);
+            expect(payload).to.deep.equal(expected);
         });
     });
 });

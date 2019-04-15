@@ -1,5 +1,6 @@
 import { Uploads } from "@aics/aicsfiles/type-declarations/types";
 import { isEmpty, map, uniq } from "lodash";
+import { extname } from "path";
 import { createSelector } from "reselect";
 
 import { State } from "../types";
@@ -46,6 +47,24 @@ export const getUploadSummaryRows = createSelector([getUpload], (uploads: Upload
     }))
 );
 
+export class FileType {
+    public static readonly IMAGE = "image";
+    public static readonly OTHER = "other";
+}
+
+const fileTypeToExtensionMap = new Map<string, string[]>([
+    [FileType.IMAGE, [".czi", ".ome.tif", ".ome.tiff", ".tiff", ".png", ".pdf"]],
+]);
+
+const extensionToFileTypeMap = new Map();
+fileTypeToExtensionMap.forEach((extensions: string[], fileType: string) => {
+    extensions.forEach((ext) => extensionToFileTypeMap.set(ext, fileType));
+});
+
+const getFileType = (fullpath: string): string => {
+    return extensionToFileTypeMap.get(extname(fullpath)) || FileType.OTHER;
+};
+
 export const getUploadPayload = createSelector([getUpload], (uploads: UploadStateBranch): Uploads => {
     let result = {};
     map(uploads, ({wellId}: UploadMetadata, fullPath: string) => {
@@ -53,7 +72,7 @@ export const getUploadPayload = createSelector([getUpload], (uploads: UploadStat
             ...result,
             [fullPath]: {
                 file: {
-                    fileType: "text", // todo: lisah 4/12/19 FMS-466 Determine fileType from file name
+                    fileType: getFileType(fullPath),
                 },
                 microscopy: {
                     wellId,
