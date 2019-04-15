@@ -53,7 +53,16 @@ export class FileType {
 }
 
 const fileTypeToExtensionMap = new Map<string, string[]>([
-    [FileType.IMAGE, [".czi", ".ome.tif", ".ome.tiff", ".tiff", ".png", ".pdf"]],
+    [FileType.IMAGE, [
+        ".czi",
+        ".tif",
+        ".tiff",
+        ".png",
+        ".pdf",
+        ".jpeg",
+        ".jpg",
+        ".gif",
+    ]],
 ]);
 
 const extensionToFileTypeMap = new Map();
@@ -62,7 +71,7 @@ fileTypeToExtensionMap.forEach((extensions: string[], fileType: string) => {
 });
 
 const getFileType = (fullpath: string): string => {
-    return extensionToFileTypeMap.get(extname(fullpath)) || FileType.OTHER;
+    return extensionToFileTypeMap.get(extname(fullpath).toLowerCase()) || FileType.OTHER;
 };
 
 export const getUploadPayload = createSelector([getUpload], (uploads: UploadStateBranch): Uploads => {
