@@ -61,6 +61,11 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
         this.saveAndContinue = this.saveAndContinue.bind(this);
         this.setAlert = debounce(this.setAlert.bind(this), 2000);
         this.openCreatePlateModal = this.openCreatePlateModal.bind(this);
+
+        ipcRenderer.on(PLATE_CREATED, (event: any, barcode: string, plateId: number) => {
+            // TODO: uncomment below once redirect URL on CreatePlateStandalone includes barcode and plateId
+            // this.props.selectBarcode(barcode, plateId);
+        });
     }
 
     public render() {
@@ -120,10 +125,6 @@ class EnterBarcode extends React.Component<EnterBarcodeProps, EnterBarcodeState>
     }
 
     private openCreatePlateModal(): void {
-        ipcRenderer.on(PLATE_CREATED, (event: any, barcode: string, plateId: number) => {
-            // TODO: uncomment below once redirect URL on CreatePlateStandalone includes barcode and plateId
-            // this.props.selectBarcode(barcode, plateId);
-        });
         ipcRenderer.send(OPEN_CREATE_PLATE_STANDALONE);
     }
 }
