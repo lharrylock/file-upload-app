@@ -8,6 +8,7 @@ import { format as formatUrl } from "url";
 import {
     LIMS_HOST,
     LIMS_PORT,
+    LIMS_PROTOCOL,
     OPEN_CREATE_PLATE_STANDALONE,
     PLATE_CREATED,
     START_UPLOAD,
@@ -95,16 +96,14 @@ ipcMain.on(START_UPLOAD, startUpload);
 ipcMain.on(OPEN_CREATE_PLATE_STANDALONE, (event: any) => {
     const child: BrowserWindow = new BrowserWindow({
         modal: true,
-        parent: win,
+        parent: mainWindow,
         show: false,
         webPreferences: {
             nodeIntegration: false,
         },
     });
-    const host = "localhost:8080"; // "stg-aics.corp.alleninstitute.org";
-    const modalUrl = `http://${host}/labkey/aics_microscopy/AICS/plateStandalone.view`;
+    const modalUrl = `${LIMS_PROTOCOL}://${LIMS_HOST}:${LIMS_PORT}/labkey/aics_microscopy/AICS/plateStandalone.view`;
     child.loadURL(modalUrl);
-    // todo: use env variable for host
     child.once("ready-to-show", () => {
         child.show();
     });
@@ -113,10 +112,10 @@ ipcMain.on(OPEN_CREATE_PLATE_STANDALONE, (event: any) => {
         console.log("will navigate", next);
         if (next.indexOf("plateStandalone.view") === -1) {
             e.preventDefault();
-            // todo use constants
-            event.sender.send(PLATE_CREATED, "lisa_test");
+            // todo once redirect URL on CreatePlateStandalone includes barcode and plateId, parse these values
+            // and include below
+            event.sender.send(PLATE_CREATED, "barcode", 789);
             child.close();
-            // send message to renderer about created plateid/barcode
         }
     });
 });
