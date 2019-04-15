@@ -5,10 +5,11 @@ import { connect } from "react-redux";
 import { ActionCreator } from "redux";
 
 import FolderTree from "../../components/FolderTree";
-import { feedback, selection } from "../../state";
+import StatusBar from "../../components/StatusBar";
+import { selection } from "../../state";
 import { clearAlert } from "../../state/feedback/actions";
-import { getAlert, getIsLoading } from "../../state/feedback/selectors";
-import { AlertType, AppAlert, ClearAlertAction } from "../../state/feedback/types";
+import { getAlert, getIsLoading, getRecentEvent } from "../../state/feedback/selectors";
+import { AlertType, AppAlert, AppEvent, ClearAlertAction } from "../../state/feedback/types";
 import { requestMetadata } from "../../state/metadata/actions";
 import { RequestMetadataAction } from "../../state/metadata/types";
 import { getPage, getSelectedFiles, getStagedFiles } from "../../state/selection/selectors";
@@ -21,14 +22,15 @@ import {
 } from "../../state/selection/types";
 import { State } from "../../state/types";
 import { FileTag } from "../../state/upload/types";
-import AssociateWells from "../AssociateWells";
 
+import AssociateWells from "../AssociateWells";
 import DragAndDropSquare from "../DragAndDropSquare";
 import EnterBarcode from "../EnterBarcode";
+import UploadJobs from "../UploadJob";
+import UploadSummary from "../UploadSummary";
 
-import "../../styles/fonts.css";
 import { getFileToTags } from "./selectors";
-const styles = require("./styles.css");
+const styles = require("./styles.pcss");
 const ALERT_DURATION = 2;
 
 interface AppProps {
@@ -38,6 +40,7 @@ interface AppProps {
     files: UploadFile[];
     getFilesInFolder: ActionCreator<GetFilesInFolderAction>;
     loading: boolean;
+    recentEvent?: AppEvent;
     requestMetadata: ActionCreator<RequestMetadataAction>;
     selectFile: ActionCreator<SelectFileAction>;
     selectedFiles: string[];
@@ -59,6 +62,16 @@ const APP_PAGE_TO_CONFIG_MAP = new Map<Page, AppPageConfig>([
         container:  <AssociateWells key="associateWells" className={styles.mainContent}/>,
         folderTreeSelectable: true,
         folderTreeVisible: true,
+    }],
+    [Page.UploadJobs, {
+        container: <UploadJobs key="uploadJobs" className={styles.mainContent}/>,
+        folderTreeSelectable: false,
+        folderTreeVisible: true,
+    }],
+    [Page.UploadSummary, {
+        container: <UploadSummary key="uploadSummary" className={styles.mainContent}/>,
+        folderTreeSelectable: false,
+        folderTreeVisible: false,
     }],
 ]);
 
@@ -103,6 +116,7 @@ class App extends React.Component<AppProps, {}> {
             files,
             getFilesInFolder,
             loading,
+            recentEvent,
             selectFile,
             selectedFiles,
             page,
@@ -116,19 +130,22 @@ class App extends React.Component<AppProps, {}> {
 
         return (
             <div className={styles.container}>
-                {pageConfig.folderTreeVisible &&
-                   <FolderTree
-                       className={styles.folderTree}
-                       files={files}
-                       getFilesInFolder={getFilesInFolder}
-                       isLoading={loading}
-                       isSelectable={pageConfig.folderTreeSelectable}
-                       onCheck={selectFile}
-                       selectedKeys={selectedFiles}
-                       fileToTags={fileToTags}
-                   />
-                }
-                {pageConfig.container}
+                <div className={styles.mainContentContainer}>
+                    {pageConfig.folderTreeVisible &&
+                       <FolderTree
+                           className={styles.folderTree}
+                           files={files}
+                           getFilesInFolder={getFilesInFolder}
+                           isLoading={loading}
+                           isSelectable={pageConfig.folderTreeSelectable}
+                           onCheck={selectFile}
+                           selectedKeys={selectedFiles}
+                           fileToTags={fileToTags}
+                       />
+                    }
+                    {pageConfig.container}
+                </div>
+                <StatusBar className={styles.statusBar} event={recentEvent}/>
             </div>
         );
     }
@@ -141,6 +158,7 @@ function mapStateToProps(state: State) {
         files: getStagedFiles(state),
         loading: getIsLoading(state),
         page: getPage(state),
+        recentEvent: getRecentEvent(state),
         selectedFiles: getSelectedFiles(state),
     };
 }

@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { expect } from "chai";
 import { isEmpty } from "lodash";
 import { dirname, resolve } from "path";
@@ -9,11 +9,10 @@ import { SinonStub } from "sinon";
 import selections from "../";
 
 import { feedback } from "../../";
-import createReduxStore, { reduxLogicDependencies } from "../../configure-store";
 import { API_WAIT_TIME_SECONDS } from "../../constants";
 import { getAlert, getRequestsInProgressContains } from "../../feedback/selectors";
-import { AlertType, AppAlert, HttpRequestType } from "../../feedback/types";
-import { createMockReduxStore } from "../../test/configure-mock-store";
+import { AlertType, AppAlert, AsyncRequest } from "../../feedback/types";
+import { createMockReduxStore, mockReduxLogicDeps } from "../../test/configure-mock-store";
 import { getMockStateWithHistory, mockSelection, mockState } from "../../test/mocks";
 import { AicsSuccessResponse, HTTP_STATUS } from "../../types";
 import { selectBarcode } from "../actions";
@@ -43,6 +42,7 @@ describe("Selection logics", () => {
         expect(folder.name).to.equal(FOLDER_NAME);
         expect(folder.path).to.equal(resolve(__dirname, TEST_FILES_DIR));
         expect(folder.fullPath).to.equal(FOLDER_FULL_PATH);
+        expect(folder.files.length).to.equal(2);
     };
 
     describe("loadFilesLogic", () => {
@@ -66,7 +66,7 @@ describe("Selection logics", () => {
         });
 
         it("Goes to EnterBarcode page if on DragAndDrop page", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(selections.selectors.getPage(store.getState())).to.equal(Page.DragAndDrop);
@@ -86,7 +86,7 @@ describe("Selection logics", () => {
                 ...mockSelection,
                 page: Page.EnterBarcode,
             });
-            const store = createReduxStore({
+            const store = createMockReduxStore({
                 ...mockState,
                 selection,
             });
@@ -105,7 +105,7 @@ describe("Selection logics", () => {
         });
 
         it("stages all files loaded", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(selections.selectors.getStagedFiles(store.getState()).length).to.equal(0);
@@ -124,7 +124,7 @@ describe("Selection logics", () => {
         });
 
         it ("should stop loading on success", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
@@ -140,7 +140,7 @@ describe("Selection logics", () => {
         });
 
         it ("should stop loading on error", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
@@ -175,7 +175,7 @@ describe("Selection logics", () => {
         });
 
         it("Goes to EnterBarcode page if on DragAndDrop page", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(selections.selectors.getPage(store.getState())).to.equal(Page.DragAndDrop);
@@ -195,7 +195,7 @@ describe("Selection logics", () => {
                 ...mockSelection,
                 page: Page.EnterBarcode,
             });
-            const store = createReduxStore({
+            const store = createMockReduxStore({
                 ...mockState,
                 selection,
             });
@@ -214,7 +214,7 @@ describe("Selection logics", () => {
         });
 
         it("Stages all files opened", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(selections.selectors.getStagedFiles(store.getState()).length).to.equal(0);
@@ -233,7 +233,7 @@ describe("Selection logics", () => {
         });
 
         it("Removes child files or directories", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(selections.selectors.getStagedFiles(store.getState()).length).to.equal(0);
@@ -258,7 +258,7 @@ describe("Selection logics", () => {
         });
 
         it ("should stop loading on success", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
@@ -274,7 +274,7 @@ describe("Selection logics", () => {
         });
 
         it ("should stop loading on error", (done) => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             // before
             expect(feedback.selectors.getIsLoading(store.getState())).to.equal(false);
@@ -302,7 +302,7 @@ describe("Selection logics", () => {
                 ...mockSelection,
                 stagedFiles,
             });
-            const store = createReduxStore({
+            const store = createMockReduxStore({
                 ...mockState,
                 selection,
             });
@@ -344,11 +344,10 @@ describe("Selection logics", () => {
         let mockOkResponse: AxiosResponse<AicsSuccessResponse<Well[][]>>;
         let mockBadGatewayResponse: AxiosError;
         const createMockReduxLogicDeps = (getStub: SinonStub) => ({
-            ...reduxLogicDependencies,
+            ...mockReduxLogicDeps,
             httpClient: {
-                ...axios,
+                ...mockReduxLogicDeps.httpClient,
                 get: getStub,
-                post: sinon.stub(),
             },
         });
 
@@ -387,14 +386,14 @@ describe("Selection logics", () => {
         it("Adds GET wells request to requests in progress", (done) => {
             const getStub = sinon.stub().resolves(mockOkResponse);
             const store = createMockReduxStore(mockState, createMockReduxLogicDeps(getStub));
-            expect(getRequestsInProgressContains(store.getState(), HttpRequestType.GET_WELLS)).to.be.false;
+            expect(getRequestsInProgressContains(store.getState(), AsyncRequest.GET_WELLS)).to.be.false;
             let storeUpdates = 0;
             store.subscribe(() => {
                 storeUpdates++;
 
                 if (storeUpdates === 1) {
                     const state = store.getState();
-                    expect(getRequestsInProgressContains(state, HttpRequestType.GET_WELLS)).to.be.true;
+                    expect(getRequestsInProgressContains(state, AsyncRequest.GET_WELLS)).to.be.true;
                     done();
                 }
             });
@@ -405,7 +404,7 @@ describe("Selection logics", () => {
         it ("removes GET wells from requests in progress if GET wells is OK", (done) => {
             const getStub = sinon.stub().callsFake(() => {
                 store.subscribe(() => {
-                    expect(getRequestsInProgressContains(store.getState(), HttpRequestType.GET_WELLS)).to.be.false;
+                    expect(getRequestsInProgressContains(store.getState(), AsyncRequest.GET_WELLS)).to.be.false;
                     done();
                 });
                 return Promise.resolve(mockOkResponse);
@@ -440,7 +439,7 @@ describe("Selection logics", () => {
             const getStub = sinon.stub().callsFake(() => {
                 store.subscribe(() => {
                     const state = store.getState();
-                    expect(getRequestsInProgressContains(state, HttpRequestType.GET_WELLS)).to.be.false;
+                    expect(getRequestsInProgressContains(state, AsyncRequest.GET_WELLS)).to.be.false;
                     expect(getStub.callCount).to.equal(1);
 
                     const alert = getAlert(state);

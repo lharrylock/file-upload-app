@@ -1,8 +1,9 @@
-import { isEmpty, uniq } from "lodash";
+import { Uploads } from "@aics/aicsfiles/type-declarations/types";
+import { isEmpty, map, uniq } from "lodash";
 import { createSelector } from "reselect";
 
 import { State } from "../types";
-import { UploadStateBranch } from "./types";
+import { UploadJobTableRow, UploadMetadata, UploadStateBranch } from "./types";
 
 export const getUpload = (state: State) => state.upload.present;
 export const getCurrentUploadIndex = (state: State) => state.upload.index;
@@ -34,4 +35,32 @@ export const getCanRedoUpload = createSelector([getUploadFuture], (future: Uploa
 
 export const getCanUndoUpload = createSelector([getUploadPast], (past: UploadStateBranch[]) => {
     return !isEmpty(past);
+});
+
+export const getUploadSummaryRows = createSelector([getUpload], (uploads: UploadStateBranch): UploadJobTableRow[] =>
+    map(uploads, ({ barcode, wellLabel}: UploadMetadata, fullPath: string) => ({
+        barcode,
+        file: fullPath,
+        key: fullPath,
+        wellLabel,
+    }))
+);
+
+export const getUploadPayload = createSelector([getUpload], (uploads: UploadStateBranch): Uploads => {
+    let result = {};
+    map(uploads, ({wellId}: UploadMetadata, fullPath: string) => {
+        result = {
+            ...result,
+            [fullPath]: {
+                file: {
+                    fileType: "text", // todo: lisah 4/12/19 FMS-466 Determine fileType from file name
+                },
+                microscopy: {
+                    wellId,
+                },
+            },
+        };
+    });
+
+    return result;
 });

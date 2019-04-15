@@ -6,7 +6,7 @@ import { getUnits } from "../metadata/selectors";
 import { Unit } from "../metadata/types";
 import { State } from "../types";
 
-import { Page, Solution, SolutionLot, ViabilityResult, Well } from "./types";
+import { Solution, SolutionLot, ViabilityResult, Well } from "./types";
 
 // BASIC SELECTORS
 export const getSelectedBarcode = (state: State) => state.selection.present.barcode;

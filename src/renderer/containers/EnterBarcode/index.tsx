@@ -8,16 +8,16 @@ import { ActionCreator } from "redux";
 import { OPEN_CREATE_PLATE_STANDALONE, PLATE_CREATED } from "../../../shared/constants";
 
 import FormPage from "../../components/FormPage";
-import { State } from "../../state";
 import { setAlert } from "../../state/feedback/actions";
 import { getRequestsInProgressContains } from "../../state/feedback/selectors";
-import { AlertType, HttpRequestType, SetAlertAction } from "../../state/feedback/types";
+import { AlertType, AsyncRequest, SetAlertAction } from "../../state/feedback/types";
 import { goBack, selectBarcode } from "../../state/selection/actions";
 import { getSelectedBarcode, getSelectedPlateId } from "../../state/selection/selectors";
 import { GoBackAction, SelectBarcodeAction } from "../../state/selection/types";
+import { State } from "../../state/types";
 import LabkeyQueryService, { Plate } from "../../util/labkey-query-service";
 
-const styles = require("./style.css");
+const styles = require("./style.pcss");
 
 interface EnterBarcodeProps {
     className?: string;
@@ -132,7 +132,7 @@ function mapStateToProps(state: State) {
     return {
         barcode: getSelectedBarcode(state),
         plateId: getSelectedPlateId(state),
-        saveInProgress: getRequestsInProgressContains(state, HttpRequestType.GET_WELLS),
+        saveInProgress: getRequestsInProgressContains(state, AsyncRequest.GET_WELLS),
     };
 }
 

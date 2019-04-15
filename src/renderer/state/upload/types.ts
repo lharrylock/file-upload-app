@@ -4,13 +4,38 @@ export interface UploadStateBranch {
 
 // Metadata associated with a file
 export interface UploadMetadata {
+    barcode: string;
     wellId: number;
+    wellLabel: string;
+}
+
+export interface UploadJobTableRow {
+    // plate barcode associated with well and file
+    barcode: string;
+
+    // fullpath of file
+    file: string;
+
+    // also fullpath of file - used by ant.d Table to identify rows
+    key: string;
+
+    // human readable identifier of well, such as "A1"
+    wellLabel: string;
+}
+
+export interface UploadSummaryTableRow {
+    jobId: string;
+    status: string;
+    created: Date;
+    key: string;
 }
 
 export interface AssociateFilesAndWellAction {
     payload: {
+        barcode: string,
         fullPaths: string[],
         wellId: number,
+        wellLabel: string,
     };
     type: string;
 }
@@ -31,6 +56,15 @@ export interface JumpToUploadAction {
 }
 
 export interface ClearUploadHistoryAction {
+    type: string;
+}
+
+export interface RemoveUploadsAction {
+    payload: string[]; // fullpaths to remove from upload state branch
+    type: string;
+}
+
+export interface InitiateUploadAction {
     type: string;
 }
 

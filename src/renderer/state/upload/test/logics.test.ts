@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { get } from "lodash";
 
-import { createReduxStore } from "../../index";
 import { getSelectedFiles } from "../../selection/selectors";
+import { createMockReduxStore } from "../../test/configure-mock-store";
 import { mockState } from "../../test/mocks";
 import { associateFilesAndWell } from "../actions";
 import { getUpload } from "../selectors";
@@ -10,7 +10,7 @@ import { getUpload } from "../selectors";
 describe("Upload logics", () => {
     describe("associateFileAndWellLogic", () => {
         it("clears files and associates well with file", () => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
             const file1 = "/path1";
             const file2 = "/path2";
             const wellId = 1;

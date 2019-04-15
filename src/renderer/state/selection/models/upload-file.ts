@@ -1,7 +1,11 @@
-import { readdir, stat, Stats } from "fs";
+import { readdir as fsReaddir, stat as fsStat, Stats } from "fs";
 import { basename, dirname, resolve as resolvePath } from "path";
+import { promisify } from "util";
 
 import { UploadFile } from "../types";
+
+const readdir = promisify(fsReaddir);
+const stat = promisify(fsStat);
 
 export class UploadFileImpl implements UploadFile {
     public name: string;
@@ -20,32 +24,16 @@ export class UploadFileImpl implements UploadFile {
         return resolvePath(this.path, this.name);
     }
 
-    public loadFiles(): Promise<Array<Promise<UploadFile>>> {
+    public async loadFiles(): Promise<Array<Promise<UploadFile>>> {
         if (!this.isDirectory) {
             return Promise.reject("Not a directory");
         }
 
-        return new Promise((resolve, reject) => {
-            readdir(this.fullPath, (err: NodeJS.ErrnoException, files: string[]) => {
-                if (err) {
-                    return reject(err);
-                }
-
-                return resolve(files.map((file: string) => {
-                    const filePath = resolvePath(this.fullPath, file);
-                    return new Promise((resolve2, reject2) => {
-                        stat(filePath, (err2: NodeJS.ErrnoException, stats: Stats) => {
-                            if (err2 || !stats) {
-                                return reject2(err2);
-                            }
-
-                            return resolve2(
-                                new UploadFileImpl(basename(filePath), dirname(filePath), stats.isDirectory())
-                            );
-                        });
-                    });
-                }));
-            });
+        const files: string[] = await readdir(this.fullPath);
+        return files.map(async (file: string) => {
+            const filePath = resolvePath(this.fullPath, file);
+            const stats: Stats = await stat(filePath);
+            return new UploadFileImpl(basename(filePath), dirname(filePath), stats.isDirectory());
         });
     }
 }

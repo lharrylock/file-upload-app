@@ -4,6 +4,7 @@ import {
     createStore,
 } from "redux";
 import { createLogicMiddleware } from "redux-logic";
+import * as sinon from "sinon";
 import { SinonStub } from "sinon";
 
 import {
@@ -11,9 +12,9 @@ import {
     feedback,
     metadata,
     selection,
-    State,
     upload,
 } from "../";
+import { State } from "../types";
 
 export interface ReduxLogicDependencies {
     baseMmsUrl: string;
@@ -21,7 +22,21 @@ export interface ReduxLogicDependencies {
         get: SinonStub,
         post: SinonStub,
     };
+    dialog: {
+        showMessageBox: SinonStub;
+    };
 }
+
+export const mockReduxLogicDeps: ReduxLogicDependencies = {
+    baseMmsUrl: "MMS",
+    dialog: {
+        showMessageBox: sinon.stub(),
+    },
+    httpClient: {
+        get: sinon.stub(),
+        post: sinon.stub(),
+    },
+};
 
 const reducers = {
     feedback: feedback.reducer,
@@ -36,7 +51,8 @@ const logics = [
     ...upload.logics,
 ];
 
-export function createMockReduxStore(initialState: State, reduxLogicDependencies: ReduxLogicDependencies) {
+export function createMockReduxStore(initialState: State,
+                                     reduxLogicDependencies: ReduxLogicDependencies = mockReduxLogicDeps) {
     const logicMiddleware = createLogicMiddleware(logics, reduxLogicDependencies);
     const middleware = applyMiddleware(logicMiddleware);
     const rootReducer = enableBatching<State>(combineReducers(reducers));

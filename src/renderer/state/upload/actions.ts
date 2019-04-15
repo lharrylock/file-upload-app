@@ -1,6 +1,8 @@
 import {
     ASSOCIATE_FILES_AND_WELL,
     CLEAR_UPLOAD_HISTORY,
+    DELETE_UPLOAD,
+    INITIATE_UPLOAD,
     JUMP_TO_PAST_UPLOAD,
     JUMP_TO_UPLOAD,
     UNDO_FILE_WELL_ASSOCIATION
@@ -8,8 +10,10 @@ import {
 import {
     AssociateFilesAndWellAction,
     ClearUploadHistoryAction,
+    InitiateUploadAction,
     JumpToPastUploadAction,
     JumpToUploadAction,
+    RemoveUploadsAction,
     UndoFileWellAssociationAction
 } from "./types";
 
@@ -17,8 +21,10 @@ export function associateFilesAndWell(fullPaths: string[], wellId: number)
     : AssociateFilesAndWellAction {
     return {
         payload: {
+            barcode: "",
             fullPaths,
             wellId,
+            wellLabel: "",
         },
         type: ASSOCIATE_FILES_AND_WELL,
     };
@@ -48,5 +54,18 @@ export function jumpToUpload(index: number): JumpToUploadAction {
 export function clearUploadHistory(): ClearUploadHistoryAction {
     return {
         type: CLEAR_UPLOAD_HISTORY,
+    };
+}
+
+export function removeUploads(fullPaths: string[]): RemoveUploadsAction {
+    return {
+        payload: fullPaths,
+        type: DELETE_UPLOAD,
+    };
+}
+
+export function initiateUpload(): InitiateUploadAction {
+    return {
+        type: INITIATE_UPLOAD,
     };
 }

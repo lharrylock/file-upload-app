@@ -42,6 +42,24 @@ export function getWellLabel(well?: AicsGridCell, noneText: string = "None"): st
     return `${row}${col}`;
 }
 
+/***
+ * Returns number representing sort order of first string param compared to second string param
+ * If a is alphabetically before b, returns 1.
+ * If a is equal to b, returns 0.
+ * If a is alphabetically after b, returns -1.
+ * @param a string
+ * @param b string
+ */
+export const alphaOrderComparator = (a: string, b: string): number => {
+    if (a < b) {
+        return 1;
+    } else if (a === b) {
+        return 0;
+    }
+
+    return -1;
+};
+
 export {
     LabkeyQueryService,
 };

@@ -1,6 +1,6 @@
+import { omit } from "lodash";
 import { AnyAction } from "redux";
 import undoable, {
-    excludeAction,
     UndoableOptions,
 } from "redux-undo";
 
@@ -9,11 +9,17 @@ import { makeReducer } from "../util";
 import {
     ASSOCIATE_FILES_AND_WELL,
     CLEAR_UPLOAD_HISTORY,
+    DELETE_UPLOAD,
     JUMP_TO_PAST_UPLOAD,
     JUMP_TO_UPLOAD,
     UNDO_FILE_WELL_ASSOCIATION
 } from "./constants";
-import { AssociateFilesAndWellAction, UndoFileWellAssociationAction, UploadStateBranch } from "./types";
+import {
+    AssociateFilesAndWellAction,
+    RemoveUploadsAction,
+    UndoFileWellAssociationAction,
+    UploadStateBranch
+} from "./types";
 
 export const initialState = {
 
@@ -26,11 +32,14 @@ const actionToConfigMap: TypeToDescriptionMap = {
             const nextState = {...state};
 
             return action.payload.fullPaths.reduce((accum: UploadStateBranch, fullPath: string) => {
+                const { barcode, wellId, wellLabel } = action.payload;
                 return {
                     ...accum,
                     [fullPath]: {
                         ...accum[fullPath],
-                        wellId: action.payload.wellId,
+                        barcode,
+                        wellId,
+                        wellLabel,
                     },
                 };
             }, nextState);
@@ -46,6 +55,10 @@ const actionToConfigMap: TypeToDescriptionMap = {
                 wellId: undefined,
             },
         }),
+    },
+    [DELETE_UPLOAD]: {
+        accepts: (action: AnyAction): action is RemoveUploadsAction => action.type === DELETE_UPLOAD,
+        perform: (state: UploadStateBranch, action: RemoveUploadsAction) => omit(state, action.payload),
     },
 };
 

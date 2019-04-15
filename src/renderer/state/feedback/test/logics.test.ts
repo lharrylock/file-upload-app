@@ -1,6 +1,6 @@
 import { expect } from "chai";
+import { createMockReduxStore } from "../../test/configure-mock-store";
 
-import createReduxStore from "../../configure-store";
 import { mockState } from "../../test/mocks";
 import { HTTP_STATUS } from "../../types";
 import { setAlert } from "../actions";
@@ -12,7 +12,7 @@ describe("Feedback logics", () => {
 
     describe("setAlertLogic", () => {
         it("Updates message if alert has a recognized statusCode", () => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
 
             store.dispatch(setAlert({
                 statusCode: HTTP_STATUS.BAD_REQUEST,
@@ -28,7 +28,7 @@ describe("Feedback logics", () => {
         });
 
         it("Does not update message if alert does not have a statusCode", () => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
             const message = "Hello";
 
             store.dispatch(setAlert({
@@ -45,7 +45,7 @@ describe("Feedback logics", () => {
         });
 
         it("Does not update message if alert already has a message", () => {
-            const store = createReduxStore(mockState);
+            const store = createMockReduxStore(mockState);
             const message = "Hello world";
 
             store.dispatch(setAlert({

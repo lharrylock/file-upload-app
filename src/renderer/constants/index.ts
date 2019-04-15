@@ -1,17 +1,17 @@
 import { isEmpty } from "lodash";
 
-export const APP_ID = "file-upload-app";
+export const APP_ID = "app";
 
 const {
-    LABKEY_PROTOCOL = "http",
-    LABKEY_HOST = "localhost",
-    LABKEY_PORT = "8080",
-    MMS_PROTOCOL = "http",
-    MMS_HOST = "localhost",
-    MMS_PORT = "8080",
+    LIMS_PROTOCOL = "http",
+    LIMS_HOST = "localhost",
+    LIMS_PORT = "8080",
+    NODE_ENV,
 } = process.env;
 
-export const LABKEY_URL = `${LABKEY_PROTOCOL}://${LABKEY_HOST}:${LABKEY_PORT}/labkey`;
+export const HOST = NODE_ENV === "production" ? LIMS_HOST : `${LIMS_HOST}:${LIMS_PORT}`;
+
+export const LABKEY_URL = `${LIMS_PROTOCOL}://${HOST}/labkey`;
 export const LABKEY_SELECT_ROWS_URL = (schema: string, table: string, additionalQueries: string[] = []) => {
     const base = `${LABKEY_URL}/AICS/query-selectRows.api?schemaName=${schema}&query.queryName=${table}`;
     if (!isEmpty(additionalQueries)) {
@@ -22,7 +22,7 @@ export const LABKEY_SELECT_ROWS_URL = (schema: string, table: string, additional
 };
 
 // Metadata Management Service
-export const MMS_BASE_URL = `${MMS_PROTOCOL}://${MMS_HOST}:${MMS_PORT}/metadata-management-service`;
+export const MMS_BASE_URL = `${LIMS_PROTOCOL}://${HOST}/metadata-management-service`;
 
 // Labkey Schemas
 export const LK_MICROSCOPY_SCHEMA = "microscopy";

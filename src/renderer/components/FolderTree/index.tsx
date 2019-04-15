@@ -9,7 +9,7 @@ import {
 } from "../../state/selection/types";
 import { FileTag } from "../../state/upload/types";
 
-const styles = require("./style.css");
+const styles = require("./style.pcss");
 
 interface FolderTreeProps {
     className?: string;
@@ -90,10 +90,10 @@ class FolderTree extends React.Component<FolderTreeProps, FolderTreeState> {
                     {!isLoading && <Tree.DirectoryTree
                         checkable={false}
                         multiple={true}
-                        defaultExpandAll={false}
+                        defaultExpandedKeys={files.map((file: UploadFile) => FolderTree.getFolderKey(file.fullPath))}
                         onSelect={this.onSelect}
                         onExpand={this.onExpand}
-                        selectedKeys={selectedKeys}
+                        selectedKeys={selectedKeys.filter((file) => !file.includes(FOLDER_TAG))}
                         selectable={isSelectable}
                     >
                         {files.map((file: UploadFile) => this.renderChildDirectories(file))}

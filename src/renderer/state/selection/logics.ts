@@ -1,10 +1,10 @@
 import { AxiosResponse } from "axios";
-import { stat, Stats } from "fs";
+import { stat as fsStat, Stats } from "fs";
 import { isEmpty, uniq } from "lodash";
 import { basename, dirname, resolve as resolvePath } from "path";
 import { AnyAction } from "redux";
 import { createLogic } from "redux-logic";
-import { ActionCreators } from "redux-undo";
+import { promisify } from "util";
 
 import { API_WAIT_TIME_SECONDS } from "../constants";
 
@@ -16,7 +16,7 @@ import {
     startLoading,
     stopLoading
 } from "../feedback/actions";
-import { AlertType, HttpRequestType } from "../feedback/types";
+import { AlertType, AsyncRequest } from "../feedback/types";
 import { updatePageHistory } from "../metadata/actions";
 import { getSelectionHistory, getUploadHistory } from "../metadata/selectors";
 
@@ -51,12 +51,10 @@ import {
     SELECT_PAGE,
 } from "./constants";
 import { UploadFileImpl } from "./models/upload-file";
-import {
-    getCurrentSelectionIndex,
-    getPage,
-    getStagedFiles,
-} from "./selectors";
+import { getCurrentSelectionIndex, getPage, getStagedFiles } from "./selectors";
 import { DragAndDropFileList, Page, UploadFile, Well } from "./types";
+
+const stat = promisify(fsStat);
 
 const mergeChildPaths = (filePaths: string[]): string[] => {
     filePaths = uniq(filePaths);
@@ -67,32 +65,41 @@ const mergeChildPaths = (filePaths: string[]): string[] => {
     });
 };
 
-const getUploadFilePromise = (name: string, path: string): Promise<UploadFile> => (
-    new Promise((resolve, reject) => {
-        stat(resolvePath(path, name), (err: NodeJS.ErrnoException, stats: Stats) => {
-            if (err || !stats) {
-                return reject(err);
-            }
+const getUploadFilePromise = async (name: string, path: string): Promise<UploadFile> => {
+    const stats: Stats = await stat(resolvePath(path, name));
+    const isDirectory = stats.isDirectory();
+    const file = new UploadFileImpl(name, path, isDirectory);
 
-            return resolve(new UploadFileImpl(name, path, stats.isDirectory()));
-        });
-    })
-);
+    if (isDirectory) {
+        file.files = await Promise.all(await file.loadFiles());
+    }
 
-const stageFilesAndStopLoading = (uploadFilePromises: Array<Promise<UploadFile>>, dispatch: ReduxLogicNextCb,
-                                  done: ReduxLogicDoneCb) => {
-    Promise.all(uploadFilePromises)
-        .then((uploadFiles: UploadFile[]) => {
-            dispatch(batchActions([
-                stageFiles(uploadFiles),
-                stopLoading(),
-            ]));
-            done();
-        })
-        .catch(() => {
-            dispatch(stopLoading());
-            done();
-        });
+    return file;
+};
+
+const stageFilesAndStopLoading = async (uploadFilePromises: Array<Promise<UploadFile>>, dispatch: ReduxLogicNextCb,
+                                        done: ReduxLogicDoneCb) => {
+    try {
+        const uploadFiles = await Promise.all(uploadFilePromises);
+        dispatch(batchActions([
+            stopLoading(),
+            stageFiles(uploadFiles),
+        ]));
+        done();
+
+    } catch (e) {
+        // tslint:disable-next-line
+        console.log(e);
+
+        dispatch(batchActions([
+            stopLoading(),
+            setAlert({
+                message: "Encountered error while resolving files",
+                type: AlertType.ERROR,
+            }),
+        ]));
+        done();
+    }
 };
 
 const openFilesTransformLogic = ({ action, getState }: ReduxLogicDependencies, next: ReduxLogicNextCb) => {
@@ -105,7 +112,7 @@ const openFilesTransformLogic = ({ action, getState }: ReduxLogicDependencies, n
 };
 
 const loadFilesLogic = createLogic({
-    process: ({ action }: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
+    process: async ({ action }: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
         const originalAction = action.payload.filter((a: AnyAction) => a.type === LOAD_FILES);
 
         if (!isEmpty(originalAction)) {
@@ -120,7 +127,7 @@ const loadFilesLogic = createLogic({
                 );
             }
 
-            stageFilesAndStopLoading(uploadFilePromises, dispatch, done);
+            await stageFilesAndStopLoading(uploadFilePromises, dispatch, done);
         }
     },
     transform: openFilesTransformLogic,
@@ -128,7 +135,7 @@ const loadFilesLogic = createLogic({
 });
 
 const openFilesLogic = createLogic({
-    process: ({ action }: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
+    process: async ({ action }: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
         const originalAction = action.payload.filter((a: AnyAction) => a.type === OPEN_FILES);
 
         if (!isEmpty(originalAction)) {
@@ -138,7 +145,7 @@ const openFilesLogic = createLogic({
                 (filePath: string) => getUploadFilePromise(basename(filePath), dirname(filePath))
             );
 
-            stageFilesAndStopLoading(uploadFilePromises, dispatch, done);
+            await stageFilesAndStopLoading(uploadFilePromises, dispatch, done);
         }
     },
     transform: openFilesTransformLogic,
@@ -159,20 +166,18 @@ const getNewStagedFiles = (files: UploadFile[], fileToUpdate: UploadFile): Uploa
 };
 
 const getFilesInFolderLogic = createLogic({
-    transform: ({ action, getState }: ReduxLogicTransformDependencies,
-                next: ReduxLogicNextCb) => {
+    transform: async ({ action, getState }: ReduxLogicTransformDependencies,
+                      next: ReduxLogicNextCb) => {
         const folder: UploadFile = action.payload;
-        folder.loadFiles()
-            .then((filePromises: Array<Promise<UploadFile>>) => {
-                Promise.all(filePromises)
-                    .then((files: UploadFile[]) => {
-                        folder.files = files;
-                        const stagedFiles = [...getStagedFiles(getState())];
-                        next(updateStagedFiles(getNewStagedFiles(stagedFiles, folder)));
-                    })
-                    // tslint:disable-next-line
-                    .catch((reason: string) => console.log(reason));
-            });
+        try {
+            folder.files = await Promise.all(await folder.loadFiles());
+            const stagedFiles = [...getStagedFiles(getState())];
+            next(updateStagedFiles(getNewStagedFiles(stagedFiles, folder)));
+        } catch (e) {
+            // tslint:disable-next-line
+           console.log(e);
+        }
+
     },
     type: GET_FILES_IN_FOLDER,
 });
@@ -208,7 +213,7 @@ const selectBarcodeLogic = createLogic({
                     receivedSuccessfulResponse = true;
                     const actions = [
                         setWells(wells),
-                        removeRequestFromInProgress(HttpRequestType.GET_WELLS),
+                        removeRequestFromInProgress(AsyncRequest.GET_WELLS),
                         action,
                     ];
                     actions.push(...getGoForwardActions(Page.EnterBarcode, deps.getState()));
@@ -244,7 +249,7 @@ const selectBarcodeLogic = createLogic({
                     GENERIC_GET_WELLS_ERROR_MESSAGE(action.payload.barcode);
                 dispatch(batchActions([
                     action,
-                    removeRequestFromInProgress(HttpRequestType.GET_WELLS),
+                    removeRequestFromInProgress(AsyncRequest.GET_WELLS),
                     setAlert({
                         message,
                         type: AlertType.ERROR,
@@ -258,7 +263,7 @@ const selectBarcodeLogic = createLogic({
     },
     transform: ({action}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb) => {
         next(batchActions([
-            addRequestToInProgress(HttpRequestType.GET_WELLS),
+            addRequestToInProgress(AsyncRequest.GET_WELLS),
             action,
         ]));
     },
@@ -270,7 +275,7 @@ const pageOrder: Page[] = [
     Page.EnterBarcode,
     Page.AssociateWells,
     Page.UploadJobs,
-    Page.UploadComplete,
+    Page.UploadSummary,
 ];
 const selectPageLogic = createLogic({
     process: ({action, getState}: ReduxLogicDependencies, dispatch: ReduxLogicNextCb, done: ReduxLogicDoneCb) => {
@@ -319,13 +324,27 @@ const selectPageLogic = createLogic({
 });
 
 const goBackLogic = createLogic({
-    transform: ({getState, action}: ReduxLogicTransformDependencies, next: ReduxLogicNextCb, reject: () => void) => {
+    transform: ({getState, action, dialog}: ReduxLogicTransformDependencies,
+                next: ReduxLogicNextCb, reject: () => void) => {
         const state = getState();
         const currentPage = getPage(state);
         const nextPage = getNextPage(currentPage, -1);
 
         if (nextPage) {
-            next(selectPage(currentPage, nextPage));
+            dialog.showMessageBox({
+                buttons: ["Cancel", "Yes"],
+                cancelId: 0,
+                defaultId: 1,
+                message: "Changes will be lost if you go back. Are you sure?",
+                title: "Warning",
+                type: "warning",
+            }, (response: number) => {
+                if (response === 1) {
+                    next(selectPage(currentPage, nextPage));
+                } else {
+                   reject();
+                }
+            });
         } else {
             reject();
         }

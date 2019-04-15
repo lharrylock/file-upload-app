@@ -1,4 +1,5 @@
 import { AxiosPromise, AxiosRequestConfig } from "axios";
+import { MessageBoxOptions } from "electron";
 import { AnyAction } from "redux";
 import { CreateLogic } from "redux-logic/definitions/logic";
 import { StateWithHistory } from "redux-undo";
@@ -28,6 +29,12 @@ export interface ReduxLogicExtraDependencies {
         post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
     };
     ctx?: any;
+    dialog: {
+        showMessageBox(
+            options: MessageBoxOptions,
+            callback?: (response: number, checkboxChecked: boolean) => void
+        ): number;
+    };
 }
 
 export type ReduxLogicDependencies = Process.DepObj<State, AnyAction, ReduxLogicExtraDependencies>;

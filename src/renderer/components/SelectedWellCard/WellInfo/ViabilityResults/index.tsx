@@ -7,7 +7,7 @@ import { ViabilityResult } from "../../../../state/selection/types";
 import { NULL_TEXT } from "..";
 import KeyValueDisplay from "../KeyValueDisplay";
 
-const styles = require("../style.css");
+const styles = require("../style.pcss");
 
 export interface ViabilityResultsProps {
     className?: string;

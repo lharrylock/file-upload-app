@@ -1,4 +1,5 @@
 import axios from "axios";
+import { remote } from "electron";
 import {
     applyMiddleware,
     combineReducers,
@@ -13,9 +14,9 @@ import {
     feedback,
     metadata,
     selection,
-    State,
     upload,
 } from "./";
+import { State } from "./types";
 
 const reducers = {
     feedback: feedback.reducer,
@@ -33,6 +34,7 @@ const logics = [
 
 export const reduxLogicDependencies = {
     baseMmsUrl: MMS_BASE_URL,
+    dialog: remote.dialog,
     httpClient: axios,
 };
 
