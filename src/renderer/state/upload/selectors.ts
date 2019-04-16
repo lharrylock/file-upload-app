@@ -47,9 +47,9 @@ export const getUploadSummaryRows = createSelector([getUpload], (uploads: Upload
     }))
 );
 
-export class FileType {
-    public static readonly IMAGE = "image";
-    public static readonly OTHER = "other";
+export enum FileType {
+    IMAGE = "image",
+    OTHER = "other",
 }
 
 const fileTypeToExtensionMap = new Map<string, string[]>([
