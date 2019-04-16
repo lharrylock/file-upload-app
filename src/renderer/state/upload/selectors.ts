@@ -48,14 +48,19 @@ export const getUploadSummaryRows = createSelector([getUpload], (uploads: Upload
 );
 
 const extensionToFileTypeMap: {[index: string]: FileType} = {
+    ".csv": FileType.CSV,
+    ".czexp": FileType.ZEISS_CONFIG_FILE,
     ".czi": FileType.IMAGE,
+    ".czmbi": FileType.ZEISS_CONFIG_FILE,
+    ".czsh": FileType.ZEISS_CONFIG_FILE,
     ".gif": FileType.IMAGE,
     ".jpeg": FileType.IMAGE,
     ".jpg": FileType.IMAGE,
-    ".pdf": FileType.IMAGE,
+    ".pdf": FileType.IMAGE, // TODO: decide if we consider this to be true
     ".png": FileType.IMAGE,
     ".tif": FileType.IMAGE,
     ".tiff": FileType.IMAGE,
+    ".txt": FileType.TEXT,
 };
 
 export const getUploadPayload = createSelector([getUpload], (uploads: UploadStateBranch): Uploads => {

@@ -93,6 +93,12 @@ describe("Upload selectors", () => {
                         wellId: 7,
                         wellLabel: "A1",
                     },
+                    "/path/to/not-image.csv": {
+                        barcode: "578",
+                        plateId: 7,
+                        wellId: 8,
+                        wellLabel: "A1",
+                    },
                     "/path/to/not-image.txt": {
                         barcode: "456",
                         plateId: 7,
@@ -150,9 +156,17 @@ describe("Upload selectors", () => {
                         wellId: 7,
                     },
                 },
+                "/path/to/not-image.csv": {
+                    file: {
+                        fileType: FileType.CSV,
+                    },
+                    microscopy: {
+                        wellId: 8,
+                    },
+                },
                 "/path/to/not-image.txt": {
                     file: {
-                        fileType: FileType.OTHER,
+                        fileType: FileType.TEXT,
                     },
                     microscopy: {
                         wellId: 5,
