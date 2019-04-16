@@ -1,9 +1,10 @@
 import { Uploads } from "@aics/aicsfiles/type-declarations/types";
 import { isEmpty, map, uniq } from "lodash";
+import { extname } from "path";
 import { createSelector } from "reselect";
 
 import { State } from "../types";
-import { UploadJobTableRow, UploadMetadata, UploadStateBranch } from "./types";
+import { FileType, UploadJobTableRow, UploadMetadata, UploadStateBranch } from "./types";
 
 export const getUpload = (state: State) => state.upload.present;
 export const getCurrentUploadIndex = (state: State) => state.upload.index;
@@ -46,6 +47,22 @@ export const getUploadSummaryRows = createSelector([getUpload], (uploads: Upload
     }))
 );
 
+const extensionToFileTypeMap: {[index: string]: FileType} = {
+    ".csv": FileType.CSV,
+    ".czexp": FileType.ZEISS_CONFIG_FILE,
+    ".czi": FileType.IMAGE,
+    ".czmbi": FileType.ZEISS_CONFIG_FILE,
+    ".czsh": FileType.ZEISS_CONFIG_FILE,
+    ".gif": FileType.IMAGE,
+    ".jpeg": FileType.IMAGE,
+    ".jpg": FileType.IMAGE,
+    ".pdf": FileType.IMAGE, // TODO: decide if we consider this to be true
+    ".png": FileType.IMAGE,
+    ".tif": FileType.IMAGE,
+    ".tiff": FileType.IMAGE,
+    ".txt": FileType.TEXT,
+};
+
 export const getUploadPayload = createSelector([getUpload], (uploads: UploadStateBranch): Uploads => {
     let result = {};
     map(uploads, ({wellId}: UploadMetadata, fullPath: string) => {
@@ -53,7 +70,7 @@ export const getUploadPayload = createSelector([getUpload], (uploads: UploadStat
             ...result,
             [fullPath]: {
                 file: {
-                    fileType: "text", // todo: lisah 4/12/19 FMS-466 Determine fileType from file name
+                    fileType: extensionToFileTypeMap[extname(fullPath).toLowerCase()] || FileType.OTHER,
                 },
                 microscopy: {
                     wellId,

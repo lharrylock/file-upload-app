@@ -76,3 +76,11 @@ export interface FileTag {
     // Tag background color
     color: string;
 }
+
+export enum FileType {
+    CSV = "csv",
+    IMAGE = "image",
+    OTHER = "other",
+    TEXT = "text",
+    ZEISS_CONFIG_FILE = "zeiss-config-file",
+}
