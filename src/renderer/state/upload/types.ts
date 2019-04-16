@@ -76,3 +76,8 @@ export interface FileTag {
     // Tag background color
     color: string;
 }
+
+export enum FileType {
+    IMAGE = "image",
+    OTHER = "other",
+}

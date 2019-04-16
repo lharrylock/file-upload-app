@@ -3,7 +3,9 @@ import { difference } from "lodash";
 
 import { getMockStateWithHistory, mockState } from "../../test/mocks";
 import { State } from "../../types";
-import { FileType, getUploadPayload, getWellIdToFiles } from "../selectors";
+
+import { getUploadPayload, getWellIdToFiles } from "../selectors";
+import { FileType } from "../types";
 
 describe("Upload selectors", () => {
     describe("getWellIdToFiles", () => {

@@ -4,7 +4,7 @@ import { extname } from "path";
 import { createSelector } from "reselect";
 
 import { State } from "../types";
-import { UploadJobTableRow, UploadMetadata, UploadStateBranch } from "./types";
+import { FileType, UploadJobTableRow, UploadMetadata, UploadStateBranch } from "./types";
 
 export const getUpload = (state: State) => state.upload.present;
 export const getCurrentUploadIndex = (state: State) => state.upload.index;
@@ -47,31 +47,15 @@ export const getUploadSummaryRows = createSelector([getUpload], (uploads: Upload
     }))
 );
 
-export enum FileType {
-    IMAGE = "image",
-    OTHER = "other",
-}
-
-const fileTypeToExtensionMap = new Map<string, string[]>([
-    [FileType.IMAGE, [
-        ".czi",
-        ".tif",
-        ".tiff",
-        ".png",
-        ".pdf",
-        ".jpeg",
-        ".jpg",
-        ".gif",
-    ]],
-]);
-
-const extensionToFileTypeMap = new Map();
-fileTypeToExtensionMap.forEach((extensions: string[], fileType: string) => {
-    extensions.forEach((ext) => extensionToFileTypeMap.set(ext, fileType));
-});
-
-const getFileType = (fullpath: string): string => {
-    return extensionToFileTypeMap.get(extname(fullpath).toLowerCase()) || FileType.OTHER;
+const extensionToFileTypeMap: {[index: string]: FileType} = {
+    ".czi": FileType.IMAGE,
+    ".gif": FileType.IMAGE,
+    ".jpeg": FileType.IMAGE,
+    ".jpg": FileType.IMAGE,
+    ".pdf": FileType.IMAGE,
+    ".png": FileType.IMAGE,
+    ".tif": FileType.IMAGE,
+    ".tiff": FileType.IMAGE,
 };
 
 export const getUploadPayload = createSelector([getUpload], (uploads: UploadStateBranch): Uploads => {
@@ -81,7 +65,7 @@ export const getUploadPayload = createSelector([getUpload], (uploads: UploadStat
             ...result,
             [fullPath]: {
                 file: {
-                    fileType: getFileType(fullPath),
+                    fileType: extensionToFileTypeMap[extname(fullPath).toLowerCase()] || FileType.OTHER,
                 },
                 microscopy: {
                     wellId,
