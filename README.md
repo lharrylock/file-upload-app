@@ -48,3 +48,12 @@ which provides the dependencies needed.
 
 Packaging the app for MacOS has not been implemented yet as it requires MacOS to be built.
 
+## Mac OS build
+
+Mirroring:
+```bash
+git remote add github git@github.com:lharrylock/file-upload-app.git
+
+git push --mirror github
+```
+
