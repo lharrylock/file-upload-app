@@ -46,14 +46,16 @@ Use the various bundle gradle tasks available to package the app for both Window
 We accomplish packaging for both Windows and Linux thanks to the docker image provided by `electron-builder`: electronuserland/builder:wine
 which provides the dependencies needed.
 
-Packaging the app for MacOS has not been implemented yet as it requires MacOS to be built.
-
 ## Mac OS build
 
-Mirroring:
+Set up Mirroring:
 ```bash
 git remote add github git@github.com:lharrylock/file-upload-app.git
 
 git push --mirror github
 ```
 
+Push to mirror repo
+```bash
+git push github
+```
