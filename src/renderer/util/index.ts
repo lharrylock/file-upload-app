@@ -1,4 +1,4 @@
-import { AicsGridCell } from "aics-react-labkey";
+import { AicsGridCell } from "@aics/aics-react-labkey";
 import {
     forOwn,
     isFunction,

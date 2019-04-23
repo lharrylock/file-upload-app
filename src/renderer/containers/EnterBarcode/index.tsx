@@ -1,4 +1,4 @@
-import { LabkeyOption, LabKeyOptionSelector } from "aics-react-labkey";
+import { LabkeyOption, LabKeyOptionSelector } from "@aics/aics-react-labkey";
 import { AxiosError } from "axios";
 import { ipcRenderer } from "electron";
 import { debounce } from "lodash";

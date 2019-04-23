@@ -1,5 +1,5 @@
 // todo lisah 11/15/18 DT-51 create npm module so this can be shared
-declare module "aics-react-labkey" {
+declare module "@aics/aics-react-labkey" {
     export interface LabkeyOption {
         [id: string]: any;
     }

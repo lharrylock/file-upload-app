@@ -1,4 +1,4 @@
-import "aics-react-labkey/dist/styles.css";
+import "@aics/aics-react-labkey/dist/styles.css";
 import { message } from "antd";
 import * as React from "react";
 import { connect } from "react-redux";

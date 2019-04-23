@@ -1,4 +1,4 @@
-import { AicsGrid, AicsGridCell } from "aics-react-labkey";
+import { AicsGrid, AicsGridCell } from "@aics/aics-react-labkey";
 import * as React from "react";
 
 import { Well } from "../../state/selection/types";
