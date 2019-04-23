@@ -1,3 +1,6 @@
+osx_instance:
+  image: mojave-xcode-10.2
+
 container:
   image: node:latest
 
@@ -6,4 +9,4 @@ check_task:
     folder: node_modules
     fingerprint_script: cat yarn.lock
     populate_script: yarn install
-  test_script: yarn test
+  test_script: yarn dist-mac
