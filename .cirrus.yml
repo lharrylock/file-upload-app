@@ -1,11 +1,8 @@
 osx_instance:
   image: mojave-xcode-10.2
 
-
-
 build_task:
-  container:
-    image: node:latest
+  yarn_script: brew install yarn
   node_modules_cache:
     folder: node_modules
     fingerprint_script: cat yarn.lock
