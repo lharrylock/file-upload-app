@@ -12,6 +12,18 @@
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/7zip/-/7zip-0.0.6.tgz#9cafb171af82329490353b4816f03347aa150a30"
   integrity sha1-nK+xca+CMpSQNTtIFvAzR6oVCjA=
 
+"@aics/aics-react-labkey@^4.1.6":
+  version "4.1.6"
+  resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@aics/aics-react-labkey/-/aics-react-labkey-4.1.6.tgz#2ce8470095d72577d98347ab074720a9d18b0f16"
+  integrity sha1-LOhHAJXXJXfZg0erB0cgqdGLDxY=
+  dependencies:
+    loaders.css "^0.1.2"
+    prop-types "^15.6.1"
+    react-block-ui "^1.1.1"
+    react-bootstrap "^0.32.1"
+    react-loaders "^3.0.1"
+    react-select "^1.2.1"
+
 "@aics/aicsfiles@^0.0.13":
   version "0.0.13"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@aics/aicsfiles/-/aicsfiles-0.0.13.tgz#0119953667af1805e4bd9daa1fd0dabc4a94bc13"
@@ -621,21 +633,21 @@
     semver "^5.3.0"
 
 "@babel/runtime-corejs2@^7.0.0":
-  version "7.3.4"
-  resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@babel/runtime-corejs2/-/runtime-corejs2-7.3.4.tgz#63f8bbc77622da202e9ea6f8f6e3bf28991832d9"
-  integrity sha1-Y/i7x3Yi2iAunqb49uO/KJkYMtk=
+  version "7.4.3"
+  resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@babel/runtime-corejs2/-/runtime-corejs2-7.4.3.tgz#40271fc260e570fb356da984e42e5990bd275860"
+  integrity sha1-QCcfwmDlcPs1bamE5C5ZkL0nWGA=
   dependencies:
-    core-js "^2.5.7"
-    regenerator-runtime "^0.12.0"
+    core-js "^2.6.5"
+    regenerator-runtime "^0.13.2"
 
-"@babel/runtime@^7.0.0":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2":
   version "7.4.3"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@babel/runtime/-/runtime-7.4.3.tgz#79888e452034223ad9609187a0ad1fe0d2ad4bdc"
   integrity sha1-eYiORSA0IjrZYJGHoK0f4NKtS9w=
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@babel/runtime@^7.1.2", "@babel/runtime@^7.3.1":
+"@babel/runtime@^7.3.1":
   version "7.3.4"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/@babel/runtime/-/runtime-7.3.4.tgz#73d12ba819e365fcf7fd152aed56d6df97d21c83"
   integrity sha1-c9ErqBnjZfz3/RUq7VbW35fSHIM=
@@ -1054,18 +1066,6 @@ add-dom-event-listener@^1.1.0:
   integrity sha1-apLbOg3Qq8JU4JXA8dwUrLuq4xA=
   dependencies:
     object-assign "4.x"
-
-aics-react-labkey@4.1.0:
-  version "4.1.0"
-  resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/aics-react-labkey/-/aics-react-labkey-4.1.0.tgz#45fe92570848c677c7dfb2235a963bb0d5d284a4"
-  integrity sha1-Rf6SVwhIxnfH37IjWpY7sNXShKQ=
-  dependencies:
-    loaders.css "^0.1.2"
-    prop-types "^15.6.1"
-    react-block-ui "^1.1.1"
-    react-bootstrap "^0.32.1"
-    react-loaders "^3.0.1"
-    react-select "^1.2.1"
 
 ajv-errors@^1.0.0:
   version "1.0.1"
@@ -3030,7 +3030,7 @@ dom-converter@^0.2:
   dependencies:
     utila "~0.4"
 
-dom-helpers@^3.2.0, dom-helpers@^3.2.1, dom-helpers@^3.3.1:
+dom-helpers@^3.2.0, dom-helpers@^3.2.1, dom-helpers@^3.4.0:
   version "3.4.0"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/dom-helpers/-/dom-helpers-3.4.0.tgz#e9b369700f959f62ecde5a6babde4bccd9169af8"
   integrity sha1-6bNpcA+Vn2Ls3lprq95LzNkWmvg=
@@ -7858,7 +7858,12 @@ react-input-autosize@^2.1.2:
   dependencies:
     prop-types "^15.5.8"
 
-react-is@^16.3.2, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.2, react-is@^16.8.4:
+react-is@^16.3.2:
+  version "16.8.6"
+  resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
+  integrity sha1-W7weLSkUHJ+9/tRWND/ivEMKahY=
+
+react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.2, react-is@^16.8.4:
   version "16.8.4"
   resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/react-is/-/react-is-16.8.4.tgz#90f336a68c3a29a096a3d648ab80e87ec61482a2"
   integrity sha1-kPM2pow6KaCWo9ZIq4DofsYUgqI=
@@ -7948,11 +7953,11 @@ react-test-renderer@^16.0.0-0:
     scheduler "^0.13.4"
 
 react-transition-group@^2.0.0, react-transition-group@^2.2.0:
-  version "2.6.1"
-  resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/react-transition-group/-/react-transition-group-2.6.1.tgz#abf4a95e2f13fb9ba83a970a896fedbc5c4856a2"
-  integrity sha1-q/SpXi8T+5uoOpcKiW/tvFxIVqI=
+  version "2.9.0"
+  resolved "https://artifactory.corp.alleninstitute.org:443/artifactory/api/npm/npm-virtual/react-transition-group/-/react-transition-group-2.9.0.tgz#df9cdb025796211151a436c69a8f3b97b5b07c8d"
+  integrity sha1-35zbAleWIRFRpDbGmo87l7WwfI0=
   dependencies:
-    dom-helpers "^3.3.1"
+    dom-helpers "^3.4.0"
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"

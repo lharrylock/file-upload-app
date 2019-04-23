@@ -1,4 +1,4 @@
-declare module "aics-react-labkey" {
+declare module "@aics/aics-react-labkey" {
     export interface AicsGridCell {
         row: number;
         col: number;
