@@ -12,7 +12,7 @@
     "target": "ES5",
     "baseUrl": ".",
     "paths": {
-      "aics-react-labkey": ["src/renderer/@types/aics-react-labkey"]
+      "@aics/aics-react-labkey": ["src/renderer/@types/@aics/aics-react-labkey"]
     }
   },
   "include": [
