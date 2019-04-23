@@ -9,4 +9,4 @@ check_task:
     folder: node_modules
     fingerprint_script: cat yarn.lock
     populate_script: yarn install
-  test_script: yarn dist-mac
+  test_script: yarn dist
