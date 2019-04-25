@@ -4,7 +4,7 @@ osx_instance:
 env_task:
   env:
     CSC_LINK: https://drive.google.com/uc?export=download&id=1kjg-b8a8avYpCAyvEtNiADLi92R3Lqt4
-    CSC_KEY_PASSWORD: ENCRYPTED[8d06c5f46b4b0294102eb2e38a69e9d30b5fdc8968f91159f2047879cab137ab34dd46e5aafc2ca7f9b10cf350396486]
+    CSC_KEY_PASSWORD: ENCRYPTED[2135896f7dac7c52c6cd4dd747130fb34cf717d0dff7da267cc9582c883fc6155fdfb98f0799c304dd7f44ab89bbb5c1]
 
 build_task:
   yarn_script: brew install yarn
